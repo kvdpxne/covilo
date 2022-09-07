@@ -1,0 +1,7 @@
+[versions]
+kotlin = "1.7.10"
+spring = "2.7.3"
+some = "1.4"
+
+[libraries]
+myLib = { group = "com.mycompany", name = "mylib", version.ref = "some" }

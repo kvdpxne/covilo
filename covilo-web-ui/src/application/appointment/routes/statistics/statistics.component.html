@@ -1,0 +1,28 @@
+<a-container>
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">City</th>
+      <th scope="col">Region</th>
+      <th scope="col">Country</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let city of cities; let i = index">
+      <th scope="row">
+        {{ i }}
+      </th>
+      <td>
+        {{ city.domesticName }}
+      </td>
+      <td>
+        {{ city.region.domesticName }}
+      </td>
+      <td>
+        {{ "country." + city.region.country.key | translate }}
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</a-container>

@@ -1,0 +1,26 @@
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/maps";
+@import "~bootstrap/scss/utilities";
+@import "~bootstrap/scss/utilities/api";
+
+/* NOTE: That we don’t provide utility classes for justified text. While,
+ * aesthetically, justified text might look more appealing, it does make
+ * word-spacing more random and therefore harder to read.
+ *
+ * TODO: Remove it
+ */
+$utilities: map-merge(
+    $utilities, (
+    "text-align": map-merge(
+        map-get($utilities, "text-align"), (
+        values: map-merge(
+            map-get(map-get($utilities, "text-align"), "values"), (
+            justify: justify
+          )
+        )
+      )
+    )
+  )
+);

@@ -1,0 +1,50 @@
+# Intelij IDEA
+# User-specific stuff
+.idea/
+
+# File-based project format
+*.iml
+*.ipr
+*.iws
+
+# Build output
+out/
+
+# Kotlin
+# Compiled class file
+*.class
+
+# Package files
+*.jar
+*.war
+*.ear
+
+# Virtual Machine crash logs,
+# see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+# Gradle
+# Project-specific cache
+.gradle/
+
+# Avoid ignoring Gradle wrapper files
+!gradle-wrapper.jar
+!gradle-wrapper.properties
+
+# Build output
+build/
+
+# Angular
+# Cache of project
+.angular/
+
+# Build output
+dist/
+
+# Node
+# Project packages
+node_modules/
+
+# Miscellaneous
+# Log file
+*.log

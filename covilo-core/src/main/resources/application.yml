@@ -1,0 +1,14 @@
+application:
+  title: "Covilo"
+  version: "0.1"
+logging:
+  level:
+    org.springframework.web: "debug"
+spring:
+  banner:
+    location: banner.txt
+
+  security:
+    user:
+      name: root
+      password: lol

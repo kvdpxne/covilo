@@ -1,0 +1,16 @@
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/maps";
+@import "~bootstrap/scss/mixins";
+
+/*
+ * https://getbootstrap.com/docs/5.1/utilities/spacing/
+ */
+$spacers: map-merge(
+    $spacers, (
+    6: $spacer * 3.5,
+    7: $spacer * 4,
+    8: $spacer * 4.5,
+    9: $spacer * 5
+  )
+);

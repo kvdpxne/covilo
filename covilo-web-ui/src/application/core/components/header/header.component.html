@@ -1,0 +1,46 @@
+<header id="top" class="fixed-top">
+  <nav class="navbar navbar-expand-md navbar-light bg-light shadow justify-items-baseline">
+    <div class="container">
+      <a class="navbar-brand" href="/">
+        Covilo
+      </a>
+      <button class="navbar-toggler" type="button" (click)="toggleCollapse()">
+        <span class="navbar-toggler-icon">
+          <!-- menu icon -->
+        </span>
+      </button>
+
+      <div class="navbar-collapse collapse" [ngbCollapse]="isCollapsed">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item" [routerLinkActive]="['active']" *ngFor="let link of itemList">
+            <a class="nav-link" [routerLink]="link.reference">
+              {{ link.name | translate }}
+            </a>
+          </li>
+        </ul>
+
+        <div class="navbar-nav">
+          <button class="btn btn-sm btn-outline-primary me-1" type="button">
+            {{ 'login' | translate }}
+          </button>
+          <button class="btn btn-sm btn-primary" type="button">
+            {{ 'signup' | translate }}
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </nav>
+
+  <!--  <div class="alert alert-warning fade show">-->
+  <!--    <div class="container-md d-flex align-items-center">-->
+  <!--      <span class="me-auto">-->
+  <!--        {{ 'core.header.alert' | translate }}-->
+  <!--      </span>-->
+  <!--      <button class="btn btn-close"-->
+  <!--              type="button">-->
+  <!--        &lt;!&ndash; close icon &ndash;&gt;-->
+  <!--      </button>-->
+  <!--    </div>-->
+  <!--  </div>-->
+</header>

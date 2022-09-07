@@ -1,0 +1,14 @@
+@import "~bootstrap/scss/mixins/lists";
+@import "~bootstrap/scss/vendor/rfs";
+
+.bi {
+  font-size: 1.5em;
+}
+
+// reactive link
+.rl {
+  &:hover {
+    border-bottom: 1px black solid;
+  }
+}
+
