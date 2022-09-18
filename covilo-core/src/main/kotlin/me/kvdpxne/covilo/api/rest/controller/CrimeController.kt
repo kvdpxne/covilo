@@ -2,12 +2,11 @@ package me.kvdpxne.covilo.api.rest.controller
 
 import me.kvdpxne.covilo.api.rest.dto.CrimesDto
 import me.kvdpxne.covilo.api.rest.dto.toDto
-import me.kvdpxne.covilo.domain.COLUMN_CITY
-import me.kvdpxne.covilo.domain.COLUMN_CLASSIFICATION
-import me.kvdpxne.covilo.domain.COLUMN_COUNTRY
-import me.kvdpxne.covilo.domain.COLUMN_REGION
+import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_CITY
+import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_CLASSIFICATION
+import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_COUNTRY
+import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_REGION
 import me.kvdpxne.covilo.domain.persistence.CrimeRepository
-import me.kvdpxne.covilo.util.slf4j.logger
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity

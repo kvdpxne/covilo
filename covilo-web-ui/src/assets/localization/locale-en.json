@@ -19,15 +19,11 @@
   "login": "Log in",
   "logout": "Log out",
   "report": "Report",
-
-
   "feature.header": "Columns with icons",
   "feature.title": "Featured title",
   "feature.description": "Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.",
-
   "navigation.home": "Home page",
   "navigation.statistics": "Statistics",
-
   "country.albania": "Albania",
   "country.andorra": "Andorra",
   "country.armenia": "Armenia",
@@ -78,7 +74,6 @@
   "country.ukraine": "Ukraine",
   "country.united_kingdom": "United Kingdom",
   "country.vatican_city": "Vatican City",
-
   "word.city": "City",
   "word.country": "Country",
   "word.region": "Region",

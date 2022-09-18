@@ -1,4 +1,4 @@
-import { LocationRegion } from "./location-region";
+import { LocationRegion } from "./location-region"
 
 export interface LocationCity {
   key: string,

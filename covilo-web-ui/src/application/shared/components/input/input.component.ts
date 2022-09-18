@@ -7,7 +7,7 @@ import {
   OnInit,
   Output,
   ViewChild
-} from '@angular/core';
+} from "@angular/core"
 
 @Component({
   selector: "a-input",
@@ -18,17 +18,42 @@ import {
 })
 export class InputComponent implements AfterViewInit, OnInit {
 
+  // current value in the input selector
+  value: string = ""
+  @Input() name!: string
+  placeholder!: string
+  @Input() suggestions?: any[] = []
+  @Input() disabled!: boolean
+  @Output() key: EventEmitter<any> = new EventEmitter<any>()
   @ViewChild("input")
   private readonly input?: ElementRef<HTMLInputElement>
 
-  // current value in the input selector
-  value?: string
+  getSuggestionReadableName(entity: any): string {
+    if ("domesticName" in entity) {
+      return entity.domesticName
+    }
+    // Only the LocationCountry entity has no domestic name
+    return `country.${entity.key}`
+  }
 
-  @Input() name!: string
-  placeholder!: string
-  @Input() suggestions?: any[]
-  @Input() disabled!: boolean
-  @Output() key: EventEmitter<any> = new EventEmitter<any>()
+  setKey(entity: any): void {
+    this.key.emit(entity)
+    if ("domesticName" in entity) {
+      this.set(entity.domesticName)
+    } else {
+      // const translated = this.translate.transform(`country.${entity.key}`)
+      this.set(entity.key)
+    }
+  }
+
+  ngOnInit(): void {
+    if (!this.placeholder) {
+      this.placeholder = `word.${this.name}`
+    }
+  }
+
+  ngAfterViewInit(): void {
+  }
 
   /**
    *
@@ -51,32 +76,6 @@ export class InputComponent implements AfterViewInit, OnInit {
 
   private set(value: string): void {
     this.getInput().value = value
-  }
-
-  getSuggestionReadableName(entity: any): string {
-    if ("domesticName" in entity) {
-      return entity.domesticName
-    }
-    // Only the LocationCountry entity has no domestic name
-    return `country.${entity.key}`
-  }
-
-  setKey(entity: any): void {
-    this.key.emit(entity);
-    if ("domesticName" in entity) {
-      this.set(entity.domesticName)
-    } else {
-      // const translated = this.translate.transform(`country.${entity.key}`)
-      this.set(entity.key)
-    }
-  }
-
-  ngOnInit(): void {
-    if (!this.placeholder) {
-      this.placeholder = `word.${this.name}`;
-    }
-  }
-
-  ngAfterViewInit(): void {
+    this.getInputValue()
   }
 }

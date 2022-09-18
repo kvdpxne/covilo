@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from "@angular/router";
+import { Component, OnInit } from "@angular/core"
+import { Router } from "@angular/router"
 import {
   LocationCity,
   LocationCityService,
@@ -7,10 +7,9 @@ import {
   LocationCountryService,
   LocationRegion,
   LocationRegionService
-} from "../../../core/core.module";
+} from "../../../core"
 
 @Component({
-  selector: "home",
   templateUrl: "./home.component.html",
   styleUrls: [
     "./home.component.scss"
@@ -52,39 +51,6 @@ export class HomeComponent implements OnInit {
   }
 
   /**
-   * All available countries
-   */
-  private getAvailableCountries(): void {
-    this.countryService.getAll().subscribe({
-      next: value => this.countries = value
-    })
-  }
-
-  /**
-   * All available regions for selected country
-   */
-  private getAvailableRegions(): void {
-    if (!this.countryKey) {
-      throw new Error("Cannot get regions if country is undefined.")
-    }
-    this.regionService.getAll(this.countryKey).subscribe({
-      next: value => this.regions = value
-    })
-  }
-
-  /**
-   * All available cities for selected region
-   */
-  private getAvailableCities(): void {
-    if (!this.regionKey && !this.countryKey) {
-      throw new Error("Cannot get cities if country or region is undefined.")
-    }
-    this.cityService.getAll(this.countryKey, this.regionKey).subscribe({
-      next: value => this.cities = value
-    })
-  }
-
-  /**
    * Overwrite the country key and fetch all regions for it
    */
   setCountry(country: LocationCountry): void {
@@ -123,6 +89,51 @@ export class HomeComponent implements OnInit {
     const path = `result-details/${country}/${region}/${city}`
     this.router.navigateByUrl(path).then(it => {
       // TODO ???
+    })
+  }
+
+  /**
+   * All available countries
+   */
+  private getAvailableCountries(): void {
+    this.countryService.getAll().subscribe({
+      next: value => {
+        this.countries = value.sort((a, b) => {
+          return a.key.localeCompare(b.key)
+        })
+      }
+    })
+  }
+
+  /**
+   * All available regions for selected country
+   */
+  private getAvailableRegions(): void {
+    if (!this.countryKey) {
+      throw new Error("Cannot get regions if country is undefined.")
+    }
+    this.regionService.getAll(this.countryKey).subscribe({
+      next: value => {
+        this.regions = value.sort((a, b) => {
+          return a.domesticName.localeCompare(b.domesticName)
+        })
+      }
+    })
+  }
+
+  /**
+   * All available cities for selected region
+   */
+  private getAvailableCities(): void {
+    if (!this.regionKey && !this.countryKey) {
+      throw new Error("Cannot get cities if country or region is undefined.")
+    }
+    this.cityService.getAll(this.countryKey, this.regionKey).subscribe({
+      next: value => {
+        this.cities = value.sort((a, b) => {
+          return a.domesticName.localeCompare(b.domesticName)
+        })
+      }
     })
   }
 }

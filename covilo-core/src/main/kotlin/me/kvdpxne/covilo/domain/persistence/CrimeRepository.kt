@@ -10,13 +10,16 @@ import java.util.UUID
 interface CrimeRepository {
 
   fun findByIdentifier(identifier: UUID): Crime?
+
   fun findAll(): Crimes
 
   fun insert(crime: Crime)
+
   fun update(crime: Crime)
 
   fun delete(identifier: UUID)
+
   fun deleteAll()
 
-  fun count(): Long
+  fun count(): Int
 }

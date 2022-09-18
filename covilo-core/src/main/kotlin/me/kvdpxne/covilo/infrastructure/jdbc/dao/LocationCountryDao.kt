@@ -1,14 +1,16 @@
 package me.kvdpxne.covilo.infrastructure.jdbc.dao
 
-import me.kvdpxne.covilo.domain.COLUMN_IDENTIFIER
-import me.kvdpxne.covilo.domain.COLUMN_KEY
-import me.kvdpxne.covilo.domain.TABLE_LOCATION_COUNTRY
+import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_IDENTIFIER
+import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_KEY
+import me.kvdpxne.covilo.infrastructure.jdbc.TABLE_LOCATION_COUNTRY
+import me.kvdpxne.covilo.domain.model.LocationCountries
 import me.kvdpxne.covilo.domain.model.LocationCountry
 import me.kvdpxne.covilo.domain.persistence.LocationCountryRepository
+import me.kvdpxne.covilo.infrastructure.jdbc.callback.RowCounterCallback
 import me.kvdpxne.covilo.infrastructure.jdbc.mapping.LocationCountryMapper
-import me.kvdpxne.covilo.util.count
+import me.kvdpxne.covilo.util.sql.QueryBuilder
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import java.util.UUID
@@ -16,79 +18,91 @@ import java.util.UUID
 /**
  * @see LocationCountryRepository
  */
-@Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE")
 @Component
 class LocationCountryDao @Autowired(required = true) constructor(
-  private val template: NamedParameterJdbcTemplate
+  private val operations: NamedParameterJdbcOperations
 ) : LocationCountryRepository {
 
-  // quick access
-  private val tr = TABLE_LOCATION_COUNTRY
-  private val c0 = COLUMN_IDENTIFIER
-  private val c1 = COLUMN_KEY
+  companion object {
 
-  // frequently used query
-  private val body = "SELECT $tr.$c0," +
-    "$tr.$c1 " +
-    "FROM $tr"
+    /**
+     * Current table
+     */
+    val TABLE: String
+      get() = TABLE_LOCATION_COUNTRY
 
-  override fun findByIdentifier(p0: UUID): LocationCountry? {
-//    val query = QueryBuilder(tr, "SELECT")
-//      .select(c0, c1)
-//      .from()
-//      .where(c0)
-//      .build()
-//    val v0 = p0.toString()
-//    return runCatching {
-//      template.queryForObject(
-//        query,
-//        mapOf(c0 to v0),
-//        LocationCountryMapper
-//      )
-//    }.getOrNull()
+    /**
+     *
+     */
+    val FIELD_ARRAY = arrayOf(
+      "$TABLE.$COLUMN_IDENTIFIER",
+      "$TABLE.$COLUMN_KEY"
+    )
+
+    private val queryBuilder = QueryBuilder()
+      .select(*FIELD_ARRAY)
+      .from(TABLE)
+  }
+
+
+  override fun findByIdentifier(identifier: UUID): LocationCountry? {
+    val stringIdentifier = identifier.toString()
+    val query = queryBuilder.where(stringIdentifier, COLUMN_IDENTIFIER).end()
     return runCatching {
-      template.queryForObject(
-        "$body WHERE $tr.$c0 = :$c0;",
-        mapOf(c0 to p0.toString()),
+      operations.queryForObject(
+        query,
+        mapOf(COLUMN_IDENTIFIER to stringIdentifier),
         LocationCountryMapper
       )
     }.getOrNull()
   }
 
-  override fun findByKey(p0: String): LocationCountry? {
+  override fun findByKey(key: String): LocationCountry? {
+    val query = queryBuilder.where(key, COLUMN_KEY).end()
     return runCatching {
-      template.queryForObject(
-        "$body WHERE $tr.$c1 = :$c1;",
-        mapOf(c1 to p0),
+      operations.queryForObject(
+        query,
+        mapOf(COLUMN_KEY to key),
         LocationCountryMapper
       )
     }.getOrNull()
   }
 
-  override fun findAll(): Collection<LocationCountry> {
-    return template.query("$body;", LocationCountryMapper)
+  override fun findAll(): LocationCountries {
+    val query = queryBuilder.end()
+    return operations.query(
+      query,
+      LocationCountryMapper
+    )
   }
 
   @Transactional
-  override fun insert(p0: LocationCountry) {
+  override fun insert(country: LocationCountry) {
     TODO("Not yet implemented")
   }
 
   @Transactional
-  override fun update(p0: LocationCountry) {
+  override fun update(country: LocationCountry) {
     TODO("Not yet implemented")
   }
 
   @Transactional
-  override fun delete(p0: UUID) {
+  override fun delete(identifier: UUID) {
     TODO("Not yet implemented")
   }
 
+  @Transactional
   override fun deleteAll() {
     TODO("Not yet implemented")
   }
 
-  override fun count(): Long {
-    return template.count("$tr.$c0", tr)
+  override fun count(): Int {
+    val counter = RowCounterCallback()
+    val query = QueryBuilder()
+      .count(FIELD_ARRAY.first())
+      .from(TABLE)
+      .end()
+    operations.query(query, counter)
+    return counter.count
   }
 }

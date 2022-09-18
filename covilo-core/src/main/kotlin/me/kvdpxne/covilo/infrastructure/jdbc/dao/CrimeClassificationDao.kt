@@ -1,15 +1,16 @@
 package me.kvdpxne.covilo.infrastructure.jdbc.dao
 
-import me.kvdpxne.covilo.domain.COLUMN_IDENTIFIER
-import me.kvdpxne.covilo.domain.COLUMN_KEY
-import me.kvdpxne.covilo.domain.TABLE_CRIME_CLASSIFICATION
 import me.kvdpxne.covilo.domain.model.CrimeClassification
 import me.kvdpxne.covilo.domain.model.CrimeClassifications
 import me.kvdpxne.covilo.domain.persistence.CrimeClassificationRepository
-import me.kvdpxne.covilo.util.count
+import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_IDENTIFIER
+import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_KEY
+import me.kvdpxne.covilo.infrastructure.jdbc.TABLE_CRIME_CLASSIFICATION
+import me.kvdpxne.covilo.infrastructure.jdbc.callback.RowCounterCallback
 import me.kvdpxne.covilo.infrastructure.jdbc.mapping.CrimeClassificationMapper
+import me.kvdpxne.covilo.util.sql.QueryBuilder
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import java.util.UUID
@@ -17,70 +18,74 @@ import java.util.UUID
 /**
  * @see CrimeClassificationRepository
  */
-@Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE")
 @Component
 class CrimeClassificationDao @Autowired(required = true) constructor(
-  private val template: NamedParameterJdbcTemplate
+  private val operations: NamedParameterJdbcOperations
 ) : CrimeClassificationRepository {
 
   companion object {
-    private const val T0 = TABLE_CRIME_CLASSIFICATION
-    private const val C0 = COLUMN_IDENTIFIER
-    private const val C1 = COLUMN_KEY
+    /**
+     *
+     */
+    val FIELD_ARRAY = arrayOf(
+      "$TABLE_CRIME_CLASSIFICATION.$COLUMN_IDENTIFIER",
+      "$TABLE_CRIME_CLASSIFICATION.$COLUMN_KEY"
+    )
   }
 
-  // frequently used query
-  private val selectQuery = "SELECT $T0.$C0," +
-    "$T0.$C1 " +
-    "FROM $T0"
-
-  override fun findByIdentifier(p0: UUID): CrimeClassification? {
-    val v0 = p0.toString()
+  override fun findByIdentifier(identifier: UUID): CrimeClassification? {
+    val stringIdentifier = identifier.toString()
+    val query = QueryBuilder()
+      .select(*FIELD_ARRAY)
+      .from(TABLE_CRIME_CLASSIFICATION)
+      .where(stringIdentifier, COLUMN_IDENTIFIER)
+      .end()
     return runCatching {
-      template.queryForObject(
-        "$selectQuery WHERE $T0.$C0 = :$C0;",
-        mapOf(C0 to v0),
+      operations.queryForObject(
+        query,
+        mapOf(COLUMN_IDENTIFIER to stringIdentifier),
         CrimeClassificationMapper
       )
     }.getOrNull()
   }
 
   override fun findAll(): CrimeClassifications {
-    return template.query(
-      "$selectQuery;",
+    val query = QueryBuilder()
+      .select(*FIELD_ARRAY)
+      .from(TABLE_CRIME_CLASSIFICATION)
+      .end()
+    return operations.query(
+      query,
       CrimeClassificationMapper
     )
   }
 
   @Transactional
-  override fun insert(p0: CrimeClassification) {
-    val v0 = p0.identifier.toString()
-    val v1 = p0.key
-    template.update(
-      "INSERT INTO $T0($C0,$C1) VALUES(:$C0,:$C1);",
-      mapOf(C0 to v0, C1 to v1)
-    )
-  }
-
-  @Transactional
-  override fun update(p0: CrimeClassification) {
+  override fun insert(classification: CrimeClassification) {
     TODO("Not yet implemented")
   }
 
   @Transactional
-  override fun delete(p0: UUID) {
-    val v0 = p0.toString()
-    template.update(
-      "DELETE FROM $T0 WHERE $C0 = :$C0;",
-      mapOf(C0 to v0)
-    )
+  override fun update(classification: CrimeClassification) {
+    TODO("Not yet implemented")
+  }
+
+  @Transactional
+  override fun delete(identifier: UUID) {
+    TODO("Not yet implemented")
   }
 
   override fun deleteAll() {
     TODO("Not yet implemented")
   }
 
-  override fun count(): Long {
-    return template.count(C0, T0)
+  override fun count(): Int {
+    val counter = RowCounterCallback()
+    val query = QueryBuilder()
+      .count(FIELD_ARRAY.first())
+      .from(TABLE_CRIME_CLASSIFICATION)
+      .end()
+    operations.query(query, counter)
+    return counter.count
   }
 }

@@ -1,33 +1,34 @@
 package me.kvdpxne.covilo.infrastructure.jdbc.mapping
 
-import me.kvdpxne.covilo.domain.COLUMN_DOMESTIC_NAME
-import me.kvdpxne.covilo.domain.COLUMN_IDENTIFIER
-import me.kvdpxne.covilo.domain.COLUMN_KEY
-import me.kvdpxne.covilo.domain.TABLE_LOCATION_REGION
 import me.kvdpxne.covilo.domain.model.LocationRegion
-import me.kvdpxne.covilo.util.sql.getUuid
+import me.kvdpxne.covilo.infrastructure.jdbc.TABLE_LOCATION_REGION
+import me.kvdpxne.covilo.util.sql.ResultSetParser
 import org.springframework.jdbc.core.RowMapper
 import java.sql.ResultSet
 import java.sql.SQLException
 
 object LocationRegionMapper : RowMapper<LocationRegion> {
 
-  private const val TR = TABLE_LOCATION_REGION
-  private const val C0 = COLUMN_IDENTIFIER
-  private const val C1 = COLUMN_KEY
-  private const val C2 = COLUMN_DOMESTIC_NAME
-
   @Throws(SQLException::class)
   override fun mapRow(result: ResultSet, row: Int): LocationRegion {
-    val v0 = result.getUuid("$TR.$C0")
-    val v1 = result.getString("$TR.$C1")
-    val v2 = result.getString("$TR.$C2")
-    val v3 = LocationCountryMapper.mapRow(result, row)
+    val parser = ResultSetParser(TABLE_LOCATION_REGION, result)
+
+    // Parse the entity identifier
+    val identifier = parser.parseIdentifier()
+
+    // Parse relational entities to the entity
+    val country = LocationCountryMapper.mapRow(result, row)
+
+    // Parse remaining fields
+    val key = parser.parseKey()
+    val domesticName = parser.parseDomesticName()
+
+    // Initialize
     return LocationRegion(
-      identifier = v0,
-      key = v1,
-      domesticName = v2,
-      country = v3
+      identifier,
+      key,
+      domesticName,
+      country
     )
   }
 }

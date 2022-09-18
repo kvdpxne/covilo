@@ -1,7 +1,6 @@
 {
   "navigation.home": "Strona główna",
   "navigation.statistics": "Statystyki",
-
   "country.albania": "Albania",
   "country.andorra": "Andora",
   "country.armenia": "Armenia",
@@ -52,7 +51,6 @@
   "country.ukraine": "Ukraina",
   "country.united_kingdom": "Wielka Brytania",
   "country.vatican_city": "Watykan",
-
   "word.city": "Miasto",
   "word.country": "Państwo",
   "word.region": "Region",

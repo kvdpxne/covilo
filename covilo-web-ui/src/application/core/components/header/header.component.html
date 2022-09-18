@@ -1,29 +1,33 @@
-<header id="top" class="fixed-top">
-  <nav class="navbar navbar-expand-md navbar-light bg-light shadow justify-items-baseline">
+<header class="fixed-top" id="top">
+  <nav
+    class="navbar navbar-expand-md navbar-light bg-light shadow justify-items-baseline">
     <div class="container">
       <a class="navbar-brand" href="/">
         Covilo
       </a>
-      <button class="navbar-toggler" type="button" (click)="toggleCollapse()">
+      <button (click)="toggleCollapse()" class="navbar-toggler" type="button">
         <span class="navbar-toggler-icon">
           <!-- menu icon -->
         </span>
       </button>
 
-      <div class="navbar-collapse collapse" [ngbCollapse]="isCollapsed">
+      <div [ngbCollapse]="isCollapsed" class="navbar-collapse collapse">
         <ul class="navbar-nav me-auto">
-          <li class="nav-item" [routerLinkActive]="['active']" *ngFor="let link of itemList">
-            <a class="nav-link" [routerLink]="link.reference">
+          <li *ngFor="let link of itemList" [routerLinkActive]="['active']"
+              class="nav-item">
+            <a [routerLink]="link.reference" class="nav-link">
               {{ link.name | translate }}
             </a>
           </li>
         </ul>
 
         <div class="navbar-nav">
-          <button class="btn btn-sm btn-outline-primary me-1" type="button">
+          <button class="btn btn-sm btn-outline-primary me-1" routerLink="./authentication/login"
+                  type="button">
             {{ 'login' | translate }}
           </button>
-          <button class="btn btn-sm btn-primary" type="button">
+          <button class="btn btn-sm btn-primary" routerLink="./authentication/signup"
+                  type="button">
             {{ 'signup' | translate }}
           </button>
         </div>

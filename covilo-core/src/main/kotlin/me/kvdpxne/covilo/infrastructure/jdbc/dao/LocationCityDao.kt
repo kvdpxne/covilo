@@ -1,19 +1,23 @@
 package me.kvdpxne.covilo.infrastructure.jdbc.dao
 
-import me.kvdpxne.covilo.domain.COLUMN_COUNTRY
-import me.kvdpxne.covilo.domain.COLUMN_DOMESTIC_NAME
-import me.kvdpxne.covilo.domain.COLUMN_IDENTIFIER
-import me.kvdpxne.covilo.domain.COLUMN_KEY
-import me.kvdpxne.covilo.domain.COLUMN_REGION
-import me.kvdpxne.covilo.domain.TABLE_LOCATION_CITY
-import me.kvdpxne.covilo.domain.TABLE_LOCATION_COUNTRY
-import me.kvdpxne.covilo.domain.TABLE_LOCATION_REGION
+import me.kvdpxne.covilo.domain.model.LocationCities
 import me.kvdpxne.covilo.domain.model.LocationCity
 import me.kvdpxne.covilo.domain.persistence.LocationCityRepository
+import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_CAPITAL
+import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_COUNTRY
+import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_DOMESTIC_NAME
+import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_IDENTIFIER
+import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_KEY
+import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_POPULATION
+import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_REGION
+import me.kvdpxne.covilo.infrastructure.jdbc.TABLE_LOCATION_CITY
+import me.kvdpxne.covilo.infrastructure.jdbc.TABLE_LOCATION_COUNTRY
+import me.kvdpxne.covilo.infrastructure.jdbc.TABLE_LOCATION_REGION
+import me.kvdpxne.covilo.infrastructure.jdbc.callback.RowCounterCallback
 import me.kvdpxne.covilo.infrastructure.jdbc.mapping.LocationCityMapper
-import me.kvdpxne.covilo.util.count
+import me.kvdpxne.covilo.util.sql.QueryBuilder
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import java.util.UUID
@@ -21,81 +25,109 @@ import java.util.UUID
 /**
  * @see LocationCityRepository
  */
-@Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE")
 @Component
 class LocationCityDao @Autowired(required = true) constructor(
-  private val template: NamedParameterJdbcTemplate
+  private val operations: NamedParameterJdbcOperations
 ) : LocationCityRepository {
 
-  // quick access
-  private val tr = TABLE_LOCATION_CITY
-  private val r0 = TABLE_LOCATION_REGION
-  private val r1 = TABLE_LOCATION_COUNTRY
-  private val c0 = COLUMN_IDENTIFIER
-  private val c1 = COLUMN_KEY
-  private val c2 = COLUMN_DOMESTIC_NAME
-  private val k0 = COLUMN_REGION
-  private val k1 = COLUMN_COUNTRY
+  companion object {
 
-  // frequently used query
-  private val body = "SELECT $tr.$c0," +
-    "$tr.$c1," +
-    "$tr.$c2," +
-    "$r0.$c0," +
-    "$r0.$c1," +
-    "$r0.$c2," +
-    "$r1.$c0," +
-    "$r1.$c1 " +
-    "FROM $tr " +
-    "INNER JOIN $r0 ON $tr.$k0 = $r0.$c0 " +
-    "INNER JOIN $r1 ON $r0.$k1 = $r1.$c0"
+    /**
+     * Current table
+     */
+    val TABLE: String
+      get() = TABLE_LOCATION_CITY
 
-  override fun findByIdentifier(p0: UUID): LocationCity? {
+    /**
+     *
+     */
+    val FIELD_ARRAY = arrayOf(
+      "$TABLE.$COLUMN_IDENTIFIER",
+      "$TABLE.$COLUMN_KEY",
+      "$TABLE.$COLUMN_DOMESTIC_NAME",
+      *LocationRegionDao.FIELD_ARRAY,
+      "$TABLE.$COLUMN_POPULATION",
+      "$TABLE.$COLUMN_CAPITAL",
+    )
+
+    private val queryBuilder = QueryBuilder()
+      .select(*FIELD_ARRAY)
+      .from(TABLE_LOCATION_CITY)
+      .join(TABLE_LOCATION_REGION, TABLE, COLUMN_REGION)
+      .join(TABLE_LOCATION_COUNTRY, TABLE_LOCATION_REGION, COLUMN_COUNTRY)
+  }
+
+  override fun findByIdentifier(identifier: UUID): LocationCity? {
+    val stringIdentifier = identifier.toString()
+    val query = queryBuilder.where(stringIdentifier, COLUMN_IDENTIFIER).end()
     return runCatching {
-      template.queryForObject(
-        "$body WHERE $tr.$c0 = :$c0;",
-        mapOf(c0 to p0.toString()),
+      operations.queryForObject(
+        query,
+        mapOf(COLUMN_IDENTIFIER to stringIdentifier),
         LocationCityMapper
       )
     }.getOrNull()
   }
 
-  override fun findBySpecificKey(
-    p0: String, p1: String, p2: String
-  ): LocationCity? {
+  @Deprecated(
+    message = "Sometimes a key can match more than one entity.",
+    replaceWith = ReplaceWith("findAllByKey")
+  )
+  override fun findByKey(key: String): LocationCity? {
+    val query = queryBuilder.where(key, COLUMN_KEY).end()
     return runCatching {
-      template.queryForObject(
-        "$body WHERE $r1.$c1 = :$k1 AND $r0.$c1 = :$k0 AND $tr.$c1 = :$c1;",
-        mapOf(k1 to p0, k0 to p1, c1 to p2),
+      operations.queryForObject(
+        query,
+        mapOf(key to COLUMN_KEY),
         LocationCityMapper
       )
     }.getOrNull()
   }
 
   override fun findAll(): Collection<LocationCity> {
-    return template.query("$body;", LocationCityMapper)
+    val query = queryBuilder.end()
+    return operations.query(
+      query,
+      LocationCityMapper
+    )
+  }
+
+  override fun findAllByKey(key: String): LocationCities {
+    val query = queryBuilder.where(key, COLUMN_KEY).end()
+    return operations.query(
+      query,
+      mapOf(COLUMN_KEY to key),
+      LocationCityMapper
+    )
   }
 
   @Transactional
-  override fun insert(p0: LocationCity) {
+  override fun insert(city: LocationCity) {
     TODO("Not yet implemented")
   }
 
   @Transactional
-  override fun update(p0: LocationCity) {
+  override fun update(city: LocationCity) {
     TODO("Not yet implemented")
   }
 
   @Transactional
-  override fun delete(p0: UUID) {
+  override fun delete(identifier: UUID) {
     TODO("Not yet implemented")
   }
 
+  @Transactional
   override fun deleteAll() {
     TODO("Not yet implemented")
   }
 
-  override fun count(): Long {
-    return template.count("$tr.$c0", tr)
+  override fun count(): Int {
+    val counter = RowCounterCallback()
+    val query = QueryBuilder()
+      .count(FIELD_ARRAY.first())
+      .from(TABLE)
+      .end()
+    operations.query(query, counter)
+    return counter.count
   }
 }

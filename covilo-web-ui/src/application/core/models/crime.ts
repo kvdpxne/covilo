@@ -1,6 +1,6 @@
-import { CrimeClassification } from "./crime-classification";
-import { CrimePerpetrator } from "./crime-perpetrator";
-import { LocationCity } from "./location-city";
+import { CrimeClassification } from "./crime-classification"
+import { CrimePerpetrator } from "./crime-perpetrator"
+import { LocationCity } from "./location-city"
 
 export interface Crime {
   date: Date

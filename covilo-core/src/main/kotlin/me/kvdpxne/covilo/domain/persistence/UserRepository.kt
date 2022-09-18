@@ -10,14 +10,18 @@ import java.util.UUID
 interface UserRepository {
 
   fun findByIdentifier(identifier: UUID): User?
+
   fun findByName(name: String): User?
+
   fun findAll(): Users
 
   fun insert(user: User)
+
   fun update(user: User)
 
   fun delete(identifier: UUID)
-  fun truncate()
 
-  fun count(): Long
+  fun deleteAll()
+
+  fun count(): Int
 }

@@ -1,25 +1,26 @@
 <div #wrapper="ngbDropdown" ngbDropdown>
-  <label class="fw-bold mb-1" [for]="name">
+  <label [for]="name" class="fw-bold mb-1">
     {{ placeholder | translate }}
   </label>
   <input #input
-         ngbDropdownAnchor
-         class="form-select"
-         autocomplete="off"
+         (focus)="wrapper.open()"
          [(ngModel)]="value"
+         [disabled]="disabled"
          [id]="name"
          [name]="name"
          [placeholder]="placeholder | translate"
-         [disabled]="disabled"
-         (focus)="wrapper.open()"
+         autocomplete="off"
+         class="form-select"
+         ngbDropdownAnchor
          value="">
 
   <!--a drop-down list filtered by the value in the input selector -->
-  <div ngbDropdownMenu class="list">
-    <div ngbDropdownItem class="list-item"
-         *ngFor="let item of suggestions; let i = index"
+  <div class="list" ngbDropdownMenu>
+    <div (click)="setKey(item)"
+         *ngFor="let item of suggestions | textFilter: value; index as i"
          [tabIndex]="i"
-         (click)="setKey(item)">
+         class="list-item"
+         ngbDropdownItem>
       {{ getSuggestionReadableName(item) | translate }}
     </div>
   </div>

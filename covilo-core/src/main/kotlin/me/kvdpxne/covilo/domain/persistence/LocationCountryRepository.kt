@@ -10,14 +10,18 @@ import java.util.UUID
 interface LocationCountryRepository {
 
   fun findByIdentifier(identifier: UUID): LocationCountry?
+
   fun findByKey(key: String): LocationCountry?
+
   fun findAll(): LocationCountries
 
   fun insert(country: LocationCountry)
+
   fun update(country: LocationCountry)
 
   fun delete(identifier: UUID)
+
   fun deleteAll()
 
-  fun count(): Long
+  fun count(): Int
 }

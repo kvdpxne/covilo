@@ -1,5 +1,6 @@
 package me.kvdpxne.covilo.api.rest.dto
 
+import me.kvdpxne.covilo.domain.model.CapitalType
 import me.kvdpxne.covilo.domain.model.LocationCities
 import me.kvdpxne.covilo.domain.model.LocationCity
 
@@ -15,6 +16,8 @@ data class LocationCityDto(
   val key: String,
   val domesticName: String,
   val region: LocationRegionDto,
+  val population: Int,
+  val capital: CapitalType
 )
 
 /**
@@ -24,7 +27,9 @@ fun LocationCity.toDto(): LocationCityDto {
   return LocationCityDto(
     this.key,
     this.domesticName,
-    this.region.toDto()
+    this.region.toDto(),
+    this.population,
+    this.capital
   )
 }
 

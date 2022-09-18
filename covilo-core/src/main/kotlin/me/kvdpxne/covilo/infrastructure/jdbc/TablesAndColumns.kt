@@ -1,4 +1,4 @@
-package me.kvdpxne.covilo.domain
+package me.kvdpxne.covilo.infrastructure.jdbc
 
 // table names
 const val TABLE_COMMENT = "comment"
@@ -9,24 +9,25 @@ const val TABLE_CRIME_PERPETRATOR = "crime_perpetrator"
 const val TABLE_LOCATION_CITY = "location_city"
 const val TABLE_LOCATION_REGION = "location_region"
 const val TABLE_LOCATION_COUNTRY = "location_country"
+const val TABLE_USER = "user"
 
 // column names
 const val COLUMN_IDENTIFIER = "identifier"
 const val COLUMN_KEY = "key"
+const val COLUMN_POPULATION = "population"
+const val COLUMN_CAPITAL = "capital"
 const val COLUMN_DOMESTIC_NAME = "domestic_name"
 const val COLUMN_DATE = "date"
 const val COLUMN_EMOJI = "emoji"
-
+const val COLUMN_EMAIL = "email"
+const val COLUMN_PASSWORD = "password"
+const val COLUMN_BIRTH_DATE = "birth_date"
+const val COLUMN_CREATED_DATE = "created_date"
+const val COLUMN_LAST_MODIFIED_DATE = "last_modified_date"
 const val COLUMN_DESCRIPTION = "description"
-
-// varchar(24)
 const val COLUMN_FIRST_NAME = "first_name"
 const val COLUMN_LAST_NAME = "last_name"
-
-// unsigned int(10)
 const val COLUMN_AGE = "age"
-
-// bool(1)
 const val COLUMN_IS_CAUGHT = "is_caught"
 const val COLUMN_IS_CONFIRMED = "is_confirmed"
 

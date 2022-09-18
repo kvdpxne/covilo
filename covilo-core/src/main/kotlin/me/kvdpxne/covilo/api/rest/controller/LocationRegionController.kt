@@ -3,8 +3,8 @@ package me.kvdpxne.covilo.api.rest.controller
 import me.kvdpxne.covilo.api.rest.dto.LocationRegionDto
 import me.kvdpxne.covilo.api.rest.dto.LocationRegionsDto
 import me.kvdpxne.covilo.api.rest.dto.toDto
-import me.kvdpxne.covilo.domain.COLUMN_KEY
-import me.kvdpxne.covilo.domain.TABLE_LOCATION_COUNTRY
+import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_KEY
+import me.kvdpxne.covilo.infrastructure.jdbc.TABLE_LOCATION_COUNTRY
 import me.kvdpxne.covilo.domain.persistence.LocationRegionRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus

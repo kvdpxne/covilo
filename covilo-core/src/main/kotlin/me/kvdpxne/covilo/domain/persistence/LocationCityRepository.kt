@@ -10,14 +10,24 @@ import java.util.UUID
 interface LocationCityRepository {
 
   fun findByIdentifier(identifier: UUID): LocationCity?
-  fun findBySpecificKey(country: String, region: String, key: String): LocationCity?
+
+  @Deprecated(
+    message = "Sometimes a key can match more than one entity.",
+    replaceWith = ReplaceWith("findAllByKey")
+  )
+  fun findByKey(key: String): LocationCity?
+
   fun findAll(): LocationCities
 
+  fun findAllByKey(key: String): LocationCities
+
   fun insert(city: LocationCity)
+
   fun update(city: LocationCity)
 
   fun delete(identifier: UUID)
+
   fun deleteAll()
 
-  fun count(): Long
+  fun count(): Int
 }

@@ -1,26 +1,19 @@
-<!--<div class="container py-9">-->
-<!--  <div>-->
-<!--    <small>-->
-<!--      {{ city?.domesticName }}-->
-<!--    </small>-->
-<!--  </div>-->
-<!--  &lt;!&ndash; TODO chart, comments, crimes &ndash;&gt;-->
-<!--</div>-->
+<div class="container">
+
+</div>
 
 <a-container>
   <div>
     <div>
       <div style="display: block">
-        <canvas baseChart
-                [data]="barChartData"
+        <canvas [data]="barChartData"
                 [options]="barChartOptions"
                 [plugins]="barChartPlugins"
                 [type]="barChartType"
-                (chartHover)="chartHovered($event)"
-                (chartClick)="chartClicked($event)">
+                baseChart>
         </canvas>
       </div>
-      <button mat-button mat-raised-button color="primary" (click)="randomize()">Update</button>
+      <button (click)="randomize()">Update</button>
     </div>
   </div>
 </a-container>

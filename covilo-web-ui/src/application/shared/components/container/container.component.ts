@@ -1,8 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from "@angular/core"
 
 @Component({
-  selector: 'a-container',
-  templateUrl: './container.component.html'
+  selector: "a-container",
+  templateUrl: "./container.component.html"
 })
 export class ContainerComponent implements OnInit {
 

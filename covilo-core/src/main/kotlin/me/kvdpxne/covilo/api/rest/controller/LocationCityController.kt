@@ -3,9 +3,9 @@ package me.kvdpxne.covilo.api.rest.controller
 import me.kvdpxne.covilo.api.rest.dto.LocationCitiesDto
 import me.kvdpxne.covilo.api.rest.dto.LocationCityDto
 import me.kvdpxne.covilo.api.rest.dto.toDto
-import me.kvdpxne.covilo.domain.COLUMN_CITY
-import me.kvdpxne.covilo.domain.COLUMN_COUNTRY
-import me.kvdpxne.covilo.domain.COLUMN_REGION
+import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_CITY
+import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_COUNTRY
+import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_REGION
 import me.kvdpxne.covilo.domain.persistence.LocationCityRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -78,8 +78,9 @@ class LocationCityController @Autowired(required = true) constructor(
     if (b0 || b1 || b2) {
       return ResponseEntity(HttpStatus.BAD_REQUEST)
     }
-    val one = repository.findBySpecificKey(p0, p1, p2)
-      ?: return ResponseEntity(HttpStatus.NOT_FOUND)
+    val one = repository.findAllByKey(p2).find {
+      it.regionKey == p1
+    } ?: return ResponseEntity(HttpStatus.NOT_FOUND)
     return ResponseEntity.ok(one.toDto())
   }
 }

@@ -1,7 +1,7 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform } from "@angular/core"
 
 @Pipe({
-  name: 'textFilter',
+  name: "textFilter",
   pure: false
 })
 export class TextFilterPipe implements PipeTransform {
@@ -16,6 +16,14 @@ export class TextFilterPipe implements PipeTransform {
     }
 
     search = search.toLowerCase()
-    return items.filter(item => item.toLowerCase().includes(search))
+    return items.filter(item => {
+      if ("domesticName" in item) {
+        return item.domesticName.toLocaleLowerCase().includes(search)
+      }
+      if ("key" in item) {
+        return item.key.toLocaleLowerCase().includes(search)
+      }
+      return item.toLowerCase().includes(search)
+    })
   }
 }

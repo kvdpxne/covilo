@@ -1,11 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Section } from "../../../shared/types/section";
-import { Icon } from "../../../shared/types/icon";
-import { Link } from "../../../shared/types/link";
+import { Component, Input, OnInit } from "@angular/core"
+import { Section } from "../../../shared/types/section"
+import { Icon } from "../../../shared/types/icon"
+import { Link } from "../../../shared/types/link"
 
 @Component({
-  selector: 'app-footer',
-  templateUrl: './footer.component.html',
+  selector: "app-footer",
+  templateUrl: "./footer.component.html",
   styleUrls: [
     "./footer.component.scss"
   ]

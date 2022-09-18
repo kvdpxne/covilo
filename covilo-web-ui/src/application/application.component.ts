@@ -1,53 +1,77 @@
-import { Component } from '@angular/core';
-import { TranslateService } from "@ngx-translate/core";
-import { Section } from "./shared/types/section";
-import { Icon } from "./shared/types/icon";
-import { Link } from "./shared/types/link";
+import { Component } from "@angular/core"
+import { TranslateService } from "@ngx-translate/core"
+import { Section } from "./shared/types/section"
+import { Icon } from "./shared/types/icon"
+import { Link } from "./shared/types/link"
+import { NavigationStart, Router } from "@angular/router"
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './application.component.html'
+  selector: "app-root",
+  templateUrl: "./application.component.html",
+  styleUrls: [
+    "./application.component.scss"
+  ]
 })
 export class ApplicationComponent {
 
-  navigationItemList: Set<Link>
-  sectionSet: Set<Section>;
-  iconSet: Set<Icon>;
-  linkSet: Set<Link>;
+  showFooter: boolean = true
+  showHeader: boolean = true
 
-  constructor(private translate: TranslateService) {
+  navigationItemList: Set<Link>
+  sectionSet: Set<Section>
+  iconSet: Set<Icon>
+  linkSet: Set<Link>
+
+  constructor(private router: Router, private translate: TranslateService) {
+    router.events.subscribe(event => {
+      console.log(event)
+      if (event instanceof NavigationStart) {
+        if (event.url.includes("authentication")) {
+          this.showFooter = false
+          this.showHeader = false
+        } else {
+          this.showFooter = true
+          this.showHeader = true
+        }
+      }
+    })
+
     this.translate.addLangs([
-      'locale-en',
-    ]);
-    this.translate.setDefaultLang('locale-en');
-    this.translate.use('locale-en');
+      "locale-en"
+    ])
+    this.translate.setDefaultLang("locale-en")
+    this.translate.use("locale-en")
 
     // Initialize
     this.navigationItemList = new Set<Link>()
-    this.sectionSet = new Set<Section>();
-    this.iconSet = new Set<Icon>();
+    this.sectionSet = new Set<Section>()
+    this.iconSet = new Set<Icon>()
     this.linkSet = new Set<Link>()
 
-    this.builtInNavigationItems();
-    this.builtInSections();
-    this.builtInIcons();
-    this.builtInLinks();
+    this.builtInNavigationItems()
+    this.builtInSections()
+    this.builtInIcons()
+    this.builtInLinks()
+  }
+
+  onAttach($event: any) {
+
   }
 
   private builtInNavigationItems(): void {
-    this.navigationItemList.add(new Link("navigation.home", "/"));
-    this.navigationItemList.add(new Link("navigation.statistics", "/statistics"));
+    this.navigationItemList.add(new Link("navigation.home", "/"))
+    this.navigationItemList.add(new Link("navigation.statistics", "/statistics"))
   }
 
   private builtInSections(): void {
     if (undefined == this.navigationItemList) {
       return
     }
-    const linkArray = new Array(this.navigationItemList.size);
-    let iterator = 0;
+    const linkArray = new Array(this.navigationItemList.size)
+    let iterator = 0
     for (const link of this.navigationItemList) {
-      linkArray[iterator] = link;
-      iterator++;
+      linkArray[iterator] = link
+      iterator++
     }
     const section = new Section("Navigation", linkArray)
     this.sectionSet.add(section)
@@ -55,15 +79,15 @@ export class ApplicationComponent {
       new Link("About", ""),
       new Link("Contacts", ""),
       new Link("News", "")
-    ]));
+    ]))
     this.sectionSet.add(new Section("Resources", [
-      new Link("Newsletters", ""),
-    ]));
+      new Link("Newsletters", "")
+    ]))
   }
 
   private builtInIcons(): void {
-    this.iconSet.add(new Icon("github", new Link("GitHub", "")));
-    this.iconSet.add(new Icon("git", new Link("Git", "")));
+    this.iconSet.add(new Icon("github", new Link("GitHub", "")))
+    this.iconSet.add(new Icon("git", new Link("Git", "")))
   }
 
   private builtInLinks(): void {

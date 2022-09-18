@@ -1,5 +1,5 @@
-import { User } from "./user";
-import { CommentReaction } from "./comment-reaction";
+import { User } from "./user"
+import { CommentReaction } from "./comment-reaction"
 
 export interface Comment {
   author: User,

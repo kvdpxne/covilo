@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { LocationCity, LocationCityService } from "../../../core/core.module";
+import { Component, OnInit } from "@angular/core"
+import { LocationCity, LocationCityService } from "../../../core"
 
 @Component({
-  selector: 'app-statistics',
-  templateUrl: './statistics.component.html',
-  styleUrls: ['./statistics.component.scss']
+  selector: "a-statistics",
+  templateUrl: "./statistics.component.html",
+  styleUrls: [
+    "./statistics.component.scss"
+  ]
 })
 export class StatisticsComponent implements OnInit {
 
@@ -19,15 +21,9 @@ export class StatisticsComponent implements OnInit {
    */
   getCities(): void {
     this.cityService.getAll().subscribe({
-      next: value => this.cities = value,
-      complete: () => {
-        console.debug(this.cities)
-        this.cities?.sort((a, b) => {
-          const aCity = a.key
-          const bCity = b.key
-          return aCity > bCity ? 1 : -1
-        })
-      }
+      next: value => this.cities = value.sort((a, b) => {
+        return a.domesticName.localeCompare(b.domesticName)
+      })
     })
   }
 

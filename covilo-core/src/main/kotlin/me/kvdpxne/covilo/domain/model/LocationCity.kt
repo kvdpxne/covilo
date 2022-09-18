@@ -12,7 +12,9 @@ data class LocationCity(
   val identifier: UUID = UUID.randomUUID(),
   val key: String,
   val domesticName: String,
-  val region: LocationRegion
+  val region: LocationRegion,
+  val population: Int = 0,
+  val capital: CapitalType = CapitalType.NONE
 ) : Serializable {
 
   companion object {

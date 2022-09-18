@@ -1,17 +1,17 @@
-import { Injectable } from '@angular/core';
-import { Observable } from "rxjs";
-import { ApiHttpClientService } from "../../shared/shared.module";
-import { LocationRegion } from "../core.module";
+import { Injectable } from "@angular/core"
+import { Observable } from "rxjs"
+import { ApiHttpClientService } from "../../shared/shared.module"
+import { LocationRegion } from "../core.module"
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class LocationRegionService {
 
   // basic path of the rest controller rest
   private readonly basePath: string
 
-  constructor(private httpClient: ApiHttpClientService) {
+  constructor(private readonly api: ApiHttpClientService) {
     this.basePath = "location/region"
   }
 
@@ -27,6 +27,6 @@ export class LocationRegionService {
       const parameters = `?country=${p0}`
       query += parameters
     }
-    return this.httpClient.getV2(query)
+    return this.api.get(query)
   }
 }

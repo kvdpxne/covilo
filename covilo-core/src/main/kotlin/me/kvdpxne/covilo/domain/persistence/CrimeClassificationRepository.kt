@@ -18,5 +18,5 @@ interface CrimeClassificationRepository {
   fun delete(identifier: UUID)
   fun deleteAll()
 
-  fun count(): Long
+  fun count(): Int
 }

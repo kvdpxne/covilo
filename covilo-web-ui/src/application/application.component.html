@@ -1,14 +1,20 @@
-<app-header [itemList]="navigationItemList">
+<ng-template [ngIf]="showHeader">
+  <app-header [itemList]="navigationItemList">
 
-</app-header>
+  </app-header>
+</ng-template>
 
-<main>
+
+<div [ngClass]="{'my-8': showHeader}">
   <router-outlet>
 
   </router-outlet>
-</main>
+</div>
 
-<app-footer [sectionSet]="sectionSet"
-            [iconSet]="iconSet"
-            [linkSet]="linkSet">
-</app-footer>
+<ng-template [ngIf]="showFooter">
+  <app-footer [iconSet]="iconSet"
+              [linkSet]="linkSet"
+              [sectionSet]="sectionSet">
+  </app-footer>
+</ng-template>
+
