@@ -1,0 +1,102 @@
+# Auto detect text files and perform LF normalization
+*                 text=auto
+
+# Common
+# Documents
+*.doc             diff=astextplain
+*.docx            diff=astextplain
+*.dot             diff=astextplain
+*.pdf             diff=astextplain
+*.rtf             diff=astextplain
+*.txt             text
+
+# Graphics
+*.bmp             binary
+*.gif             binary
+*.ico             binary
+*.jpg             binary
+*.jpeg            binary
+*.png             binary
+*.svg             binary
+*.tif             binary
+*.tiff            binary
+*.webp            binary
+
+# Fonts
+*.ttf             binary
+*.eot             binary
+*.otf             binary
+*.woff            binary
+*.woff2           binary
+
+# Scripts
+*.bat             text eol=crlf
+*.sh              text eol=lf
+
+# Documentation
+*.markdown        text diff=markdown
+*.md              text diff=markdown
+AUTHORS           text
+CHANGELOG         text
+CHANGES           text
+CONTRIBUTING      text
+COPYING           text
+COPYRIGHT         text
+INSTALL           text
+LICENSE           text
+NEWS              text
+README            text
+
+# Serialisation
+*.json            text
+*.properties      text
+*.toml            text
+*.xml             text
+*.yaml            text
+*.yml             text
+
+# Text files where line endings should be preserved
+*.patch           -text
+
+# Exclude files from exporting
+.gitattributes    export-ignore
+.gitignore        export-ignore
+.gitkeep          export-ignore
+
+# Kotlin
+# Source code
+*.kt              text diff=kotlin
+*.gradle.kts      text diff=kotlin
+
+# Compiled class file
+*.class           binary
+
+# Package files
+*.jar             binary
+*.war             binary
+*.ear             binary
+
+# Configuration
+.editorconfig     text
+
+# Web
+# Source code
+*.css             text diff=css
+*.htm             text diff=html
+*.html            text diff=html
+*.js              text
+*.jsx             text
+*.map             text -diff
+*.scss            text diff=css
+*.ts              text
+*.tsx             text
+*.xhtml           text diff=html
+
+# Configuration
+.browserslistrc   text
+package.json      text eol=lf
+package-lock.json text eol=lf -diff
+
+# Miscellaneous
+# Docker
+Dockerfile        text

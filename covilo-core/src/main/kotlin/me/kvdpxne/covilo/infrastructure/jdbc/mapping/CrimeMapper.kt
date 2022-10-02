@@ -6,6 +6,7 @@ import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_DESCRIPTION
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_IS_CONFIRMED
 import me.kvdpxne.covilo.infrastructure.jdbc.TABLE_CRIME
 import me.kvdpxne.covilo.util.sql.ResultSetParser
+import me.kvdpxne.covilo.util.sql.parseIdentifier
 import org.springframework.jdbc.core.RowMapper
 import java.sql.ResultSet
 import java.sql.SQLException

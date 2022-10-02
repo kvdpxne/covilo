@@ -6,9 +6,12 @@ import me.kvdpxne.covilo.domain.persistence.CrimeClassificationRepository
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_IDENTIFIER
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_KEY
 import me.kvdpxne.covilo.infrastructure.jdbc.TABLE_CRIME_CLASSIFICATION
-import me.kvdpxne.covilo.infrastructure.jdbc.callback.RowCounterCallback
+import me.kvdpxne.covilo.infrastructure.jdbc.callback.RowCounterCallbackHandler
 import me.kvdpxne.covilo.infrastructure.jdbc.mapping.CrimeClassificationMapper
-import me.kvdpxne.covilo.util.sql.QueryBuilder
+import me.kvdpxne.covilo.util.sql.SqlCallBuilder
+import me.kvdpxne.covilo.util.sql.SqlDeleteBuilder
+import me.kvdpxne.covilo.util.sql.SqlInsertBuilder
+import me.kvdpxne.covilo.util.sql.sqlColumnArrayOf
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.stereotype.Component
@@ -24,36 +27,40 @@ class CrimeClassificationDao @Autowired(required = true) constructor(
 ) : CrimeClassificationRepository {
 
   companion object {
+
     /**
-     *
+     * Shortcut to the current table.
      */
-    val FIELD_ARRAY = arrayOf(
-      "$TABLE_CRIME_CLASSIFICATION.$COLUMN_IDENTIFIER",
-      "$TABLE_CRIME_CLASSIFICATION.$COLUMN_KEY"
+    private val TABLE: String
+      get() = TABLE_CRIME_CLASSIFICATION
+
+    internal val COLUMNS = sqlColumnArrayOf(
+      TABLE,
+      COLUMN_IDENTIFIER,
+      COLUMN_KEY
     )
   }
 
+  /**
+   * Shortcut to the most used query builder based on SELECT query.
+   */
+  private val callBuilder: SqlCallBuilder
+    get() = SqlCallBuilder().select(COLUMNS).from(TABLE)
+
   override fun findByIdentifier(identifier: UUID): CrimeClassification? {
-    val stringIdentifier = identifier.toString()
-    val query = QueryBuilder()
-      .select(*FIELD_ARRAY)
-      .from(TABLE_CRIME_CLASSIFICATION)
-      .where(stringIdentifier, COLUMN_IDENTIFIER)
-      .end()
+    val builder = callBuilder.where(COLUMN_IDENTIFIER, identifier)
+    val query = builder.build()
     return runCatching {
       operations.queryForObject(
         query,
-        mapOf(COLUMN_IDENTIFIER to stringIdentifier),
+        builder.parameters,
         CrimeClassificationMapper
       )
     }.getOrNull()
   }
 
   override fun findAll(): CrimeClassifications {
-    val query = QueryBuilder()
-      .select(*FIELD_ARRAY)
-      .from(TABLE_CRIME_CLASSIFICATION)
-      .end()
+    val query = callBuilder.build()
     return operations.query(
       query,
       CrimeClassificationMapper
@@ -62,7 +69,11 @@ class CrimeClassificationDao @Autowired(required = true) constructor(
 
   @Transactional
   override fun insert(classification: CrimeClassification) {
-    TODO("Not yet implemented")
+    val builder = SqlInsertBuilder(TABLE)
+    builder[COLUMN_IDENTIFIER] = classification.identifier
+    builder[COLUMN_KEY] = classification.key
+    val query = builder.build()
+    operations.jdbcOperations.update(query)
   }
 
   @Transactional
@@ -72,19 +83,23 @@ class CrimeClassificationDao @Autowired(required = true) constructor(
 
   @Transactional
   override fun delete(identifier: UUID) {
-    TODO("Not yet implemented")
+    val builder = SqlDeleteBuilder(TABLE).where(COLUMN_IDENTIFIER, identifier)
+    val query = builder.build()
+    operations.update(
+      query,
+      builder.parameters
+    )
   }
 
+  @Transactional
   override fun deleteAll() {
-    TODO("Not yet implemented")
+    val query = SqlDeleteBuilder(TABLE).build()
+    operations.jdbcOperations.update(query)
   }
 
   override fun count(): Int {
-    val counter = RowCounterCallback()
-    val query = QueryBuilder()
-      .count(FIELD_ARRAY.first())
-      .from(TABLE_CRIME_CLASSIFICATION)
-      .end()
+    val counter = RowCounterCallbackHandler()
+    val query = SqlCallBuilder().count().from(TABLE).build()
     operations.query(query, counter)
     return counter.count
   }

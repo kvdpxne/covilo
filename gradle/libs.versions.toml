@@ -1,7 +1,7 @@
 [versions]
 kotlin = "1.7.10"
-spring = "2.7.3"
-some = "1.4"
+springDependencyManagment = "1.0.13.RELEASE"
+springFramework = "2.7.3"
 
 [libraries]
-myLib = { group = "com.mycompany", name = "mylib", version.ref = "some" }
+kotlin = { group = "org.jetbrains", name = "kotlin", version.ref = "kotlin" }

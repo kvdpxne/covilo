@@ -13,7 +13,7 @@ class MyUserDetailsService @Autowired(required = true) constructor(
 ) : UserDetailsService {
 
   override fun loadUserByUsername(name: String): UserDetails {
-    return repository.findByName(name)?.let {
+    return repository.findByEmail(name)?.let {
       MyPrincipal(it)
     } ?: throw UsernameNotFoundException(name)
   }

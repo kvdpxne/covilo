@@ -8,9 +8,13 @@ import java.util.UUID
  */
 typealias CrimeClassifications = Collection<CrimeClassification>
 
+/**
+ * @param identifier
+ * @param key
+ */
 data class CrimeClassification(
   val identifier: UUID = UUID.randomUUID(),
-  val key: String
+  var key: String
 ) : Serializable {
 
   companion object {

@@ -11,7 +11,7 @@ interface UserRepository {
 
   fun findByIdentifier(identifier: UUID): User?
 
-  fun findByName(name: String): User?
+  fun findByEmail(email: String): User?
 
   fun findAll(): Users
 

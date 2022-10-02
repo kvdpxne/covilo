@@ -1,7 +1,6 @@
 package me.kvdpxne.covilo.api.rest.dto
 
 import me.kvdpxne.covilo.domain.model.Crime
-import me.kvdpxne.covilo.domain.model.CrimeClassification
 import me.kvdpxne.covilo.domain.model.Crimes
 
 /**
@@ -26,12 +25,12 @@ data class CrimeDto(
  */
 fun Crime.toDto(): CrimeDto {
   return CrimeDto(
-    this.date.toString(),
-    this.city.toDto(),
-    this.classification.toDto(),
-    this.perpetrator.toDto(),
-    this.description,
-    this.isConfirmed
+    date.toString(),
+    city.toDto(),
+    classification.toDto(),
+    perpetrator.toDto(),
+    description,
+    isConfirmed
   )
 }
 

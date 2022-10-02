@@ -20,7 +20,7 @@ data class CrimeClassificationDto(
  */
 fun CrimeClassification.toDto(): CrimeClassificationDto {
   return CrimeClassificationDto(
-    this.key
+    key
   )
 }
 

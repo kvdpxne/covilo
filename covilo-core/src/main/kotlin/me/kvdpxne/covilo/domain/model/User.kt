@@ -10,6 +10,16 @@ import java.util.UUID
  */
 typealias Users = Collection<User>
 
+/**
+ * @param identifier
+ * @param email
+ * @param password
+ * @param firstName
+ * @param lastName
+ * @param birthDate
+ * @param createdDate
+ * @param lastModifiedDate
+ */
 data class User(
   val identifier: UUID = UUID.randomUUID(),
   var email: String,

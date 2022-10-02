@@ -2,7 +2,7 @@ package me.kvdpxne.covilo.infrastructure.datasource
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
-import me.kvdpxne.covilo.Settings
+import me.kvdpxne.covilo.ApplicationSettings
 import org.mariadb.jdbc.MariaDbDataSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.jdbc.DataSourceBuilder
@@ -13,7 +13,7 @@ import javax.sql.DataSource
 
 @Configuration
 class DataSourceConfiguration @Autowired(required = true) constructor(
-  private val settings: Settings
+  private val settings: ApplicationSettings
 ) {
 
   @Primary

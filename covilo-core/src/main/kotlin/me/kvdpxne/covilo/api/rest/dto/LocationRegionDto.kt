@@ -22,9 +22,9 @@ data class LocationRegionDto(
  */
 fun LocationRegion.toDto(): LocationRegionDto {
   return LocationRegionDto(
-    this.key,
-    this.domesticName,
-    this.country.toDto()
+    key,
+    domesticName,
+    country.toDto()
   )
 }
 

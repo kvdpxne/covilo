@@ -1,21 +1,28 @@
 <div class="container">
 
-</div>
-
-<a-container>
   <div>
-    <div>
-      <div style="display: block">
-        <canvas [data]="barChartData"
-                [options]="barChartOptions"
-                [plugins]="barChartPlugins"
-                [type]="barChartType"
-                baseChart>
-        </canvas>
-      </div>
-      <button (click)="randomize()">Update</button>
+    <h2>
+      {{ city.domesticName }}
+    </h2>
+  </div>
+
+  <div class="d-block">
+    <canvas [data]="barChartData"
+            [options]="barChartOptions"
+            [plugins]="barChartPlugins"
+            [type]="barChartType"
+            baseChart>
+    </canvas>
+  </div>
+
+  <!--  -->
+  <div class="mt-5">
+    <h2>Latest Crimes</h2>
+    <div *ngFor="let crime of crimes">
+
     </div>
   </div>
-</a-container>
+
+</div>
 
 

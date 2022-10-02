@@ -8,6 +8,10 @@ import java.util.UUID
  */
 typealias LocationCountries = Collection<LocationCountry>
 
+/**
+ * @param identifier
+ * @param key
+ */
 data class LocationCountry(
   val identifier: UUID = UUID.randomUUID(),
   val key: String,

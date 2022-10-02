@@ -7,6 +7,7 @@ import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_IS_CAUGHT
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_LAST_NAME
 import me.kvdpxne.covilo.infrastructure.jdbc.TABLE_CRIME_PERPETRATOR
 import me.kvdpxne.covilo.util.sql.ResultSetParser
+import me.kvdpxne.covilo.util.sql.parseIdentifier
 import org.springframework.jdbc.core.RowMapper
 import java.sql.ResultSet
 import java.sql.SQLException

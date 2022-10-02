@@ -1,0 +1,184 @@
+<div class="container-fluid">
+  <div class="row">
+    <div
+      class="col-lg-5 col-xl-4 d-none d-lg-flex align-items-center min-vh-100 bg-dark">
+    </div>
+    <!-- End Col -->
+
+    <div
+      class="col-lg-7 col-xl-8 d-flex justify-content-center align-items-center min-vh-lg-100">
+      <div class="flex-grow-1 mx-auto" style="max-width: 28rem;">
+        <!-- Heading -->
+        <div class="text-center mb-5 mb-md-7">
+          <h1 class="h2">Welcome to Front</h1>
+          <p>Fill out the form to get started.</p>
+        </div>
+        <!-- End Heading -->
+
+        <!-- Form -->
+        <form class="js-validate needs-validation" novalidate="">
+          <div class="mb-3">
+            <label class="form-label" for="signupModalFormSignupEmail">Your
+              email</label>
+            <input aria-label="email@site.com"
+                   class="form-control form-control-lg"
+                   id="signupModalFormSignupEmail" name="email"
+                   placeholder="email@site.com" required=""
+                   type="email">
+            <span
+              class="invalid-feedback">Please enter a valid email address.</span>
+          </div>
+
+          <!-- Form -->
+          <div class="mb-3">
+            <label class="form-label" for="signupModalFormSignupPassword">Password</label>
+
+            <div class="input-group input-group-merge"
+                 data-hs-validation-validate-class="">
+              <input aria-label="8+ characters required"
+                     class="js-toggle-password form-control form-control-lg"
+                     id="signupModalFormSignupPassword"
+                     name="password"
+                     placeholder="8+ characters required" required
+                     type="password">
+              <a
+                class="js-toggle-password-target-1 input-group-append input-group-text"
+                href="javascript:">
+                <i class="js-toggle-passowrd-show-icon-1 bi-eye-slash"></i>
+              </a>
+            </div>
+
+            <span class="invalid-feedback">Your password is invalid. Please try again.</span>
+          </div>
+          <!-- End Form -->
+
+          <!-- Form -->
+          <div class="mb-3">
+            <label class="form-label"
+                   for="signupModalFormSignupConfirmPassword">Confirm
+              password</label>
+
+            <div class="input-group input-group-merge"
+                 data-hs-validation-validate-class="">
+              <input aria-label="8+ characters required"
+                     class="js-toggle-password form-control form-control-lg"
+                     id="signupModalFormSignupConfirmPassword"
+                     name="confirmPassword" placeholder="8+ characters required"
+                     required
+                     type="password">
+              <a
+                class="js-toggle-password-target-2 input-group-append input-group-text"
+                href="javascript:">
+                <i class="js-toggle-passowrd-show-icon-2 bi-eye-slash"></i>
+              </a>
+            </div>
+
+            <span class="invalid-feedback">Password does not match the confirm password.</span>
+          </div>
+          <!-- End Form -->
+
+          <!-- Check -->
+          <div class="form-check mb-3">
+            <input class="form-check-input" id="signupHeroFormPrivacyCheck"
+                   name="signupFormPrivacyCheck" required=""
+                   type="checkbox">
+            <label class="form-check-label small"
+                   for="signupHeroFormPrivacyCheck"> By submitting this form I
+              have read and acknowledged the <a href="./page-privacy.html">Privacy
+                Policy</a></label>
+            <span
+              class="invalid-feedback">Please accept our Privacy Policy.</span>
+          </div>
+          <!-- End Check -->
+
+          <div class="d-grid mb-3">
+            <button class="btn btn-primary btn-lg" type="submit">Sign up
+            </button>
+          </div>
+
+          <div class="text-center">
+            <p>Already have an account? <a class="link"
+                                           href="./page-login.html">Log in
+              here</a></p>
+          </div>
+        </form>
+        <!-- End Form -->
+      </div>
+    </div>
+
+    <div
+      *ngIf="log"
+      class="col-lg-7 col-xl-8 d-flex justify-content-center align-items-center min-vh-lg-100">
+      <div class="flex-grow-1 mx-auto" style="max-width: 28rem;">
+        <!-- Heading -->
+        <div class="text-center mb-5 mb-md-7">
+          <h1 class="h2">Welcome back</h1>
+          <p>Login to manage your account.</p>
+        </div>
+        <!-- End Heading -->
+
+        <!-- Form -->
+        <form class="js-validate needs-validation" novalidate="">
+          <!-- Form -->
+          <div class="mb-4">
+            <label class="form-label" for="signupModalFormLoginEmail">Your
+              email</label>
+            <input aria-label="email@site.com"
+                   class="form-control form-control-lg"
+                   id="signupModalFormLoginEmail" name="email"
+                   placeholder="email@site.com" required=""
+                   type="email">
+            <span
+              class="invalid-feedback">Please enter a valid email address.</span>
+          </div>
+          <!-- End Form -->
+
+          <!-- Form -->
+          <div class="mb-4">
+            <div class="d-flex justify-content-between align-items-center">
+              <label class="form-label" for="signupModalFormLoginPassword">Password</label>
+
+              <a class="form-label-link" href="./page-reset-password.html">Forgot
+                Password?</a>
+            </div>
+
+            <div class="input-group input-group-merge"
+                 data-hs-validation-validate-class="">
+              <input aria-label="8+ characters required"
+                     class="js-toggle-password form-control form-control-lg"
+                     data-hs-toggle-password-options="{
+                         &quot;target&quot;: &quot;#changePassTarget&quot;,
+                         &quot;defaultClass&quot;: &quot;bi-eye-slash&quot;,
+                         &quot;showClass&quot;: &quot;bi-eye&quot;,
+                         &quot;classChangeTarget&quot;: &quot;#changePassIcon&quot;
+                       }" id="signupModalFormLoginPassword"
+                     minlength="8"
+                     name="password" placeholder="8+ characters required"
+                     required="" type="password">
+              <a class="input-group-append input-group-text"
+                 href="javascript:" id="changePassTarget">
+                <i class="bi-eye-slash" id="changePassIcon"></i>
+              </a>
+            </div>
+
+            <span class="invalid-feedback">Please enter a valid password.</span>
+          </div>
+          <!-- End Form -->
+
+          <div class="d-grid mb-3">
+            <button class="btn btn-primary btn-lg" type="submit">Log in</button>
+          </div>
+
+          <div class="text-center">
+            <p>Don't have an account yet? <a class="link"
+                                             href="./page-signup.html">Sign up
+              here</a></p>
+          </div>
+        </form>
+        <!-- End Form -->
+      </div>
+    </div>
+    <!-- End Col -->
+  </div>
+  <!-- End Row -->
+</div>

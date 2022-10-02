@@ -6,12 +6,14 @@ import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_CAPITAL
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_POPULATION
 import me.kvdpxne.covilo.infrastructure.jdbc.TABLE_LOCATION_CITY
 import me.kvdpxne.covilo.util.sql.ResultSetParser
+import me.kvdpxne.covilo.util.sql.parseDomesticName
+import me.kvdpxne.covilo.util.sql.parseIdentifier
+import me.kvdpxne.covilo.util.sql.parseKey
 import org.springframework.jdbc.core.RowMapper
 import java.sql.ResultSet
 import java.sql.SQLException
 
 object LocationCityMapper : RowMapper<LocationCity> {
-
 
   @Throws(SQLException::class)
   override fun mapRow(result: ResultSet, row: Int): LocationCity {

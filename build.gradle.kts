@@ -1,6 +1,5 @@
 import io.spring.gradle.dependencymanagement.DependencyManagementPlugin
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
 plugins {
   id("org.springframework.boot").apply(false)
@@ -20,15 +19,6 @@ subprojects {
   apply<DependencyManagementPlugin>()
   apply(plugin = "kotlin")
   apply(plugin = "org.jetbrains.kotlin.plugin.spring")
-
-  // TODO
-  if (name != "covilo-core") {
-    dependencyManagement {
-      imports {
-        mavenBom(SpringBootPlugin.BOM_COORDINATES)
-      }
-    }
-  }
 
   repositories {
     mavenCentral()

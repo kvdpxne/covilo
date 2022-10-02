@@ -1,36 +1,29 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core"
+import { AfterViewInit, Component, OnDestroy, OnInit } from "@angular/core"
 import { ActivatedRoute } from "@angular/router"
 import {
   Crime,
-  CrimeClassification,
-  CrimeClassificationService,
   CrimeService,
   LocationCity,
   LocationCityService
 } from "../../../core"
-import { BaseChartDirective } from "ng2-charts"
-import { ChartConfiguration, ChartData, ChartEvent, ChartType } from "chart.js"
+import { ChartConfiguration, ChartData, ChartType } from "chart.js"
+import { Subscription } from "rxjs"
 
 @Component({
-  selector: "result-details",
+  selector: "a-result-details",
   templateUrl: "./result-details.component.html"
 })
-export class ResultDetailsComponent implements AfterViewInit, OnInit {
-
-  @ViewChild(BaseChartDirective)
-  chart?: BaseChartDirective
+export class ResultDetailsComponent implements AfterViewInit, OnInit,
+  OnDestroy {
 
   //
-  city?: LocationCity
+  private crimeSubscription?: Subscription
+
+  //
+  city!: LocationCity
 
   // All available crimes for the city
   crimes?: Array<Crime>
-
-  // All available crime classifications
-  classifications?: Array<CrimeClassification>
-
-  //
-  comments?: Array<Comment>
 
   public barChartOptions: ChartConfiguration["options"] = {
     responsive: true,
@@ -59,25 +52,29 @@ export class ResultDetailsComponent implements AfterViewInit, OnInit {
     ]
   }
 
-  constructor(private route: ActivatedRoute,
-              private cityService: LocationCityService,
-              private crimeService: CrimeService,
-              private classificationService: CrimeClassificationService
+  constructor(private readonly route: ActivatedRoute,
+              private readonly locationCityService: LocationCityService,
+              private readonly crimeService: CrimeService
   ) {
   }
 
-  public randomize(): void {
-    // Only Change 3 values
-    this.barChartData.datasets[0].data = [
-      Math.round(Math.random() * 100),
-      59,
-      80,
-      Math.round(Math.random() * 100),
-      56,
-      Math.round(Math.random() * 100),
-      40]
+  private getCity(): void {
 
-    this.chart?.update()
+  }
+
+  private getCrimes(
+    country: string,
+    region: string,
+    city: string
+  ): void {
+    this.crimeSubscription = this.crimeService.getAll(country, region, city).subscribe({
+      next: (value: Array<Crime>) => {
+        this.crimes = value
+      }
+    })
+    if (!this.city) {
+
+    }
   }
 
   ngAfterViewInit(): void {
@@ -95,29 +92,16 @@ export class ResultDetailsComponent implements AfterViewInit, OnInit {
     })
 
     //
-    this.getCity(country, region, city)
     this.getCrimes(country, region, city)
-    this.getClassifications()
-  }
 
-  private getCity(p0: string, p1: string, p2: string): void {
-    this.cityService.getOne(p0, p1, p2).subscribe({
-      next: value => this.city = value,
-      complete: () => console.debug(this.city)
+    this.locationCityService.getOne(country, region, city).subscribe({
+      next: (value: LocationCity) => {
+        this.city = value
+      }
     })
   }
 
-  private getCrimes(p0: string, p1: string, p2: string): void {
-    this.crimeService.getAll(p0, p1, p2).subscribe({
-      next: value => this.crimes = value,
-      complete: () => console.debug(this.crimes)
-    })
-  }
-
-  private getClassifications(): void {
-    this.classificationService.getAll().subscribe({
-      next: value => this.classifications = value,
-      complete: () => console.debug(this.classifications)
-    })
+  ngOnDestroy(): void {
+    this.crimeSubscription?.unsubscribe()
   }
 }

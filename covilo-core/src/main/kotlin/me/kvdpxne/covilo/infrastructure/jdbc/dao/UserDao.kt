@@ -1,5 +1,8 @@
 package me.kvdpxne.covilo.infrastructure.jdbc.dao
 
+import me.kvdpxne.covilo.domain.model.User
+import me.kvdpxne.covilo.domain.model.Users
+import me.kvdpxne.covilo.domain.persistence.UserRepository
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_CREATED_DATE
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_EMAIL
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_FIRST_NAME
@@ -8,13 +11,12 @@ import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_LAST_MODIFIED_DATE
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_LAST_NAME
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_PASSWORD
 import me.kvdpxne.covilo.infrastructure.jdbc.TABLE_USER
-import me.kvdpxne.covilo.domain.model.User
-import me.kvdpxne.covilo.domain.model.Users
-import me.kvdpxne.covilo.domain.persistence.UserRepository
-import me.kvdpxne.covilo.infrastructure.jdbc.TABLE_CRIME_CLASSIFICATION
-import me.kvdpxne.covilo.infrastructure.jdbc.callback.RowCounterCallback
+import me.kvdpxne.covilo.infrastructure.jdbc.callback.RowCounterCallbackHandler
 import me.kvdpxne.covilo.infrastructure.jdbc.mapping.UserMapper
-import me.kvdpxne.covilo.util.sql.QueryBuilder
+import me.kvdpxne.covilo.util.sql.SqlCallBuilder
+import me.kvdpxne.covilo.util.sql.SqlDeleteBuilder
+import me.kvdpxne.covilo.util.sql.SqlInsertBuilder
+import me.kvdpxne.covilo.util.sql.sqlColumnArrayOf
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.stereotype.Component
@@ -27,45 +29,57 @@ class UserDao @Autowired(required = true) constructor(
 ) : UserRepository {
 
   companion object {
+
     /**
-     *
+     * Shortcut to the current table.
      */
-    val FIELD_ARRAY = arrayOf(
-      "$TABLE_USER.$COLUMN_IDENTIFIER",
-      "$TABLE_USER.$COLUMN_EMAIL",
-      "$TABLE_USER.$COLUMN_PASSWORD",
-      "$TABLE_USER.$COLUMN_FIRST_NAME",
-      "$TABLE_USER.$COLUMN_LAST_NAME",
-      "$TABLE_USER.$COLUMN_CREATED_DATE",
-      "$TABLE_USER.$COLUMN_LAST_MODIFIED_DATE"
+    private val TABLE: String
+      get() = TABLE_USER
+
+    internal val COLUMNS = sqlColumnArrayOf(
+      TABLE,
+      COLUMN_IDENTIFIER,
+      COLUMN_EMAIL,
+      COLUMN_PASSWORD,
+      COLUMN_FIRST_NAME,
+      COLUMN_LAST_NAME,
+      COLUMN_CREATED_DATE,
+      COLUMN_LAST_MODIFIED_DATE
     )
   }
 
+  /**
+   * Shortcut to the most used query builder based on SELECT query.
+   */
+  private val callBuilder: SqlCallBuilder
+    get() = SqlCallBuilder().select(COLUMNS).from(TABLE)
+
   override fun findByIdentifier(identifier: UUID): User? {
-    val stringIdentifier = identifier.toString()
-    val query = QueryBuilder()
-      .select(*FIELD_ARRAY)
-      .from(TABLE_USER)
-      .where(COLUMN_IDENTIFIER, stringIdentifier)
-      .end()
+    val builder = callBuilder.where(COLUMN_IDENTIFIER, identifier)
+    val query = builder.build()
     return runCatching {
       operations.queryForObject(
         query,
-        mapOf(COLUMN_IDENTIFIER to stringIdentifier),
+        builder.parameters,
         UserMapper
       )
     }.getOrNull()
   }
 
-  override fun findByName(name: String): User? {
-    TODO("Not yet implemented")
+  override fun findByEmail(email: String): User? {
+    val builder = callBuilder.where(COLUMN_EMAIL, email)
+    val query = builder.build()
+    return runCatching {
+      operations.queryForObject(
+        query,
+        builder.parameters,
+        UserMapper
+      )
+    }.getOrNull()
   }
 
   override fun findAll(): Users {
-    val query = QueryBuilder()
-      .select(*FIELD_ARRAY)
-      .from(TABLE_USER)
-      .end()
+    val query = callBuilder.build()
     return operations.query(
       query,
       UserMapper
@@ -74,7 +88,16 @@ class UserDao @Autowired(required = true) constructor(
 
   @Transactional
   override fun insert(user: User) {
-    TODO("Not yet implemented")
+    val builder = SqlInsertBuilder(TABLE)
+    builder[COLUMN_IDENTIFIER] = user.identifier
+    builder[COLUMN_EMAIL] = user.email
+    builder[COLUMN_PASSWORD] = user.password
+    builder[COLUMN_FIRST_NAME] = user.firstName
+    builder[COLUMN_LAST_NAME] = user.lastName
+    builder[COLUMN_CREATED_DATE] = user.createdDate
+    builder[COLUMN_LAST_MODIFIED_DATE] = user.lastModifiedDate
+    val query = builder.build()
+    operations.jdbcOperations.update(query)
   }
 
   @Transactional
@@ -84,21 +107,23 @@ class UserDao @Autowired(required = true) constructor(
 
   @Transactional
   override fun delete(identifier: UUID) {
-    TODO("Not yet implemented")
+    val builder = SqlDeleteBuilder(TABLE).where(COLUMN_IDENTIFIER, identifier)
+    operations.update(
+      builder.build(),
+      builder.parameters
+    )
   }
 
   @Transactional
   override fun deleteAll() {
-    TODO("Not yet implemented")
+    val query = SqlDeleteBuilder(TABLE).build()
+    operations.jdbcOperations.update(query)
   }
 
   override fun count(): Int {
-    val counter = RowCounterCallback()
-    val query = QueryBuilder()
-      .count(FIELD_ARRAY.first())
-      .from(TABLE_USER)
-      .end()
-    operations.query(query, counter)
+    val counter = RowCounterCallbackHandler()
+    val query = SqlCallBuilder().count().from(TABLE).build()
+    operations.jdbcOperations.query(query, counter)
     return counter.count
   }
 }

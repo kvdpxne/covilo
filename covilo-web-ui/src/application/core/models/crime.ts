@@ -6,7 +6,7 @@ export interface Crime {
   date: Date
   city: LocationCity
   classification: CrimeClassification,
-  perpetrator: CrimePerpetrator,
+  perpetrator?: CrimePerpetrator,
   description: string,
   confirmed: boolean
 }

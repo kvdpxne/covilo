@@ -3,6 +3,8 @@ package me.kvdpxne.covilo.infrastructure.jdbc.mapping
 import me.kvdpxne.covilo.domain.model.CrimeClassification
 import me.kvdpxne.covilo.infrastructure.jdbc.TABLE_CRIME_CLASSIFICATION
 import me.kvdpxne.covilo.util.sql.ResultSetParser
+import me.kvdpxne.covilo.util.sql.parseIdentifier
+import me.kvdpxne.covilo.util.sql.parseKey
 import org.springframework.jdbc.core.RowMapper
 import java.sql.ResultSet
 import java.sql.SQLException

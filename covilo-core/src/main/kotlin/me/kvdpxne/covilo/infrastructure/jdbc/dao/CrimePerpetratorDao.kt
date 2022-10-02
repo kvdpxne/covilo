@@ -9,9 +9,12 @@ import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_IDENTIFIER
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_IS_CAUGHT
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_LAST_NAME
 import me.kvdpxne.covilo.infrastructure.jdbc.TABLE_CRIME_PERPETRATOR
-import me.kvdpxne.covilo.infrastructure.jdbc.callback.RowCounterCallback
+import me.kvdpxne.covilo.infrastructure.jdbc.callback.RowCounterCallbackHandler
 import me.kvdpxne.covilo.infrastructure.jdbc.mapping.CrimePerpetratorMapper
-import me.kvdpxne.covilo.util.sql.QueryBuilder
+import me.kvdpxne.covilo.util.sql.SqlCallBuilder
+import me.kvdpxne.covilo.util.sql.SqlDeleteBuilder
+import me.kvdpxne.covilo.util.sql.SqlInsertBuilder
+import me.kvdpxne.covilo.util.sql.sqlColumnArrayOf
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.stereotype.Component
@@ -27,39 +30,43 @@ class CrimePerpetratorDao @Autowired(required = true) constructor(
 ) : CrimePerpetratorRepository {
 
   companion object {
+
     /**
-     *
+     * Shortcut to the current table.
      */
-    val FIELD_ARRAY = arrayOf(
-      "$TABLE_CRIME_PERPETRATOR.$COLUMN_IDENTIFIER",
-      "$TABLE_CRIME_PERPETRATOR.$COLUMN_FIRST_NAME",
-      "$TABLE_CRIME_PERPETRATOR.$COLUMN_LAST_NAME",
-      "$TABLE_CRIME_PERPETRATOR.$COLUMN_AGE",
-      "$TABLE_CRIME_PERPETRATOR.$COLUMN_IS_CAUGHT"
+    private val TABLE: String
+      get() = TABLE_CRIME_PERPETRATOR
+
+    internal val COLUMNS = sqlColumnArrayOf(
+      TABLE,
+      COLUMN_IDENTIFIER,
+      COLUMN_FIRST_NAME,
+      COLUMN_LAST_NAME,
+      COLUMN_AGE,
+      COLUMN_IS_CAUGHT
     )
   }
 
+  /**
+   * Shortcut to the most used query builder based on SELECT query.
+   */
+  private val callBuilder: SqlCallBuilder
+    get() = SqlCallBuilder().select(COLUMNS).from(TABLE)
+
   override fun findByIdentifier(identifier: UUID): CrimePerpetrator? {
-    val stringIdentifier = identifier.toString()
-    val query = QueryBuilder()
-      .select(*FIELD_ARRAY)
-      .from(TABLE_CRIME_PERPETRATOR)
-      .where(stringIdentifier, COLUMN_IDENTIFIER)
-      .end()
+    val builder = callBuilder.where(COLUMN_IDENTIFIER, identifier)
+    val query = builder.build()
     return runCatching {
       operations.queryForObject(
         query,
-        mapOf(COLUMN_IDENTIFIER to stringIdentifier),
+        builder.parameters,
         CrimePerpetratorMapper
       )
     }.getOrNull()
   }
 
   override fun findAll(): CrimePerpetrators {
-    val query = QueryBuilder()
-      .select(*FIELD_ARRAY)
-      .from(TABLE_CRIME_PERPETRATOR)
-      .end()
+    val query = callBuilder.build()
     return operations.query(
       query,
       CrimePerpetratorMapper
@@ -68,7 +75,14 @@ class CrimePerpetratorDao @Autowired(required = true) constructor(
 
   @Transactional
   override fun insert(perpetrator: CrimePerpetrator) {
-    TODO("Not yet implemented")
+    val builder = SqlInsertBuilder(TABLE)
+    builder[COLUMN_IDENTIFIER] = perpetrator.identifier
+    builder[COLUMN_FIRST_NAME] = perpetrator.firstName
+    builder[COLUMN_LAST_NAME] = perpetrator.lastName
+    builder[COLUMN_AGE] = perpetrator.age
+    builder[COLUMN_IS_CAUGHT] = perpetrator.isCaught
+    val query = builder.build()
+    operations.jdbcOperations.update(query)
   }
 
   @Transactional
@@ -78,19 +92,23 @@ class CrimePerpetratorDao @Autowired(required = true) constructor(
 
   @Transactional
   override fun delete(identifier: UUID) {
-    TODO("Not yet implemented")
+    val builder = SqlDeleteBuilder(TABLE).where(COLUMN_IDENTIFIER, identifier)
+    val query = builder.build()
+    operations.update(
+      query,
+      builder.parameters
+    )
   }
 
   @Transactional
   override fun deleteAll() {
-    TODO("Not yet implemented")
+    val query = SqlDeleteBuilder(TABLE).build()
+    operations.jdbcOperations.update(query)
   }
 
   override fun count(): Int {
-    val counter = RowCounterCallback()
-    val query = QueryBuilder()
-      .count(FIELD_ARRAY.first())
-      .end()
+    val counter = RowCounterCallbackHandler()
+    val query = SqlCallBuilder().count().from(TABLE).build()
     operations.query(query, counter)
     return counter.count
   }

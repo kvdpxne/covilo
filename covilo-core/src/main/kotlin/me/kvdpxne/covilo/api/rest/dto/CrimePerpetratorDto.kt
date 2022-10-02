@@ -23,10 +23,10 @@ data class CrimePerpetratorDto(
  */
 fun CrimePerpetrator.toDto(): CrimePerpetratorDto {
   return CrimePerpetratorDto(
-    this.firstName,
-    this.lastName,
-    this.age,
-    this.isCaught
+    firstName,
+    lastName,
+    age,
+    isCaught
   )
 }
 

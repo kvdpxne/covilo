@@ -1,3 +1,3 @@
 export interface User {
-  identifier: string
+  identifier: string,
 }

@@ -20,7 +20,7 @@ data class LocationCountryDto(
  */
 fun LocationCountry.toDto(): LocationCountryDto {
   return LocationCountryDto(
-    this.key
+    key
   )
 }
 

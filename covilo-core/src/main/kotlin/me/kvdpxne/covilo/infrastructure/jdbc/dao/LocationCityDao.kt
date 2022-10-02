@@ -4,18 +4,20 @@ import me.kvdpxne.covilo.domain.model.LocationCities
 import me.kvdpxne.covilo.domain.model.LocationCity
 import me.kvdpxne.covilo.domain.persistence.LocationCityRepository
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_CAPITAL
-import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_COUNTRY
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_DOMESTIC_NAME
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_IDENTIFIER
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_KEY
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_POPULATION
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_REGION
 import me.kvdpxne.covilo.infrastructure.jdbc.TABLE_LOCATION_CITY
-import me.kvdpxne.covilo.infrastructure.jdbc.TABLE_LOCATION_COUNTRY
 import me.kvdpxne.covilo.infrastructure.jdbc.TABLE_LOCATION_REGION
-import me.kvdpxne.covilo.infrastructure.jdbc.callback.RowCounterCallback
+import me.kvdpxne.covilo.infrastructure.jdbc.callback.RowCounterCallbackHandler
 import me.kvdpxne.covilo.infrastructure.jdbc.mapping.LocationCityMapper
-import me.kvdpxne.covilo.util.sql.QueryBuilder
+import me.kvdpxne.covilo.util.sql.SqlCallBuilder
+import me.kvdpxne.covilo.util.sql.SqlDeleteBuilder
+import me.kvdpxne.covilo.util.sql.SqlInsertBuilder
+import me.kvdpxne.covilo.util.sql.SqlRelation
+import me.kvdpxne.covilo.util.sql.sqlColumnArrayOf
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.stereotype.Component
@@ -33,37 +35,40 @@ class LocationCityDao @Autowired(required = true) constructor(
   companion object {
 
     /**
-     * Current table
+     * Shortcut to the current table.
      */
-    val TABLE: String
+    private val TABLE: String
       get() = TABLE_LOCATION_CITY
 
-    /**
-     *
-     */
-    val FIELD_ARRAY = arrayOf(
-      "$TABLE.$COLUMN_IDENTIFIER",
-      "$TABLE.$COLUMN_KEY",
-      "$TABLE.$COLUMN_DOMESTIC_NAME",
-      *LocationRegionDao.FIELD_ARRAY,
-      "$TABLE.$COLUMN_POPULATION",
-      "$TABLE.$COLUMN_CAPITAL",
+    internal val COLUMNS = sqlColumnArrayOf(
+      TABLE,
+      COLUMN_IDENTIFIER,
+      COLUMN_KEY,
+      COLUMN_DOMESTIC_NAME,
+      *LocationRegionDao.COLUMNS.extend(),
+      COLUMN_POPULATION,
+      COLUMN_CAPITAL
     )
 
-    private val queryBuilder = QueryBuilder()
-      .select(*FIELD_ARRAY)
-      .from(TABLE_LOCATION_CITY)
-      .join(TABLE_LOCATION_REGION, TABLE, COLUMN_REGION)
-      .join(TABLE_LOCATION_COUNTRY, TABLE_LOCATION_REGION, COLUMN_COUNTRY)
+    internal val RELATIONS = arrayOf(
+      SqlRelation(TABLE_LOCATION_REGION, TABLE, COLUMN_REGION),
+      *LocationRegionDao.RELATIONS
+    )
   }
 
+  /**
+   * Shortcut to the most used query builder based on SELECT query.
+   */
+  private val callBuilder: SqlCallBuilder
+    get() = SqlCallBuilder().select(COLUMNS).from(TABLE).join(RELATIONS)
+
   override fun findByIdentifier(identifier: UUID): LocationCity? {
-    val stringIdentifier = identifier.toString()
-    val query = queryBuilder.where(stringIdentifier, COLUMN_IDENTIFIER).end()
+    val builder = callBuilder.where(COLUMN_IDENTIFIER, identifier)
+    val query = builder.build()
     return runCatching {
       operations.queryForObject(
         query,
-        mapOf(COLUMN_IDENTIFIER to stringIdentifier),
+        builder.parameters,
         LocationCityMapper
       )
     }.getOrNull()
@@ -74,18 +79,19 @@ class LocationCityDao @Autowired(required = true) constructor(
     replaceWith = ReplaceWith("findAllByKey")
   )
   override fun findByKey(key: String): LocationCity? {
-    val query = queryBuilder.where(key, COLUMN_KEY).end()
+    val builder = callBuilder.where(COLUMN_KEY, key)
+    val query = builder.build()
     return runCatching {
       operations.queryForObject(
         query,
-        mapOf(key to COLUMN_KEY),
+        builder.parameters,
         LocationCityMapper
       )
     }.getOrNull()
   }
 
-  override fun findAll(): Collection<LocationCity> {
-    val query = queryBuilder.end()
+  override fun findAll(): LocationCities {
+    val query = callBuilder.build()
     return operations.query(
       query,
       LocationCityMapper
@@ -93,17 +99,26 @@ class LocationCityDao @Autowired(required = true) constructor(
   }
 
   override fun findAllByKey(key: String): LocationCities {
-    val query = queryBuilder.where(key, COLUMN_KEY).end()
+    val builder = callBuilder.where(COLUMN_KEY, key)
+    val query = builder.build()
     return operations.query(
       query,
-      mapOf(COLUMN_KEY to key),
+      builder.parameters,
       LocationCityMapper
     )
   }
 
   @Transactional
   override fun insert(city: LocationCity) {
-    TODO("Not yet implemented")
+    val builder = SqlInsertBuilder(TABLE)
+    builder[COLUMN_IDENTIFIER] = city.identifier
+    builder[COLUMN_KEY] = city.key
+    builder[COLUMN_DOMESTIC_NAME] = city.domesticName
+    builder[COLUMN_REGION] = city.region.identifier
+    builder[COLUMN_POPULATION] = city.population
+    builder[COLUMN_CAPITAL] = city.capital
+    val query = builder.build()
+    operations.jdbcOperations.update(query)
   }
 
   @Transactional
@@ -113,20 +128,23 @@ class LocationCityDao @Autowired(required = true) constructor(
 
   @Transactional
   override fun delete(identifier: UUID) {
-    TODO("Not yet implemented")
+    val builder = SqlDeleteBuilder(TABLE).where(COLUMN_IDENTIFIER, identifier)
+    val query = builder.build()
+    operations.update(
+      query,
+      builder.parameters
+    )
   }
 
   @Transactional
   override fun deleteAll() {
-    TODO("Not yet implemented")
+    val query = SqlDeleteBuilder(TABLE).build()
+    operations.jdbcOperations.update(query)
   }
 
   override fun count(): Int {
-    val counter = RowCounterCallback()
-    val query = QueryBuilder()
-      .count(FIELD_ARRAY.first())
-      .from(TABLE)
-      .end()
+    val counter = RowCounterCallbackHandler()
+    val query = SqlCallBuilder().count().from(TABLE).build()
     operations.query(query, counter)
     return counter.count
   }

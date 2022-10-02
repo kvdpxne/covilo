@@ -8,12 +8,19 @@ import java.util.UUID
  */
 typealias CrimePerpetrators = Collection<CrimePerpetrator>
 
+/**
+ * @param identifier
+ * @param firstName
+ * @param lastName
+ * @param age
+ * @param isCaught
+ */
 data class CrimePerpetrator(
   val identifier: UUID = UUID.randomUUID(),
   val firstName: String,
   val lastName: String,
   val age: Int = 0,
-  val isCaught: Boolean = false
+  var isCaught: Boolean = false
 ) : Serializable {
 
   companion object {

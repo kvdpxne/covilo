@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component
 
 @Component
 @ConfigurationProperties(prefix = "covilo")
-class Settings {
+class ApplicationSettings {
 
   var database: String = "localhost:3306/covilo"
   var user: String = "root"

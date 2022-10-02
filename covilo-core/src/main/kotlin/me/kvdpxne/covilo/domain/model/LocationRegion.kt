@@ -8,6 +8,12 @@ import java.util.UUID
  */
 typealias LocationRegions = Collection<LocationRegion>
 
+/**
+ * @param identifier
+ * @param key
+ * @param domesticName
+ * @param country
+ */
 data class LocationRegion(
   val identifier: UUID = UUID.randomUUID(),
   val key: String,

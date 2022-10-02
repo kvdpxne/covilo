@@ -24,7 +24,6 @@ export class ApplicationComponent {
 
   constructor(private router: Router, private translate: TranslateService) {
     router.events.subscribe(event => {
-      console.log(event)
       if (event instanceof NavigationStart) {
         if (event.url.includes("authentication")) {
           this.showFooter = false

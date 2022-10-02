@@ -8,13 +8,21 @@ import java.util.UUID
  */
 typealias LocationCities = Collection<LocationCity>
 
+/**
+ * @param identifier
+ * @param key
+ * @param domesticName
+ * @param region
+ * @param population
+ * @param capital
+ */
 data class LocationCity(
   val identifier: UUID = UUID.randomUUID(),
   val key: String,
   val domesticName: String,
   val region: LocationRegion,
-  val population: Int = 0,
-  val capital: CapitalType = CapitalType.NONE
+  var population: Int = 0,
+  var capital: CapitalType = CapitalType.NONE
 ) : Serializable {
 
   companion object {

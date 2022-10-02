@@ -26,13 +26,13 @@ data class UserDto(
  */
 fun User.toDto(): UserDto {
   return UserDto(
-    this.identifier.toString(),
-    this.email,
-    this.firstName.toString(),
-    this.lastName.toString(),
-    this.birthDate.toString(),
-    this.createdDate.toString(),
-    this.lastModifiedDate.toString()
+    identifier.toString(),
+    email,
+    firstName.toString(),
+    lastName.toString(),
+    birthDate.toString(),
+    createdDate.toString(),
+    lastModifiedDate.toString()
   )
 }
 

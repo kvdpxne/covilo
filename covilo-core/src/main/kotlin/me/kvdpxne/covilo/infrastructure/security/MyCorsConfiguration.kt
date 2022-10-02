@@ -1,6 +1,6 @@
 package me.kvdpxne.covilo.infrastructure.security
 
-import me.kvdpxne.covilo.Settings
+import me.kvdpxne.covilo.ApplicationSettings
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -11,7 +11,7 @@ import kotlin.time.Duration.Companion.minutes
 
 @Configuration
 class MyCorsConfiguration @Autowired(required = true) constructor(
-  private val settings: Settings
+  private val settings: ApplicationSettings
 ) {
 
   @Bean(name = ["corsConfigurationSource"])

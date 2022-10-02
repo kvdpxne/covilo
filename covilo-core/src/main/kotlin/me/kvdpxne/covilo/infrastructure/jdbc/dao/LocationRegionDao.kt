@@ -9,11 +9,15 @@ import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_IDENTIFIER
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_KEY
 import me.kvdpxne.covilo.infrastructure.jdbc.TABLE_LOCATION_COUNTRY
 import me.kvdpxne.covilo.infrastructure.jdbc.TABLE_LOCATION_REGION
-import me.kvdpxne.covilo.infrastructure.jdbc.callback.RowCounterCallback
+import me.kvdpxne.covilo.infrastructure.jdbc.callback.RowCounterCallbackHandler
 import me.kvdpxne.covilo.infrastructure.jdbc.mapping.LocationRegionMapper
-import me.kvdpxne.covilo.util.sql.QueryBuilder
+import me.kvdpxne.covilo.util.sql.SqlCallBuilder
+import me.kvdpxne.covilo.util.sql.SqlDeleteBuilder
+import me.kvdpxne.covilo.util.sql.SqlInsertBuilder
+import me.kvdpxne.covilo.util.sql.SqlRelation
+import me.kvdpxne.covilo.util.sql.sqlColumnArrayOf
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import java.util.UUID
@@ -23,58 +27,62 @@ import java.util.UUID
  */
 @Component
 class LocationRegionDao @Autowired(required = true) constructor(
-  private val operations: NamedParameterJdbcOperations
+  private val operations: NamedParameterJdbcTemplate
 ) : LocationRegionRepository {
 
   companion object {
 
     /**
-     * Current table
+     * Shortcut to the current table.
      */
-    val TABLE: String
+    private val TABLE: String
       get() = TABLE_LOCATION_REGION
 
-    /**
-     *
-     */
-    val FIELD_ARRAY = arrayOf(
-      "$TABLE.$COLUMN_IDENTIFIER",
-      "$TABLE.$COLUMN_KEY",
-      "$TABLE.$COLUMN_DOMESTIC_NAME",
-      *LocationCountryDao.FIELD_ARRAY
+    internal val COLUMNS = sqlColumnArrayOf(
+      TABLE,
+      COLUMN_IDENTIFIER,
+      COLUMN_KEY,
+      COLUMN_DOMESTIC_NAME,
+      *LocationCountryDao.COLUMNS.extend()
     )
 
-    private val queryBuilder = QueryBuilder()
-      .select(*FIELD_ARRAY)
-      .from(TABLE)
-      .join(TABLE_LOCATION_COUNTRY, TABLE, COLUMN_COUNTRY)
+    internal val RELATIONS = arrayOf(
+      SqlRelation(TABLE_LOCATION_COUNTRY, TABLE, COLUMN_COUNTRY)
+    )
   }
 
+  /**
+   * Shortcut to the most used query builder based on SELECT query.
+   */
+  private val callBuilder: SqlCallBuilder
+    get() = SqlCallBuilder().select(COLUMNS).from(TABLE).join(RELATIONS)
+
   override fun findByIdentifier(identifier: UUID): LocationRegion? {
-    val stringIdentifier = identifier.toString()
-    val query = queryBuilder.where(stringIdentifier, COLUMN_IDENTIFIER).end()
+    val builder = callBuilder.where(COLUMN_IDENTIFIER, identifier)
+    val query = builder.build()
     return runCatching {
       operations.queryForObject(
         query,
-        mapOf(COLUMN_IDENTIFIER to stringIdentifier),
+        builder.parameters,
         LocationRegionMapper
       )
     }.getOrNull()
   }
 
   override fun findByKey(key: String): LocationRegion? {
-    val query = queryBuilder.where(key, COLUMN_KEY).end()
+    val builder = callBuilder.where(key, COLUMN_KEY)
+    val query = builder.build()
     return runCatching {
       operations.queryForObject(
         query,
-        mapOf(COLUMN_KEY to key),
+        builder.parameters,
         LocationRegionMapper
       )
     }.getOrNull()
   }
 
   override fun findAll(): LocationRegions {
-    val query = queryBuilder.end()
+    val query = callBuilder.build()
     return operations.query(
       query,
       LocationRegionMapper
@@ -83,7 +91,13 @@ class LocationRegionDao @Autowired(required = true) constructor(
 
   @Transactional
   override fun insert(region: LocationRegion) {
-    TODO("Not yet implemented")
+    val builder = SqlInsertBuilder(TABLE)
+    builder[COLUMN_IDENTIFIER] = region.identifier
+    builder[COLUMN_KEY] = region.key
+    builder[COLUMN_DOMESTIC_NAME] = region.domesticName
+    builder[COLUMN_COUNTRY] = region.country.identifier
+    val query = builder.build()
+    operations.jdbcOperations.update(query)
   }
 
   @Transactional
@@ -93,20 +107,23 @@ class LocationRegionDao @Autowired(required = true) constructor(
 
   @Transactional
   override fun delete(identifier: UUID) {
-    TODO("Not yet implemented")
+    val builder = SqlDeleteBuilder(TABLE).where(COLUMN_IDENTIFIER, identifier)
+    val query = builder.build()
+    operations.update(
+      query,
+      builder.parameters
+    )
   }
 
   @Transactional
   override fun deleteAll() {
-    TODO("Not yet implemented")
+    val query = SqlDeleteBuilder(TABLE).build()
+    operations.jdbcOperations.update(query)
   }
 
   override fun count(): Int {
-    val counter = RowCounterCallback()
-    val query = QueryBuilder()
-      .count(FIELD_ARRAY.first())
-      .from(TABLE)
-      .end()
+    val counter = RowCounterCallbackHandler()
+    val query = SqlCallBuilder().count().from(TABLE).build()
     operations.query(query, counter)
     return counter.count
   }
