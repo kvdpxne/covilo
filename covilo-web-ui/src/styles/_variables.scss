@@ -8,9 +8,9 @@
  */
 $spacers: map-merge(
     $spacers, (
-    6: $spacer * 3.5,
-    7: $spacer * 4,
-    8: $spacer * 4.5,
-    9: $spacer * 5
+    6: $spacer * 3.25,
+    7: $spacer * 3.5,
+    8: $spacer * 8,
+    9: $spacer * 8.75,
   )
 );

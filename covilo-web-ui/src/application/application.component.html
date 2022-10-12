@@ -1,15 +1,17 @@
-<ng-template [ngIf]="showHeader">
-  <app-header [itemList]="navigationItemList">
+<header id="top" *ngIf="showHeader">
+  <a-navigation [itemList]="navigationItemList"></a-navigation>
+  <a-notification [visible]="true">
+    Aww yeah, you successfully read this important alert message. This
+    example text is going to run a bit longer so that you can see how
+    spacing
+    within an alert works with this kind of content.
+  </a-notification>
+</header>
 
-  </app-header>
-</ng-template>
 
-
-<div [ngClass]="{'my-8': showHeader}">
-  <router-outlet>
-
-  </router-outlet>
-</div>
+<main [ngClass]="{'my-5': showHeader}">
+  <router-outlet></router-outlet>
+</main>
 
 <ng-template [ngIf]="showFooter">
   <app-footer [iconSet]="iconSet"

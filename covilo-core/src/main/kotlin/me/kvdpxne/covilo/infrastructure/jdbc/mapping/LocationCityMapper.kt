@@ -1,7 +1,7 @@
 package me.kvdpxne.covilo.infrastructure.jdbc.mapping
 
-import me.kvdpxne.covilo.domain.model.CapitalType
-import me.kvdpxne.covilo.domain.model.LocationCity
+import me.kvdpxne.covilo.domain.models.CapitalType
+import me.kvdpxne.covilo.domain.models.LocationCity
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_CAPITAL
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_POPULATION
 import me.kvdpxne.covilo.infrastructure.jdbc.TABLE_LOCATION_CITY

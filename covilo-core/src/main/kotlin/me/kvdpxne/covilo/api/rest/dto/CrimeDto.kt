@@ -1,7 +1,7 @@
 package me.kvdpxne.covilo.api.rest.dto
 
-import me.kvdpxne.covilo.domain.model.Crime
-import me.kvdpxne.covilo.domain.model.Crimes
+import me.kvdpxne.covilo.domain.models.Crime
+import me.kvdpxne.covilo.domain.models.Crimes
 
 /**
  * Shortcut to the [CrimeDto] collection.

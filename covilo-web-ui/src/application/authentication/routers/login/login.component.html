@@ -1,0 +1,52 @@
+<div>
+  <div class="mb-4">
+    <label class="form-label" for="signupModalFormLoginEmail">
+      Your email
+    </label>
+
+    <!--    -->
+    <a-email-input>
+      <!--      -->
+    </a-email-input>
+
+    <span class="invalid-feedback">
+      Please enter a valid email address.
+    </span>
+  </div>
+  <!-- End Form -->
+
+  <!-- Form -->
+  <div class="mb-4">
+    <div class="d-flex justify-content-between align-items-center">
+      <label class="form-label" for="signupModalFormLoginPassword">
+        Password
+      </label>
+      <a class="form-label-link" routerLink="/authentication/forgot-password">
+        Forgot Password?
+      </a>
+    </div>
+
+    <!--    -->
+    <a-password-input>
+      <!--      -->
+    </a-password-input>
+
+    <span class="invalid-feedback">Please enter a valid password.</span>
+  </div>
+
+  <!-- A button confirming that the form has been completed -->
+  <a-confirm-button displayName="word.login">
+    <!-- no content needed -->
+  </a-confirm-button>
+
+  <div class="text-center">
+    <p>
+    <span>
+      Don't have an account yet?
+    </span>
+      <a class="link" routerLink="/authentication/signup">
+        Sign up here
+      </a>
+    </p>
+  </div>
+</div>

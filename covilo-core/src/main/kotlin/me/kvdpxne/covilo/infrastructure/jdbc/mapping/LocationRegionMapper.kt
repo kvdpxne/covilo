@@ -1,6 +1,6 @@
 package me.kvdpxne.covilo.infrastructure.jdbc.mapping
 
-import me.kvdpxne.covilo.domain.model.LocationRegion
+import me.kvdpxne.covilo.domain.models.LocationRegion
 import me.kvdpxne.covilo.infrastructure.jdbc.TABLE_LOCATION_REGION
 import me.kvdpxne.covilo.util.sql.ResultSetParser
 import me.kvdpxne.covilo.util.sql.parseDomesticName

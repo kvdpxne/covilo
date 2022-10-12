@@ -1,6 +1,6 @@
 package me.kvdpxne.covilo.infrastructure.jdbc.mapping
 
-import me.kvdpxne.covilo.domain.model.User
+import me.kvdpxne.covilo.domain.models.User
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_BIRTH_DATE
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_EMAIL
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_FIRST_NAME

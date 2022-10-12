@@ -1,7 +1,7 @@
 package me.kvdpxne.covilo.infrastructure.jdbc.dao
 
-import me.kvdpxne.covilo.domain.model.CrimeClassification
-import me.kvdpxne.covilo.domain.model.CrimeClassifications
+import me.kvdpxne.covilo.domain.models.CrimeClassification
+import me.kvdpxne.covilo.domain.models.CrimeClassifications
 import me.kvdpxne.covilo.domain.persistence.CrimeClassificationRepository
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_IDENTIFIER
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_KEY

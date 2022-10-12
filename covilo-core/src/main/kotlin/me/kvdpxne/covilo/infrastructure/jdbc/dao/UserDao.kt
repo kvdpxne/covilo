@@ -1,7 +1,7 @@
 package me.kvdpxne.covilo.infrastructure.jdbc.dao
 
-import me.kvdpxne.covilo.domain.model.User
-import me.kvdpxne.covilo.domain.model.Users
+import me.kvdpxne.covilo.domain.models.User
+import me.kvdpxne.covilo.domain.models.Users
 import me.kvdpxne.covilo.domain.persistence.UserRepository
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_CREATED_DATE
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_EMAIL

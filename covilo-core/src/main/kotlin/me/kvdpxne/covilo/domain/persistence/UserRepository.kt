@@ -1,7 +1,7 @@
 package me.kvdpxne.covilo.domain.persistence
 
-import me.kvdpxne.covilo.domain.model.User
-import me.kvdpxne.covilo.domain.model.Users
+import me.kvdpxne.covilo.domain.models.User
+import me.kvdpxne.covilo.domain.models.Users
 import java.util.UUID
 
 /**

@@ -1,10 +1,12 @@
 import { User } from "./user"
-import { CommentReaction } from "./comment-reaction"
+import { CommentReactions } from "./comment-reaction"
 
 export interface Comment {
-  author: User,
-  content: string,
-  reactions: Array<CommentReaction>,
+  author: User
+  content: string
+  reactions: CommentReactions
   pinned: boolean
 }
+
+export declare type Comments = Comment[]
 

@@ -1,7 +1,7 @@
 package me.kvdpxne.covilo.domain.persistence
 
-import me.kvdpxne.covilo.domain.model.LocationCountries
-import me.kvdpxne.covilo.domain.model.LocationCountry
+import me.kvdpxne.covilo.domain.models.LocationCountries
+import me.kvdpxne.covilo.domain.models.LocationCountry
 import java.util.UUID
 
 /**

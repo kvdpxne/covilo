@@ -1,7 +1,7 @@
 package me.kvdpxne.covilo.infrastructure.jdbc.dao
 
-import me.kvdpxne.covilo.domain.model.LocationCountries
-import me.kvdpxne.covilo.domain.model.LocationCountry
+import me.kvdpxne.covilo.domain.models.LocationCountries
+import me.kvdpxne.covilo.domain.models.LocationCountry
 import me.kvdpxne.covilo.domain.persistence.LocationCountryRepository
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_IDENTIFIER
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_KEY

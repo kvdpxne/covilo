@@ -1,7 +1,7 @@
 package me.kvdpxne.covilo.infrastructure.jdbc.dao
 
-import me.kvdpxne.covilo.domain.model.LocationCities
-import me.kvdpxne.covilo.domain.model.LocationCity
+import me.kvdpxne.covilo.domain.models.LocationCities
+import me.kvdpxne.covilo.domain.models.LocationCity
 import me.kvdpxne.covilo.domain.persistence.LocationCityRepository
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_CAPITAL
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_DOMESTIC_NAME

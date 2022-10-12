@@ -1,7 +1,7 @@
 package me.kvdpxne.covilo.api.rest.dto
 
-import me.kvdpxne.covilo.domain.model.LocationCountries
-import me.kvdpxne.covilo.domain.model.LocationCountry
+import me.kvdpxne.covilo.domain.models.LocationCountries
+import me.kvdpxne.covilo.domain.models.LocationCountry
 
 /**
  * Shortcut to the [LocationCountryDto] collection.

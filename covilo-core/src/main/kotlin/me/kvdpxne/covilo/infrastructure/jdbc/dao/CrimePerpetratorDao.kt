@@ -1,7 +1,7 @@
 package me.kvdpxne.covilo.infrastructure.jdbc.dao
 
-import me.kvdpxne.covilo.domain.model.CrimePerpetrator
-import me.kvdpxne.covilo.domain.model.CrimePerpetrators
+import me.kvdpxne.covilo.domain.models.CrimePerpetrator
+import me.kvdpxne.covilo.domain.models.CrimePerpetrators
 import me.kvdpxne.covilo.domain.persistence.CrimePerpetratorRepository
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_AGE
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_FIRST_NAME

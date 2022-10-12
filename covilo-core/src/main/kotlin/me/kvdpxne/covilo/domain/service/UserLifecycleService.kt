@@ -1,6 +1,6 @@
 package me.kvdpxne.covilo.domain.service
 
-import me.kvdpxne.covilo.domain.model.User
+import me.kvdpxne.covilo.domain.models.User
 import me.kvdpxne.covilo.domain.persistence.UserRepository
 import me.kvdpxne.covilo.util.slf4j.logger
 import org.springframework.beans.factory.annotation.Autowired

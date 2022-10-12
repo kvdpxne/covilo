@@ -1,6 +1,6 @@
 package me.kvdpxne.covilo.infrastructure.security
 
-import me.kvdpxne.covilo.domain.model.User
+import me.kvdpxne.covilo.domain.models.User
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 

@@ -1,6 +1,6 @@
 package me.kvdpxne.covilo.infrastructure.jdbc.mapping
 
-import me.kvdpxne.covilo.domain.model.CrimePerpetrator
+import me.kvdpxne.covilo.domain.models.CrimePerpetrator
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_AGE
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_FIRST_NAME
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_IS_CAUGHT

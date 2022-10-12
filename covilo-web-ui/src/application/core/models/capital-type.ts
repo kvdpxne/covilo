@@ -1,6 +1,6 @@
 export enum CapitalType {
-  PRIMARY,
-  ADMINISTRATIVE,
-  MINOR,
-  NONE
+  PRIMARY = "PRIMARY",
+  ADMINISTRATIVE = "ADMINISTRATIVE",
+  MINOR = "MINOR",
+  NONE = "NONE"
 }

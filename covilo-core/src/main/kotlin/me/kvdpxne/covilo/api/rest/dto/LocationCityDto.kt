@@ -1,7 +1,7 @@
 package me.kvdpxne.covilo.api.rest.dto
 
-import me.kvdpxne.covilo.domain.model.LocationCities
-import me.kvdpxne.covilo.domain.model.LocationCity
+import me.kvdpxne.covilo.domain.models.LocationCities
+import me.kvdpxne.covilo.domain.models.LocationCity
 
 /**
  * Shortcut to the [LocationCityDto] collection.

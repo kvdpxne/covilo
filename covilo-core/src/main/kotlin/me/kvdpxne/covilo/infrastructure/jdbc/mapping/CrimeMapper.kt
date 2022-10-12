@@ -1,6 +1,6 @@
 package me.kvdpxne.covilo.infrastructure.jdbc.mapping
 
-import me.kvdpxne.covilo.domain.model.Crime
+import me.kvdpxne.covilo.domain.models.Crime
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_DATE
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_DESCRIPTION
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_IS_CONFIRMED

@@ -1,7 +1,7 @@
 package me.kvdpxne.covilo.domain.persistence
 
-import me.kvdpxne.covilo.domain.model.Crime
-import me.kvdpxne.covilo.domain.model.Crimes
+import me.kvdpxne.covilo.domain.models.Crime
+import me.kvdpxne.covilo.domain.models.Crimes
 import java.util.UUID
 
 /**

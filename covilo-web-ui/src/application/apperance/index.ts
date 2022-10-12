@@ -1,0 +1,7 @@
+export * from "./home/home.component"
+export * from "./page-not-found/page-not-found.component"
+export * from "./result-details/result-details.component"
+export * from "./result-list/result-list.component"
+export * from "./statistics/statistics.component"
+
+export * from "../application.module"

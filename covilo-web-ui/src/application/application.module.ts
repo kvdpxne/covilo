@@ -3,17 +3,43 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations"
 import { NgModule } from "@angular/core"
 import { FormsModule, ReactiveFormsModule } from "@angular/forms"
 import { HttpClient, HttpClientModule } from "@angular/common/http"
+
 import { TranslateLoader, TranslateModule } from "@ngx-translate/core"
 import { TranslateHttpLoader } from "@ngx-translate/http-loader"
-import { CoreModule } from "./core/core.module"
-import { AppointmentModule } from "./appointment/appointment.module"
-import { ApplicationComponent } from "./application.component"
-import { ApplicationRoutingModule } from "./application-routing.module"
+
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap"
+
+import { NgChartsModule } from "ng2-charts"
+
+//
+import { CoreModule } from "./core/core.module"
+
+//
+import { SharedModule } from "./shared/shared.module"
+
+//
+import { AuthenticationModule } from "./authentication/authentication.module"
+
+import { ApplicationRoutingModule } from "./application-routing.module"
+
+import { ApplicationComponent } from "./application.component"
+
+import {
+  HomeComponent,
+  PageNotFoundComponent,
+  ResultDetailsComponent,
+  ResultListComponent,
+  StatisticsComponent
+} from "./apperance"
 
 @NgModule({
   declarations: [
-    ApplicationComponent
+    ApplicationComponent,
+    HomeComponent,
+    PageNotFoundComponent,
+    ResultDetailsComponent,
+    ResultListComponent,
+    StatisticsComponent
   ],
   imports: [
     BrowserModule,
@@ -24,19 +50,20 @@ import { NgbModule } from "@ng-bootstrap/ng-bootstrap"
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
-        useFactory: (createTranslateLoader),
+        useFactory: createTranslateLoader,
         deps: [HttpClient]
       }
     }),
-    ApplicationRoutingModule,
-    AppointmentModule,
     NgbModule,
-    CoreModule
+    NgChartsModule,
+    ApplicationRoutingModule,
+    CoreModule,
+    SharedModule.forRoot(),
+    AuthenticationModule
   ],
   exports: [
     ApplicationComponent
   ],
-  providers: [],
   bootstrap: [
     ApplicationComponent
   ]
@@ -47,3 +74,6 @@ export class ApplicationModule {
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, "assets/localization/", ".json")
 }
+
+export * from "./core/core.module"
+export * from "./shared/shared.module"
