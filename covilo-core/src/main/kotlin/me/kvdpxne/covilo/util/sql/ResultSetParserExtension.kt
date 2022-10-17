@@ -27,10 +27,10 @@ fun ResultSetParser.parseDomesticName(): String {
 
 @Throws(SQLException::class)
 fun ResultSetParser.parseCreatedDate(): LocalDateTime {
-  return parseDateTime(COLUMN_CREATED_DATE)
+  return parseDateTime(COLUMN_CREATED_DATE) as LocalDateTime
 }
 
 @Throws(SQLException::class)
-fun ResultSetParser.parseLastModifiedDate(): LocalDateTime {
+fun ResultSetParser.parseLastModifiedDate(): LocalDateTime? {
   return parseDateTime(COLUMN_LAST_MODIFIED_DATE)
 }

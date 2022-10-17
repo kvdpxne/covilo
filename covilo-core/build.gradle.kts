@@ -66,4 +66,7 @@ dependencies {
   testImplementation("$spring:spring-boot-starter-test")
 
   testImplementation("org.springframework.security:spring-security-test")
+
+  // https://mvnrepository.com/artifact/com.auth0/auth0
+  implementation("com.auth0:java-jwt:4.1.0")
 }

@@ -52,8 +52,11 @@ class ResultSetParser(
   }
 
   @Throws(SQLException::class)
-  fun parseDateTime(column: String): LocalDateTime {
-    return LocalDateTime.parse(parse(column), dateTimeFormatter)
+  fun parseDateTime(column: String): LocalDateTime? {
+    val content = this.parse(column)
+    return runCatching {
+      LocalDateTime.parse(content, dateTimeFormatter)
+    }.getOrNull()
   }
 
   @Throws(SQLException::class)

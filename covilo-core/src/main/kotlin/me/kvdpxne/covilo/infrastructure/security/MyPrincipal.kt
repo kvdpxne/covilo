@@ -2,37 +2,32 @@ package me.kvdpxne.covilo.infrastructure.security
 
 import me.kvdpxne.covilo.domain.models.User
 import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
-class MyPrincipal(
+private typealias Authorities = MutableCollection<out GrantedAuthority>
+
+class MyPrincipal constructor(
   val user: User
 ) : UserDetails {
 
-  override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
-    TODO("Not yet implemented")
+  companion object {
+    private const val serialVersionUID: Long = 2031976890L
   }
 
-  override fun getPassword(): String {
-    return user.password
-  }
+  override fun getUsername(): String = user.email
 
-  override fun getUsername(): String {
-    return user.email
-  }
+  override fun getPassword(): String = user.password
 
-  override fun isAccountNonExpired(): Boolean {
-    return true
-  }
+  override fun getAuthorities(): Authorities = user.roles
+    .map { name: String -> SimpleGrantedAuthority("ROLE_$name") }
+    .toMutableSet()
 
-  override fun isAccountNonLocked(): Boolean {
-    return true
-  }
+  override fun isAccountNonExpired(): Boolean = true
 
-  override fun isCredentialsNonExpired(): Boolean {
-    return true
-  }
+  override fun isAccountNonLocked(): Boolean = true
 
-  override fun isEnabled(): Boolean {
-    return true
-  }
+  override fun isCredentialsNonExpired(): Boolean = true
+
+  override fun isEnabled(): Boolean = true
 }

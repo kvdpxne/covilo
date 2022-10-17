@@ -1,6 +1,12 @@
 application:
   title: "Covilo"
   version: "0.1"
+
+server:
+  port: 8080
+
+jwt_secret: "test"
+
 logging:
   level:
     org.springframework.web: "debug"

@@ -3,6 +3,7 @@ package me.kvdpxne.covilo.infrastructure.jdbc.dao
 import me.kvdpxne.covilo.domain.models.User
 import me.kvdpxne.covilo.domain.models.Users
 import me.kvdpxne.covilo.domain.persistence.UserRepository
+import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_BIRTH_DATE
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_CREATED_DATE
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_EMAIL
 import me.kvdpxne.covilo.infrastructure.jdbc.COLUMN_FIRST_NAME
@@ -43,6 +44,7 @@ class UserDao @Autowired(required = true) constructor(
       COLUMN_PASSWORD,
       COLUMN_FIRST_NAME,
       COLUMN_LAST_NAME,
+      COLUMN_BIRTH_DATE,
       COLUMN_CREATED_DATE,
       COLUMN_LAST_MODIFIED_DATE
     )
@@ -94,6 +96,7 @@ class UserDao @Autowired(required = true) constructor(
     builder[COLUMN_PASSWORD] = user.password
     builder[COLUMN_FIRST_NAME] = user.firstName
     builder[COLUMN_LAST_NAME] = user.lastName
+    builder[COLUMN_BIRTH_DATE] = user.birthDate
     builder[COLUMN_CREATED_DATE] = user.createdDate
     builder[COLUMN_LAST_MODIFIED_DATE] = user.lastModifiedDate
     val query = builder.build()

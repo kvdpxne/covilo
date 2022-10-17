@@ -34,4 +34,11 @@ data class User(
   companion object {
     private const val serialVersionUID: Long = 1609015556L
   }
+
+  @delegate:Transient
+  val roles: Set<String> by lazy {
+    buildSet {
+      add(ROLE_USER)
+    }
+  }
 }

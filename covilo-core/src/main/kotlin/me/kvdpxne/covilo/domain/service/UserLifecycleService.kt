@@ -17,7 +17,7 @@ class UserLifecycleService @Autowired constructor(
     private val logger = logger(UserLifecycleService::class)
   }
 
-  @Throws()
+
   fun createUser(user: User): User {
     val newUser = user.copy(
       password = passwordEncoder.encode(user.password)

@@ -25,7 +25,7 @@ class SqlCallBuilder : Buildable<String> {
   }
 
   fun count(column: String = "*"): SqlCallBuilder {
-    val part = " COUNT($column)"
+    val part = "SELECT COUNT($column)"
     query += part
     return this
   }

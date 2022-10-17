@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core"
-import { FormControl, FormGroup } from "@angular/forms"
+import { UntypedFormControl, UntypedFormGroup } from "@angular/forms"
 import { Router } from "@angular/router"
 import { UserService } from "../application.module"
 
@@ -9,7 +9,7 @@ import { UserService } from "../application.module"
 })
 export class AuthenticationComponent implements OnInit {
 
-  formData: FormGroup
+  formData: UntypedFormGroup
 
   log: boolean = false
 
@@ -17,8 +17,8 @@ export class AuthenticationComponent implements OnInit {
     private router: Router,
     private userService: UserService
   ) {
-    this.formData = new FormGroup({
-      username: new FormControl()
+    this.formData = new UntypedFormGroup({
+      username: new UntypedFormControl()
     })
   }
 
