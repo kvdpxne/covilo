@@ -1,54 +1,54 @@
 package me.kvdpxne.covilo.infrastructure.security
 
-import org.springframework.beans.factory.annotation.Autowired
+import me.kvdpxne.covilo.domain.models.ROLE_ADMINISTRATOR
+import me.kvdpxne.covilo.domain.models.ROLE_USER
+import me.kvdpxne.covilo.infrastructure.jwt.JwtConfiguration
 import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
-import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.config.http.SessionCreationPolicy.STATELESS
 import org.springframework.security.web.SecurityFilterChain
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
-import org.springframework.web.cors.CorsConfigurationSource
-import javax.servlet.http.HttpServletResponse
 
-@EnableWebSecurity
-class SecurityConfiguration @Autowired constructor(
-  private val cors: CorsConfigurationSource,
-  private val userDetails: MyUserDetailsService,
-  private val filter: JwtOncePerRequestFilter,
+@Configuration
+class SecurityConfiguration(
+  private val jwtConfiguration: JwtConfiguration,
+  private val userDetailsService: MyUserDetailsService,
+  private val authenticationManager: AuthenticationManager,
+  private val authenticationSuccessHandler: AuthenticationSuccessHandler,
 ) {
 
   @Bean
-  fun filterChain(http: HttpSecurity): SecurityFilterChain = http
-    .headers {
-      // Headers are set in WebMvcConfiguration
-      it.cacheControl().disable()
-    }
-    .cors {
-      it.configurationSource(cors)
-    }
-    .csrf { it.disable() }
-    .authorizeHttpRequests {
-      it.mvcMatchers(
-        "/api/authentication/",
-        "/api/v1/crime/",
-        "/api/v1/location/"
-      ).permitAll()
-    }
-    .userDetailsService(userDetails)
-    .addFilterBefore(filter, UsernamePasswordAuthenticationFilter::class.java)
-    .sessionManagement {
-      it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-    }
-    .logout {
-      it.logoutUrl("/api/logout")
-    }
-    .exceptionHandling {
-      it.authenticationEntryPoint { _, response, m ->
-        response.sendError(
-          HttpServletResponse.SC_UNAUTHORIZED,
-          m.message
-        )
+  fun filterChain(http: HttpSecurity): SecurityFilterChain {
+    return http
+      .headers { it.cacheControl().disable() }
+      .cors { }
+      .csrf { it.disable() }
+      .authorizeHttpRequests {
+        it.mvcMatchers("/admin").hasRole(ROLE_ADMINISTRATOR)
+        it.mvcMatchers("/user").hasRole(ROLE_USER)
+        it.anyRequest().permitAll()
       }
-    }
-    .build()
+      .addFilter(authenticationFilter())
+      .addFilter(authorizationFilter())
+      .sessionManagement { it.sessionCreationPolicy(STATELESS) }
+      .httpBasic(Customizer.withDefaults())
+      .build()
+  }
+
+  @Bean
+  fun authenticationFilter(): AuthenticationFilter {
+    val filter = AuthenticationFilter()
+    filter.setAuthenticationManager(authenticationManager)
+    filter.setAuthenticationSuccessHandler(authenticationSuccessHandler)
+    return filter
+  }
+
+  @Bean
+  fun authorizationFilter(): AuthorizationFilter {
+    return AuthorizationFilter(
+      jwtConfiguration, userDetailsService, authenticationManager
+    )
+  }
 }

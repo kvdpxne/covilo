@@ -14,7 +14,7 @@ import {
 //
 const routes: Routes = [
   {
-    path: "authentication",
+    pathMatch: "full",
     component: AuthenticationComponent,
     children: [
       {

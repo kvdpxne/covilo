@@ -20,7 +20,8 @@ import {
   ConfirmButtonComponent,
   EmailInputComponent,
   PasswordInputComponent
-} from "./components"
+} from "./components";
+import { SignupComponent } from "./routers"
 
 @NgModule({
   providers: [],
@@ -31,7 +32,8 @@ import {
     LogoutComponent,
     ConfirmButtonComponent,
     PasswordInputComponent,
-    EmailInputComponent
+    EmailInputComponent,
+    SignupComponent
   ],
   imports: [
     CommonModule,
@@ -43,5 +45,3 @@ import {
 })
 export class AuthenticationModule {
 }
-
-export * from "./services/authentication.service"

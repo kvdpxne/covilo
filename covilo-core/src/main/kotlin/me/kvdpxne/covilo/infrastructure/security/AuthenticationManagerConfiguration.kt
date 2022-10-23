@@ -8,8 +8,10 @@ import org.springframework.security.config.annotation.authentication.configurati
 @Configuration
 class AuthenticationManagerConfiguration {
 
-  @Bean(name = ["authenticationManager"])
-  fun getAuthenticationManager(configuration: AuthenticationConfiguration):
-    AuthenticationManager = configuration.authenticationManager
+  @Bean("authenticationManager")
+  fun getAuthenticationManager(
+    configuration: AuthenticationConfiguration
+  ): AuthenticationManager {
+    return configuration.authenticationManager
+  }
 }
-

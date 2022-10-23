@@ -52,8 +52,7 @@ dependencies {
   // Persist data in SQL stores with plain JDBC using Spring Data
   implementation("$spring:spring-boot-starter-data-jdbc")
 
-  // Provides an API and implementations for managing user session information
-  implementation("org.springframework.session:spring-session-jdbc")
+  implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
   //
   implementation("org.mariadb.jdbc:mariadb-java-client:3.0.7")

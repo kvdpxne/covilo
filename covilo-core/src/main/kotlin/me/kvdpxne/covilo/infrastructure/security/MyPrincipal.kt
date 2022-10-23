@@ -7,27 +7,39 @@ import org.springframework.security.core.userdetails.UserDetails
 
 private typealias Authorities = MutableCollection<out GrantedAuthority>
 
-class MyPrincipal constructor(
-  val user: User
-) : UserDetails {
+class MyPrincipal(val user: User) : UserDetails {
 
   companion object {
     private const val serialVersionUID: Long = 2031976890L
   }
 
-  override fun getUsername(): String = user.email
+  override fun getUsername(): String {
+    return user.email
+  }
 
-  override fun getPassword(): String = user.password
+  override fun getPassword(): String {
+    return user.password
+  }
 
-  override fun getAuthorities(): Authorities = user.roles
-    .map { name: String -> SimpleGrantedAuthority("ROLE_$name") }
-    .toMutableSet()
+  override fun getAuthorities(): Authorities {
+    return user.roles
+      .map { name: String -> SimpleGrantedAuthority("ROLE_$name") }
+      .toMutableSet()
+  }
 
-  override fun isAccountNonExpired(): Boolean = true
+  override fun isAccountNonExpired(): Boolean {
+    return true
+  }
 
-  override fun isAccountNonLocked(): Boolean = true
+  override fun isAccountNonLocked(): Boolean {
+    return true
+  }
 
-  override fun isCredentialsNonExpired(): Boolean = true
+  override fun isCredentialsNonExpired(): Boolean {
+    return true
+  }
 
-  override fun isEnabled(): Boolean = true
+  override fun isEnabled(): Boolean {
+    return true
+  }
 }

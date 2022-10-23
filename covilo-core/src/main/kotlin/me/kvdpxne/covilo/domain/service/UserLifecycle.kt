@@ -8,21 +8,24 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
-class UserLifecycleService @Autowired constructor(
-  private val repository: UserRepository,
+class UserLifecycle(
+  private val userRepository: UserRepository,
   private val passwordEncoder: PasswordEncoder
 ) {
 
   companion object {
-    private val logger = logger(UserLifecycleService::class)
+    private val logger = logger(UserLifecycle::class)
   }
 
-
   fun createUser(user: User): User {
-    val newUser = user.copy(
+    var newUser = userRepository.findByEmail(user.email)
+    if (null != newUser) {
+      throw IllegalArgumentException("")
+    }
+    newUser = user.copy(
       password = passwordEncoder.encode(user.password)
     )
-    repository.insert(newUser)
+    userRepository.insert(newUser)
     logger.info(newUser.toString())
     return newUser
   }

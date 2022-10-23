@@ -1,20 +1,13 @@
 application:
   title: "Covilo"
   version: "0.1"
-
-server:
-  port: 8080
-
-jwt_secret: "test"
-
+jwt:
+  secret: "a0a90d10-d06e-4cc5-9bf9-85910c1575a4"
+  experience: 60
 logging:
   level:
+    org.springframework.security: "debug"
     org.springframework.web: "debug"
 spring:
   banner:
     location: banner.txt
-
-  security:
-    user:
-      name: root
-      password: lol

@@ -1,0 +1,14 @@
+[versions]
+auth0 = "4.1.0"
+kotlin = "1.7.20"
+ktor = "2.1.2"
+
+[libraries]
+
+[bundles]
+
+
+[plugins]
+kotlin = { name = "jvm", version.ref = "kotlin" }
+kotlin-serialization = { name = "plugin.serialization", version.ref = "kotlin" }
+ktor = { name = "ktor", version.ref = "ktor" }

@@ -1,6 +1,7 @@
 package me.kvdpxne.covilo.infrastructure.jdbc
 
 // table names
+const val TABLE_AUTHENTICATION_TOKEN = "authentication_token"
 const val TABLE_COMMENT = "comment"
 const val TABLE_COMMENT_REACTION = "comment_reaction"
 const val TABLE_CRIME = "crime"
@@ -10,6 +11,9 @@ const val TABLE_LOCATION_CITY = "location_city"
 const val TABLE_LOCATION_REGION = "location_region"
 const val TABLE_LOCATION_COUNTRY = "location_country"
 const val TABLE_USER = "user"
+
+const val COLUMN_TOKEN = "token"
+const val COLUMN_EXPIRATION = "expiration"
 
 // column names
 const val COLUMN_IDENTIFIER = "identifier"
@@ -38,3 +42,4 @@ const val COLUMN_PERPETRATOR = "perpetrator"
 const val COLUMN_CITY = "city"
 const val COLUMN_REGION = "region"
 const val COLUMN_COUNTRY = "country"
+const val COLUMN_USER = "user"
