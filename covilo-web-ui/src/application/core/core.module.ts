@@ -3,7 +3,11 @@ import { FormsModule } from "@angular/forms"
 import { CommonModule } from "@angular/common"
 import { RouterModule } from "@angular/router"
 import { BrowserModule } from "@angular/platform-browser"
-import { NgbAlertModule, NgbCollapseModule } from "@ng-bootstrap/ng-bootstrap"
+import {
+  NgbAlertModule,
+  NgbCollapseModule,
+  NgbDropdownModule
+} from "@ng-bootstrap/ng-bootstrap"
 import { TranslateModule } from "@ngx-translate/core"
 
 //
@@ -11,6 +15,7 @@ import { SharedModule } from "../shared"
 
 //
 import {
+  AvatarComponent,
   FooterComponent,
   NavigationComponent,
   NotificationComponent
@@ -20,7 +25,8 @@ import {
   declarations: [
     FooterComponent,
     NavigationComponent,
-    NotificationComponent
+    NotificationComponent,
+    AvatarComponent
   ],
   imports: [
     CommonModule,
@@ -30,7 +36,8 @@ import {
     NgbCollapseModule,
     TranslateModule.forChild(),
     SharedModule,
-    NgbAlertModule
+    NgbAlertModule,
+    NgbDropdownModule
   ],
   exports: [
     FooterComponent,
@@ -38,4 +45,5 @@ import {
     NotificationComponent
   ]
 })
-export class CoreModule { }
+export class CoreModule {
+}

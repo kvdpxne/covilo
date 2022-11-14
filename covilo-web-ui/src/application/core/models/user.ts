@@ -1,9 +1,6 @@
-import { UserProfile } from "./user-profile"
+import { Account } from "../../authentication/models/account"
 
-export interface User {
+export interface User extends Account {
   identifier: string
-  email: string
-  password: string
-  profile: UserProfile
   createdDate: Date
 }

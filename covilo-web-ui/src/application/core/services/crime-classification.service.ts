@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core"
 import { Observable } from "rxjs"
-import { ApiHttpClientService } from "../../shared/shared.module"
-import { CrimeClassification } from "../core.module"
+import { ApiHttpClientService } from "../../shared"
+import { CrimeClassification } from "../index"
 
 @Injectable({
   providedIn: "root"

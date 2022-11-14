@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core"
 import { Observable } from "rxjs"
-import { ApiHttpClientService } from "../../shared/shared.module"
-import { LocationCountry } from "../core.module"
+import { ApiHttpClientService } from "../../shared"
+import { LocationCountry } from "../index"
 
 @Injectable({
   providedIn: "root"

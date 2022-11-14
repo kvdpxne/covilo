@@ -1,0 +1,40 @@
+<div class="navbar-nav">
+
+  <div *ngIf="!isLogged">
+    <button class="btn btn-sm btn-outline-primary me-1"
+            routerLink="./authentication/login"
+            type="button">
+      {{ 'login' | translate }}
+    </button>
+
+    <button class="btn btn-sm btn-primary"
+            routerLink="./authentication/signup"
+            type="button">
+      {{ 'signup' | translate }}
+    </button>
+  </div>
+
+  <div ngbDropdown *ngIf="isLogged" class="nav-item">
+    <div ngbDropdownToggle>
+      <img class="avatar-image"
+           src="https://cdn.discordapp.com/embed/avatars/0.png" alt="avatar">
+      <span>
+          <!-- TODO replace to username -->
+        {{ currentUser?.email }}
+        </span>
+    </div>
+    <div ngbDropdownMenu>
+      <button ngbDropdownItem>Action - 1</button>
+      <button ngbDropdownItem>Another Action</button>
+      <button ngbDropdownItem>Something else is here</button>
+      <div class="dropdown-divider"></div>
+
+      <button ngbDropdownItem
+              routerLink="./authentication/logout"
+              class="text-danger">
+        {{ "logout" | translate }}
+      </button>
+
+    </div>
+  </div>
+</div>

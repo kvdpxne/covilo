@@ -1,5 +1,4 @@
-<nav
-  class="navbar navbar-expand-md navbar-light bg-light shadow justify-items-baseline">
+<nav class="navigation-wrapper">
   <div class="container">
     <a class="navbar-brand" href="/">
       Covilo
@@ -20,18 +19,8 @@
         </li>
       </ul>
 
-      <div class="navbar-nav">
-        <button class="btn btn-sm btn-outline-primary me-1"
-                routerLink="./authentication/login"
-                type="button">
-          {{ 'login' | translate }}
-        </button>
-        <button class="btn btn-sm btn-primary"
-                routerLink="./authentication/signup"
-                type="button">
-          {{ 'signup' | translate }}
-        </button>
-      </div>
+      <a-avatar></a-avatar>
+
     </div>
 
   </div>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core"
 import { ActivatedRoute } from "@angular/router"
-import { LocationCountryService, LocationRegionService } from ".."
+import { LocationCountryService, LocationRegionService } from "../../core"
 
 @Component({
   selector: "a-result-list",

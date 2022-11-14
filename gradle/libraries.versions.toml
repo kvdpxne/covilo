@@ -1,14 +1,18 @@
 [versions]
-auth0 = "4.1.0"
 kotlin = "1.7.20"
-ktor = "2.1.2"
-
-[libraries]
-
-[bundles]
-
+spring-boot = "2.7.5"
+spring-management = "1.0.15.RELEASE"
+mariadb-client = "3.0.8"
+swagger = "3.0.0"
+auth0-jwt = "4.1.0"
 
 [plugins]
-kotlin = { name = "jvm", version.ref = "kotlin" }
-kotlin-serialization = { name = "plugin.serialization", version.ref = "kotlin" }
-ktor = { name = "ktor", version.ref = "ktor" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+spring-management = { id = "io.spring.dependency-management", version.ref = "spring-management" }
+
+[libraries]
+auth0-jwt = { module = "com.auth0:java-jwt", version.ref = "auth0-jwt" }
+mariadb-client = { module = "org.mariadb.jdbc:mariadb-java-client", version.ref = "mariadb-client" }
+swagger = { module = "io.springfox:springfox-boot-starter", version.ref = "swagger" }

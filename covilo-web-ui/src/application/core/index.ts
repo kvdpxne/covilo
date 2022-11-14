@@ -1,3 +1,5 @@
+export * from "./components"
+
 // All available application models
 export * from "./models/capital-type"
 export * from "./models/comment"
@@ -9,7 +11,6 @@ export * from "./models/location-city"
 export * from "./models/location-country"
 export * from "./models/location-region"
 export * from "./models/user"
-export * from "./models/user-profile"
 
 // All available application services
 export * from "./services/crime.service"

@@ -1,0 +1,25 @@
+package me.kvdpxne.covilo.domain.repositories
+
+import me.kvdpxne.covilo.domain.models.CrimeClassification
+import me.kvdpxne.covilo.domain.models.CrimeClassifications
+import java.util.UUID
+
+/**
+ * @see CrimeClassification
+ */
+interface CrimeClassificationRepository {
+
+  fun findByIdentifier(identifier: UUID): CrimeClassification?
+
+  fun findAll(): CrimeClassifications
+
+  fun insert(classification: CrimeClassification)
+
+  fun update(classification: CrimeClassification)
+
+  fun delete(identifier: UUID)
+
+  fun deleteAll()
+
+  fun count(): Int
+}

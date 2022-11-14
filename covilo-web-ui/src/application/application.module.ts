@@ -15,10 +15,10 @@ import { NgChartsModule } from "ng2-charts"
 import { CoreModule } from "./core/core.module"
 
 //
-import { SharedModule } from "./shared/shared.module"
+import { SharedModule } from "./shared"
 
 //
-import { AuthenticationModule } from "./authentication/authentication.module"
+import { AuthenticationModule } from "./authentication"
 
 import { ApplicationRoutingModule } from "./application-routing.module"
 
@@ -74,6 +74,3 @@ export class ApplicationModule {
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, "assets/localization/", ".json")
 }
-
-export * from "./core/core.module"
-export * from "./shared/shared.module"

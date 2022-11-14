@@ -11,9 +11,7 @@ describe('PasswordInputComponent', () => {
       declarations: [ PasswordInputComponent ]
     })
     .compileComponents();
-  });
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(PasswordInputComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -1,10 +1,13 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
 plugins {
-  id("org.springframework.boot").apply(false)
-  id("io.spring.dependency-management").apply(false)
-  kotlin("jvm")
-  kotlin("plugin.spring").apply(false)
+  val libraries = libraries.plugins
+
+  alias(libraries.kotlin.jvm).apply(false)
+  alias(libraries.kotlin.spring).apply(false)
+  alias(libraries.spring.boot).apply(false)
+  alias(libraries.spring.management)
 }
 
 allprojects {
@@ -15,17 +18,27 @@ allprojects {
 
 subprojects {
 
-  apply(plugin = "kotlin")
+  apply(plugin = "org.jetbrains.kotlin.jvm")
+  apply(plugin = "org.jetbrains.kotlin.plugin.spring")
+  apply(plugin = "org.springframework.boot")
+  apply(plugin = "io.spring.dependency-management")
 
-  repositories {
-    mavenCentral()
-    mavenLocal()
+  if (name != "covilo-entry-point") {
+    dependencyManagement {
+      imports {
+        mavenBom(SpringBootPlugin.BOM_COORDINATES)
+      }
+    }
   }
 
   dependencies {
     // Kotlin
     "implementation"(kotlin("stdlib-jdk8"))
     "implementation"(kotlin("reflect"))
+
+    // Starter for testing Spring Boot applications with libraries
+    // including JUnit Jupiter, Hamcrest and Mockito
+    "testImplementation"("org.springframework.boot:spring-boot-starter-test")
   }
 
   tasks {

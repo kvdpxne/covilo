@@ -1,3 +1,5 @@
+rootProject.name = "covilo"
+
 pluginManagement {
 
   repositories {
@@ -6,14 +8,31 @@ pluginManagement {
     maven("https://repo.spring.io/milestone")
     maven("https://repo.spring.io/snapshot")
   }
+}
 
-  plugins {
-    id("org.springframework.boot").version("2.7.4")
-    id("io.spring.dependency-management").version("1.0.14.RELEASE")
-    kotlin("jvm").version("1.7.20")
-    kotlin("plugin.spring").version("1.7.20")
+@Suppress("UnstableApiUsage")
+dependencyResolutionManagement {
+
+  versionCatalogs {
+    val fileName = "libraries"
+    create(fileName) {
+      from(files("gradle/$fileName.versions.toml"))
+    }
+  }
+
+  repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+
+  repositories {
+    mavenCentral()
+    mavenLocal()
   }
 }
 
-rootProject.name = "covilo"
-include("covilo-core")
+sequenceOf(
+  "entry-point",
+  "api",
+  "authentication",
+  "common"
+).forEach {
+  include("${rootProject.name}-$it")
+}

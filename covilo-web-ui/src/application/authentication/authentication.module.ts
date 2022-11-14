@@ -3,36 +3,27 @@ import { CommonModule } from "@angular/common"
 import { FormsModule, ReactiveFormsModule } from "@angular/forms"
 import { TranslateModule } from "@ngx-translate/core"
 
-//
 import { ApplicationRoutingModule } from "./authentication-routing.module"
 
-// Root our application authentication component
-import { AuthenticationComponent } from "./authentication.component"
-
 //
 import {
+  AuthenticationComponent,
   ForgotPasswordComponent,
+  AUTHENTICATION_INTERCEPTOR_PROVIDER,
   LoginComponent,
-  LogoutComponent
-} from "./routers"
-
-import {
-  ConfirmButtonComponent,
-  EmailInputComponent,
-  PasswordInputComponent
-} from "./components";
-import { SignupComponent } from "./routers"
+  LogoutComponent,
+  SignupComponent
+} from "./"
 
 @NgModule({
-  providers: [],
+  providers: [
+    AUTHENTICATION_INTERCEPTOR_PROVIDER
+  ],
   declarations: [
     AuthenticationComponent,
     ForgotPasswordComponent,
     LoginComponent,
     LogoutComponent,
-    ConfirmButtonComponent,
-    PasswordInputComponent,
-    EmailInputComponent,
     SignupComponent
   ],
   imports: [

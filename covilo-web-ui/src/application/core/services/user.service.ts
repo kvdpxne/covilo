@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core"
-import { ApiHttpClientService } from "../../shared/shared.module"
+import { ApiHttpClientService } from "../../shared"
 
 @Injectable({
   providedIn: "root"

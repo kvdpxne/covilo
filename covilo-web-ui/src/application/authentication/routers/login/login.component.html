@@ -1,52 +1,127 @@
-<div>
-  <div class="mb-4">
-    <label class="form-label" for="signupModalFormLoginEmail">
-      Your email
-    </label>
+<!--<div>-->
+<!--  <div class="mb-4">-->
+<!--    <label class="form-label">-->
+<!--      {{ "application.authentication.your-email" | translate }}-->
+<!--    </label>-->
+<!--    &lt;!&ndash;    &ndash;&gt;-->
+<!--    <input class="form-control form-control-lg"-->
+<!--           type="email"-->
+<!--           name="email"-->
+<!--           required="true"-->
+<!--           placeholder="email@site.com">-->
 
-    <!--    -->
-    <a-email-input>
-      <!--      -->
-    </a-email-input>
+<!--    <span class="invalid-feedback">-->
+<!--      {{ "application.authentication.invalid-email" | translate }}-->
+<!--    </span>-->
+<!--  </div>-->
+<!--  <div class="mb-4">-->
+<!--    <div class="d-flex justify-content-between align-items-center">-->
+<!--      <label class="form-label">-->
+<!--        {{ "application.authentication.your-password" | translate }}-->
+<!--      </label>-->
+<!--      <a class="form-label-link" routerLink="/authentication/forgot-password">-->
+<!--        {{ "application.authentication.forgot-password" | translate }}-->
+<!--      </a>-->
+<!--    </div>-->
 
-    <span class="invalid-feedback">
-      Please enter a valid email address.
-    </span>
-  </div>
-  <!-- End Form -->
+<!--    <div class="input-group input-group-merge">-->
+<!--      <input #passwordInputElement-->
+<!--             [type]="this.getPasswordType()"-->
+<!--             class="js-toggle-password form-control form-control-lg"-->
+<!--             type="password"-->
+<!--             minlength="8"-->
+<!--             name="password"-->
+<!--             placeholder="8+ characters required"-->
+<!--             required>-->
+<!--      <a class="input-group-append input-group-text"-->
+<!--         (click)="togglePasswordVisibility()">-->
 
-  <!-- Form -->
-  <div class="mb-4">
-    <div class="d-flex justify-content-between align-items-center">
-      <label class="form-label" for="signupModalFormLoginPassword">
-        Password
-      </label>
-      <a class="form-label-link" routerLink="/authentication/forgot-password">
-        Forgot Password?
-      </a>
+<!--        &lt;!&ndash;        &ndash;&gt;-->
+<!--        <i class="bi" [ngClass]="{'bi-eye-slash': this.isPasswordHidden, 'bi-eye': !this.isPasswordHidden}">-->
+<!--          &lt;!&ndash; THIS ELEMENT SHOULD NOT CONTAIN ANY CONTENT &ndash;&gt;-->
+<!--        </i>-->
+
+<!--      </a>-->
+<!--    </div>-->
+<!--    <span class="invalid-feedback">-->
+<!--      {{ "application.authentication.invalid-password" | translate }}-->
+<!--    </span>-->
+<!--  </div>-->
+
+
+<!--  <button class="btn btn-primary" (click)="onPreSubmit()">-->
+<!--    {{ "word.login" | translate }}-->
+<!--  </button>-->
+
+<!--  <div class="text-center">-->
+<!--    <p>-->
+<!--    <span>-->
+<!--      Don't have an account yet?-->
+<!--    </span>-->
+<!--      <a class="link" routerLink="/authentication/signup">-->
+<!--        Sign up here-->
+<!--      </a>-->
+<!--    </p>-->
+<!--  </div>-->
+<!--</div>-->
+
+<div class="col-md-12">
+  <div class="card card-container">
+    <form
+      *ngIf="!isLoggedIn"
+      name="form"
+      (ngSubmit)="f.form.valid && onSubmit()"
+      #f="ngForm"
+      novalidate
+    >
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input
+          type="text"
+          class="form-control"
+          name="username"
+          [(ngModel)]="form.username"
+          required
+          #username="ngModel"
+          [ngClass]="{ 'is-invalid': f.submitted && username.errors }"
+        />
+        <div *ngIf="username.errors && f.submitted" class="invalid-feedback">
+          Username is required!
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          class="form-control"
+          name="password"
+          [(ngModel)]="form.password"
+          required
+          minlength="6"
+          #password="ngModel"
+          [ngClass]="{ 'is-invalid': f.submitted && password.errors }"
+        />
+        <div *ngIf="password.errors && f.submitted" class="invalid-feedback">
+          <div *ngIf="password.errors['required']">Password is required</div>
+          <div *ngIf="password.errors['minlength']">
+            Password must be at least 6 characters
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <button class="btn btn-primary btn-block">
+          Login
+        </button>
+      </div>
+      <div class="form-group">
+        <div *ngIf="f.submitted && isLoginFailed" class="alert alert-danger" role="alert">
+          Login failed: {{ errorMessage }}
+        </div>
+      </div>
+    </form>
+
+    <div class="alert alert-success" *ngIf="isLoggedIn">
+      Logged in as {{ roles }}.
     </div>
-
-    <!--    -->
-    <a-password-input>
-      <!--      -->
-    </a-password-input>
-
-    <span class="invalid-feedback">Please enter a valid password.</span>
-  </div>
-
-  <!-- A button confirming that the form has been completed -->
-  <a-confirm-button displayName="word.login">
-    <!-- no content needed -->
-  </a-confirm-button>
-
-  <div class="text-center">
-    <p>
-    <span>
-      Don't have an account yet?
-    </span>
-      <a class="link" routerLink="/authentication/signup">
-        Sign up here
-      </a>
-    </p>
   </div>
 </div>

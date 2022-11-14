@@ -1,28 +1,53 @@
-import { Component, OnInit } from "@angular/core"
-import { UntypedFormControl, UntypedFormGroup } from "@angular/forms"
+import { Component } from "@angular/core"
 import { Router } from "@angular/router"
-import { UserService } from "../application.module"
+
+import { UserService } from "../"
+
+import {
+  AuthenticationService,
+  LoginCredentials,
+  StorageService
+} from "./"
 
 @Component({
   selector: "a-authentication",
-  templateUrl: "./authentication.component.html"
+  templateUrl: "./authentication.component.html",
+  styleUrls: [
+    "./authentication.component.scss"
+  ]
 })
-export class AuthenticationComponent implements OnInit {
+export class AuthenticationComponent {
 
-  formData: UntypedFormGroup
+  isLogged: boolean = false
+  roles: string[] = []
 
-  log: boolean = false
+  activeComponent: any
 
   constructor(
     private router: Router,
-    private userService: UserService
+    private userService: UserService,
+    private authenticationService: AuthenticationService,
+    private storageService: StorageService
   ) {
-    this.formData = new UntypedFormGroup({
-      username: new UntypedFormControl()
+
+  }
+
+  onActivate(component: any): void {
+    console.log(component)
+    if (this.storageService.isLogged()) {
+      this.isLogged = true
+      this.roles = ["USER"]
+    }
+
+    this.activeComponent = component
+  }
+
+  onSubmit() {
+    this.activeComponent.loginCredentialsEvent.subscribe({
+      next: (value: LoginCredentials) => {
+        console.log(value)
+        this.authenticationService.login(value)
+      }
     })
   }
-
-  ngOnInit(): void {
-  }
-
 }

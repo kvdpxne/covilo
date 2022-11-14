@@ -1,0 +1,10 @@
+@import "src/styles";
+
+.navigation-wrapper {
+  @extend .navbar;
+  @extend .navbar-expand-md;
+  @extend .navbar-light;
+  @extend .bg-light;
+  @extend .shadow;
+  @extend .align-items-baseline;
+}

@@ -7,7 +7,7 @@ import {
   LocationCountryService,
   LocationRegion,
   LocationRegionService
-} from "../../core/core.module"
+} from "../../core"
 
 @Component({
   templateUrl: "./home.component.html",

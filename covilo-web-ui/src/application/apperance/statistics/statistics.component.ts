@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core"
 import { timer } from "rxjs"
-import { LocationCities, LocationCity, LocationCityService } from ".."
+import { LocationCities, LocationCity, LocationCityService } from "../../core"
 
 interface IndexedLocationCity extends LocationCity {
   index: number

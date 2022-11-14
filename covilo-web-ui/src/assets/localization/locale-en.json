@@ -1,4 +1,22 @@
 {
+  "application": {
+    "authentication": {
+      "your-email": "Your Email",
+      "your-password": "Password",
+      "invalid-email": "Please enter a valid email address.",
+      "invalid-password": "Please enter a valid password.",
+      "forgot-password": "Forgot Password?",
+      "password-placeholder": "8+ characters required",
+
+      "welcome": "Welcome to Covilo",
+      "fill": "Fill out the form to get started."
+    }
+  },
+
+
+
+
+
   "navigation": "Navigation",
   "company": "Company",
   "company.about": "About",

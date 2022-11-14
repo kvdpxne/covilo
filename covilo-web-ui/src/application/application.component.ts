@@ -1,10 +1,13 @@
-import { Component } from "@angular/core"
+import { Component, OnInit } from "@angular/core"
 import { TranslateService } from "@ngx-translate/core"
 import { Section } from "./shared/types/section"
 import { Icon } from "./shared/types/icon"
 import { Link } from "./shared/types/link"
 import { NavigationStart, Router } from "@angular/router"
+import { User } from "./core"
+import { StorageService } from "./authentication"
 
+//
 @Component({
   selector: "app-root",
   templateUrl: "./application.component.html",
@@ -12,7 +15,9 @@ import { NavigationStart, Router } from "@angular/router"
     "./application.component.scss"
   ]
 })
-export class ApplicationComponent {
+export class ApplicationComponent implements OnInit {
+
+  currentUser?: User
 
   showFooter: boolean = true
   showHeader: boolean = true
@@ -22,7 +27,11 @@ export class ApplicationComponent {
   iconSet: Set<Icon>
   linkSet: Set<Link>
 
-  constructor(private router: Router, private translate: TranslateService) {
+  constructor(
+    private readonly router: Router,
+    private readonly translate: TranslateService,
+    private readonly storageService: StorageService,
+  ) {
     router.events.subscribe(event => {
       if (event instanceof NavigationStart) {
         if (event.url.includes("authentication")) {
@@ -46,15 +55,6 @@ export class ApplicationComponent {
     this.sectionSet = new Set<Section>()
     this.iconSet = new Set<Icon>()
     this.linkSet = new Set<Link>()
-
-    this.builtInNavigationItems()
-    this.builtInSections()
-    this.builtInIcons()
-    this.builtInLinks()
-  }
-
-  onAttach($event: any) {
-
   }
 
   private builtInNavigationItems(): void {
@@ -94,5 +94,23 @@ export class ApplicationComponent {
     this.linkSet.add(new Link("Terms of Use", ""))
     this.linkSet.add(new Link("Trademarks", ""))
     this.linkSet.add(new Link("Legal", ""))
+  }
+
+  ngOnInit(): void {
+    this.builtInNavigationItems()
+    this.builtInSections()
+    this.builtInIcons()
+    this.builtInLinks()
+
+    const isLogged = this.storageService.isLogged()
+
+    if (isLogged) {
+      const user = this.storageService.getUser()
+      if (null === user) {
+        return
+      }
+
+      this.currentUser = user
+    }
   }
 }

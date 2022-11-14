@@ -1,20 +1,16 @@
 import { NgModule } from "@angular/core"
 import { RouterModule, Routes } from "@angular/router"
 
-//
-import { AuthenticationComponent } from "./authentication.component"
-
-//
 import {
+  AuthenticationComponent,
   ForgotPasswordComponent,
   LoginComponent,
   LogoutComponent
-} from "./routers"
+} from "./"
 
-//
 const routes: Routes = [
   {
-    pathMatch: "full",
+    path: "authentication",
     component: AuthenticationComponent,
     children: [
       {
