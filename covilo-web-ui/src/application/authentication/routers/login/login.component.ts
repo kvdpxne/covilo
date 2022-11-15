@@ -12,7 +12,7 @@ export class LoginComponent implements OnInit {
     username: null,
     password: null
   }
-  isLoggedIn = false
+  isLogged = false
   isLoginFailed = false
   errorMessage = ""
   roles: string[] = []
@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.storageService.isLogged()) {
-      this.isLoggedIn = true
+      this.isLogged = true
     }
   }
 
@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
         this.storageService.setUser(data)
 
         this.isLoginFailed = false
-        this.isLoggedIn = true
+        this.isLogged = true
         this.roles = this.storageService.getUser()!!.roles
         this.reloadPage()
       },

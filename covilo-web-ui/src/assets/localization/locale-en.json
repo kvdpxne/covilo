@@ -1,15 +1,43 @@
 {
   "application": {
     "authentication": {
+
+      "forgot-password2": {
+        "description": "Enter your email address below and we'll get you back on track.",
+        "back": "Back to Log in",
+        "email": "Enter your email address"
+      },
+
+      "login": {
+        "title": "Welcome back",
+        "description": "Login to manage your account.",
+        "aa": "Don't have an account yet?",
+        "sign-here": "Sign up here"
+      },
+
+      "signup": {
+        "title": "Welcome to Covilo",
+        "description": "Fill out the form to get started.",
+
+        "aa": "Already have an account?",
+        "log-here": "Log in here",
+        "privacy-policy": "Please accept our Privacy Policy.",
+        "acknowledged": "By submitting this form I have read and acknowledged the"
+      },
+
       "your-email": "Your Email",
       "your-password": "Password",
+      "your-confirm-password": "Confirm Password",
       "invalid-email": "Please enter a valid email address.",
       "invalid-password": "Please enter a valid password.",
       "forgot-password": "Forgot Password?",
       "password-placeholder": "8+ characters required",
-
       "welcome": "Welcome to Covilo",
       "fill": "Fill out the form to get started."
+    },
+
+    "common": {
+      "privacy-policy": "Privacy Policy"
     }
   },
 
@@ -34,6 +62,7 @@
   "search": "Search",
   "search.placeholder": "Country, City...",
   "signup": "Sign up",
+  "submit": "Submit",
   "login": "Log in",
   "logout": "Log out",
   "report": "Report",

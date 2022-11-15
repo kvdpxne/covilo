@@ -11,7 +11,7 @@ import {
 import { TranslateModule } from "@ngx-translate/core"
 
 //
-import { SharedModule } from "../shared"
+import { SharedModule } from "src/application/shared"
 
 //
 import {

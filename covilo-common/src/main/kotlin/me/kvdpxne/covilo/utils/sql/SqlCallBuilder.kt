@@ -31,7 +31,7 @@ class SqlCallBuilder : Buildable<String> {
   }
 
   fun from(table: String): SqlCallBuilder {
-    val part = " FROM $table"
+    val part = " FROM `$table`"
     query += part
     tableName = table
     return this
@@ -56,7 +56,7 @@ class SqlCallBuilder : Buildable<String> {
   }
 
   fun where(column: String, key: Any?): SqlCallBuilder {
-    val columnWithTable = "$tableName.$column"
+    val columnWithTable = "`$tableName`.`$column`"
     val part = "WHERE $columnWithTable = :$columnWithTable"
     parameters.putIfAbsent(columnWithTable, key.toString())
     query += " $part"

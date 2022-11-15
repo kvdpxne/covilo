@@ -5,7 +5,8 @@ import {
   AuthenticationComponent,
   ForgotPasswordComponent,
   LoginComponent,
-  LogoutComponent
+  LogoutComponent,
+  SignupComponent
 } from "./"
 
 const routes: Routes = [
@@ -24,6 +25,10 @@ const routes: Routes = [
       {
         path: "logout",
         component: LogoutComponent
+      },
+      {
+        path: "signup",
+        component: SignupComponent
       }
     ]
   }

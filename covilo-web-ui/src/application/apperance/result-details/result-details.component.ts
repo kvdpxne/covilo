@@ -5,7 +5,7 @@ import {
   CrimeService,
   LocationCity,
   LocationCityService
-} from "../../core"
+} from "src/application/core"
 import { ChartConfiguration, ChartData, ChartType } from "chart.js"
 import { Subscription } from "rxjs"
 

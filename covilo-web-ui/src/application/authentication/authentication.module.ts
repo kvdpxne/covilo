@@ -14,6 +14,7 @@ import {
   LogoutComponent,
   SignupComponent
 } from "./"
+import { SharedModule } from "../shared"
 
 @NgModule({
   providers: [
@@ -31,7 +32,8 @@ import {
     FormsModule,
     ReactiveFormsModule,
     TranslateModule.forChild(),
-    ApplicationRoutingModule
+    ApplicationRoutingModule,
+    SharedModule
   ]
 })
 export class AuthenticationModule {

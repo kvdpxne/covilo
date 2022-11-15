@@ -1,19 +1,26 @@
 import { ModuleWithProviders, NgModule } from "@angular/core"
 import { CommonModule } from "@angular/common"
-import { ApiHttpClientService } from "./services/api-http-client.service"
-import { TextFilterPipe } from "./pipes/text-filter.pipe"
-import { TranslateModule } from "@ngx-translate/core"
-import { InputComponent } from "./components"
-import { NgbDropdownModule } from "@ng-bootstrap/ng-bootstrap"
 import { FormsModule } from "@angular/forms"
+import { TranslateModule } from "@ngx-translate/core"
+import { NgbDropdownModule } from "@ng-bootstrap/ng-bootstrap"
+
+import { NavigationBackDirective } from "./directives/navigation-back.directive"
+
+import {
+  ApiHttpClientService,
+  InputComponent,
+  TextFilterPipe
+} from "./"
 
 @NgModule({
   declarations: [
     TextFilterPipe,
-    InputComponent
+    InputComponent,
+    NavigationBackDirective
   ],
   exports: [
-    InputComponent
+    InputComponent,
+    NavigationBackDirective
   ],
   imports: [
     CommonModule,
@@ -31,7 +38,3 @@ export class SharedModule {
     }
   }
 }
-
-// application services
-export { ApiHttpClientService } from "./services/api-http-client.service"
-export { TextFilterPipe } from "./pipes/text-filter.pipe"

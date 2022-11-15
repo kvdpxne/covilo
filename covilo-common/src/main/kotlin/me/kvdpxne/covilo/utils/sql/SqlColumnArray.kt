@@ -20,7 +20,7 @@ class SqlColumnArray internal constructor(val table: String, capacity: Int) {
       columns[index] = value
       return
     }
-    val columnWithTable = "$table.`$value`"
+    val columnWithTable = "`$table`.`$value`"
     columns[index] = columnWithTable
   }
 

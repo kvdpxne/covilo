@@ -1,15 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from "@angular/core"
 
 @Component({
-  selector: 'app-signup',
-  templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.scss']
+  selector: "a-signup",
+  templateUrl: "./signup.component.html",
+  styleUrls: ["./signup.component.scss"]
 })
 export class SignupComponent implements OnInit {
+  isLogged: boolean = false
 
-  constructor() { }
+  form: any = {
+    email: null,
+    password: null,
+    confirmPassword: null,
+    fsf: null
+  }
+
+  constructor() {
+  }
 
   ngOnInit(): void {
   }
 
+  onSubmit() {
+    return false
+  }
 }
