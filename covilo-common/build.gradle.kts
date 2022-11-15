@@ -17,6 +17,6 @@ dependencies {
   implementation("$spring:spring-boot-starter-jdbc")
   implementation("$spring:spring-boot-starter-data-jdbc")
   implementation(libraries.swagger)
-  implementation(libraries.mariadb.client)
-  runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
+//  implementation(libraries.mariadb.client)
+  runtimeOnly("com.h2database:h2")
 }

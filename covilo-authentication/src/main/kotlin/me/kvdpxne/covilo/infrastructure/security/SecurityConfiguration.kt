@@ -21,7 +21,10 @@ class SecurityConfiguration(
   @Bean(name = ["securityFilterChain"])
   fun getSecurityFilterChain(http: HttpSecurity): SecurityFilterChain {
     return http
-      .headers { it.cacheControl().disable() }
+      .headers {
+        it.cacheControl().disable()
+        it.frameOptions().disable()
+      }
       .cors { }
       .csrf { it.disable() }
       .authorizeHttpRequests {

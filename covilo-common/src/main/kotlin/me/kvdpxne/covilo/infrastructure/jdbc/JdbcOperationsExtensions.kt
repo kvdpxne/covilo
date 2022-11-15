@@ -4,5 +4,5 @@ import org.springframework.jdbc.core.JdbcOperations
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 
 fun NamedParameterJdbcOperations.operations(): JdbcOperations {
-  return jdbcOperations
+  return this.jdbcOperations
 }
