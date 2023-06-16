@@ -1,0 +1,7 @@
+allprojects {
+  group = "me.kvdpxne"
+}
+
+wrapper {
+  distributionType = Wrapper.DistributionType.ALL
+}

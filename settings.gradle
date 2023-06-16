@@ -1,0 +1,27 @@
+pluginManagement {
+
+  repositories {
+    gradlePluginPortal()
+
+    mavenCentral()
+    mavenLocal()
+  }
+}
+
+dependencyResolutionManagement {
+
+  versionCatalogs {
+    def fileName = "libraries"
+    create(fileName) {
+      from(files("gradle/${fileName}.versions.toml"))
+    }
+  }
+
+  repositories {
+    mavenCentral()
+    mavenLocal()
+  }
+}
+
+rootProject.name = "covilo"
+include("covilo-core")
