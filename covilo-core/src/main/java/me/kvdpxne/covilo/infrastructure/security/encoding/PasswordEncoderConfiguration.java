@@ -1,4 +1,4 @@
-package me.kvdpxne.covilo.infrastructure.security;
+package me.kvdpxne.covilo.infrastructure.security.encoding;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

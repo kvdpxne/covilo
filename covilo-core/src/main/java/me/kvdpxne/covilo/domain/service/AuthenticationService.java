@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import me.kvdpxne.covilo.api.request.LoginCredentials;
 import me.kvdpxne.covilo.api.request.RegisterRequest;
 import me.kvdpxne.covilo.api.response.AuthenticationResponse;
+import me.kvdpxne.covilo.application.PasswordEncodingUseCase;
 import me.kvdpxne.covilo.domain.model.Token;
 import me.kvdpxne.covilo.domain.model.TokenType;
 import me.kvdpxne.covilo.domain.model.User;
@@ -16,7 +17,6 @@ import me.kvdpxne.covilo.infrastructure.security.TokenService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -27,9 +27,10 @@ public class AuthenticationService {
 
   private final UserRepository repository;
   private final TokenRepository tokenRepository;
-  private final PasswordEncoder passwordEncoder;
   private final TokenService jwtService;
   private final AuthenticationManager authenticationManager;
+
+  private final PasswordEncodingUseCase passwordEncodingUseCase;
 
   public AuthenticationResponse register(RegisterRequest request) {
 
@@ -37,7 +38,7 @@ public class AuthenticationService {
       .firstname(request.getFirstname())
       .lastname(request.getLastname())
       .email(request.getEmail())
-      .password(passwordEncoder.encode(request.getPassword()))
+      .password(this.passwordEncodingUseCase.encode(request.getPassword()))
       .role(request.getRole())
       .build();
 
