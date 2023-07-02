@@ -1,6 +1,6 @@
 <div class="navbar-nav">
 
-  <div *ngIf="!isLogged">
+  <div>
     <button class="btn btn-sm btn-outline-primary me-1"
             routerLink="./authentication/login"
             type="button">
@@ -14,13 +14,13 @@
     </button>
   </div>
 
-  <div ngbDropdown *ngIf="isLogged" class="nav-item">
+  <div ngbDropdown class="nav-item">
     <div ngbDropdownToggle>
       <img class="avatar-image"
            src="https://cdn.discordapp.com/embed/avatars/0.png" alt="avatar">
       <span>
           <!-- TODO replace to username -->
-        {{ currentUser?.email }}
+
         </span>
     </div>
     <div ngbDropdownMenu>

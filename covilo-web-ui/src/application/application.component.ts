@@ -5,7 +5,6 @@ import { Icon } from "./shared/types/icon"
 import { Link } from "./shared/types/link"
 import { NavigationStart, Router } from "@angular/router"
 import { User } from "./core"
-import { StorageService } from "./authentication"
 
 //
 @Component({
@@ -29,8 +28,7 @@ export class ApplicationComponent implements OnInit {
 
   constructor(
     private readonly router: Router,
-    private readonly translate: TranslateService,
-    private readonly storageService: StorageService,
+    private readonly translate: TranslateService
   ) {
     router.events.subscribe(event => {
       if (event instanceof NavigationStart) {
@@ -101,16 +99,5 @@ export class ApplicationComponent implements OnInit {
     this.builtInSections()
     this.builtInIcons()
     this.builtInLinks()
-
-    const isLogged = this.storageService.isLogged()
-
-    if (isLogged) {
-      const user = this.storageService.getUser()
-      if (null === user) {
-        return
-      }
-
-      this.currentUser = user
-    }
   }
 }

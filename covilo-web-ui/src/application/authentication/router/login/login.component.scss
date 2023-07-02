@@ -1,7 +1,8 @@
 @import "src/styles";
 
 .column {
-  @extend .mx-auto;
+  margin-right: auto;
+  margin-left: auto;
 
   max-width: 28rem;
   flex-grow: 1;

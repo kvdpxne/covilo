@@ -1,6 +1,12 @@
-import { Account } from "../../authentication/models/account"
+export interface User {
 
-export interface User extends Account {
-  identifier: string
-  createdDate: Date
+  identifier: string;
+  email: string;
+
+  createdDate: Date;
+  lastModifiedDate: Date;
+
+  birthDate: Date
+  enabled: boolean
+  roles: Array<string>
 }
