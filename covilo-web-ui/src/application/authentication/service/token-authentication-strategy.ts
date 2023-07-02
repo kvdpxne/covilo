@@ -1,8 +1,7 @@
-import {AUTHENTICATION_STRATEGY, AuthenticationStrategy} from "./authentication-strategy";
+import {AuthenticationStrategy} from "./authentication-strategy";
 import {Token} from "../payload/token";
 import {Observable, of} from "rxjs";
 import {User} from "../../core";
-import {Inject} from "@angular/core";
 
 export class TokenAuthenticationStrategy implements AuthenticationStrategy<Token> {
 

@@ -1,7 +1,7 @@
 import {Inject, Injectable} from "@angular/core"
 import {catchError, Observable, of, tap} from "rxjs"
 
-import {ApiHttpClientService, User} from "../../"
+import {ApiHttpClientService} from "../../"
 
 import {LoginCredentials} from "../"
 import {Token} from "../payload/token";
