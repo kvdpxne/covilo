@@ -1,14 +1,6 @@
 package me.kvdpxne.covilo.domain.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,9 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.time.LocalDate;
+import java.util.*;
 
 @Builder(toBuilder = true)
 @AllArgsConstructor
@@ -38,12 +29,13 @@ public class User {
   @Column(name = "_email", unique = true)
   private String email;
 
-  @Column(name = "password")
+  @Column(name = "_password")
   private String password;
 
   @Enumerated(EnumType.STRING)
   @Column(name = "_role")
   private Role role;
+
 
   @ToString.Exclude
   @OneToMany(mappedBy = "user", orphanRemoval = true)
@@ -54,5 +46,16 @@ public class User {
 
   @Column(name = "_lastname")
   private String lastname;
+
+  @OneToMany(mappedBy = "reporter", orphanRemoval = true)
+  private Collection<Crime> crimes = new ArrayList<>();
+
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(name = "_living_place_identifier")
+  private City livingPlace;
+
+  @Column(name = "_birth_date", nullable = false)
+  private LocalDate birthDate;
 
 }

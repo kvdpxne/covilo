@@ -40,12 +40,11 @@ export class LoginComponent {
     // Initializes the standard form group with the FormGroup constructor
     // needed to hold the user authentication information.
     this.formGroup = formBuilder.group<LoginForm>({
-        recognizableName: new FormControl<string | null>(null),
-        password: new FormControl<string | null>(null)
-      }, {
-        validators: Validators.required
-      }
-    )
+      recognizableName: new FormControl<string | null>(null),
+      password: new FormControl<string | null>(null)
+    }, {
+      validators: Validators.required
+    });
     //
     this.router = router;
     // Initiates the standard services.
@@ -75,15 +74,20 @@ export class LoginComponent {
   }
 
   public submit(): void {
-    const s1: string | null = this.recognizableName.value;
-    const s2: string | null = this.password.value;
-    if (!s1 || !s2) {
+    //
+    const recognizableName: string | null = this.recognizableName.value;
+    const password: string | null = this.password.value;
+
+    // Checks if the values are not null or empty.
+    if (!recognizableName || !password) {
       return;
     }
+
     const credentials: LoginCredentials = {
-      email: s1,
-      password: s2
+      email: recognizableName,
+      password: password
     };
+
     this.authenticationService.login2(credentials).subscribe((token: Token) => {
       console.log(token);
       this.router.navigate(["/"]).catch(error => throwError(error));

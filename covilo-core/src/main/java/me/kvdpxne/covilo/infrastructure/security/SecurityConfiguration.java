@@ -42,7 +42,9 @@ public class SecurityConfiguration {
       .csrf(AbstractHttpConfigurer::disable)
       .authorizeHttpRequests(configurer -> {
         configurer.requestMatchers(
+          "/api/0.1.0/geographical/**",
           "/api/0.1.0/auth/**",
+
           "/v2/api-docs",
           "/v3/api-docs",
           "/v3/api-docs/**",
