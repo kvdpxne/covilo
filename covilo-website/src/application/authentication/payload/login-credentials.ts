@@ -1,4 +1,13 @@
 export interface LoginCredentials {
-  email: string
-  password: string
+
+  /**
+   * A unique email address to which the user account is assigned or a unique,
+   * friendly username, if it has been set.
+   */
+  recognizableName: string;
+
+  /**
+   * Password for accessing the user account.
+   */
+  password: string;
 }

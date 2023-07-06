@@ -84,11 +84,11 @@ export class LoginComponent {
     }
 
     const credentials: LoginCredentials = {
-      email: recognizableName,
+      recognizableName: recognizableName,
       password: password
     };
 
-    this.authenticationService.login2(credentials).subscribe((token: Token) => {
+    this.authenticationService.login(credentials).subscribe((token: Token) => {
       console.log(token);
       this.router.navigate(["/"]).catch(error => throwError(error));
     });

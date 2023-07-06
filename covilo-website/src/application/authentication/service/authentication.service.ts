@@ -1,7 +1,7 @@
 import {Inject, Injectable} from "@angular/core"
 import {catchError, Observable, of, tap} from "rxjs"
 
-import {ApiHttpClientService} from "../../"
+import {ApiHttpClientService, User} from "../../"
 
 import {LoginCredentials} from "../"
 import {Token} from "../payload/token";
@@ -14,38 +14,35 @@ import {map} from "rxjs/operators";
 })
 export class AuthenticationService {
 
+  private readonly apiHttpClientService: ApiHttpClientService;
   private readonly authenticationStrategy: AuthenticationStrategy<any>
 
-  private readonly baseUrl: string
-
-  constructor(private readonly httpClient: ApiHttpClientService,
-              @Inject(AUTHENTICATION_STRATEGY) authenticationStrategy: TokenAuthenticationStrategy
+  constructor(
+    httpClientService: ApiHttpClientService,
+    @Inject(AUTHENTICATION_STRATEGY) authenticationStrategy: TokenAuthenticationStrategy
   ) {
-    const apiUrl = httpClient.getUrl()
-    this.baseUrl = apiUrl + "authentication"
+    this.apiHttpClientService = httpClientService;
     this.authenticationStrategy = authenticationStrategy;
   }
 
-  login2(credentials: LoginCredentials): Observable<Token> {
-    const url: string = "auth/login";
-    return this.httpClient.post<Token>(url, credentials)
-      .pipe(
-        tap((token: Token) => this.authenticationStrategy.doLogin(token))
-      );
+  public login(credentials: LoginCredentials): Observable<Token> {
+    return this.apiHttpClientService.post<Token>("auth/login", credentials).pipe(
+      tap((token: Token): void => this.authenticationStrategy.doLogin(token))
+    );
   }
 
-  isLoggedIn(): Observable<boolean> {
+  public isLoggedIn(): Observable<boolean> {
     return this.authenticationStrategy.getCurrentUser().pipe(
-      map(user => !!user),
+      map((user: User | null) => !!user),
       catchError(() => of(false))
     );
   }
 
-  refreshToken(): Observable<void> {
-    return this.httpClient.post("auth/refresh-token", null);
+  public refreshToken(): Observable<void> {
+    return this.apiHttpClientService.post("auth/refresh-token", null);
   }
 
-  logout(): Observable<void> {
-    return this.httpClient.post("auth/logout", null);
+  public logout(): Observable<void> {
+    return this.apiHttpClientService.post("auth/logout", null);
   }
 }
