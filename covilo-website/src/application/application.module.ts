@@ -54,12 +54,19 @@ import {
         deps: [HttpClient]
       }
     }),
+
+    /*
+     *
+     * IMPORTANT: Imports in the wrong order may cause the application to work
+     * incorrectly or cause other undesirable errors.
+     */
+    SharedModule.forRoot(),
+    CoreModule,
+    AuthenticationModule,
+    ApplicationRoutingModule,
+
     NgbModule,
     NgChartsModule,
-    ApplicationRoutingModule,
-    CoreModule,
-    SharedModule.forRoot(),
-    AuthenticationModule
   ],
   exports: [
     ApplicationComponent

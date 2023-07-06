@@ -1,7 +1,8 @@
-import { NgModule } from "@angular/core"
-import { RouterModule, Routes } from "@angular/router"
+import {NgModule} from "@angular/core"
+import {RouterModule, Routes} from "@angular/router"
 import {
   HomeComponent,
+  PageNotFoundComponent,
   ResultDetailsComponent,
   ResultListComponent,
   StatisticsComponent
@@ -25,11 +26,11 @@ const routes: Routes = [
     path: "statistics",
     component: StatisticsComponent
   },
-  // {
-  //   path: "**",
-  //   pathMatch: "full",
-  //   component: PageNotFoundComponent
-  // }
+  {
+    path: "**",
+    pathMatch: "full",
+    component: PageNotFoundComponent
+  }
 ]
 
 @NgModule({
