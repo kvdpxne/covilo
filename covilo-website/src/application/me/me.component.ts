@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { StorageService } from "../authentication"
 
 @Component({
   selector: 'app-me',
@@ -7,10 +6,6 @@ import { StorageService } from "../authentication"
   styleUrls: ['./me.component.scss']
 })
 export class MeComponent implements OnInit {
-
-  constructor(
-    private readonly tokenStorageService: StorageService
-  ) { }
 
   ngOnInit(): void {
   }
