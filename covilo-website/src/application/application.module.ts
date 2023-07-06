@@ -31,6 +31,7 @@ import {
   ResultListComponent,
   StatisticsComponent
 } from "./apperance"
+import {MeModule} from "./me/me.module";
 
 @NgModule({
   declarations: [
@@ -63,6 +64,7 @@ import {
     SharedModule.forRoot(),
     CoreModule,
     AuthenticationModule,
+    MeModule,
     ApplicationRoutingModule,
 
     NgbModule,
