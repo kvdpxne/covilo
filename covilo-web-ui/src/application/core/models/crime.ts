@@ -1,13 +1,13 @@
 import { CrimeClassification } from "./crime-classification"
 import { CrimePerpetrator } from "./crime-perpetrator"
-import { LocationCity } from "./location-city"
+import { City } from "./city"
 
 /**
  *
  */
 export interface Crime {
   date: Date
-  city: LocationCity
+  city: City
   classification: CrimeClassification
   perpetrator?: CrimePerpetrator
   description: string

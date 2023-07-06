@@ -2,11 +2,12 @@ import { Injectable } from "@angular/core"
 import {
   HttpClient,
   HttpErrorResponse,
-  HttpHeaders
+  HttpHeaders, HttpParams
 } from "@angular/common/http"
 import { catchError, Observable, retry, throwError } from "rxjs"
 import { map } from "rxjs/operators"
 import { BaseHttpParams } from "./base-http-params"
+import {BaseHttpParametersBuilder} from "./base-http-parameters-builder";
 
 @Injectable()
 export abstract class BaseHttpClient {
@@ -15,6 +16,16 @@ export abstract class BaseHttpClient {
   }
 
   abstract getUrl(): string;
+
+  public get2<T>(path: string, parameters: any): Observable<T> {
+    return this.handleResponse<T>(
+      this.httpClient.get<T>(this.getUrl().concat(path), {
+          headers: this.getHttpHeaders(),
+          params: BaseHttpParametersBuilder.buildQueryParameters(parameters)
+        }
+      )
+    )
+  }
 
   public get<T>(
     url: string,

@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core"
 import { Observable } from "rxjs"
 import { ApiHttpClientService } from "../../shared"
-import { LocationCountry } from "../index"
+import { Country } from "../index"
 
 @Injectable({
   providedIn: "root"
@@ -15,7 +15,7 @@ export class LocationCountryService {
     this.basePath = "location/country"
   }
 
-  public getAll(): Observable<Array<LocationCountry>> {
+  public getAll(): Observable<Array<Country>> {
     const query = `${this.basePath}/all`
     return this.api.get(query)
   }

@@ -3,7 +3,7 @@ import { ActivatedRoute } from "@angular/router"
 import {
   Crime,
   CrimeService,
-  LocationCity,
+  City,
   LocationCityService
 } from "src/application/core"
 import { ChartConfiguration, ChartData, ChartType } from "chart.js"
@@ -20,7 +20,7 @@ export class ResultDetailsComponent implements AfterViewInit, OnInit,
   private crimeSubscription?: Subscription
 
   //
-  city!: LocationCity
+  city!: City
 
   // All available crimes for the city
   crimes?: Array<Crime>
@@ -95,7 +95,7 @@ export class ResultDetailsComponent implements AfterViewInit, OnInit,
     this.getCrimes(country, region, city)
 
     this.locationCityService.getOne(country, region, city).subscribe({
-      next: (value: LocationCity) => {
+      next: (value: City) => {
         this.city = value
       }
     })

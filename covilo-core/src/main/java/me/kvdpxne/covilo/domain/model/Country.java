@@ -22,14 +22,14 @@ public class Country {
   @Column(name = "_identifier", nullable = false)
   private UUID identifier;
 
-  @Column(name = "_name", nullable = false, unique = true, length = 20)
+  @Column(name = "_name", nullable = false, unique = true)
   private String name;
 
   @Enumerated(EnumType.STRING)
-  @Column(name = "_continent", nullable = false, length = 14)
+  @Column(name = "_continent", nullable = false)
   private Continent continent;
 
   @ToString.Exclude
-  @OneToMany(mappedBy = "country", orphanRemoval = true)
+  @OneToMany(orphanRemoval = true)
   private Set<Province> provinces = new LinkedHashSet<>();
 }

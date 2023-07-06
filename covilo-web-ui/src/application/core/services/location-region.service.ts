@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core"
 import { Observable } from "rxjs"
 import { ApiHttpClientService } from "../../shared"
-import { LocationRegion } from "../index"
+import { Province } from "../index"
 
 @Injectable({
   providedIn: "root"
@@ -20,7 +20,7 @@ export class LocationRegionService {
    */
   public getAll(
     p0: string = ""
-  ): Observable<Array<LocationRegion>> {
+  ): Observable<Array<Province>> {
     let query = `${this.basePath}/all`
     // TODO make better idea to assigning parameters
     if (0 != p0.length) {

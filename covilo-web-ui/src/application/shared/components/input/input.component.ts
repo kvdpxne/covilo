@@ -32,7 +32,7 @@ export class InputComponent implements AfterViewInit, OnInit {
     if ("domesticName" in entity) {
       return entity.domesticName
     }
-    // Only the LocationCountry entity has no domestic name
+    // Only the Country entity has no domestic name
     return `country.${entity.key}`
   }
 

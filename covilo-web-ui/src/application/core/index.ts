@@ -7,9 +7,9 @@ export * from "./models/comment-reaction"
 export * from "./models/crime"
 export * from "./models/crime-classification"
 export * from "./models/crime-perpetrator"
-export * from "./models/location-city"
-export * from "./models/location-country"
-export * from "./models/location-region"
+export * from "./models/city"
+export * from "./models/country"
+export * from "./models/province"
 export * from "./models/user"
 
 // All available application services

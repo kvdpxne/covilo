@@ -1,8 +1,8 @@
 import { Component, OnInit } from "@angular/core"
 import { timer } from "rxjs"
-import { LocationCities, LocationCity, LocationCityService } from "../../core"
+import { Cities, City, LocationCityService } from "../../core"
 
-interface IndexedLocationCity extends LocationCity {
+interface IndexedLocationCity extends City {
   index: number
 }
 
@@ -16,7 +16,7 @@ interface IndexedLocationCity extends LocationCity {
 export class StatisticsComponent implements OnInit {
 
   // All available cities
-  private cities?: LocationCities
+  private cities?: Cities
   citiesInTable?: IndexedLocationCity[]
   size: number = 0
   page: number = 1
@@ -27,8 +27,8 @@ export class StatisticsComponent implements OnInit {
 
   private refreshCities(): void {
     this.locationCityService.getAll().subscribe({
-      next: (value: LocationCities) => {
-        this.cities = value.sort((a: LocationCity, b: LocationCity) => {
+      next: (value: Cities) => {
+        this.cities = value.sort((a: City, b: City) => {
           return a.domesticName.localeCompare(b.domesticName)
         })
         this.size = value.length
@@ -43,7 +43,7 @@ export class StatisticsComponent implements OnInit {
     const count = this.pageItemsCount
     const product = (this.page - 1) * count
     this.citiesInTable = this.cities
-    .map((city: LocationCity, i: number) => ({index: i + 1, ...city}))
+    .map((city: City, i: number) => ({index: i + 1, ...city}))
     .slice(product, product + count)
   }
 

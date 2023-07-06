@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core"
 import { Observable } from "rxjs"
 import { ApiHttpClientService } from "../../shared"
-import { LocationCity } from "../index"
+import { City } from "../index"
 
 @Injectable({
   providedIn: "root"
@@ -22,7 +22,7 @@ export class LocationCityService {
   public getAll(
     p0: string = "",
     p1: string = ""
-  ): Observable<Array<LocationCity>> {
+  ): Observable<Array<City>> {
     let query = `${this.basePath}/all`
     // TODO make better idea to assigning parameters
     if (0 != p0.length) {
@@ -44,7 +44,7 @@ export class LocationCityService {
     p0: string,
     p1: string,
     p2: string
-  ): Observable<LocationCity> {
+  ): Observable<City> {
     if (0 == p0.length || 0 == p1.length || 0 == p2.length) {
       throw new Error("One of the required values is empty!")
     }

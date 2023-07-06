@@ -36,26 +36,28 @@ public class User {
   @Column(name = "_role")
   private Role role;
 
+  @Column(name = "_first_name")
+  private String firstName;
+
+  @Column(name = "_last_name")
+  private String lastName;
+
+  @Enumerated(EnumType.STRING)
+  @Column(name = "_gender")
+  private Gender gender;
+
+  @Column(name = "_birth_date", nullable = false)
+  private LocalDate birthDate;
+
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(name = "_living_place")
+  private City livingPlace;
 
   @ToString.Exclude
   @OneToMany(mappedBy = "user", orphanRemoval = true)
   private Set<Token> tokens = new LinkedHashSet<>();
 
-  @Column(name = "_firstname")
-  private String firstname;
-
-  @Column(name = "_lastname")
-  private String lastname;
-
   @OneToMany(mappedBy = "reporter", orphanRemoval = true)
   private Collection<Crime> crimes = new ArrayList<>();
-
-  @ToString.Exclude
-  @ManyToOne
-  @JoinColumn(name = "_living_place_identifier")
-  private City livingPlace;
-
-  @Column(name = "_birth_date", nullable = false)
-  private LocalDate birthDate;
-
 }
