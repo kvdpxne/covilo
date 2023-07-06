@@ -65,7 +65,7 @@ export class HomeComponent implements OnInit {
     this.currentCity = city;
   }
 
-  canEnabled(value?: string): boolean {
+  canEnabled(value?: any): boolean {
     return null == value
   }
 

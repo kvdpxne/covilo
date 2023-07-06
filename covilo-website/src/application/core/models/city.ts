@@ -9,6 +9,7 @@ export interface City {
   name: string;
   domesticName: string;
   capital: CapitalType;
+  population: number;
   province: Province;
 }
 
