@@ -107,7 +107,7 @@ export class HomeComponent implements OnInit {
     this.geographicalService.getProvincesByCountry(this.currentCountry).subscribe({
       next: (value: Provinces): void => {
         this.regions = value.sort((a: Province, b: Province) => {
-          return a.domesticName.localeCompare(b.domesticName);
+          return a.nationalName.localeCompare(b.nationalName);
         })
       }
     })
@@ -123,7 +123,7 @@ export class HomeComponent implements OnInit {
     this.geographicalService.getCitiesByProvince(this.currentProvince).subscribe({
       next: (value: Cities): void => {
         this.cities = value.sort((a, b) => {
-          return a.domesticName.localeCompare(b.domesticName)
+          return a.nationalName.localeCompare(b.nationalName)
         })
       }
     })

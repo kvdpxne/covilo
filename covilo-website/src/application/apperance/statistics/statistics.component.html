@@ -13,8 +13,8 @@
     <tbody>
     <tr *ngFor="let city of citiesInTable">
       <th scope="row">{{ city.index }}</th>
-      <td>{{ city.domesticName }}</td>
-      <td>{{ city.province.domesticName }}</td>
+      <td>{{ city.nationalName }}</td>
+      <td>{{ city.province.nationalName }}</td>
       <td>
         <i class="fi fi-pl m-1"></i>
         <span>{{ "country." + city.province.country.name | translate }}</span>

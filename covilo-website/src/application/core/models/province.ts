@@ -6,7 +6,7 @@ import { Country } from "./country"
 export interface Province {
   identifier: string;
   name: string;
-  domesticName: string;
+  nationalName: string;
   country: Country;
 }
 

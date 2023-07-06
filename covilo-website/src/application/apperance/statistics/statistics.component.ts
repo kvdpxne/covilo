@@ -29,7 +29,7 @@ export class StatisticsComponent implements OnInit {
     this.locationCityService.getAll().subscribe({
       next: (value: Cities) => {
         this.cities = value.sort((a: City, b: City) => {
-          return a.domesticName.localeCompare(b.domesticName)
+          return a.nationalName.localeCompare(b.nationalName)
         })
         this.size = value.length
       }

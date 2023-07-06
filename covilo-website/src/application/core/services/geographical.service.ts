@@ -18,20 +18,18 @@ export class GeographicalService {
   }
 
   public getCountriesByContinent(continent: Continent): Observable<Countries> {
-    return this.api.get2<Countries>("geographical/countries", {
-      continent: continent
-    });
+    return this.api.get2<Countries>("geographical/countries", {});
   }
 
   public getProvincesByCountry(country: Country): Observable<Provinces> {
     return this.api.get2<Provinces>("geographical/provinces", {
-      country: country
+      country: country.identifier
     });
   }
 
   public getCitiesByProvince(province: Province): Observable<Cities> {
     return this.api.get2<Cities>("geographical/cities", {
-      province: province
+      province: province.identifier
     });
   }
 }

@@ -29,20 +29,20 @@ export class InputComponent implements AfterViewInit, OnInit {
   private readonly input?: ElementRef<HTMLInputElement>
 
   getSuggestionReadableName(entity: any): string {
-    if ("domesticName" in entity) {
-      return entity.domesticName
+    if ("nationalName" in entity) {
+      return entity.nationalName
     }
     // Only the Country entity has no domestic name
-    return `country.${entity.key}`
+    return `country.${entity.name}`
   }
 
   setKey(entity: any): void {
     this.key.emit(entity)
-    if ("domesticName" in entity) {
-      this.set(entity.domesticName)
+    if ("nationalName" in entity) {
+      this.set(entity.nationalName)
     } else {
       // const translated = this.translate.transform(`country.${entity.key}`)
-      this.set(entity.key)
+      this.set(entity.name)
     }
   }
 

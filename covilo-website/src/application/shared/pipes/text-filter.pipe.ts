@@ -17,11 +17,11 @@ export class TextFilterPipe implements PipeTransform {
 
     search = search.toLowerCase()
     return items.filter(item => {
-      if ("domesticName" in item) {
-        return item.domesticName.toLocaleLowerCase().includes(search)
+      if ("nationalName" in item) {
+        return item.nationalName.toLocaleLowerCase().includes(search)
       }
-      if ("key" in item) {
-        return item.key.toLocaleLowerCase().includes(search)
+      if ("name" in item) {
+        return item.name.toLocaleLowerCase().includes(search)
       }
       return item.toLowerCase().includes(search)
     })
