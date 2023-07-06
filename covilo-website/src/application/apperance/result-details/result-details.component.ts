@@ -1,20 +1,18 @@
-import { AfterViewInit, Component, OnDestroy, OnInit } from "@angular/core"
-import { ActivatedRoute } from "@angular/router"
+import {AfterViewInit, Component, OnDestroy, OnInit} from "@angular/core"
+import {ActivatedRoute} from "@angular/router"
 import {
   Crime,
   CrimeService,
   City,
   LocationCityService
 } from "src/application/core"
-import { ChartConfiguration, ChartData, ChartType } from "chart.js"
-import { Subscription } from "rxjs"
+import {Subscription} from "rxjs"
 
 @Component({
   selector: "a-result-details",
   templateUrl: "./result-details.component.html"
 })
-export class ResultDetailsComponent implements AfterViewInit, OnInit,
-  OnDestroy {
+export class ResultDetailsComponent implements AfterViewInit, OnInit, OnDestroy {
 
   //
   private crimeSubscription?: Subscription
@@ -24,33 +22,6 @@ export class ResultDetailsComponent implements AfterViewInit, OnInit,
 
   // All available crimes for the city
   crimes?: Array<Crime>
-
-  public barChartOptions: ChartConfiguration["options"] = {
-    responsive: true,
-    // We use these empty structures as placeholders for dynamic theming.
-    scales: {
-      x: {},
-      y: {
-        min: 10
-      }
-    },
-    plugins: {
-      legend: {
-        display: true
-      }
-    }
-  }
-  public barChartType: ChartType = "bar"
-  public barChartPlugins = []
-  public barChartData: ChartData<"bar"> = {
-    labels: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-    datasets: [
-      {data: [97, 31, 19, 60, 85, 57, 27], label: "Series A"},
-      {data: [75, 76, 49, 69, 84, 33, 60], label: "Series B"},
-      {data: [91, 50, 15, 67, 22, 98, 60], label: "Series C"},
-      {data: [20, 62, 78, 96, 21, 88, 65], label: "Series D"}
-    ]
-  }
 
   constructor(private readonly route: ActivatedRoute,
               private readonly locationCityService: LocationCityService,

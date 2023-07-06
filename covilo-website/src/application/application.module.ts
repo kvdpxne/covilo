@@ -9,8 +9,6 @@ import { TranslateHttpLoader } from "@ngx-translate/http-loader"
 
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap"
 
-import { NgChartsModule } from "ng2-charts"
-
 //
 import { CoreModule } from "./core/core.module"
 
@@ -68,7 +66,6 @@ import {MeModule} from "./me/me.module";
     ApplicationRoutingModule,
 
     NgbModule,
-    NgChartsModule,
   ],
   exports: [
     ApplicationComponent

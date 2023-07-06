@@ -4,9 +4,6 @@ import { Link } from "../../../shared/types/link"
 @Component({
   selector: "a-navigation",
   templateUrl: "./navigation.component.html",
-  styleUrls: [
-    "./navigation.component.scss"
-  ]
 })
 export class NavigationComponent implements OnInit {
 
