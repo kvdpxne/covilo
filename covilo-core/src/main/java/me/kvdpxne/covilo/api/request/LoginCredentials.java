@@ -1,3 +1,6 @@
 package me.kvdpxne.covilo.api.request;
 
-public record LoginCredentials(String email, String password) { }
+public record LoginCredentials(
+  String recognizableName,
+  String password
+) { }

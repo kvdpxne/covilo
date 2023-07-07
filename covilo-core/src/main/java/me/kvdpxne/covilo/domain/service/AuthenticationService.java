@@ -56,11 +56,11 @@ public class AuthenticationService {
   public AuthenticationResponse authenticate(LoginCredentials request) {
     authenticationManager.authenticate(
       new UsernamePasswordAuthenticationToken(
-        request.email(),
+        request.recognizableName(),
         request.password()
       )
     );
-    var user = repository.findByEmail(request.email())
+    var user = repository.findByEmail(request.recognizableName())
       .orElseThrow();
     var jwtToken = jwtService.generateToken(user);
     var refreshToken = jwtService.generateRefreshToken(user);
