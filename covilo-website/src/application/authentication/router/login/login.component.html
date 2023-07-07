@@ -1,78 +1,65 @@
-<div class="column">
+<form #formElement="ngForm"
+      (ngSubmit)="submit()">
 
-  <div class="mb-5 mb-md-7 text-center">
-    <h2>
-      {{ "application.authentication.login.title" | translate }}
-    </h2>
-    <p>
-      {{ "application.authentication.login.description" | translate }}
-    </p>
-  </div>
+  <div class="mb-3">
+    <label for="recognizableNameModal"
+           class="form-label">
+      {{ "application.authentication.your-email" | translate }}
+    </label>
 
-  <form #formElement="ngForm"
-        (ngSubmit)="submit()">
-
-    <div class="mb-3">
-      <label for="recognizableNameModal"
-             class="form-label">
-        {{ "application.authentication.your-email" | translate }}
-      </label>
-
-      <input [formControl]="recognizableName"
-             [ngClass]="{ 'is-invalid' : formElement.submitted && recognizableName.errors || isRecognizableNameValid() }"
-             id="recognizableNameModal"
-             class="form-control form-control-lg"
-             type="email"
-             required>
-      <!-- Displays information about incorrect completion of a field -->
-      <!-- with a recognizable name. -->
-      <span *ngIf="(formElement.submitted || isRecognizableNameValid()) && recognizableName.errors"
-            class="invalid-feedback">
+    <input [formControl]="recognizableName"
+           [ngClass]="{ 'is-invalid' : formElement.submitted && recognizableName.errors || isRecognizableNameValid() }"
+           id="recognizableNameModal"
+           class="form-control form-control-lg"
+           type="email"
+           required>
+    <!-- Displays information about incorrect completion of a field -->
+    <!-- with a recognizable name. -->
+    <span *ngIf="(formElement.submitted || isRecognizableNameValid()) && recognizableName.errors"
+          class="invalid-feedback">
         {{ "application.authentication.invalid-email" | translate }}
       </span>
+  </div>
+
+  <div class="mb-3">
+    <div class="d-flex justify-content-between align-items-center">
+      <label for="passwordModal"
+             class="form-label">
+        {{ "application.authentication.your-password" | translate }}
+      </label>
+
+      <a routerLink="/authentication/forgot-password"
+         class="form-label-link">
+        {{ "application.authentication.forgot-password-question" | translate }}
+      </a>
     </div>
 
-    <div class="mb-3">
-      <div class="d-flex justify-content-between align-items-center">
-        <label for="passwordModal"
-               class="form-label">
-          {{ "application.authentication.your-password" | translate }}
-        </label>
-
-        <a routerLink="/authentication/forgot-password"
-           class="form-label-link">
-          {{ "application.authentication.forgot-password" | translate }}
-        </a>
-      </div>
-
-      <input [formControl]="password"
-             [ngClass]="{ 'is-invalid' : formElement.submitted && recognizableName.errors || isPasswordValid() }"
-             id="passwordModal"
-             class="form-control form-control-lg"
-             type="password"
-             required>
-      <!-- Displays information about incorrect completion of a field -->
-      <!-- with a password. -->
-      <span *ngIf="(formElement.submitted || isPasswordValid()) && password.errors"
-            class="invalid-feedback">
+    <input [formControl]="password"
+           [ngClass]="{ 'is-invalid' : formElement.submitted && recognizableName.errors || isPasswordValid() }"
+           id="passwordModal"
+           class="form-control form-control-lg"
+           type="password"
+           required>
+    <!-- Displays information about incorrect completion of a field -->
+    <!-- with a password. -->
+    <span *ngIf="(formElement.submitted || isPasswordValid()) && password.errors"
+          class="invalid-feedback">
         {{ "application.authentication.invalid-password" | translate }}
       </span>
-    </div>
+  </div>
 
-    <div class="d-grid mb-3">
-      <button class="btn btn-primary btn-lg" type="submit">
-        {{ "login" | translate }}
-      </button>
-    </div>
+  <div class="d-grid mb-3">
+    <button class="btn btn-primary btn-lg" type="submit">
+      {{ "login" | translate }}
+    </button>
+  </div>
 
-    <div class="text-center">
-      <p>
-        {{ "application.authentication.login.aa" | translate }}
-        <a routerLink="/authentication/signup" class="link">
-          {{ "application.authentication.login.sign-here" | translate }}
-        </a>
-      </p>
-    </div>
-
-  </form>
-</div>
+  <div class="text-center">
+    <p>
+      {{ "application.authentication.login.aa" | translate }}
+      <a routerLink="/authentication/signup" class="link">
+        {{ "application.authentication.login.sign-here" | translate }}
+      </a>
+    </p>
+  </div>
+</form>

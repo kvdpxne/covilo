@@ -2,7 +2,8 @@
   "application": {
     "authentication": {
 
-      "forgot-password2": {
+      "forgot-password": {
+        "title": "Forgot Password?",
         "description": "Enter your email address below and we'll get you back on track.",
         "back": "Back to Log in",
         "email": "Enter your email address"
@@ -30,7 +31,7 @@
       "your-confirm-password": "Confirm Password",
       "invalid-email": "Please enter a valid email address.",
       "invalid-password": "Please enter a valid password.",
-      "forgot-password": "Forgot Password?",
+      "forgot-password-question": "Forgot Password?",
       "password-placeholder": "8+ characters required",
       "welcome": "Welcome to Covilo",
       "fill": "Fill out the form to get started."
