@@ -19,7 +19,23 @@
         </li>
       </ul>
 
-      <a-avatar></a-avatar>
+      <div class="navbar-nav">
+        <covilo-avatar *ngIf="!isLoggedIn"></covilo-avatar>
+
+        <ng-template [ngIf]="isLoggedIn">
+          <button class="btn btn-sm btn-outline-primary me-1"
+                  routerLink="./authentication/login"
+                  type="button">
+            {{ 'login' | translate }}
+          </button>
+
+          <button class="btn btn-sm btn-primary"
+                  routerLink="./authentication/signup"
+                  type="button">
+            {{ 'signup' | translate }}
+          </button>
+        </ng-template>
+      </div>
 
     </div>
 
