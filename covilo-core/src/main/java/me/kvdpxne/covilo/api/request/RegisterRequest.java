@@ -1,10 +1,13 @@
 package me.kvdpxne.covilo.api.request;
 
+import me.kvdpxne.covilo.domain.model.Gender;
 import me.kvdpxne.covilo.domain.model.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
 
 @Data
 @Builder
@@ -17,4 +20,6 @@ public class RegisterRequest {
   private String email;
   private String password;
   private Role role;
+  private Gender gender;
+  private LocalDate birthDate;
 }

@@ -40,6 +40,8 @@ public class AuthenticationService {
       .email(request.getEmail())
       .password(this.passwordEncodingUseCase.encode(request.getPassword()))
       .role(request.getRole())
+      .gender(request.getGender())
+      .birthDate(request.getBirthDate())
       .build();
 
     var savedUser = repository.save(user);
