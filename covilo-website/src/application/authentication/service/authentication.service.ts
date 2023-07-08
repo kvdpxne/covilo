@@ -38,11 +38,15 @@ export class AuthenticationService {
     );
   }
 
-  public refreshToken(): Observable<void> {
-    return this.apiHttpClientService.post("auth/refresh-token", null);
+  public refreshToken(): Observable<Token> {
+    return this.apiHttpClientService.post<Token>("auth/refresh-token", {}).pipe(
+      tap((token: Token): void => this.authenticationStrategy.doLogin(token))
+    )
   }
 
-  public logout(): Observable<void> {
-    return this.apiHttpClientService.post("auth/logout", null);
+  public logout(): Observable<never> {
+    return this.apiHttpClientService.post<never>("auth/logout", {}).pipe(
+      tap((): void => this.authenticationStrategy.doLogout())
+    )
   }
 }

@@ -12,13 +12,16 @@ export class NavigationComponent implements OnInit {
   // If true, will collapse the element or show it otherwise
   isCollapsed: boolean = true
 
-  isLoggedIn: boolean;
+  private readonly storageService: StorageService;
+
+  isLoggedIn?: boolean;
 
   @Input()
   itemList!: Set<Link>
 
   constructor(storageService: StorageService) {
-    this.isLoggedIn = storageService.has(StorageKey.TOKEN);
+    this.storageService = storageService;
+    this.isLoggedIn = false;
   }
 
   toggleCollapse(): void {
@@ -26,5 +29,6 @@ export class NavigationComponent implements OnInit {
   };
 
   ngOnInit(): void {
+    this.isLoggedIn = this.storageService.has(StorageKey.TOKEN);
   }
 }

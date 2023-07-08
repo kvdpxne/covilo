@@ -15,6 +15,7 @@ import me.kvdpxne.covilo.domain.persistence.TokenRepository;
 import me.kvdpxne.covilo.domain.persistence.UserRepository;
 import me.kvdpxne.covilo.infrastructure.security.TokenService;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
@@ -96,20 +97,25 @@ public class AuthenticationService {
     tokenRepository.saveAll(validUserTokens);
   }
 
-  public void refreshToken(
+  public HttpStatus refreshToken(
     HttpServletRequest request,
     HttpServletResponse response
   ) throws IOException {
-    final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-    final String refreshToken;
-    final String userEmail;
-    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-      return;
+    final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+    if (header == null || !header.startsWith("Bearer ")) {
+      return HttpStatus.UNAUTHORIZED;
     }
-    refreshToken = authHeader.substring(7);
-    userEmail = jwtService.extractUsername(refreshToken);
-    if (userEmail != null) {
-      var user = this.repository.findByEmail(userEmail)
+    final String refreshToken = header.substring(7);
+    final Token token = tokenRepository.findByToken(refreshToken).orElse(null);
+
+    System.out.println(token);
+
+    if (null != token && token.isRevoked()) {
+      return HttpStatus.FORBIDDEN;
+    }
+    final String email = jwtService.extractUsername(refreshToken);
+    if (email != null) {
+      var user = this.repository.findByEmail(email)
         .orElseThrow();
       if (jwtService.isTokenValid(refreshToken, user)) {
         var accessToken = jwtService.generateToken(user);
@@ -122,5 +128,6 @@ public class AuthenticationService {
         new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
       }
     }
+    return HttpStatus.OK;
   }
 }

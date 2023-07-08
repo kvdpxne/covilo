@@ -1,6 +1,5 @@
 import {Component} from "@angular/core";
-import {StorageService} from "../../../shared/services/storage.service";
-import {StorageKey} from "../../../shared/services/storage-key";
+import {AuthenticationService} from "../../../authentication";
 
 @Component({
   selector: "covilo-avatar",
@@ -9,15 +8,18 @@ import {StorageKey} from "../../../shared/services/storage-key";
 })
 export class AvatarComponent {
 
-  private readonly storageService: StorageService;
+  private readonly authenticationService: AuthenticationService;
 
-  public isLogged: boolean;
-
-  public constructor(storageService: StorageService) {
-    this.storageService = storageService;
-
-    this.isLogged = storageService.has(StorageKey.TOKEN);
+  public constructor(authenticationService: AuthenticationService) {
+    this.authenticationService = authenticationService;
   }
 
-
+  public logout(): void {
+    this.authenticationService.logout().subscribe({
+      complete: () => {
+        location.reload();
+        console.debug("Successfully logged out.");
+      }
+    });
+  }
 }

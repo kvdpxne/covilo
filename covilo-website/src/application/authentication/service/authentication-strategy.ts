@@ -1,8 +1,9 @@
 import {Observable} from "rxjs";
 import {User} from "../../core";
-import {InjectionToken} from "@angular/core";
+import {FactoryProvider, inject, Injectable, InjectionToken} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {TokenAuthenticationStrategy} from "./token-authentication-strategy";
+import {StorageService} from "../../shared/services/storage.service";
 
 export interface AuthenticationStrategy<T> {
 
@@ -17,8 +18,10 @@ export const AUTHENTICATION_STRATEGY: InjectionToken<AuthenticationStrategy<any>
   "AuthenticationStrategy"
 );
 
-export const AUTHENTICATION_STRATEGY_PROVIDER = {
+export const AUTHENTICATION_STRATEGY_PROVIDER: FactoryProvider = {
   provide: AUTHENTICATION_STRATEGY,
   deps: [HttpClient],
-  useFactory: () => new TokenAuthenticationStrategy()
+  useFactory: () => new TokenAuthenticationStrategy(
+    inject(StorageService)
+  )
 };

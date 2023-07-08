@@ -1,10 +1,10 @@
 package me.kvdpxne.covilo.infrastructure.security;
 
 import lombok.RequiredArgsConstructor;
-import me.kvdpxne.covilo.domain.model.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -18,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -57,19 +58,23 @@ public class SecurityConfiguration {
           "/swagger-ui.html"
         ).permitAll();
 
-        configurer.requestMatchers("/api/v1/test/**").hasAnyRole(
-          Role.ADMINISTRATOR.name(),
-          Role.MODERATOR.name(),
-          Role.EDITOR.name()
-        );
+        configurer.requestMatchers(
+          "/api/0.1.0/user/**"
+        ).authenticated();
 
-        configurer.anyRequest().authenticated();
+        // Denies access to all other URLs not defined above for all users
+        // regardless of role or permission.
+        configurer.anyRequest().denyAll();
+      })
+      .exceptionHandling(configurer -> {
+        // TODO more advanced error handling
+        configurer.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
       })
       .sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
       .authenticationProvider(this.authenticationProvider())
       .addFilterBefore(this.authenticationRequestFilter, UsernamePasswordAuthenticationFilter.class)
       .logout(configurer -> {
-        configurer.logoutUrl("/api/v1/auth/logout");
+        configurer.logoutUrl("/api/0.1.0/auth/logout");
         configurer.addLogoutHandler(this.logoutHandler);
         configurer.logoutSuccessHandler(((request, response, authentication) -> SecurityContextHolder.clearContext()));
       })

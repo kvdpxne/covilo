@@ -10,8 +10,6 @@ export class BaseHttpParametersBuilder {
    */
   public static buildQueryParameters(source: [parameter: any]): HttpParams {
     let parameters: HttpParams = new HttpParams();
-    console.log(source);
-    console.log(typeof source)
     Object.keys(source).forEach((key: string) => {
       // @ts-ignore
       const value: any = source[key];

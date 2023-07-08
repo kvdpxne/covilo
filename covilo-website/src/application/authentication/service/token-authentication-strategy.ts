@@ -2,13 +2,19 @@ import {AuthenticationStrategy} from "./authentication-strategy";
 import {Token} from "../payload/token";
 import {Observable, of} from "rxjs";
 import {User} from "../../core";
+import {StorageService} from "../../shared/services/storage.service";
+import {StorageKey} from "../../shared/services/storage-key";
 
 export class TokenAuthenticationStrategy implements AuthenticationStrategy<Token> {
 
-  private readonly TOKEN: string = "token";
+  private readonly storageService: StorageService
+
+  constructor(storageService: StorageService) {
+    this.storageService = storageService;
+  }
 
   getToken(): string | null {
-    return localStorage.getItem(this.TOKEN);
+    return this.storageService.getValue(StorageKey.TOKEN);
   }
 
   getCurrentUser(): Observable<User | null> {
@@ -18,7 +24,7 @@ export class TokenAuthenticationStrategy implements AuthenticationStrategy<Token
       const payload: string = window.atob(encodedPayload);
       return of(JSON.parse(payload));
     }
-    return of(null);
+    return of(null)
   }
 
   isLogged(): boolean {
@@ -26,10 +32,10 @@ export class TokenAuthenticationStrategy implements AuthenticationStrategy<Token
   }
 
   doLogin(data: Token): void {
-    localStorage.setItem(this.TOKEN, data.accessToken);
+    this.storageService.setValue(StorageKey.TOKEN, data.accessToken);
   }
 
   doLogout(): void {
-    localStorage.removeItem(this.TOKEN);
+    localStorage.removeItem("token");
   }
 }

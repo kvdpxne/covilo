@@ -7,6 +7,8 @@ import me.kvdpxne.covilo.api.request.LoginCredentials;
 import me.kvdpxne.covilo.api.request.RegisterRequest;
 import me.kvdpxne.covilo.api.response.AuthenticationResponse;
 import me.kvdpxne.covilo.domain.service.AuthenticationService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,12 +37,10 @@ public class AuthenticationController {
   }
 
   @PostMapping("/refresh-token")
-  public void refreshToken(
+  public ResponseEntity<?> refreshToken(
     HttpServletRequest request,
     HttpServletResponse response
   ) throws IOException {
-    service.refreshToken(request, response);
+    return ResponseEntity.status(service.refreshToken(request, response)).build();
   }
-
-
 }
