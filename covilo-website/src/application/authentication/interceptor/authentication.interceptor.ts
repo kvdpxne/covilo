@@ -66,7 +66,6 @@ export class AuthenticationInterceptor implements HttpInterceptor {
      * because the old, expired token is needed for the user to get a new
      * access token.
      */
-    console.debug(this.tokenAuthenticationStrategy.isLogged())
     if (this.tokenAuthenticationStrategy.isLogged()) {
       return next.handle(request);
     }
