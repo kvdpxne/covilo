@@ -1,8 +1,9 @@
-import {Component, OnInit} from "@angular/core"
-import {Router} from "@angular/router"
-import {Cities, City, Countries, Country, Province, Provinces} from "src/application/core"
+import {Component, OnInit} from "@angular/core";
+import {Router} from "@angular/router";
+import {Cities, City, Countries, Country, Province, Provinces} from "src/application/core";
 import {GeographicalService} from "../../core/services/geographical.service";
 import {Continent} from "../../core/models/continent";
+import {throwError} from "rxjs";
 
 @Component({
   templateUrl: "./home.component.html",
@@ -14,7 +15,7 @@ export class HomeComponent implements OnInit {
 
   private readonly router: Router;
 
-  private readonly geographicalService: GeographicalService
+  private readonly geographicalService: GeographicalService;
 
   // available countries
   countries?: Countries;
@@ -26,13 +27,13 @@ export class HomeComponent implements OnInit {
   cities?: Cities;
 
   // key of the selected country
-  currentCountry?: Country
+  currentCountry?: Country;
 
   // key of the selected region
-  currentProvince?: Province
+  currentProvince?: Province;
 
   // key of the selected city
-  currentCity?: City
+  currentCity?: City;
 
   constructor(
     router: Router,
@@ -47,7 +48,7 @@ export class HomeComponent implements OnInit {
    */
   setCountry(country: Country): void {
     this.currentCountry = country;
-    this.getAvailableRegions()
+    this.getAvailableRegions();
   }
 
   /**
@@ -55,7 +56,7 @@ export class HomeComponent implements OnInit {
    */
   setRegion(region: Province): void {
     this.currentProvince = region;
-    this.getAvailableCities()
+    this.getAvailableCities();
   }
 
   /**
@@ -66,22 +67,21 @@ export class HomeComponent implements OnInit {
   }
 
   canEnabled(value?: any): boolean {
-    return null == value
+    return null == value;
   }
 
   ngOnInit(): void {
     // countries should always be available
-    this.getAvailableCountries()
+    this.getAvailableCountries();
   }
 
-  go() {
-    const country = this.currentCountry
-    const region = this.currentProvince
-    const city = this.currentCity
-    const path = `result-details/${country}/${region}/${city}`
-    this.router.navigateByUrl(path).then(it => {
-      // TODO ???
-    })
+  go(): void {
+    const city: City | undefined = this.currentCity;
+    if (!city) {
+      return;
+    }
+    this.router.navigateByUrl(`result-details/${city.identifier}`)
+      .catch(error => throwError(() => error));
   }
 
   /**
@@ -92,9 +92,9 @@ export class HomeComponent implements OnInit {
       next: (value: Countries): void => {
         this.countries = value.sort((a: Country, b: Country) => {
           return a.name.localeCompare(b.name);
-        })
+        });
       }
-    })
+    });
   }
 
   /**
@@ -102,15 +102,15 @@ export class HomeComponent implements OnInit {
    */
   private getAvailableRegions(): void {
     if (!this.currentCountry) {
-      throw new Error("Cannot get regions if country is undefined.")
+      throw new Error("Cannot get regions if country is undefined.");
     }
     this.geographicalService.getProvincesByCountry(this.currentCountry).subscribe({
       next: (value: Provinces): void => {
         this.regions = value.sort((a: Province, b: Province) => {
           return a.nationalName.localeCompare(b.nationalName);
-        })
+        });
       }
-    })
+    });
   }
 
   /**
@@ -118,14 +118,14 @@ export class HomeComponent implements OnInit {
    */
   private getAvailableCities(): void {
     if (!this.currentProvince) {
-      throw new Error("Cannot get cities if country or region is undefined.")
+      throw new Error("Cannot get cities if country or region is undefined.");
     }
     this.geographicalService.getCitiesByProvince(this.currentProvince).subscribe({
       next: (value: Cities): void => {
         this.cities = value.sort((a, b) => {
-          return a.nationalName.localeCompare(b.nationalName)
-        })
+          return a.nationalName.localeCompare(b.nationalName);
+        });
       }
-    })
+    });
   }
 }

@@ -15,7 +15,7 @@ const routes: Routes = [
     component: HomeComponent
   },
   {
-    path: "result-details/:country/:region/:city",
+    path: "result-details/:city",
     component: ResultDetailsComponent
   },
   {

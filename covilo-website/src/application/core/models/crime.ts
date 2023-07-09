@@ -1,14 +1,17 @@
 import { CrimeClassification } from "./crime-classification"
 import { CrimePerpetrator } from "./crime-perpetrator"
 import { City } from "./city"
+import {User} from "./user";
 
 /**
  *
  */
-export interface Crime {
+export type Crime = {
+  identifier: string,
+  reporter: User,
   date: Date
-  city: City
-  classification: CrimeClassification
+  place: City
+  classification: CrimeClassification[]
   perpetrator?: CrimePerpetrator
   description: string
   confirmed: boolean
@@ -17,4 +20,4 @@ export interface Crime {
 /**
  *
  */
-export declare type Crimes = Crime[]
+export type Crimes = Crime[]

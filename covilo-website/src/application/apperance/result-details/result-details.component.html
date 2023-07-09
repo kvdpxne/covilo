@@ -2,14 +2,19 @@
 
   <div>
     <h2>
-      {{ city.nationalName }}
+      {{ city?.nationalName }}
     </h2>
   </div>
 
   <!--  -->
   <div class="mt-5">
     <h2>Latest Crimes</h2>
-    <div *ngFor="let crime of crimes">
+    <div *ngFor="let crime of crimes" class="row">
+      <div class="card">
+        <div class="card-body">
+          {{ crime.identifier }}
+        </div>
+      </div>
 
     </div>
   </div>

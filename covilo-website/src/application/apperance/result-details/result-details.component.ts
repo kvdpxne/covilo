@@ -1,78 +1,44 @@
-import {AfterViewInit, Component, OnDestroy, OnInit} from "@angular/core"
-import {ActivatedRoute} from "@angular/router"
+import {Component, OnDestroy, OnInit} from "@angular/core"
+import {ActivatedRoute, UrlSegment} from "@angular/router";
 import {
-  Crime,
   CrimeService,
   City,
-  LocationCityService
-} from "src/application/core"
-import {Subscription} from "rxjs"
+  Crimes
+} from "src/application/core";
+import {GeographicalService} from "../../core/services/geographical.service";
 
 @Component({
   selector: "a-result-details",
   templateUrl: "./result-details.component.html"
 })
-export class ResultDetailsComponent implements AfterViewInit, OnInit, OnDestroy {
+export class ResultDetailsComponent implements OnInit {
 
-  //
-  private crimeSubscription?: Subscription
+  private readonly route: ActivatedRoute;
 
-  //
-  city!: City
+  private readonly geographicalService: GeographicalService;
+  private readonly crimeService: CrimeService;
 
-  // All available crimes for the city
-  crimes?: Array<Crime>
+  public city?: City;
+  public crimes?: Crimes;
 
-  constructor(private readonly route: ActivatedRoute,
-              private readonly locationCityService: LocationCityService,
-              private readonly crimeService: CrimeService
+  public constructor(
+    route: ActivatedRoute,
+    geographicalService: GeographicalService,
+    crimeService: CrimeService
   ) {
+    this.route = route;
+    this.geographicalService = geographicalService;
+    this.crimeService = crimeService;
   }
 
-  private getCity(): void {
+  public ngOnInit(): void {
+    const url: UrlSegment[] = this.route.snapshot.url;
 
-  }
+    if (0 < url.length) {
+      const lastSegment: string = url[url.length - 1].path;
 
-  private getCrimes(
-    country: string,
-    region: string,
-    city: string
-  ): void {
-    this.crimeSubscription = this.crimeService.getAll(country, region, city).subscribe({
-      next: (value: Array<Crime>) => {
-        this.crimes = value
-      }
-    })
-    if (!this.city) {
-
+      this.geographicalService.getCity(lastSegment).subscribe(it => this.city = it)
+      this.crimeService.getCrimes(lastSegment).subscribe(it => this.crimes = it)
     }
-  }
-
-  ngAfterViewInit(): void {
-
-  }
-
-  ngOnInit(): void {
-    let country = ""
-    let region = ""
-    let city = ""
-    this.route.params.subscribe(parameter => {
-      country = parameter["country"]
-      region = parameter["region"]
-      city = parameter["city"]
-    })
-
-    //
-    this.getCrimes(country, region, city)
-
-    this.locationCityService.getOne(country, region, city).subscribe({
-      next: (value: City) => {
-        this.city = value
-      }
-    })
-  }
-
-  ngOnDestroy(): void {
-    this.crimeSubscription?.unsubscribe()
   }
 }

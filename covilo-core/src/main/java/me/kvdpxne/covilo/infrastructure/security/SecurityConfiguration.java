@@ -44,6 +44,7 @@ public class SecurityConfiguration {
       .authorizeHttpRequests(configurer -> {
         configurer.requestMatchers(
           "/api/0.1.0/geographical/**",
+          "/api/0.1.0/crimes/**",
           "/api/0.1.0/auth/**",
 
           "/v2/api-docs",
