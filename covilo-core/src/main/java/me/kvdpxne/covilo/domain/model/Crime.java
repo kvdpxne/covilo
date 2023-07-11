@@ -3,6 +3,7 @@ package me.kvdpxne.covilo.domain.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -13,43 +14,43 @@ import java.util.UUID;
 @Getter
 @Setter
 @ToString
-@Entity(name = "crime")
+@Entity
 @Table(name = "_crime")
 public class Crime {
 
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
-  @Column(name = "_identifier", nullable = false)
+  @Column(name = "_identifier", nullable = false, updatable = false)
   private UUID identifier;
+
+  @Column(name = "_title")
+  private String title;
 
   @Lob
   @Column(name = "_description")
   private String description;
 
-  @Column(name = "_confirmed", nullable = false)
-  private boolean confirmed;
-
   @ToString.Exclude
   @ManyToMany
-  @JoinTable(
-    name = "_crime_by_crime_classifications",
-    joinColumns = @JoinColumn(
-      name = "_crime_identifier"
-    ),
-    inverseJoinColumns = @JoinColumn(
-      name = "_crime_classification_identifier"
-    )
-  )
-  private Set<CrimeClassification> classifications = new LinkedHashSet<>();
+  @JoinTable(name = "_crime_categories",
+    joinColumns = @JoinColumn(name = "_crime"),
+    inverseJoinColumns = @JoinColumn(name = "_categories"))
+  private Set<Category> categories = new LinkedHashSet<>();
+
+  @Column(name = "_time")
+  private LocalDateTime time;
 
   @ToString.Exclude
-  @ManyToOne
-  @JoinColumn(name = "_reporter_identifier")
+  @ManyToOne(optional = false)
+  @JoinColumn(name = "_reporter", nullable = false)
   private User reporter;
 
   @ToString.Exclude
-  @ManyToOne
-  @JoinColumn(name = "_place_identifier")
+  @ManyToOne(optional = false)
+  @JoinColumn(name = "_place", nullable = false)
   private City place;
+
+  @Column(name = "_confirmed", nullable = false)
+  private boolean confirmed;
 
 }

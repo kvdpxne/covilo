@@ -32,8 +32,8 @@ public class City {
   private Province province;
 
   @Enumerated(EnumType.STRING)
-  @Column(name = "_capital_type")
-  private CapitalType capitalType;
+  @Column(name = "_capital")
+  private CapitalType capital;
 
   @Column(name = "_population", nullable = false)
   private int population;

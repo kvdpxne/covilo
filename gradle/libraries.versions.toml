@@ -2,6 +2,7 @@
 spring-boot = "3.1.1"
 spring-management = "1.1.0"
 openapi = "2.1.0"
+mapstruct = "1.5.5.Final"
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
@@ -9,3 +10,5 @@ spring-management = { id = "io.spring.dependency-management", version.ref = "spr
 
 [libraries]
 openapi = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "openapi" }
+mapstruct-core = { module = "org.mapstruct:mapstruct", version.ref = "mapstruct"}
+mapstruct-processor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstruct"}

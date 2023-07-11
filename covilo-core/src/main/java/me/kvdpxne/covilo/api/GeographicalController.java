@@ -73,7 +73,7 @@ public class GeographicalController {
       it.getIdentifier(),
       it.getName(),
       it.getNationalName(),
-      it.getCapitalType(),
+      it.getCapital(),
       it.getPopulation()
     )).toList();
   }
@@ -84,7 +84,7 @@ public class GeographicalController {
       it.getIdentifier(),
       it.getName(),
       it.getNationalName(),
-      it.getCapitalType(),
+      it.getCapital(),
       it.getPopulation()
     )).orElse(null);
   }

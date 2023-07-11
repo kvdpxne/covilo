@@ -30,6 +30,6 @@ public class Country {
   private Continent continent;
 
   @ToString.Exclude
-  @OneToMany(orphanRemoval = true)
+  @OneToMany(mappedBy = "country", orphanRemoval = true)
   private Set<Province> provinces = new LinkedHashSet<>();
 }
