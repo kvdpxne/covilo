@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from "@angular/core"
+import {Component, OnDestroy, OnInit} from "@angular/core";
 import {ActivatedRoute, UrlSegment} from "@angular/router";
 import {
   CrimeService,
@@ -6,6 +6,7 @@ import {
   Crimes
 } from "src/application/core";
 import {GeographicalService} from "../../core/services/geographical.service";
+import {NgbPaginationModule} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: "a-result-details",
@@ -20,6 +21,8 @@ export class ResultDetailsComponent implements OnInit {
 
   public city?: City;
   public crimes?: Crimes;
+
+  public page = 1;
 
   public constructor(
     route: ActivatedRoute,
@@ -37,8 +40,8 @@ export class ResultDetailsComponent implements OnInit {
     if (0 < url.length) {
       const lastSegment: string = url[url.length - 1].path;
 
-      this.geographicalService.getCity(lastSegment).subscribe(it => this.city = it)
-      this.crimeService.getCrimes(lastSegment).subscribe(it => this.crimes = it)
+      this.geographicalService.getCity(lastSegment).subscribe(it => this.city = it);
+      this.crimeService.getCrimes(lastSegment).subscribe(it => this.crimes = it);
     }
   }
 }

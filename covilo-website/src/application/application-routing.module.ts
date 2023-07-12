@@ -4,7 +4,6 @@ import {
   HomeComponent,
   PageNotFoundComponent,
   ResultDetailsComponent,
-  ResultListComponent,
   StatisticsComponent
 } from "./apperance"
 
@@ -17,10 +16,6 @@ const routes: Routes = [
   {
     path: "result-details/:city",
     component: ResultDetailsComponent
-  },
-  {
-    path: "result-list/:country/:region",
-    component: ResultListComponent
   },
   {
     path: "statistics",

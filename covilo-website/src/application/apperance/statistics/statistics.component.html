@@ -1,34 +1,34 @@
 <div class="container">
-  <table class="table table-striped">
-    <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">{{ "word.city" | translate }}</th>
-      <th scope="col">{{ "word.region" | translate }}</th>
-      <th scope="col">{{ "word.country" | translate }}</th>
-      <th scope="col">{{ "word.population" | translate }}</th>
-      <th scope="col">{{ "word.capital" | translate }}</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let city of citiesInTable">
-      <th scope="row">{{ city.index }}</th>
-      <td>{{ city.nationalName }}</td>
-      <td>{{ city.province.nationalName }}</td>
-      <td>
-        <i class="fi fi-pl m-1"></i>
-        <span>{{ "country." + city.province.country.name | translate }}</span>
-      </td>
-      <td>{{ city.population | number }}</td>
-      <td>{{ city.capital | translate | titlecase }}</td>
-    </tr>
-    </tbody>
-  </table>
-  <div class="d-flex justify-content-center p-2">
-    <ngb-pagination [collectionSize]="size"
-                    [(page)]="page"
-                    [pageSize]="pageItemsCount"
-                    (pageChange)="refreshCitiesInTable()">
-    </ngb-pagination>
-  </div>
+<!--  <table class="table table-striped">-->
+<!--    <thead>-->
+<!--    <tr>-->
+<!--      <th scope="col">#</th>-->
+<!--      <th scope="col">{{ "word.city" | translate }}</th>-->
+<!--      <th scope="col">{{ "word.region" | translate }}</th>-->
+<!--      <th scope="col">{{ "word.country" | translate }}</th>-->
+<!--      <th scope="col">{{ "word.population" | translate }}</th>-->
+<!--      <th scope="col">{{ "word.capital" | translate }}</th>-->
+<!--    </tr>-->
+<!--    </thead>-->
+<!--    <tbody>-->
+<!--    <tr *ngFor="let city of citiesInTable">-->
+<!--      <th scope="row">{{ city.index }}</th>-->
+<!--      <td>{{ city.nationalName }}</td>-->
+<!--      <td>{{ city.province.nationalName }}</td>-->
+<!--      <td>-->
+<!--        <i class="fi fi-pl m-1"></i>-->
+<!--        <span>{{ "country." + city.province.country.name | translate }}</span>-->
+<!--      </td>-->
+<!--      <td>{{ city.population | number }}</td>-->
+<!--      <td>{{ city.capital | translate | titlecase }}</td>-->
+<!--    </tr>-->
+<!--    </tbody>-->
+<!--  </table>-->
+<!--  <div class="d-flex justify-content-center p-2">-->
+<!--    <ngb-pagination [collectionSize]="size"-->
+<!--                    [(page)]="page"-->
+<!--                    [pageSize]="pageItemsCount"-->
+<!--                    (pageChange)="refreshCitiesInTable()">-->
+<!--    </ngb-pagination>-->
+<!--  </div>-->
 </div>

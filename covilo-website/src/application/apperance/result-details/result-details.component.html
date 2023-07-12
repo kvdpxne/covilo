@@ -8,15 +8,29 @@
 
   <!--  -->
   <div class="mt-5">
+
     <h2>Latest Crimes</h2>
-    <div *ngFor="let crime of crimes" class="row">
-      <div class="card">
+
+    <div *ngFor="let crime of crimes | slice: (page - 1) * 10 : page * 10"
+         class="row my-3">
+      <div class="card border-dark">
+        <div class="card-header">
+          {{ crime.title ? crime.title : crime.categories[0]?.name }}
+        </div>
         <div class="card-body">
           {{ crime.identifier }}
         </div>
       </div>
 
     </div>
+
+    <ngb-pagination
+      [(page)]="page"
+      [pageSize]="10"
+      [collectionSize]="crimes ? crimes.length : 0"
+      class="d-flex justify-content-center p-1"/>
+
+
   </div>
 
 </div>

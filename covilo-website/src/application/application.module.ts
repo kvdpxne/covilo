@@ -26,7 +26,6 @@ import {
   HomeComponent,
   PageNotFoundComponent,
   ResultDetailsComponent,
-  ResultListComponent,
   StatisticsComponent
 } from "./apperance"
 import {MeModule} from "./me/me.module";
@@ -37,7 +36,6 @@ import {MeModule} from "./me/me.module";
     HomeComponent,
     PageNotFoundComponent,
     ResultDetailsComponent,
-    ResultListComponent,
     StatisticsComponent
   ],
   imports: [

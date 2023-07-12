@@ -16,4 +16,4 @@ export interface City {
 /**
  *
  */
-export declare type Cities = City[]
+export type Cities = City[]

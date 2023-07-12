@@ -1,45 +1,48 @@
-import {CrimeClassification} from "./crime-classification";
-import {CrimePerpetrator} from "./crime-perpetrator";
 import {City} from "./city";
 import {User} from "./user";
+import {Category} from "./category";
 
-export type CrimeCategory = {
+export interface Crime {
+
+  /**
+   * A random unique identifier.
+   */
   identifier: string;
-  name: string;
+
+  /**
+   * Additional title of the committed crime.
+   */
+  title?: string;
+
+  /**
+   * Additional description of the committed crime.
+   */
+  description?: string;
+
+  /**
+   * Categories into which the crime has been categorized.
+   */
+  categories: Category[];
+
+  /**
+   * The date and time the crime was committed.
+   */
+  time: Date;
+
+  /**
+   * The place where the crime was committed .
+   */
+  place: City;
+
+  /**
+   * The user who reported the crime.
+   */
+  reporter: User;
+
+  /**
+   * Whether the crime is confirmed.
+   */
+  confirmed: boolean;
 }
 
-export type CrimeCategories = CrimeCategory[];
-
-export type Crime2 = {
-  identifier: string
-  name?: string
-  description?: string
-  categories: CrimeCategories
-
-  createdDate: Date
-  lastModifiedDate?: Date
-
-  when: Date
-  place: City
-  reporter: User
-  confirmed: boolean
-}
-
-/**
- *
- */
-export type Crime = {
-  identifier: string,
-  reporter: User,
-  date: Date
-  place: City
-  classification: CrimeClassification[]
-  perpetrator?: CrimePerpetrator
-  description: string
-  confirmed: boolean
-}
-
-/**
- *
- */
 export type Crimes = Crime[]

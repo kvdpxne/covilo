@@ -1,15 +1,13 @@
 import {Gender} from "./gender";
+import {City} from "./city";
 
 export interface User {
-
   identifier: string;
-  recognizableName: string;
+  recognizableName?: string;
   email: string;
-
-  createdDate: Date;
-  lastModifiedDate: Date;
-  gender: Gender,
-  birthDate: Date
-  enabled: boolean
-  roles: Array<string>
+  firstName: string;
+  lastName: string;
+  gender: Gender;
+  birthDate: Date;
+  livingPlace: City;
 }
