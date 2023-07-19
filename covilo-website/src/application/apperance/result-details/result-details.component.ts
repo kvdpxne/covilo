@@ -3,7 +3,7 @@ import {ActivatedRoute, UrlSegment} from "@angular/router";
 import {
   CrimeService,
   City,
-  Crimes
+  Crimes, Crime
 } from "src/application/core";
 import {GeographicalService} from "../../core";
 import {Category} from "../../core/models/category";
@@ -25,6 +25,7 @@ export class ResultDetailsComponent implements OnInit {
   public page = 1;
 
   public categories?: Category[];
+  public filterCrimes?: Crime[];
 
   public constructor(
     route: ActivatedRoute,
@@ -43,9 +44,32 @@ export class ResultDetailsComponent implements OnInit {
       const lastSegment: string = url[url.length - 1].path;
 
       this.geographicalService.getCity(lastSegment).subscribe(it => this.city = it);
-      this.crimeService.getCrimes(lastSegment).subscribe(it => this.crimes = it);
+      this.crimeService.getCrimes(lastSegment).subscribe(it => {
+        this.crimes = it
+        // this.filterCrimes = it
+      });
     }
 
     this.crimeService.getCategories().subscribe(it => this.categories = it)
+  }
+
+  filterBy(category: Category) {
+    this.filterCrimes = [];
+    if (!this.crimes) {
+      return;
+    }
+    for (const crime of this.crimes) {
+      const categories = crime.categories;
+      if (!categories || 0 === categories.length) {
+        continue;
+      }
+      for (const category2 of categories) {
+        if (category2.identifier === category.identifier) {
+          this.filterCrimes.push(crime);
+          // console.log(category2.name)
+        }
+      }
+    }
+    // console.log(this.filterCrimes)
   }
 }
