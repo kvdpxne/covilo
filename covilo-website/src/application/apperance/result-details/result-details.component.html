@@ -9,6 +9,11 @@
   <!--  -->
   <div class="mt-5">
 
+    <div *ngFor="let category of categories">
+      <p>{{ category.name }}</p>
+
+    </div>
+
     <h2>Latest Crimes</h2>
 
     <div *ngFor="let crime of crimes | slice: (page - 1) * 10 : page * 10"

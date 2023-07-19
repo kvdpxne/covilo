@@ -5,8 +5,8 @@ import {
   City,
   Crimes
 } from "src/application/core";
-import {GeographicalService} from "../../core/services/geographical.service";
-import {NgbPaginationModule} from "@ng-bootstrap/ng-bootstrap";
+import {GeographicalService} from "../../core";
+import {Category} from "../../core/models/category";
 
 @Component({
   selector: "a-result-details",
@@ -23,6 +23,8 @@ export class ResultDetailsComponent implements OnInit {
   public crimes?: Crimes;
 
   public page = 1;
+
+  public categories?: Category[];
 
   public constructor(
     route: ActivatedRoute,
@@ -43,5 +45,7 @@ export class ResultDetailsComponent implements OnInit {
       this.geographicalService.getCity(lastSegment).subscribe(it => this.city = it);
       this.crimeService.getCrimes(lastSegment).subscribe(it => this.crimes = it);
     }
+
+    this.crimeService.getCategories().subscribe(it => this.categories = it)
   }
 }
