@@ -20,7 +20,7 @@
          class="row my-3">
       <div class="card border-dark">
         <div class="card-header">
-          {{ crime.title ? crime.title : crime.categories[0]?.name }}
+          {{ getCategories(crime) }}
         </div>
         <div class="card-body">
           {{ crime.identifier }}

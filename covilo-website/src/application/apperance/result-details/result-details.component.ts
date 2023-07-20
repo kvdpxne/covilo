@@ -53,6 +53,23 @@ export class ResultDetailsComponent implements OnInit {
     this.crimeService.getCategories().subscribe(it => this.categories = it)
   }
 
+  public getCategories(crime: Crime): string {
+    if (crime.title) {
+      return crime.title;
+    }
+    if (!crime.categories || 0 >= crime.categories.length) {
+      return crime.identifier;
+    }
+    let categories: string = "";
+    for (let i: number = 0; i < crime.categories.length; i++) {
+      categories += crime.categories[i].name;
+      if (i < (crime.categories.length - 1)) {
+        categories += ", ";
+      }
+    }
+    return categories;
+  }
+
   filterBy(category: Category) {
     this.filterCrimes = [];
     if (!this.crimes) {
