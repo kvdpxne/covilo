@@ -46,7 +46,7 @@ export class ResultDetailsComponent implements OnInit {
       this.geographicalService.getCity(lastSegment).subscribe(it => this.city = it);
       this.crimeService.getCrimes(lastSegment).subscribe(it => {
         this.crimes = it
-        // this.filterCrimes = it
+        this.filterCrimes = it
       });
     }
 
