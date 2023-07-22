@@ -1,10 +1,6 @@
-import {Component, OnDestroy, OnInit} from "@angular/core";
+import {Component, OnInit} from "@angular/core";
 import {ActivatedRoute, UrlSegment} from "@angular/router";
-import {
-  CrimeService,
-  City,
-  Crimes, Crime
-} from "src/application/core";
+import {City, Crime, CrimeService} from "src/application/core";
 import {GeographicalService} from "../../core";
 import {Category} from "../../core/models/category";
 
@@ -20,9 +16,10 @@ export class ResultDetailsComponent implements OnInit {
   private readonly crimeService: CrimeService;
 
   public city?: City;
-  public crimes?: Crimes;
+  public crimes?: Crime[];
 
   public page = 1;
+  public pageSize = 9;
 
   public categories?: Category[];
   public filterCrimes?: Crime[];
@@ -58,7 +55,7 @@ export class ResultDetailsComponent implements OnInit {
       return crime.title;
     }
     if (!crime.categories || 0 >= crime.categories.length) {
-      return crime.identifier;
+      return "";
     }
     let categories: string = "";
     for (let i: number = 0; i < crime.categories.length; i++) {
@@ -70,7 +67,13 @@ export class ResultDetailsComponent implements OnInit {
     return categories;
   }
 
-  filterBy(category: Category) {
+  public toPascalCase(content: string): string {
+    return 0 !== content.length
+      ? content.charAt(0).toUpperCase().concat(content.slice(1))
+      : content;
+  }
+
+  public filterBy(category: Category) {
     this.filterCrimes = [];
     if (!this.crimes) {
       return;
