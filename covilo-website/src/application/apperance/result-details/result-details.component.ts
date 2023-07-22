@@ -1,12 +1,8 @@
-import {Component, OnDestroy, OnInit} from "@angular/core";
+import {Component, OnInit} from "@angular/core";
 import {ActivatedRoute, UrlSegment} from "@angular/router";
-import {
-  CrimeService,
-  City,
-  Crimes
-} from "src/application/core";
-import {GeographicalService} from "../../core/services/geographical.service";
-import {NgbPaginationModule} from "@ng-bootstrap/ng-bootstrap";
+import {City, Crime, CrimeService} from "src/application/core";
+import {GeographicalService} from "../../core";
+import {Category} from "../../core/models/category";
 
 @Component({
   selector: "a-result-details",
@@ -20,9 +16,13 @@ export class ResultDetailsComponent implements OnInit {
   private readonly crimeService: CrimeService;
 
   public city?: City;
-  public crimes?: Crimes;
+  public crimes?: Crime[];
 
   public page = 1;
+  public pageSize = 9;
+
+  public categories?: Category[];
+  public filterCrimes?: Crime[];
 
   public constructor(
     route: ActivatedRoute,
@@ -41,7 +41,55 @@ export class ResultDetailsComponent implements OnInit {
       const lastSegment: string = url[url.length - 1].path;
 
       this.geographicalService.getCity(lastSegment).subscribe(it => this.city = it);
-      this.crimeService.getCrimes(lastSegment).subscribe(it => this.crimes = it);
+      this.crimeService.getCrimes(lastSegment).subscribe(it => {
+        this.crimes = it
+        this.filterCrimes = it
+      });
     }
+
+    this.crimeService.getCategories().subscribe(it => this.categories = it)
+  }
+
+  public getCategories(crime: Crime): string {
+    if (crime.title) {
+      return crime.title;
+    }
+    if (!crime.categories || 0 >= crime.categories.length) {
+      return "";
+    }
+    let categories: string = "";
+    for (let i: number = 0; i < crime.categories.length; i++) {
+      categories += crime.categories[i].name;
+      if (i < (crime.categories.length - 1)) {
+        categories += ", ";
+      }
+    }
+    return categories;
+  }
+
+  public toPascalCase(content: string): string {
+    return 0 !== content.length
+      ? content.charAt(0).toUpperCase().concat(content.slice(1))
+      : content;
+  }
+
+  public filterBy(category: Category) {
+    this.filterCrimes = [];
+    if (!this.crimes) {
+      return;
+    }
+    for (const crime of this.crimes) {
+      const categories = crime.categories;
+      if (!categories || 0 === categories.length) {
+        continue;
+      }
+      for (const category2 of categories) {
+        if (category2.identifier === category.identifier) {
+          this.filterCrimes.push(crime);
+          // console.log(category2.name)
+        }
+      }
+    }
+    // console.log(this.filterCrimes)
   }
 }

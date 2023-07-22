@@ -1,38 +1,66 @@
 <div class="container">
-
   <div>
     <h2>
       {{ city?.nationalName }}
     </h2>
   </div>
-
-  <!--  -->
-  <div class="mt-5">
-
-    <h2>Latest Crimes</h2>
-
-    <div *ngFor="let crime of crimes | slice: (page - 1) * 10 : page * 10"
-         class="row my-3">
-      <div class="card border-dark">
-        <div class="card-header">
-          {{ crime.title ? crime.title : crime.categories[0]?.name }}
+  <div class="row g-3 align-items-center mb-4">
+    <div class="col-md-4">
+      <h4 class="mb-0">
+        Showing {{(page - 1) * pageSize}}-{{ page * pageSize }} of {{ filterCrimes?.length }} result
+      </h4>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-9 col-xxl-8">
+      <div class="row g-4">
+        <div *ngFor="let crime of filterCrimes | slice: (page - 1) * pageSize : page * pageSize" class="col-12">
+          <div class="card shadow overflow-hidden p-2">
+            <div class="row g-0">
+              <div class="card border-dark">
+                <div class="card-header">
+                  {{ getCategories(crime) }}
+                </div>
+                <div class="card-body">
+                  {{ crime.identifier }}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="card-body">
-          {{ crime.identifier }}
+        <div class="col-12">
+          <div class="mt-4 d-flex justify-content-center" aria-label="navigation">
+            <ngb-pagination
+              [(page)]="page"
+              [pageSize]="pageSize"
+              [collectionSize]="filterCrimes ? filterCrimes.length : 0"
+              class="pagination pagination-primary-soft d-inline-block d-md-flex rounded mb-0"/>
+          </div>
         </div>
       </div>
-
     </div>
-
-    <ngb-pagination
-      [(page)]="page"
-      [pageSize]="10"
-      [collectionSize]="crimes ? crimes.length : 0"
-      class="d-flex justify-content-center p-1"/>
-
-
+    <div class="col-lg-3 col-xxl-4">
+      <div class="offcanvas-xl offcanvas-end" tabindex="-1" id="offcanvasSidebar">
+        <div class="offcanvas-body p-3 p-xl-0">
+          <div class="card card-body shadow p-4 mb-4">
+            <h4 class="mb-4">
+              Category
+            </h4>
+            <div class="row">
+              <div class="col-xxl-6">
+                <div *ngFor="let it of categories" (click)="filterBy(it)"  class="form-check">
+                  <input [id]="it.name" class="form-check-input" type="checkbox">
+                  <label class="form-check-label" [for]="it.name">
+                    {{ toPascalCase(it.name) }}
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-
 </div>
 
 
