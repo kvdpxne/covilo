@@ -67,12 +67,6 @@ export class ResultDetailsComponent implements OnInit {
     return categories;
   }
 
-  public toPascalCase(content: string): string {
-    return 0 !== content.length
-      ? content.charAt(0).toUpperCase().concat(content.slice(1))
-      : content;
-  }
-
   public filterBy(category: Category) {
     this.filterCrimes = [];
     if (!this.crimes) {

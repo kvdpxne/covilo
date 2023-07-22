@@ -51,7 +51,7 @@
                 <div *ngFor="let it of categories" (click)="filterBy(it)"  class="form-check">
                   <input [id]="it.name" class="form-check-input" type="checkbox">
                   <label class="form-check-label" [for]="it.name">
-                    {{ toPascalCase(it.name) }}
+                    {{ it.name | titlecase }}
                   </label>
                 </div>
               </div>
