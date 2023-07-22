@@ -9,8 +9,3 @@ export interface Province {
   nationalName: string;
   country: Country;
 }
-
-/**
- * Shortcut for the `Province` collection.
- */
-export declare type Provinces = Province[];

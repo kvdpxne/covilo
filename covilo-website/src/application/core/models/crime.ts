@@ -44,5 +44,3 @@ export interface Crime {
    */
   confirmed: boolean;
 }
-
-export type Crimes = Crime[]

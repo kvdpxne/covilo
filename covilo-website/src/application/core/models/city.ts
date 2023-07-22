@@ -12,8 +12,3 @@ export interface City {
   population: number;
   province: Province;
 }
-
-/**
- *
- */
-export type Cities = City[]

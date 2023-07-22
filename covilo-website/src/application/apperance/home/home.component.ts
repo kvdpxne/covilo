@@ -1,7 +1,7 @@
 import {Component, OnInit} from "@angular/core";
 import {Router} from "@angular/router";
-import {Cities, City, Countries, Country, Province, Provinces} from "src/application/core";
-import {GeographicalService} from "../../core/services/geographical.service";
+import {City, Country, Province} from "src/application/core";
+import {GeographicalService} from "../../core";
 import {Continent} from "../../core/models/continent";
 import {throwError} from "rxjs";
 
@@ -18,13 +18,13 @@ export class HomeComponent implements OnInit {
   private readonly geographicalService: GeographicalService;
 
   // available countries
-  countries?: Countries;
+  countries?: Country[];
 
   // available regions by country
-  regions?: Provinces;
+  regions?: Province[];
 
   // available cities by region
-  cities?: Cities;
+  cities?: City[];
 
   // key of the selected country
   currentCountry?: Country;
@@ -89,7 +89,7 @@ export class HomeComponent implements OnInit {
    */
   private getAvailableCountries(): void {
     this.geographicalService.getCountriesByContinent(Continent.EUROPE).subscribe({
-      next: (value: Countries): void => {
+      next: (value: Country[]): void => {
         this.countries = value.sort((a: Country, b: Country) => {
           return a.name.localeCompare(b.name);
         });
@@ -105,7 +105,7 @@ export class HomeComponent implements OnInit {
       throw new Error("Cannot get regions if country is undefined.");
     }
     this.geographicalService.getProvincesByCountry(this.currentCountry).subscribe({
-      next: (value: Provinces): void => {
+      next: (value: Province[]): void => {
         this.regions = value.sort((a: Province, b: Province) => {
           return a.nationalName.localeCompare(b.nationalName);
         });
@@ -121,7 +121,7 @@ export class HomeComponent implements OnInit {
       throw new Error("Cannot get cities if country or region is undefined.");
     }
     this.geographicalService.getCitiesByProvince(this.currentProvince).subscribe({
-      next: (value: Cities): void => {
+      next: (value: City[]): void => {
         this.cities = value.sort((a, b) => {
           return a.nationalName.localeCompare(b.nationalName);
         });
