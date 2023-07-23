@@ -5,33 +5,69 @@ import {GeographicalService} from "../../core";
 import {Category} from "../../core/models/category";
 
 @Component({
-  selector: "a-result-details",
+  selector: "covilo-result-details",
   templateUrl: "./result-details.component.html"
 })
 export class ResultDetailsComponent implements OnInit {
+
+  /**
+   * Maximum number of elements that can be displayed on a single page.
+   */
+  public readonly PAGE_ITEM_COUNT: number;
+
+  /**
+   * Maximum number of pages that can be displayed.
+   */
+  public readonly PAGE_COUNT: number;
 
   private readonly route: ActivatedRoute;
 
   private readonly geographicalService: GeographicalService;
   private readonly crimeService: CrimeService;
 
+  /**
+   *
+   */
   public city?: City;
+
+  /**
+   *
+   */
   public crimes?: Crime[];
 
-  public page = 1;
-  public pageSize = 9;
+  /**
+   *
+   */
+  public filteredCrimes?: Crime[];
+
+  public page: number = 1;
 
   public categories?: Category[];
-  public filterCrimes?: Crime[];
 
   public constructor(
     route: ActivatedRoute,
     geographicalService: GeographicalService,
     crimeService: CrimeService
   ) {
+    this.PAGE_ITEM_COUNT = 9;
+    this.PAGE_COUNT = 7;
+
     this.route = route;
+
     this.geographicalService = geographicalService;
     this.crimeService = crimeService;
+  }
+
+  public get start(): number {
+    return (this.page - 1) * this.PAGE_ITEM_COUNT;
+  }
+
+  public get end(): number {
+    return this.page * this.PAGE_ITEM_COUNT;
+  }
+
+  public get max(): number {
+    return this.crimes ? this.crimes.length : 0;
   }
 
   public ngOnInit(): void {
@@ -43,32 +79,15 @@ export class ResultDetailsComponent implements OnInit {
       this.geographicalService.getCity(lastSegment).subscribe(it => this.city = it);
       this.crimeService.getCrimes(lastSegment).subscribe(it => {
         this.crimes = it
-        this.filterCrimes = it
+        this.filteredCrimes = it
       });
     }
 
     this.crimeService.getCategories().subscribe(it => this.categories = it)
   }
 
-  public getCategories(crime: Crime): string {
-    if (crime.title) {
-      return crime.title;
-    }
-    if (!crime.categories || 0 >= crime.categories.length) {
-      return "";
-    }
-    let categories: string = "";
-    for (let i: number = 0; i < crime.categories.length; i++) {
-      categories += crime.categories[i].name;
-      if (i < (crime.categories.length - 1)) {
-        categories += ", ";
-      }
-    }
-    return categories;
-  }
-
   public filterBy(category: Category) {
-    this.filterCrimes = [];
+    this.filteredCrimes = [];
     if (!this.crimes) {
       return;
     }
@@ -79,7 +98,7 @@ export class ResultDetailsComponent implements OnInit {
       }
       for (const category2 of categories) {
         if (category2.identifier === category.identifier) {
-          this.filterCrimes.push(crime);
+          this.filteredCrimes.push(crime);
           // console.log(category2.name)
         }
       }

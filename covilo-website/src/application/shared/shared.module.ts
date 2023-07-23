@@ -7,21 +7,25 @@ import { NgbDropdownModule } from "@ng-bootstrap/ng-bootstrap"
 import { NavigationBackDirective } from "./directives/navigation-back.directive"
 
 import {
-  ApiHttpClientService,
-  InputComponent,
-  TextFilterPipe
-} from "./"
+    ApiHttpClientService, CardListComponent,
+    InputComponent,
+    TextFilterPipe
+} from "./";
+import { CardComponent } from './components';
 
 @NgModule({
   declarations: [
     TextFilterPipe,
     InputComponent,
-    NavigationBackDirective
+    NavigationBackDirective,
+    CardComponent,
+    CardListComponent
   ],
-  exports: [
-    InputComponent,
-    NavigationBackDirective
-  ],
+    exports: [
+        InputComponent,
+        NavigationBackDirective,
+        CardListComponent
+    ],
   imports: [
     CommonModule,
     TranslateModule.forChild(),
