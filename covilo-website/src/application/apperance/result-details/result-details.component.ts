@@ -44,6 +44,43 @@ export class ResultDetailsComponent implements OnInit {
 
   public categories?: Category[];
 
+  multi = [
+    {
+      name: "Unconfirmed",
+      series: [
+        {
+          name: new Date(2023, 6, 1).getTime(),
+          value: 10,
+        },
+        {
+          name: new Date(2023, 6, 2).getTime(),
+          value: 15,
+        },
+        {
+          name: new Date(2023, 6, 3).getTime(),
+          value: 8,
+        },
+      ],
+    },
+    {
+      name: "Confirmed",
+      series: [
+        {
+          name: new Date(2023, 6, 1).getTime(),
+          value: 7,
+        },
+        {
+          name: new Date(2023, 6, 2).getTime(),
+          value: 14,
+        },
+        {
+          name: new Date(2023, 6, 3).getTime(),
+          value: 1,
+        },
+      ],
+    },
+  ];
+
   public constructor(
     route: ActivatedRoute,
     geographicalService: GeographicalService,

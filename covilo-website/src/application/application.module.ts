@@ -29,6 +29,7 @@ import {
   StatisticsComponent
 } from "./apperance"
 import {MeModule} from "./me/me.module";
+import {LineChartModule} from "@swimlane/ngx-charts";
 
 @NgModule({
   declarations: [
@@ -64,6 +65,7 @@ import {MeModule} from "./me/me.module";
     ApplicationRoutingModule,
 
     NgbModule,
+    LineChartModule,
   ],
   exports: [
     ApplicationComponent

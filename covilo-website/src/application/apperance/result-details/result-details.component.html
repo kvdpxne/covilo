@@ -6,6 +6,19 @@
     </h2>
   </div>
 
+  <div class="row">
+    <ngx-charts-line-chart
+      [results]="multi"
+      [xAxis]="true"
+      [yAxis]="true"
+      [legend]="true"
+      [showXAxisLabel]="true"
+      [showYAxisLabel]="true"
+      xAxisLabel="When"
+      yAxisLabel="Count"
+    />
+  </div>
+
   <div class="row g-3 align-items-center mb-4">
     <div class="col-md-4">
       <h4 class="mb-0">
@@ -73,5 +86,3 @@
     </div>
   </div>
 </div>
-
-
