@@ -3,11 +3,15 @@ package me.kvdpxne.covilo.domain.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import me.kvdpxne.covilo.api.request.LoginCredentials;
 import me.kvdpxne.covilo.api.request.RegisterRequest;
 import me.kvdpxne.covilo.api.response.AuthenticationResponse;
 import me.kvdpxne.covilo.application.PasswordEncodingUseCase;
+import me.kvdpxne.covilo.domain.model.Gender;
+import me.kvdpxne.covilo.domain.model.Role;
 import me.kvdpxne.covilo.domain.model.Token;
 import me.kvdpxne.covilo.domain.model.TokenType;
 import me.kvdpxne.covilo.domain.model.User;
@@ -20,8 +24,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -33,16 +35,55 @@ public class AuthenticationService {
 
   private final PasswordEncodingUseCase passwordEncodingUseCase;
 
-  public AuthenticationResponse register(RegisterRequest request) {
+  public AuthenticationResponse register(
+    final RegisterRequest request
+  ) throws InvalidEmailAddressException, InvalidPasswordException {
+    /* Gmail Special Case for Emails
+     *
+     * There's one special case that applies only to the Gmail domain: it's
+     * permission to use the character + character in the local part of the
+     * email. For the Gmail domain, the two email addresses
+     * username+something@gmail.com and username@gmail.com are the same.
+     *
+     * Also, username@gmail.com is similar to user+name@gmail.com.
+     *
+     * We must implement a slightly different regex that will pass the email
+     * validation for this special case as well:
+     */
+    var pattern = "^(?=.{1,64}@)[A-Za-z0-9+_-]+(\\.[A-Za-z0-9+_-]+)*@[^-]"
+      + "[A-Za-z0-9+-]+(\\.[A-Za-z0-9+-]+)*(\\.[A-Za-z]{2,})$";
+
+    var email = request.getEmail();
+
+    if (!email.matches(pattern)) {
+      throw new InvalidEmailAddressException();
+    }
+
+    var password = request.getPassword();
+    var confirmPassword = request.getConfirmPassword();
+
+    if (!password.equals(confirmPassword)) {
+      throw new InvalidPasswordException();
+    }
+
+    // TODO remove
+    var role = request.getRole();
+    role = null == role ? Role.USER : role;
+
+    var gender = request.getGender();
+    gender = null == gender ? Gender.MALE : gender;
+
+    var brithDate = request.getBirthDate();
+    brithDate = null == brithDate ? LocalDate.now() : brithDate;
 
     var user = User.builder()
       .firstName(request.getFirstname())
       .lastName(request.getLastname())
-      .email(request.getEmail())
-      .password(this.passwordEncodingUseCase.encode(request.getPassword()))
-      .role(request.getRole())
-      .gender(request.getGender())
-      .birthDate(request.getBirthDate())
+      .email(email)
+      .password(this.passwordEncodingUseCase.encode(password))
+      .role(role)
+      .gender(gender)
+      .birthDate(brithDate)
       .build();
 
     var savedUser = repository.save(user);

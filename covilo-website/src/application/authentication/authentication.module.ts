@@ -7,6 +7,7 @@ import {AuthenticationComponent, ForgotPasswordComponent, LoginComponent} from "
 import {SharedModule} from "../shared"
 import {AUTHENTICATION_STRATEGY_PROVIDER} from "./service/authentication-strategy";
 import {AUTHENTICATION_INTERCEPTOR_PROVIDER} from "./interceptor/authentication.interceptor";
+import {SignupComponent} from './router';
 
 @NgModule({
   providers: [
@@ -16,7 +17,8 @@ import {AUTHENTICATION_INTERCEPTOR_PROVIDER} from "./interceptor/authentication.
   declarations: [
     AuthenticationComponent,
     ForgotPasswordComponent,
-    LoginComponent
+    LoginComponent,
+    SignupComponent
   ],
   imports: [
     CommonModule,

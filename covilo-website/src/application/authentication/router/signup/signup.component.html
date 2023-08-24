@@ -1,0 +1,121 @@
+<form #formElement="ngForm" (ngSubmit)="submit()">
+
+  <div class="mb-3">
+
+    <label for="emailModal" class="form-label">
+      {{ "authentication.signup.email" | translate }}
+    </label>
+
+    <input [formControl]="email"
+           [ngClass]="{ 'is-invalid' : formElement.submitted && email.errors || isEmailValid() }"
+           id="emailModal"
+           class="form-control form-control-lg"
+           type="email"
+           required>
+
+    <!-- Displays information about incorrect completion of a field -->
+    <!-- with a recognizable name. -->
+    <span *ngIf="(formElement.submitted || isEmailValid()) && email.errors" class="invalid-feedback">
+      {{ "application.authentication.invalid-email" | translate }}
+    </span>
+  </div>
+
+  <div class="mb-3">
+
+    <label for="recognizableNameModal" class="form-label">
+      {{ "authentication.signup.recognizableName" | translate }}
+    </label>
+
+    <input [formControl]="recognizableName"
+           [ngClass]="{ 'is-invalid' : formElement.submitted && recognizableName.errors || isRecognizableNameValid() }"
+           id="recognizableNameModal"
+           class="form-control form-control-lg"
+           type="email"
+           required>
+
+    <!-- Displays information about incorrect completion of a field -->
+    <!-- with a recognizable name. -->
+    <span *ngIf="(formElement.submitted || isRecognizableNameValid()) && recognizableName.errors" class="invalid-feedback">
+      {{ "application.authentication.invalid-email" | translate }}
+    </span>
+  </div>
+
+  <div class="mb-3">
+
+    <label for="passwordModal" class="form-label">
+      {{ "authentication.signup.password" | translate }}
+    </label>
+
+    <input [formControl]="password"
+           [ngClass]="{ 'is-invalid' : formElement.submitted && password.errors || isPasswordValid() }"
+           placeholder="{{ 'authentication.signup.passwordRequirements' | translate }}"
+           id="passwordModal"
+           class="form-control form-control-lg"
+           type="password"
+           required>
+
+    <!-- Displays information about incorrect completion of a field -->
+    <!-- with a password. -->
+    <span *ngIf="(formElement.submitted || isPasswordValid()) && password.errors" class="invalid-feedback">
+      {{ "application.authentication.invalid-password" | translate }}
+    </span>
+  </div>
+
+  <div class="mb-3">
+
+    <label for="confirmPasswordModal" class="form-label">
+      {{ "authentication.signup.confirmPassword" | translate }}
+    </label>
+
+    <input [formControl]="confirmPassword"
+           [ngClass]="{ 'is-invalid' : formElement.submitted && confirmPassword.errors || isConfirmPasswordValid() }"
+           placeholder="{{ 'authentication.signup.passwordRequirements' | translate }}"
+           id="confirmPasswordModal"
+           class="form-control form-control-lg"
+           type="password"
+           required>
+
+    <!-- Displays information about incorrect completion of a field -->
+    <!-- with a password. -->
+    <span *ngIf="(formElement.submitted || isConfirmPasswordValid()) && confirmPassword.errors" class="invalid-feedback">
+      {{ "application.authentication.invalid-password" | translate }}
+    </span>
+  </div>
+
+  <div class="form-check mb-3">
+
+    <input [formControl]="privacyPolicy"
+           id="privacyPolicyModal"
+           class="form-check-input"
+           type="checkbox"
+           required>
+
+    <label for="privacyPolicyModal" class="form-check-label small">
+      {{ "authentication.signup.privacyPolicy" | translate }}
+      <a routerLink="/privacy-policy" class="link">
+        {{ "authentication.shared.privacyPolicy" | translate }}
+      </a>
+    </label>
+
+    <span *ngIf="(formElement.submitted || isPrivacyPolicyValid()) && privacyPolicy.errors" class="invalid-feedback">
+      {{ "authentication.signup.acceptPrivacyPolicy" | translate }}
+    </span>
+
+  </div>
+
+  <div class="d-grid mb-3">
+    <button class="btn btn-primary btn-lg" type="submit">
+      {{ "authentication.shared.signup" | translate }}
+    </button>
+  </div>
+
+  <div class="text-center">
+    <p>
+      {{ "authentication.signup.alreadyHaveAnAccount" | translate }}
+      <a routerLink="/authentication/login" class="link">
+        {{ "authentication.signup.logHere" | translate }}
+      </a>
+    </p>
+  </div>
+
+</form>

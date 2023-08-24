@@ -8,6 +8,7 @@ import {Token} from "../payload/token";
 import {AUTHENTICATION_STRATEGY, AuthenticationStrategy} from "./authentication-strategy";
 import {TokenAuthenticationStrategy} from "./token-authentication-strategy";
 import {map} from "rxjs/operators";
+import {SignupRequest} from "../payload/signup-request";
 
 @Injectable({
   providedIn: "root"
@@ -23,6 +24,12 @@ export class AuthenticationService {
   ) {
     this.apiHttpClientService = httpClientService;
     this.authenticationStrategy = authenticationStrategy;
+  }
+
+  public signup(request: SignupRequest): Observable<Token> {
+    return this.apiHttpClientService.post<Token>("auth/register", request).pipe(
+      tap((token: Token): void => this.authenticationStrategy.doLogin(token))
+    )
   }
 
   public login(credentials: LoginCredentials): Observable<Token> {

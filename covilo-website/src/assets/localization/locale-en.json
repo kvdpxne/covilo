@@ -133,6 +133,24 @@
       "password": "Password",
       "signup": "Sign up"
     },
+
+    "signup": {
+      "email": "Email address",
+      "recognizableName": "Recognizable name",
+      "password": "Password",
+      "passwordRequirements": "8+ characters required",
+      "confirmPassword": "Confirm password",
+      "alreadyHaveAnAccount": "Already have an account?",
+      "logHere": "Log in here",
+      "privacyPolicy": "By submitting this form I have read and acknowledged the",
+      "acceptPrivacyPolicy": "Please accept our Privacy Policy."
+    },
+
+    "shared": {
+      "signup": "Sign up",
+      "privacyPolicy": "Privacy Policy"
+    },
+
     "textes": {
       "your_email": "Your email",
       "confirm_password": "Confirm password"

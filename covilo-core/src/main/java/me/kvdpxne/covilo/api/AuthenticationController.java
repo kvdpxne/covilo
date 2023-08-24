@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import me.kvdpxne.covilo.api.request.LoginCredentials;
 import me.kvdpxne.covilo.api.request.RegisterRequest;
 import me.kvdpxne.covilo.api.response.AuthenticationResponse;
+import me.kvdpxne.covilo.domain.service.AuthenticationException;
 import me.kvdpxne.covilo.domain.service.AuthenticationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -27,7 +28,7 @@ public class AuthenticationController {
   @PostMapping("/register")
   public ResponseEntity<AuthenticationResponse> register(
     @RequestBody RegisterRequest request
-  ) {
+  ) throws AuthenticationException {
     return ResponseEntity.ok(service.register(request));
   }
 

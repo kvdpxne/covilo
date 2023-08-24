@@ -1,18 +1,25 @@
 import {NgModule} from "@angular/core"
 import {RouterModule, Routes} from "@angular/router"
-import {AuthenticationComponent, ForgotPasswordComponent, LoginComponent} from "./"
+import {AuthenticationComponent, ForgotPasswordComponent, LoginComponent, SignupComponent} from "./"
 import {authenticationGuard} from "./guard/authentication.guard";
 
 const routes: Routes = [{
   path: "authentication",
   component: AuthenticationComponent,
-  canActivate: [authenticationGuard],
+  canActivate: [
+    //
+    //
+    authenticationGuard
+  ],
   children: [{
     path: "forgot-password",
     component: ForgotPasswordComponent
   }, {
     path: "login",
     component: LoginComponent
+  }, {
+    path: "signup",
+    component: SignupComponent
   }]
 }];
 
