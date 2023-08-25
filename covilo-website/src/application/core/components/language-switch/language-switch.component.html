@@ -1,0 +1,23 @@
+<ng-template #popContent>
+
+  <button *ngFor="let language of languages"
+          (click)="changeLanguage(language)"
+          class="btn p-2"
+          type="button">
+    {{ language }}
+  </button>
+
+
+</ng-template>
+
+<button #popover="ngbPopover"
+        [ngbPopover]="popContent"
+        (click)="togglePopover(popover)"
+        triggers="manual"
+        placement="top"
+        class="btn btn-outline-dark"
+        type="button">
+
+  <i class="bi bi-translate"></i>
+  {{ "" + currentLanguage | translate }}
+</button>

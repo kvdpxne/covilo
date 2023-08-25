@@ -6,8 +6,8 @@ import { BrowserModule } from "@angular/platform-browser"
 import {
   NgbAlertModule,
   NgbCollapseModule,
-  NgbDropdownModule
-} from "@ng-bootstrap/ng-bootstrap"
+  NgbDropdownModule, NgbPopover
+} from "@ng-bootstrap/ng-bootstrap";
 import { TranslateModule } from "@ngx-translate/core"
 
 //
@@ -19,14 +19,16 @@ import {
   FooterComponent,
   NavigationComponent,
   NotificationComponent
-} from "./components"
+} from "./components";
+import { LanguageSwitchComponent } from "./components"
 
 @NgModule({
   declarations: [
     FooterComponent,
     NavigationComponent,
     NotificationComponent,
-    AvatarComponent
+    AvatarComponent,
+    LanguageSwitchComponent
   ],
   imports: [
     CommonModule,
@@ -37,7 +39,8 @@ import {
     TranslateModule.forChild(),
     SharedModule,
     NgbAlertModule,
-    NgbDropdownModule
+    NgbDropdownModule,
+    NgbPopover
   ],
   exports: [
     FooterComponent,

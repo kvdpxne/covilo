@@ -43,6 +43,7 @@ export class ApplicationComponent implements OnInit {
     })
 
     this.translate.addLangs([
+      "locale-pl",
       "locale-en"
     ])
     this.translate.setDefaultLang("locale-en")
