@@ -1,4 +1,4 @@
-package me.kvdpxne.covilo.infrastructure.security;
+package me.kvdpxne.covilo.infrastructure.jwts;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

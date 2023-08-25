@@ -1,6 +1,6 @@
 package me.kvdpxne.covilo.domain.exception;
 
-public class UserAlreadyExistsException extends Exception {
+public class UserAlreadyExistsException extends UserException {
 
   public UserAlreadyExistsException() {
   }

@@ -3,13 +3,12 @@ package me.kvdpxne.covilo.api;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import me.kvdpxne.covilo.api.request.LoginCredentials;
-import me.kvdpxne.covilo.api.request.RegisterRequest;
+import me.kvdpxne.covilo.api.request.LoginRequest;
+import me.kvdpxne.covilo.api.request.SignupRequest;
 import me.kvdpxne.covilo.api.response.AuthenticationResponse;
-import me.kvdpxne.covilo.domain.service.AuthenticationException;
-import me.kvdpxne.covilo.domain.service.AuthenticationService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
+import me.kvdpxne.covilo.domain.exception.AuthenticationException;
+import me.kvdpxne.covilo.domain.exception.UserNotFoundException;
+import me.kvdpxne.covilo.domain.service.UserAuthenticationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,18 +22,18 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class AuthenticationController {
 
-  private final AuthenticationService service;
+  private final UserAuthenticationService service;
 
   @PostMapping("/register")
   public ResponseEntity<AuthenticationResponse> register(
-    @RequestBody RegisterRequest request
+    @RequestBody final SignupRequest request
   ) throws AuthenticationException {
-    return ResponseEntity.ok(service.register(request));
+    return ResponseEntity.ok(service.signup(request));
   }
 
   @PostMapping("/login")
-  public ResponseEntity<AuthenticationResponse> login(@RequestBody LoginCredentials request) {
-    return ResponseEntity.ok(service.authenticate(request));
+  public ResponseEntity<AuthenticationResponse> login(@RequestBody LoginRequest request) throws UserNotFoundException {
+    return ResponseEntity.ok(service.login(request));
   }
 
   @PostMapping("/refresh-token")

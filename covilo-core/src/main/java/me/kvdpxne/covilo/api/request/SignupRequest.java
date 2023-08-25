@@ -12,12 +12,11 @@ import me.kvdpxne.covilo.domain.model.Role;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterRequest {
+public class SignupRequest {
 
   private String firstname;
   private String lastname;
   private String email;
-  private String recognizableName;
   private String password;
   private String confirmPassword;
   private boolean privacyPolicy;

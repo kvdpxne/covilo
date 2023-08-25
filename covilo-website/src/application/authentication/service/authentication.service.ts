@@ -3,7 +3,7 @@ import {catchError, Observable, of, tap} from "rxjs"
 
 import {ApiHttpClientService, User} from "../../"
 
-import {LoginCredentials} from "../"
+import {LoginRequest} from "../"
 import {Token} from "../payload/token";
 import {AUTHENTICATION_STRATEGY, AuthenticationStrategy} from "./authentication-strategy";
 import {TokenAuthenticationStrategy} from "./token-authentication-strategy";
@@ -32,8 +32,8 @@ export class AuthenticationService {
     )
   }
 
-  public login(credentials: LoginCredentials): Observable<Token> {
-    return this.apiHttpClientService.post<Token>("auth/login", credentials).pipe(
+  public login(request: LoginRequest): Observable<Token> {
+    return this.apiHttpClientService.post<Token>("auth/login", request).pipe(
       tap((token: Token): void => this.authenticationStrategy.doLogin(token))
     );
   }

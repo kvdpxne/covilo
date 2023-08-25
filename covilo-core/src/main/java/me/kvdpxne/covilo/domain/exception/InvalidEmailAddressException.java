@@ -1,4 +1,4 @@
-package me.kvdpxne.covilo.domain.service;
+package me.kvdpxne.covilo.domain.exception;
 
 public class InvalidEmailAddressException extends AuthenticationException {
 }

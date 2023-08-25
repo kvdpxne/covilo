@@ -6,10 +6,17 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
-import me.kvdpxne.covilo.api.request.LoginCredentials;
-import me.kvdpxne.covilo.api.request.RegisterRequest;
+import lombok.extern.slf4j.Slf4j;
+import me.kvdpxne.covilo.api.request.LoginRequest;
+import me.kvdpxne.covilo.api.request.SignupRequest;
 import me.kvdpxne.covilo.api.response.AuthenticationResponse;
-import me.kvdpxne.covilo.application.PasswordEncodingUseCase;
+import me.kvdpxne.covilo.application.UserAuthenticationUseCase;
+import me.kvdpxne.covilo.application.UserLifecycleUseCase;
+import me.kvdpxne.covilo.domain.exception.AuthenticationException;
+import me.kvdpxne.covilo.domain.exception.InvalidEmailAddressException;
+import me.kvdpxne.covilo.domain.exception.InvalidPasswordException;
+import me.kvdpxne.covilo.domain.exception.UserAlreadyExistsException;
+import me.kvdpxne.covilo.domain.exception.UserNotFoundException;
 import me.kvdpxne.covilo.domain.model.Gender;
 import me.kvdpxne.covilo.domain.model.Role;
 import me.kvdpxne.covilo.domain.model.Token;
@@ -17,27 +24,30 @@ import me.kvdpxne.covilo.domain.model.TokenType;
 import me.kvdpxne.covilo.domain.model.User;
 import me.kvdpxne.covilo.domain.persistence.TokenRepository;
 import me.kvdpxne.covilo.domain.persistence.UserRepository;
-import me.kvdpxne.covilo.infrastructure.security.TokenService;
+import me.kvdpxne.covilo.infrastructure.jwts.TokenService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.stereotype.Service;
 
-@Service
+@Slf4j
 @RequiredArgsConstructor
-public class AuthenticationService {
+public final class UserAuthenticationService
+  implements UserAuthenticationUseCase {
 
   private final UserRepository repository;
+
+  private final UserLifecycleUseCase userLifecycleUseCase;
+
   private final TokenRepository tokenRepository;
-  private final TokenService jwtService;
+
+  private final TokenService tokenService;
+
   private final AuthenticationManager authenticationManager;
 
-  private final PasswordEncodingUseCase passwordEncodingUseCase;
-
-  public AuthenticationResponse register(
-    final RegisterRequest request
-  ) throws InvalidEmailAddressException, InvalidPasswordException {
+  public AuthenticationResponse signup(
+    final SignupRequest request
+  ) throws AuthenticationException {
     /* Gmail Special Case for Emails
      *
      * There's one special case that applies only to the Gmail domain: it's
@@ -80,16 +90,21 @@ public class AuthenticationService {
       .firstName(request.getFirstname())
       .lastName(request.getLastname())
       .email(email)
-      .password(this.passwordEncodingUseCase.encode(password))
+      .password(password)
       .role(role)
       .gender(gender)
       .birthDate(brithDate)
       .build();
 
-    var savedUser = repository.save(user);
-    var jwtToken = jwtService.generateToken(user);
-    var refreshToken = jwtService.generateRefreshToken(user);
-    saveUserToken(savedUser, jwtToken);
+    try {
+      user = this.userLifecycleUseCase.createUser(user);
+    } catch (final UserAlreadyExistsException exception) {
+      throw new AuthenticationException();
+    }
+
+    var jwtToken = tokenService.generateToken(user);
+    var refreshToken = tokenService.generateRefreshToken(user);
+    saveUserToken(user, jwtToken);
 
     return AuthenticationResponse.builder()
       .accessToken(jwtToken)
@@ -97,17 +112,21 @@ public class AuthenticationService {
       .build();
   }
 
-  public AuthenticationResponse authenticate(LoginCredentials request) {
+  public AuthenticationResponse login(
+    final LoginRequest request
+  ) throws UserNotFoundException {
     authenticationManager.authenticate(
       new UsernamePasswordAuthenticationToken(
-        request.recognizableName(),
+        request.email(),
         request.password()
       )
     );
-    var user = repository.findByEmail(request.recognizableName())
-      .orElseThrow();
-    var jwtToken = jwtService.generateToken(user);
-    var refreshToken = jwtService.generateRefreshToken(user);
+
+    final User user = this.userLifecycleUseCase.getUserByEmail(request.email());
+
+    var jwtToken = tokenService.generateToken(user);
+    var refreshToken = tokenService.generateRefreshToken(user);
+
     revokeAllUserTokens(user);
     saveUserToken(user, jwtToken);
     return AuthenticationResponse.builder()
@@ -154,12 +173,12 @@ public class AuthenticationService {
     if (null != token && token.isRevoked()) {
       return HttpStatus.FORBIDDEN;
     }
-    final String email = jwtService.extractUsername(refreshToken);
+    final String email = tokenService.extractUsername(refreshToken);
     if (email != null) {
       var user = this.repository.findByEmail(email)
         .orElseThrow();
-      if (jwtService.isTokenValid(refreshToken, user)) {
-        var accessToken = jwtService.generateToken(user);
+      if (tokenService.isTokenValid(refreshToken, user)) {
+        var accessToken = tokenService.generateToken(user);
         revokeAllUserTokens(user);
         saveUserToken(user, accessToken);
         var authResponse = AuthenticationResponse.builder()

@@ -1,14 +1,14 @@
 import {Component} from "@angular/core"
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthenticationService} from "../../service/authentication.service";
-import {LoginCredentials} from "../../payload/login-credentials";
+import {LoginRequest} from "../../payload/login-request";
 import {Router} from "@angular/router";
 import {Token} from "../../payload/token";
 import {throwError} from "rxjs";
 
 interface LoginForm {
 
-  recognizableName: FormControl<string | null>;
+  email: FormControl<string | null>;
   password: FormControl<string | null>;
 }
 
@@ -38,7 +38,7 @@ export class LoginComponent {
     // Initializes the standard form group with the FormGroup constructor
     // needed to hold the user authentication information.
     this.formGroup = formBuilder.group<LoginForm>({
-      recognizableName: new FormControl<string | null>(null),
+      email: new FormControl<string | null>(null),
       password: new FormControl<string | null>(null)
     }, {
       validators: Validators.required
@@ -53,16 +53,16 @@ export class LoginComponent {
     return this.formGroup.controls;
   }
 
-  public get recognizableName(): FormControl<string | null> {
-    return this.controls.recognizableName;
+  public get email(): FormControl<string | null> {
+    return this.controls.email;
   }
 
   public get password(): FormControl<string | null> {
     return this.controls.password;
   }
 
-  public isRecognizableNameValid(): boolean {
-    const control: AbstractControl<string | null, string> = this.recognizableName;
+  public isEmailValid(): boolean {
+    const control: AbstractControl<string | null, string> = this.email;
     return control.invalid && (control.dirty || control.touched);
   }
 
@@ -73,20 +73,20 @@ export class LoginComponent {
 
   public submit(): void {
     //
-    const recognizableName: string | null = this.recognizableName.value;
+    const email: string | null = this.email.value;
     const password: string | null = this.password.value;
 
     // Checks if the values are not null or empty.
-    if (!recognizableName || !password) {
+    if (!email || !password) {
       return;
     }
 
-    const credentials: LoginCredentials = {
-      recognizableName: recognizableName,
+    const request: LoginRequest = {
+      email: email,
       password: password
     };
 
-    this.authenticationService.login(credentials).subscribe((token: Token) => {
+    this.authenticationService.login(request).subscribe((token: Token) => {
       console.log(token);
       this.router.navigate(["/"]).catch(error => throwError(error));
     });

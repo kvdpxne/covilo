@@ -1,6 +1,7 @@
 package me.kvdpxne.covilo.api;
 
 import jakarta.servlet.http.HttpServletRequest;
+import me.kvdpxne.covilo.application.dto.UserDto;
 import me.kvdpxne.covilo.domain.model.Token;
 import me.kvdpxne.covilo.domain.persistence.TokenRepository;
 import org.springframework.http.HttpHeaders;

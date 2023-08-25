@@ -1,9 +1,15 @@
 package me.kvdpxne.covilo.application;
 
+import java.util.UUID;
 import me.kvdpxne.covilo.domain.exception.UserAlreadyExistsException;
+import me.kvdpxne.covilo.domain.exception.UserNotFoundException;
 import me.kvdpxne.covilo.domain.model.User;
 
 public interface UserLifecycleUseCase {
+
+  User getUserByIdentifier(final UUID identifier) throws UserNotFoundException;
+
+  User getUserByEmail(final String email) throws UserNotFoundException;
 
   /**
    * Creates a new user from the given user data if the unique identifier

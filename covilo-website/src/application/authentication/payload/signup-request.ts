@@ -6,8 +6,6 @@ export interface SignupRequest {
 
   email: string;
 
-  recognizableName: string;
-
   password: string;
 
   confirmPassword: string;

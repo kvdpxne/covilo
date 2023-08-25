@@ -1,5 +1,7 @@
-package me.kvdpxne.covilo.api;
+package me.kvdpxne.covilo.application.mapper;
 
+import me.kvdpxne.covilo.application.dto.CategoryDto;
+import me.kvdpxne.covilo.application.dto.CrimeDto;
 import me.kvdpxne.covilo.domain.model.Category;
 import me.kvdpxne.covilo.domain.model.Crime;
 import org.mapstruct.Mapper;

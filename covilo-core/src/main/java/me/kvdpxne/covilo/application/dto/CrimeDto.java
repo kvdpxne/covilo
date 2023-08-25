@@ -1,4 +1,4 @@
-package me.kvdpxne.covilo.api;
+package me.kvdpxne.covilo.application.dto;
 
 import java.time.LocalDateTime;
 import java.util.Collection;

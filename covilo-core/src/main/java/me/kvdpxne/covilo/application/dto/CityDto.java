@@ -1,4 +1,4 @@
-package me.kvdpxne.covilo.api;
+package me.kvdpxne.covilo.application.dto;
 
 import me.kvdpxne.covilo.domain.model.CapitalType;
 

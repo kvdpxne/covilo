@@ -10,8 +10,6 @@ interface SignupForm {
 
   email: FormControl<string | null>;
 
-  recognizableName: FormControl<string | null>;
-
   password: FormControl<string | null>;
 
   confirmPassword: FormControl<string | null>;
@@ -46,7 +44,6 @@ export class SignupComponent {
     // needed to hold the user authentication information.
     this.formGroup = formBuilder.group<SignupForm>({
       email: new FormControl<string | null>(null),
-      recognizableName: new FormControl<string | null>(null),
       password: new FormControl<string | null>(null),
       confirmPassword: new FormControl<string | null>(null),
       privacyPolicy: new FormControl<boolean | null>(false),
@@ -67,10 +64,6 @@ export class SignupComponent {
     return this.controls.email;
   }
 
-  public get recognizableName(): FormControl<string | null> {
-    return this.controls.recognizableName;
-  }
-
   public get password(): FormControl<string | null> {
     return this.controls.password;
   }
@@ -85,11 +78,6 @@ export class SignupComponent {
 
   public isEmailValid(): boolean {
     const control: AbstractControl<string | null, string> = this.email;
-    return control.invalid && (control.dirty || control.touched);
-  }
-
-  public isRecognizableNameValid(): boolean {
-    const control: AbstractControl<string | null, string> = this.recognizableName;
     return control.invalid && (control.dirty || control.touched);
   }
 
@@ -111,13 +99,12 @@ export class SignupComponent {
   public submit(): void {
     //
     const email           : string  | null = this.email.value;
-    const recognizableName: string  | null = this.recognizableName.value;
     const password        : string  | null = this.password.value;
     const confirmPassword : string  | null = this.password.value;
     const privacyPolicy   : boolean | null = this.privacyPolicy.value;
 
     // Checks if the values are not null or empty.
-    if (!email || !recognizableName || !password || !confirmPassword || !privacyPolicy) {
+    if (!email || !password || !confirmPassword || !privacyPolicy) {
       return;
     }
 
@@ -126,7 +113,6 @@ export class SignupComponent {
       firstName       : "Sergio",
       lastName        : "Drugi",
       email           : email,
-      recognizableName: recognizableName,
       password        : password,
       confirmPassword : confirmPassword,
       privacyPolicy   : privacyPolicy

@@ -1,6 +1,6 @@
 export * from "./guard/authentication.guard"
 export * from "./interceptor/authentication.interceptor"
-export * from "./payload/login-credentials"
+export * from "./payload/login-request"
 export * from "./payload/token"
 export * from "./router"
 export * from "./service/authentication.service"

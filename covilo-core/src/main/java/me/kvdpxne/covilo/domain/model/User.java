@@ -21,10 +21,11 @@ import java.util.*;
 @Table(name = "_user")
 public class User {
 
+  @Builder.Default
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
   @Column(name = "_identifier", nullable = false)
-  private UUID identifier;
+  private UUID identifier = UUID.randomUUID();
 
   @Column(name = "_email", unique = true)
   private String email;

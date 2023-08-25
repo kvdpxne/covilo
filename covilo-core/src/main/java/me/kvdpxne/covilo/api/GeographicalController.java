@@ -1,6 +1,9 @@
 package me.kvdpxne.covilo.api;
 
 import lombok.RequiredArgsConstructor;
+import me.kvdpxne.covilo.application.dto.CityDto;
+import me.kvdpxne.covilo.application.dto.CountryDto;
+import me.kvdpxne.covilo.application.dto.ProvinceDto;
 import me.kvdpxne.covilo.domain.model.City;
 import me.kvdpxne.covilo.domain.model.Country;
 import me.kvdpxne.covilo.domain.model.Province;

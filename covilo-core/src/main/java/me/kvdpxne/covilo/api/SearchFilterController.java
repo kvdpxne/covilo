@@ -1,6 +1,8 @@
 package me.kvdpxne.covilo.api;
 
 import lombok.RequiredArgsConstructor;
+import me.kvdpxne.covilo.application.dto.CategoryDto;
+import me.kvdpxne.covilo.application.mapper.CrimeMapper;
 import me.kvdpxne.covilo.domain.persistence.CategoryRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

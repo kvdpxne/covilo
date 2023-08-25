@@ -7,15 +7,15 @@
       {{ "application.authentication.your-email" | translate }}
     </label>
 
-    <input [formControl]="recognizableName"
-           [ngClass]="{ 'is-invalid' : formElement.submitted && recognizableName.errors || isRecognizableNameValid() }"
+    <input [formControl]="email"
+           [ngClass]="{ 'is-invalid' : formElement.submitted && email.errors || isEmailValid() }"
            id="recognizableNameModal"
            class="form-control form-control-lg"
            type="email"
            required>
     <!-- Displays information about incorrect completion of a field -->
     <!-- with a recognizable name. -->
-    <span *ngIf="(formElement.submitted || isRecognizableNameValid()) && recognizableName.errors"
+    <span *ngIf="(formElement.submitted || isEmailValid()) && email.errors"
           class="invalid-feedback">
         {{ "application.authentication.invalid-email" | translate }}
       </span>
@@ -35,7 +35,7 @@
     </div>
 
     <input [formControl]="password"
-           [ngClass]="{ 'is-invalid' : formElement.submitted && recognizableName.errors || isPasswordValid() }"
+           [ngClass]="{ 'is-invalid' : formElement.submitted && email.errors || isPasswordValid() }"
            id="passwordModal"
            class="form-control form-control-lg"
            type="password"
