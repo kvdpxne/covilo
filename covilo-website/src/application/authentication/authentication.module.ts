@@ -3,7 +3,7 @@ import {CommonModule} from "@angular/common"
 import {FormsModule, ReactiveFormsModule} from "@angular/forms"
 import {TranslateModule} from "@ngx-translate/core"
 import {ApplicationRoutingModule} from "./authentication-routing.module"
-import {AuthenticationComponent, ForgotPasswordComponent, LoginComponent} from "./"
+import {AuthenticationComponent, ResetPasswordComponent, LoginComponent} from "./"
 import {SharedModule} from "../shared"
 import {AUTHENTICATION_STRATEGY_PROVIDER} from "./service/authentication-strategy";
 import {AUTHENTICATION_INTERCEPTOR_PROVIDER} from "./interceptor/authentication.interceptor";
@@ -16,7 +16,7 @@ import {SignupComponent} from './router';
   ],
   declarations: [
     AuthenticationComponent,
-    ForgotPasswordComponent,
+    ResetPasswordComponent,
     LoginComponent,
     SignupComponent
   ],

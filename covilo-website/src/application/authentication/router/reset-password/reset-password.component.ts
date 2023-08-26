@@ -4,9 +4,9 @@ import {ResetPasswordRequest} from "../../payload/reset-password-request";
 
 @Component({
   selector: "covilo-authentication-forgot-password",
-  templateUrl: "./forgot-password.component.html"
+  templateUrl: "./reset-password.component.html"
 })
-export class ForgotPasswordComponent {
+export class ResetPasswordComponent {
 
   public readonly email: FormControl<string | null>;
 

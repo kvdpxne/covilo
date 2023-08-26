@@ -1,63 +1,80 @@
 {
-  "country": {
-    "albania": "Albania",
-    "andorra": "Andora",
-    "armenia": "Armenia",
-    "austria": "Austria",
-    "azerbaijan": "Azerbejdżan",
-    "belarus": "Białoruś",
-    "belgium": "Belgia",
-    "bosnia_and_herzegovina": "Bośnia i Hercegowina",
-    "bulgaria": "Bułgaria",
-    "croatia": "Chorwacja",
-    "cyprus": "Cypr",
-    "czechia": "Czechy",
-    "denmark": "Dania",
-    "estonia": "Estonia",
-    "finland": "Finlandia",
-    "france": "Francja",
-    "georgia": "Gruzja",
-    "germany": "Niemcy",
-    "greece": "Grecja",
-    "hungary": "Węgry",
-    "iceland": "Islandia",
-    "ireland": "Irlandia",
-    "italy": "Włochy",
-    "kazakhstan": "Kazachstan",
-    "latvia": "Łotwa",
-    "liechtenstein": "Liechtenstein",
-    "lithuania": "Litwa",
-    "luxembourg": "Luksemburg",
-    "malta": "Malta",
-    "moldova": "Mołdawia",
-    "monaco": "Monako",
-    "montenegro": "Czarnogóra",
-    "netherlands": "Holandia",
-    "north_macedonia": "Północna Macedonia",
-    "norway": "Norwegia",
-    "poland": "Polska",
-    "portugal": "Portugalia",
-    "romania": "Rumunia",
-    "russia": "Rosja",
-    "san_marino": "San Marino",
-    "serbia": "Serbia",
-    "slovakia": "Słowacja",
-    "slovenia": "Słowenia",
-    "spain": "Hiszpania",
-    "sweden": "Szwecja",
-    "switzerland": "Szwajcaria",
-    "turkey": "Turcja",
-    "ukraine": "Ukraina",
-    "united_kingdom": "Wielka Brytania",
-    "vatican_city": "Watykan"
+  "appearance": {
+    "home": {
+      "search": "Szukaj"
+    }
   },
-  "word": {
-    "city": "Miasto",
-    "country": "Państwo",
-    "region": "Region",
-    "search": "Szukaj",
-    "password": "Hasło"
+  "authentication": {
+    "login":{
+      "title": "Witaj ponownie",
+      "description": "Zaloguj się, aby zarządzać swoim kontem.",
+      "email": "Twój email",
+      "password": "Twoje hasło",
+      "forgotPassword": "Zapomniałeś hasła?",
+      "login": "Zaloguj sie",
+      "signup": {
+        "question": "Nie masz jeszcze konta?",
+        "link": "Zarejestruj się tutaj"
+      }
+    },
+    "resetPassword": {
+      "title": "Zapomniałeś hasła?",
+      "description": "Wpisz poniżej swój adres email, a my pomożemy Ci odzyskać twoje konto.",
+      "email": "Twój email",
+      "login": "Powrót do logowania",
+      "placeholder": "Wpisz swój adres email",
+      "submit": "Wyślij"
+    },
+    "signup": {
+      "title": "Witaj w Covilo",
+      "description": "Wypełnij formularz, aby rozpocząć..",
+      "email": "Twój email",
+      "password": "Hasło",
+      "confirmPassword": "Potwierdź hasło",
+      "privacyPolicy": {
+        "content": "Przesyłając ten formularz, przeczytałem i zaakceptowałem",
+        "link": "Polityka prywatności"
+      },
+      "signup": "Zarejestruj się",
+      "login": {
+        "question": "Posiadasz już konto?",
+        "link": "Zaloguj się tutaj"
+      }
+    },
+    "validation": {
+      "passwordRequirements": "8+ wymaganych znaków"
+    }
   },
-  "navigation.home": "Strona główna",
-  "navigation.statistics": "Statystyki"
+  "core": {
+    "avatar": {
+      "logout": "Wyloguj"
+    },
+    "footer": {
+      "navigation": "Nawigacja",
+      "company": "Firma",
+      "about": "O nas",
+      "contacts": "Kontakty",
+      "news": "Nowości",
+      "resources": "Zasoby",
+      "newsletters": "Newsletters",
+      "rights": "Wszelkie prawa zastrzeżone."
+    },
+    "languageSwitch": {
+      "locale-en": "Angielski",
+      "locale-pl": "Polski"
+    },
+    "navigation": {
+      "home": "Strona główna",
+      "statistics": "Statystyki",
+      "login": "Logowanie",
+      "signup": "Rejestracja"
+    }
+  },
+  "shared": {
+    "common": {
+      "country": "Państwo",
+      "region": "Region",
+      "city": "Miasto"
+    }
+  }
 }

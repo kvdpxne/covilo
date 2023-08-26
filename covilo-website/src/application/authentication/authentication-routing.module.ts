@@ -1,6 +1,6 @@
 import {NgModule} from "@angular/core"
 import {RouterModule, Routes} from "@angular/router"
-import {AuthenticationComponent, ForgotPasswordComponent, LoginComponent, SignupComponent} from "./"
+import {AuthenticationComponent, ResetPasswordComponent, LoginComponent, SignupComponent} from "./"
 import {authenticationGuard} from "./guard/authentication.guard";
 
 const routes: Routes = [{
@@ -12,8 +12,8 @@ const routes: Routes = [{
     authenticationGuard
   ],
   children: [{
-    path: "forgot-password",
-    component: ForgotPasswordComponent
+    path: "reset-password",
+    component: ResetPasswordComponent
   }, {
     path: "login",
     component: LoginComponent

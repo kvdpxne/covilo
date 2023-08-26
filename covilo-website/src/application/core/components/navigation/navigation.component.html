@@ -20,19 +20,19 @@
       </ul>
 
       <div class="navbar-nav">
-        <covilo-avatar *ngIf="!isLoggedIn"></covilo-avatar>
+        <covilo-avatar *ngIf="!isLoggedIn"/>
 
         <ng-template [ngIf]="isLoggedIn">
           <button class="btn btn-sm btn-outline-primary me-1"
                   routerLink="./authentication/login"
                   type="button">
-            {{ 'login' | translate }}
+            {{ "core.navigation.login" | translate }}
           </button>
 
           <button class="btn btn-sm btn-primary"
                   routerLink="./authentication/signup"
                   type="button">
-            {{ 'signup' | translate }}
+            {{ "core.navigation.signup" | translate }}
           </button>
         </ng-template>
       </div>

@@ -1,175 +1,80 @@
 {
-  "application": {
-    "authentication": {
-
-      "forgot-password": {
-        "title": "Forgot Password?",
-        "description": "Enter your email address below and we'll get you back on track.",
-        "back": "Back to Log in",
-        "email": "Enter your email address"
-      },
-
-      "login": {
-        "title": "Welcome back",
-        "description": "Login to manage your account.",
-        "aa": "Don't have an account yet?",
-        "sign-here": "Sign up here"
-      },
-
-      "signup": {
-        "title": "Welcome to Covilo",
-        "description": "Fill out the form to get started.",
-
-        "aa": "Already have an account?",
-        "log-here": "Log in here",
-        "privacy-policy": "Please accept our Privacy Policy.",
-        "acknowledged": "By submitting this form I have read and acknowledged the"
-      },
-
-      "your-email": "Your Email",
-      "your-password": "Password",
-      "your-confirm-password": "Confirm Password",
-      "invalid-email": "Please enter a valid email address.",
-      "invalid-password": "Please enter a valid password.",
-      "forgot-password-question": "Forgot Password?",
-      "password-placeholder": "8+ characters required",
-      "welcome": "Welcome to Covilo",
-      "fill": "Fill out the form to get started."
-    },
-
-    "common": {
-      "privacy-policy": "Privacy Policy"
+  "appearance": {
+    "home": {
+      "search": "Search"
     }
   },
-
-
-
-
-
-  "navigation": "Navigation",
-  "company": "Company",
-  "company.about": "About",
-  "company.contacts": "Contacts",
-  "company.news": "News",
-  "resources": "Resources",
-  "resources.newsletters": "Newsletters",
-  "resources.blog": "Blog",
-  "legal": "Legal",
-  "legal.trademarks": "Trademarks",
-  "legal.tou": "Terms of Use",
-  "pas": "Privacy & Security",
-  "rights": " All rights reserved.",
-  "developed": "Developed by",
-  "search": "Search",
-  "search.placeholder": "Country, City...",
-  "signup": "Sign up",
-  "submit": "Submit",
-  "login": "Log in",
-  "logout": "Log out",
-  "report": "Report",
-  "feature.header": "Columns with icons",
-  "feature.title": "Featured title",
-  "feature.description": "Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.",
-  "navigation.home": "Home page",
-  "navigation.statistics": "Statistics",
-
-  "country": {
-    "albania": "Albania",
-    "andorra": "Andorra",
-    "armenia": "Armenia",
-    "austria": "Austria",
-    "azerbaijan": "Azerbaijan",
-    "belarus": "Belarus",
-    "belgium": "Belgium",
-    "bosnia_and_herzegovina": "Bosnia and Herzegovina",
-    "bulgaria": "Bulgaria",
-    "croatia": "Croatia",
-    "cyprus": "Cyprus",
-    "czechia": "Czechia",
-    "denmark": "Denmark",
-    "estonia": "Estonia",
-    "finland": "Finland",
-    "france": "France",
-    "georgia": "Georgia",
-    "germany": "Germany",
-    "greece": "Greece",
-    "hungary": "Hungary",
-    "iceland": "Iceland",
-    "ireland": "Ireland",
-    "italy": "Italy",
-    "kazakhstan": "Kazakhstan",
-    "latvia": "Latvia",
-    "liechtenstein": "Liechtenstein",
-    "lithuania": "Lithuania",
-    "luxembourg": "Luxembourg",
-    "malta": "Malta",
-    "moldova": "Moldova",
-    "monaco": "Monaco",
-    "montenegro": "Montenegro",
-    "netherlands": "Netherlands",
-    "north_macedonia": "North Macedonia",
-    "norway": "Norway",
-    "poland": "Poland",
-    "portugal": "Portugal",
-    "romania": "Romania",
-    "russia": "Russia",
-    "san_marino": "San Marino",
-    "serbia": "Serbia",
-    "slovakia": "Slovakia",
-    "slovenia": "Slovenia",
-    "spain": "Spain",
-    "sweden": "Sweden",
-    "switzerland": "Switzerland",
-    "turkey": "Turkey",
-    "ukraine": "Ukraine",
-    "united_kingdom": "United Kingdom",
-    "vatican_city": "Vatican City"
-  },
-
   "authentication": {
-    "common": {
+    "login":{
+      "title": "Welcome back",
+      "description": "Login to manage your account.",
+      "email": "Your email",
+      "password": "Your password",
+      "forgotPassword": "Forgot password?",
       "login": "Log in",
-      "logout": "Log out",
-      "password": "Password",
-      "signup": "Sign up"
+      "signup": {
+        "question": "Don't have an account yet?",
+        "link": "Sign up here"
+      }
     },
-
+    "resetPassword": {
+      "title": "Forgot password?",
+      "description": "Enter your email address below and we'll help you recover your account.",
+      "email": "Your email",
+      "login": "Back to Log in",
+      "placeholder": "Enter your email address",
+      "submit": "Submit"
+    },
     "signup": {
-      "email": "Email address",
-      "recognizableName": "Recognizable name",
+      "title": "Welcome to Covilo",
+      "description": "Fill out the form to get started.",
+      "email": "Your email",
       "password": "Password",
-      "passwordRequirements": "8+ characters required",
-      "confirmPassword": "Confirm password",
-      "alreadyHaveAnAccount": "Already have an account?",
-      "logHere": "Log in here",
-      "privacyPolicy": "By submitting this form I have read and acknowledged the",
-      "acceptPrivacyPolicy": "Please accept our Privacy Policy."
-    },
-
-    "shared": {
+      "confirmPassword": "Confirm Password",
+      "privacyPolicy": {
+        "content": "By submitting this form I have read and acknowledged the",
+        "link": "Privacy Policy"
+      },
       "signup": "Sign up",
-      "privacyPolicy": "Privacy Policy"
+      "login": {
+        "question": "Already have an account?",
+        "link": "Log in here"
+      }
     },
-
-    "textes": {
-      "your_email": "Your email",
-      "confirm_password": "Confirm password"
+    "validation": {
+      "passwordRequirements": "8+ characters required"
     }
   },
-
-  "word": {
-    "city": "City",
-    "country": "Country",
-    "region": "Region",
-    "population": "Population",
-    "capital": "Capital",
-    "search": "Search",
-    "password": "Password",
-    "signup": "Sign up",
-    "login": "Log in",
-    "logout": "Log out"
+  "core": {
+    "avatar": {
+      "logout": "Logout"
+    },
+    "footer": {
+      "navigation": "Navigation",
+      "company": "Company",
+      "about": "About",
+      "contacts": "Contacts",
+      "news": "News",
+      "resources": "Resources",
+      "newsletters": "Newsletters",
+      "rights": " All rights reserved."
+    },
+    "languageSwitch": {
+      "locale-en": "English",
+      "locale-pl": "Polski"
+    },
+    "navigation": {
+      "home": "Home page",
+      "statistics": "Statistics",
+      "login": "Log in",
+      "signup": "Sign up"
+    }
   },
-
-  "back-to-home": "Back to Homepage",
-  "404-text": "The page you are looking for might have been removed had its name changed or is temporarily unavailable."
+  "shared": {
+    "common": {
+      "country": "Country",
+      "region": "Region",
+      "city": "City"
+    }
+  }
 }

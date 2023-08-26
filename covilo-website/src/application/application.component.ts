@@ -4,7 +4,6 @@ import { Section } from "./shared/types/section"
 import { Icon } from "./shared/types/icon"
 import { Link } from "./shared/types/link"
 import { NavigationStart, Router } from "@angular/router"
-import { User } from "./core"
 
 //
 @Component({
@@ -16,8 +15,6 @@ import { User } from "./core"
 })
 export class ApplicationComponent implements OnInit {
 
-  currentUser?: User
-
   showFooter: boolean = true
   showHeader: boolean = true
 
@@ -27,7 +24,7 @@ export class ApplicationComponent implements OnInit {
   linkSet: Set<Link>
 
   constructor(
-    private readonly router: Router,
+    router: Router,
     private readonly translate: TranslateService
   ) {
     router.events.subscribe(event => {
@@ -47,7 +44,16 @@ export class ApplicationComponent implements OnInit {
       "locale-en"
     ])
     this.translate.setDefaultLang("locale-en")
-    this.translate.use("locale-en")
+
+    let browserLanguage: string | undefined = this.translate.getBrowserLang()
+    if (browserLanguage) {
+      browserLanguage = `locale-${browserLanguage}`
+      if (this.translate.langs.includes(browserLanguage)) {
+        this.translate.use(browserLanguage)
+      } else {
+        this.translate.use(this.translate.getDefaultLang())
+      }
+    }
 
     // Initialize
     this.navigationItemList = new Set<Link>()
@@ -57,8 +63,8 @@ export class ApplicationComponent implements OnInit {
   }
 
   private builtInNavigationItems(): void {
-    this.navigationItemList.add(new Link("navigation.home", "/"))
-    this.navigationItemList.add(new Link("navigation.statistics", "/statistics"))
+    this.navigationItemList.add(new Link("core.navigation.home", "/"))
+    this.navigationItemList.add(new Link("core.navigation.statistics", "/statistics"))
   }
 
   private builtInSections(): void {
@@ -71,15 +77,16 @@ export class ApplicationComponent implements OnInit {
       linkArray[iterator] = link
       iterator++
     }
-    const section = new Section("Navigation", linkArray)
+
+    const section = new Section("core.footer.navigation", linkArray)
     this.sectionSet.add(section)
-    this.sectionSet.add(new Section("Company", [
-      new Link("About", ""),
-      new Link("Contacts", ""),
-      new Link("News", "")
+    this.sectionSet.add(new Section("core.footer.company", [
+      new Link("core.footer.about", ""),
+      new Link("core.footer.contacts", ""),
+      new Link("core.footer.news", "")
     ]))
-    this.sectionSet.add(new Section("Resources", [
-      new Link("Newsletters", "")
+    this.sectionSet.add(new Section("core.footer.resources", [
+      new Link("core.footer.newsletters", "")
     ]))
   }
 

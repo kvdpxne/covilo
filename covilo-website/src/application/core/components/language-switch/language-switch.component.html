@@ -4,7 +4,7 @@
           (click)="changeLanguage(language)"
           class="btn p-2"
           type="button">
-    {{ language }}
+    {{ "core.languageSwitch." + language | translate }}
   </button>
 
 
@@ -19,5 +19,5 @@
         type="button">
 
   <i class="bi bi-translate"></i>
-  {{ "" + currentLanguage | translate }}
+  {{ "core.languageSwitch." + currentLanguage | translate }}
 </button>

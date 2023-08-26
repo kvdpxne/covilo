@@ -10,17 +10,16 @@ export class LanguageSwitchComponent {
 
   private readonly translateService: TranslateService;
 
-  public currentLanguage: string;
-
   constructor(translateService: TranslateService) {
     this.translateService = translateService;
-    this.currentLanguage = "English"
   }
-
-  name = 'World';
 
   public get languages(): string[] {
     return this.translateService.langs;
+  }
+
+  public get currentLanguage(): string {
+    return this.translateService.currentLang;
   }
 
   togglePopover(popover: NgbPopover) {

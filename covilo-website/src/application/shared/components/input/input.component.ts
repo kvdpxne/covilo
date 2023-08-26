@@ -48,7 +48,7 @@ export class InputComponent implements AfterViewInit, OnInit {
 
   ngOnInit(): void {
     if (!this.placeholder) {
-      this.placeholder = `word.${this.name}`
+      this.placeholder = `shared.common.${this.name}`
     }
   }
 
