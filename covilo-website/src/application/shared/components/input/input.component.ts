@@ -8,6 +8,7 @@ import {
   Output,
   ViewChild
 } from "@angular/core"
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: "a-input",
@@ -18,6 +19,8 @@ import {
 })
 export class InputComponent implements AfterViewInit, OnInit {
 
+  private readonly translateService: TranslateService
+
   // current value in the input selector
   value: string = ""
   @Input() name!: string
@@ -27,6 +30,10 @@ export class InputComponent implements AfterViewInit, OnInit {
   @Output() key: EventEmitter<any> = new EventEmitter<any>()
   @ViewChild("input")
   private readonly input?: ElementRef<HTMLInputElement>
+
+  constructor(translateService: TranslateService) {
+    this.translateService = translateService
+  }
 
   getSuggestionReadableName(entity: any): string {
     if ("nationalName" in entity) {
@@ -41,8 +48,12 @@ export class InputComponent implements AfterViewInit, OnInit {
     if ("nationalName" in entity) {
       this.set(entity.nationalName)
     } else {
-      // const translated = this.translate.transform(`country.${entity.key}`)
-      this.set(entity.name)
+      let translated: string = "";
+      this.translateService.get(`country.${entity.name}`).subscribe({
+        next: (value) => translated = value
+      });
+
+      this.set(translated)
     }
   }
 

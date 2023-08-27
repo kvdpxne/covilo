@@ -76,5 +76,9 @@
       "region": "Region",
       "city": "Miasto"
     }
+  },
+
+  "country": {
+    "poland": "Polska"
   }
 }
