@@ -104,7 +104,15 @@ export class ResultDetailsComponent implements OnInit {
   }
 
   public get max(): number {
-    return this.crimes ? this.crimes.length : 0;
+    if (this.filteredCrimes) {
+      return this.filteredCrimes.length;
+    }
+
+    if (this.crimes) {
+      return this.crimes.length;
+    }
+
+    return 0;
   }
 
   public ngOnInit(): void {
