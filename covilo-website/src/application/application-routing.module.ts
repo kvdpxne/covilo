@@ -1,11 +1,13 @@
 import {NgModule} from "@angular/core"
 import {RouterModule, Routes} from "@angular/router"
 import {
+  ComingSoonComponent,
   HomeComponent,
   PageNotFoundComponent,
   ResultDetailsComponent,
   StatisticsComponent
-} from "./apperance"
+} from "./apperance";
+import {ReportingComponent} from "./reporting/reporting.component";
 
 const routes: Routes = [
   {
@@ -20,6 +22,14 @@ const routes: Routes = [
   {
     path: "statistics",
     component: StatisticsComponent
+  },
+  {
+    path: "reporting",
+    component: ReportingComponent
+  },
+  {
+    path: "coming-soon",
+    component: ComingSoonComponent
   },
   {
     path: "**",

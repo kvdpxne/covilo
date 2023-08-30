@@ -30,6 +30,8 @@ import {
 } from "./apperance"
 import {MeModule} from "./me/me.module";
 import {LineChartModule} from "@swimlane/ngx-charts";
+import { ReportingComponent } from './reporting/reporting.component';
+import { ComingSoonComponent } from "./apperance";
 
 @NgModule({
   declarations: [
@@ -37,7 +39,9 @@ import {LineChartModule} from "@swimlane/ngx-charts";
     HomeComponent,
     PageNotFoundComponent,
     ResultDetailsComponent,
-    StatisticsComponent
+    StatisticsComponent,
+    ReportingComponent,
+    ComingSoonComponent
   ],
   imports: [
     BrowserModule,
