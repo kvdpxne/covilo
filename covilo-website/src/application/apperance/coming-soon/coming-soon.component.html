@@ -1,1 +1,52 @@
-<p>coming-soon works!</p>
+<div class="d-md-flex">
+  <div class="container d-md-flex align-items-md-center vh-md-75">
+
+      <div class="col-md-6">
+        <div class="mb-4">
+          <h1>We're coming soon.</h1>
+          <p>
+            {{ "appearance.comingSoon.description" | translate }}
+          </p>
+        </div>
+
+        <div class="row mb-5">
+          <div class="col-3">
+            <h2 class="h1 text-primary mb-0">
+              {{ leftDays }}
+            </h2>
+            <h5 class="mb-0">
+              {{ "appearance.comingSoon.days" | translate }}
+            </h5>
+          </div>
+
+          <div class="col-3">
+            <h2 class="h1 text-primary mb-0">
+              {{ leftHours }}
+            </h2>
+            <h5 class="mb-0">
+              {{ "appearance.comingSoon.hours" | translate }}
+            </h5>
+          </div>
+
+          <div class="col-3">
+            <h2 class="h1 text-primary mb-0">
+              {{ leftMinutes }}
+            </h2>
+            <h5 class="mb-0">
+              {{ "appearance.comingSoon.minutes" | translate }}
+            </h5>
+          </div>
+
+          <div class="col-3">
+            <h2 class="h1 text-primary mb-0">
+              {{ leftSeconds }}
+            </h2>
+            <h5 class="mb-0">
+              {{ "appearance.comingSoon.seconds" | translate }}
+            </h5>
+          </div>
+        </div>
+
+      </div>
+  </div>
+</div>

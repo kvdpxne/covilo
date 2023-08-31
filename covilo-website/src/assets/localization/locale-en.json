@@ -2,6 +2,14 @@
   "appearance": {
     "home": {
       "search": "Search"
+    },
+    "comingSoon": {
+      "title": "We're coming soon.",
+      "description": "Our website is under construction. We'll be here soon with our new awesome site.",
+      "days": "Days",
+      "hours": "Hours",
+      "minutes": "Minutes",
+      "seconds": "Seconds"
     }
   },
   "authentication": {
