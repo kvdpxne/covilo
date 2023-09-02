@@ -26,6 +26,10 @@ public class Country {
   private String name;
 
   @Enumerated(EnumType.STRING)
+  @Column(name = "administrative_division_type")
+  private AdministrativeDivisionType administrativeDivisionType;
+
+  @Enumerated(EnumType.STRING)
   @Column(name = "_continent", nullable = false)
   private Continent continent;
 

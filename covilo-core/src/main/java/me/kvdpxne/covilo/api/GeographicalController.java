@@ -33,7 +33,8 @@ public class GeographicalController {
     return ResponseEntity.ok(countryRepository.findAll().stream().map(country -> new CountryDto(
       country.getIdentifier(),
       country.getName(),
-      country.getContinent().name()
+      country.getContinent().name(),
+      country.getAdministrativeDivisionType().name()
     )).toList());
   }
 
