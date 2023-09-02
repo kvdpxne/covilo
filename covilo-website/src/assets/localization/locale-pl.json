@@ -3,6 +3,10 @@
     "home": {
       "search": "Szukaj"
     },
+    "pageNotFound": {
+      "description": "Strona, której szukasz, została przeniesiona, usunięta lub mogła nigdy nie istnieć.",
+      "home": "Przejdź do strony głównej"
+    },
     "comingSoon": {
       "title": "We're coming soon.",
       "description": "Nasza strona internetowa jest w budowie. Wkrótce będziemy tu z naszą nową, niesamowitą witryną.",

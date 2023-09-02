@@ -3,6 +3,10 @@
     "home": {
       "search": "Search"
     },
+    "pageNotFound": {
+      "description": "The page you are looking for was moved, removed or might never existed.",
+      "home": "Go to homepage"
+    },
     "comingSoon": {
       "title": "We're coming soon.",
       "description": "Our website is under construction. We'll be here soon with our new awesome site.",
