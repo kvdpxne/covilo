@@ -2,8 +2,10 @@ package me.kvdpxne.covilo.infrastructure.configuration;
 
 import me.kvdpxne.covilo.application.PasswordEncodingUseCase;
 import me.kvdpxne.covilo.application.UserLifecycleUseCase;
+import me.kvdpxne.covilo.domain.persistence.CrimeRepository;
 import me.kvdpxne.covilo.domain.persistence.TokenRepository;
 import me.kvdpxne.covilo.domain.persistence.UserRepository;
+import me.kvdpxne.covilo.domain.service.CrimeLifecycleService;
 import me.kvdpxne.covilo.domain.service.UserAuthenticationService;
 import me.kvdpxne.covilo.domain.service.UserLifecycleService;
 import me.kvdpxne.covilo.infrastructure.jwts.TokenService;
@@ -13,6 +15,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 
 @Configuration
 public class BeanConfiguration {
+
+  @Bean
+  public CrimeLifecycleService crimeLifecycleService(
+    final CrimeRepository crimeRepository
+  ) {
+    return new CrimeLifecycleService(crimeRepository);
+  }
 
   @Bean
   public UserLifecycleService userLifecycleService(

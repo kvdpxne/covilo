@@ -65,8 +65,6 @@ public class GeographicalController {
       .province(Province.builder().identifier(identifier).build())
       .build();
 
-    System.out.println(sampler);
-
     final ExampleMatcher exampleMatcher = ExampleMatcher.matching()
       .withIgnorePaths("population")
       .withIgnoreNullValues();

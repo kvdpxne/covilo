@@ -1,5 +1,6 @@
 package me.kvdpxne.covilo.application.mapper;
 
+import me.kvdpxne.covilo.api.request.ReportCrimeRequest;
 import me.kvdpxne.covilo.application.dto.CategoryDto;
 import me.kvdpxne.covilo.application.dto.CrimeDto;
 import me.kvdpxne.covilo.domain.model.Category;
@@ -13,4 +14,6 @@ public interface CrimeMapper {
   CategoryDto toResponse(final Category source);
 
   CrimeDto toResponse(final Crime source);
+
+  Crime toCrimeWithRequest(final ReportCrimeRequest request);
 }

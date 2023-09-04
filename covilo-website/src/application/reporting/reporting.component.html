@@ -1,7 +1,92 @@
-<input type="text">
-<input type="text">
-<input type="text">
-<input type="text">
-<input type="text">
-<input type="text">
-<input type="text">
+<div class="position-relative pt-2 pt-lg-0 pb-5">
+  <div class="container position-relative zindex-5 pb-2 pb-md-4 pb-lg-5">
+
+    <div class="row justify-content-center text-center pt-xl-2 pb-4 mb-1 mb-lg-3">
+
+      <div class="col-xl-6 col-lg-7 col-md-8 col-sm-11">
+        <h2 class="mb-4">Let's Change the Game Together</h2>
+        <p class="text-muted mb-0">Like what you have seen? Let’s get started. Just fill in a few details and we will get in touch as soon as possible.</p>
+      </div>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-md-10">
+
+        <form #formElement="ngForm" (ngSubmit)="submit()" class="row">
+
+          <div class="col-sm-6 mb-4">
+            <a-input (key)="setCountry($event)"
+                     [disabled]="false"
+                     [suggestions]="countries"
+                     name="country"/>
+
+          </div>
+
+          <div class="col-sm-6 mb-4">
+            <a-input (key)="setRegion($event)"
+                     [disabled]="canEnabled(currentCountry)"
+                     [suggestions]="regions"
+                     name="region"/>
+
+          </div>
+
+          <div class="col-sm-6 mb-4">
+            <a-input (key)="setCity($event)"
+                     [disabled]="canEnabled(currentProvince)"
+                     [suggestions]="cities"
+                     name="city"/>
+
+          </div>
+
+          <div class="col-sm-6 mb-4"></div>
+
+          <div class="col-sm-6 mb-4">
+            <label class="form-label">Data</label>
+
+            <input [formControl]="datetime"
+                   class="form-select"
+                   type="date">
+          </div>
+
+          <div class="col-sm-6 mb-4">
+            <label class="form-label">Godzina</label>
+            <input type="time" class="form-select">
+          </div>
+
+          <div class="col-sm-6 mb-4">
+            <label for="people" class="form-label">Type</label>
+            <select [formControl]="category"
+                    id="people"
+                    class="form-select">
+
+              <option *ngFor="let category of categories"
+                      [value]="category.name"
+                      [ngValue]="category">
+                {{ category.name }}
+              </option>
+
+            </select>
+          </div>
+
+          <div class="col-12 mb-4">
+            <label for="message" class="form-label">Description</label>
+            <textarea [formControl]="description"
+                      id="message"
+                      class="form-control"
+                      rows="4"
+                      required>
+
+            </textarea>
+          </div>
+
+          <div class="col-12 text-center pt-2 pt-md-3 pt-lg-4">
+            <button type="submit" class="btn btn-primary shadow-primary btn-lg">
+              Submit
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,10 +1,17 @@
 import {City, User} from "../../core";
+import {Category} from "../../core/models/category";
 
-interface ReportCrimeRequest {
+export interface ReportCrimeRequest {
 
-  place: City
+  datetime: Date;
 
-  reporter?: User;
+  city: City;
 
-  confirmed: boolean
+  reporter: User | null;
+
+  category: Category;
+
+  description?: string;
+
+  confirmed: boolean;
 }

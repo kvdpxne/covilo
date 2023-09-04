@@ -64,6 +64,7 @@ export class ApplicationComponent implements OnInit {
 
   private builtInNavigationItems(): void {
     this.navigationItemList.add(new Link("core.navigation.home", "/"))
+    this.navigationItemList.add(new Link("core.navigation.report", "/reporting"))
     this.navigationItemList.add(new Link("core.navigation.statistics", "/statistics"))
   }
 
