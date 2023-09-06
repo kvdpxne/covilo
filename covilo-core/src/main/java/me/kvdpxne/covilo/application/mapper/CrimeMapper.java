@@ -1,6 +1,6 @@
 package me.kvdpxne.covilo.application.mapper;
 
-import me.kvdpxne.covilo.api.request.ReportCrimeRequest;
+import me.kvdpxne.covilo.application.payload.ReportCrimeRequest;
 import me.kvdpxne.covilo.application.dto.CategoryDto;
 import me.kvdpxne.covilo.application.dto.CrimeDto;
 import me.kvdpxne.covilo.domain.model.Category;
@@ -11,9 +11,11 @@ import org.mapstruct.MappingConstants;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface CrimeMapper {
 
-  CategoryDto toResponse(final Category source);
+  Crime toDomain(final CrimeDto source);
 
-  CrimeDto toResponse(final Crime source);
+  Crime toDomain(final ReportCrimeRequest request);
 
-  Crime toCrimeWithRequest(final ReportCrimeRequest request);
+  CrimeDto toDto(final Crime source);
+
+  CategoryDto toDto(final Category source);
 }

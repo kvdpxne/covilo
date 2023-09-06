@@ -1,4 +1,4 @@
-package me.kvdpxne.covilo.api.request;
+package me.kvdpxne.covilo.application.payload;
 
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;

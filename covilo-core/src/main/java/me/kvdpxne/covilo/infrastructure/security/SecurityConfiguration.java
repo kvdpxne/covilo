@@ -46,6 +46,7 @@ public class SecurityConfiguration {
           "/api/0.1.0/geographical/**",
           "/api/0.1.0/search/**",
           "/api/0.1.0/crimes/**",
+          "/api/0.1.0/crime/**",
           "/api/0.1.0/auth/**",
 
           "/v2/api-docs",

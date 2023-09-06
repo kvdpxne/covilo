@@ -26,9 +26,14 @@ public class CrimeLifecycleService implements CrimeLifecycleUseCase {
   public Crime createCrime(final Crime crime) throws CrimeAlreadyExistsException {
     Objects.requireNonNull(crime);
 
-    if (this.crimeRepository.existsById(crime.getIdentifier())) {
-      throw new CrimeAlreadyExistsException("");
-    }
+    final var identifier = crime.getIdentifier();
+//    if (null != identifier) {
+      //
+      //
+      if (this.crimeRepository.existsById(identifier)) {
+        throw new CrimeAlreadyExistsException("");
+      }
+//    }
 
     final Crime created = this.crimeRepository.save(crime);
     logger.debug("Created crime: {}", crime);

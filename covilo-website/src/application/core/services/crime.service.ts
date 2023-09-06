@@ -3,7 +3,7 @@ import {Observable} from "rxjs";
 import {ApiHttpClientService} from "../../shared";
 import {Crime} from "../index";
 import {Category} from "../models/category";
-import {ReportCrimeRequest} from "../../reporting/playload/report-crime-request";
+import {ReportCrimeRequest} from "../playload/report-crime-request";
 
 @Injectable({
   providedIn: "root"
@@ -27,6 +27,6 @@ export class CrimeService {
   }
 
   public report(request: ReportCrimeRequest): Observable<Crime> {
-    return this.api.post("report", request)
+    return this.api.post2<Crime>("crime/report", request)
   }
 }

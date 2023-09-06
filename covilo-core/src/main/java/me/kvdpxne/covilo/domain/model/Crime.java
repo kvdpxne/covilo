@@ -18,10 +18,11 @@ import java.util.UUID;
 @Table(name = "_crime")
 public class Crime {
 
+  @Builder.Default
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
   @Column(name = "_identifier", nullable = false, updatable = false)
-  private UUID identifier;
+  private UUID identifier = UUID.randomUUID();
 
   @Column(name = "_title")
   private String title;
@@ -41,8 +42,8 @@ public class Crime {
   private LocalDateTime time;
 
   @ToString.Exclude
-  @ManyToOne(optional = false)
-  @JoinColumn(name = "_reporter", nullable = false)
+  @ManyToOne
+  @JoinColumn(name = "_reporter")
   private User reporter;
 
   @ToString.Exclude

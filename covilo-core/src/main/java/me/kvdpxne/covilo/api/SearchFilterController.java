@@ -22,7 +22,7 @@ public final class SearchFilterController {
   public Collection<CategoryDto> getCategories() {
     return categoryRepository.findAll()
       .stream()
-      .map(crimeMapper::toResponse)
+      .map(crimeMapper::toDto)
       .toList();
   }
 }

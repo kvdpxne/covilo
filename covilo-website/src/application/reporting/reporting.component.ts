@@ -4,7 +4,7 @@ import {ActivatedRoute} from "@angular/router";
 import {Continent} from "../core/models/continent";
 import {Category} from "../core/models/category";
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
-import {ReportCrimeRequest} from "./playload/report-crime-request";
+import {ReportCrimeRequest} from "../core/playload/report-crime-request";
 
 interface ReportForm {
 
@@ -182,7 +182,7 @@ export class ReportingComponent {
   public submit(): void {
     const datetime: Date | null = this.datetime.value
     const city: City | null = this.city.value;
-    const reporter: User | null = null;
+    const reporter: User | undefined = undefined;
     const category: Category | null = this.category.value;
     const description: string | null = this.description.value;
 
@@ -191,17 +191,20 @@ export class ReportingComponent {
     }
 
     const request: ReportCrimeRequest = {
-      datetime: datetime,
-      city: city,
-      reporter: reporter,
-      category: category,
+      title: "",
       description: description,
+      categories: [category],
+      time: datetime,
+      reporter: reporter,
+      place: city,
       confirmed: false
     };
 
     console.log("log request")
     console.log(request)
 
-    this.crimeService.report(request);
+    this.crimeService.report(request).subscribe({
+      next: (value) => console.log(value)
+    })
   }
 }

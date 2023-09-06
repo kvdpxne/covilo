@@ -3,7 +3,7 @@ package me.kvdpxne.covilo.api;
 import java.util.Collection;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import me.kvdpxne.covilo.api.request.ReportCrimeRequest;
+import me.kvdpxne.covilo.application.payload.ReportCrimeRequest;
 import me.kvdpxne.covilo.application.CrimeLifecycleUseCase;
 import me.kvdpxne.covilo.application.dto.CrimeDto;
 import me.kvdpxne.covilo.application.mapper.CrimeMapper;
@@ -18,12 +18,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "api/0.1.0", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping("/api/0.1.0")
 @RequiredArgsConstructor
 public class CrimeController {
 
@@ -31,14 +32,14 @@ public class CrimeController {
   private final CrimeRepository crimeRepository;
   private final CrimeMapper crimeMapper;
 
-  @GetMapping("crimes")
+  @GetMapping("/crimes")
   public Collection<CrimeDto> getCrimes(@RequestParam UUID city) {
     return crimeRepository.findByPlace_Identifier(city, Pageable.unpaged())
-      .map(crimeMapper::toResponse)
+      .map(crimeMapper::toDto)
       .toList();
   }
 
-  @GetMapping("crime/{identifier}")
+  @GetMapping("/crime/{identifier}")
   public ResponseEntity<CrimeDto> getCrimeByIdentifier(@PathVariable final UUID identifier) {
     final Crime crime;
 
@@ -48,13 +49,13 @@ public class CrimeController {
       return ResponseEntity.notFound().build();
     }
 
-    final CrimeDto crimeDto = this.crimeMapper.toResponse(crime);
+    final CrimeDto crimeDto = this.crimeMapper.toDto(crime);
     return ResponseEntity.ok(crimeDto);
   }
 
-  @PostMapping("report")
-  public ResponseEntity<CrimeDto> reportCrime(final ReportCrimeRequest request) {
-    Crime crime = this.crimeMapper.toCrimeWithRequest(request);
+  @PostMapping("/crime/report")
+  public ResponseEntity<CrimeDto> reportCrime(@RequestBody ReportCrimeRequest request) {
+    Crime crime = this.crimeMapper.toDomain(request);
 
     try {
       crime = this.crimeLifecycleUseCase.createCrime(crime);
@@ -62,7 +63,7 @@ public class CrimeController {
       return ResponseEntity.status(HttpStatus.CONFLICT).build();
     }
 
-    final CrimeDto crimeDto = this.crimeMapper.toResponse(crime);
+    final CrimeDto crimeDto = this.crimeMapper.toDto(crime);
     return ResponseEntity.ok(crimeDto);
   }
 }
