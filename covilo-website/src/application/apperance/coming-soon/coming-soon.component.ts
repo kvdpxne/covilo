@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from "@angular/core";
-import {interval, Subscription} from "rxjs";
+import {interval, Subscription, timer} from "rxjs";
 
 @Component({
   selector: "route-coming-soon",
@@ -47,7 +47,7 @@ export class ComingSoonComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.subscription = interval(1000).subscribe((): void => {
+    this.subscription = timer(0, 1000).subscribe((): void => {
       // The time difference between the current time and the end time.
       const now: number = this.endTime - Date.now();
 
