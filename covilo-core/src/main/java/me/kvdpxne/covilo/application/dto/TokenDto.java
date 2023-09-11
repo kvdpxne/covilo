@@ -1,4 +1,4 @@
-package me.kvdpxne.covilo.api.response;
+package me.kvdpxne.covilo.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationResponse {
+public class TokenDto {
 
   @JsonProperty("accessToken")
   private String accessToken;

@@ -15,61 +15,115 @@ import me.kvdpxne.covilo.domain.persistence.UserRepository;
  */
 @Slf4j
 @RequiredArgsConstructor
-public final class UserLifecycleService
-  implements UserLifecycleUseCase {
+public final class UserLifecycleService implements UserLifecycleUseCase {
 
-  private final UserRepository repository;
-
+  private final UserRepository userRepository;
   private final PasswordEncodingUseCase passwordEncodingUseCase;
 
+  /**
+   * @throws UserNotFoundException If the user with the given identifier could
+   *                               not be found.
+   */
   @Override
   public User getUserByIdentifier(
     final UUID identifier
   ) throws UserNotFoundException {
-    return this.repository.findById(identifier).orElseThrow(() -> new UserNotFoundException(""));
+    final User user = this.userRepository.findUserByIdentifierOrNull(identifier);
+    if (null == user) {
+      throw new UserNotFoundException(
+        "User with identifier \"%s\" does not exist.",
+        identifier
+      );
+    }
+    return user;
   }
 
+  /**
+   * @throws UserNotFoundException If the user with the given email address
+   *                               could not be found.
+   */
   @Override
   public User getUserByEmail(
     final String email
   ) throws UserNotFoundException {
-    return this.repository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(""));
+    final User user = this.userRepository.findUserByEmailOrNull(email);
+    if (null == user) {
+      throw new UserNotFoundException(
+        "User with email address \"%s\" does not exist.",
+        email
+      );
+    }
+    return user;
   }
 
-  @Override
-  public User createUser(
-    final User source
+  /**
+   * @throws UserAlreadyExistsException If the specified user has an identifier
+   *                                    that is already assigned to another
+   *                                    user.
+   */
+  private void checkExistsUserByIdentifier(
+    final User user
   ) throws UserAlreadyExistsException {
-    // A unique user identifier.
-    final var identifier = source.getIdentifier();
-
-    // Checks if a user already exists in the database based on a unique
-    // identifier.
-    if (this.repository.existsById(identifier)) {
+    final UUID identifier = user.identifier();
+    if (this.userRepository.existsUserByIdentifier(identifier)) {
       throw new UserAlreadyExistsException(
         "User with identifier \"%s\" already exists.",
         identifier
       );
     }
+  }
 
-    final var email = source.getEmail();
-
-    if (this.repository.existsByEmail(email)) {
+  /**
+   * @throws UserAlreadyExistsException If the specified user has an email
+   *                                    address that is already assigned to
+   *                                    another user.
+   */
+  private void checkExistsUserByEmail(
+    final User user
+  ) throws UserAlreadyExistsException {
+    final String email = user.email();
+    if (this.userRepository.existsUserByEmail(email)) {
       throw new UserAlreadyExistsException(
         "User with email \"%s\" already exists.",
         email
       );
     }
+  }
 
-    //
-    final var encoded = source.toBuilder()
-      .password(this.passwordEncodingUseCase.encode(source.getPassword()))
-      .build();
+  /**
+   * @throws UserAlreadyExistsException If the user's identifier or email
+   *                                    address is already assigned to another
+   *                                    user.
+   */
+  @Override
+  public User createUser(
+    final User source
+  ) throws UserAlreadyExistsException {
+    // Checks whether the identifier and email address of the given user are
+    // not already assigned to another user because the identifier and email
+    // address should be unique.
+    this.checkExistsUserByIdentifier(source);
+    this.checkExistsUserByEmail(source);
 
-    //
-    final var created = this.repository.save(encoded);
-    logger.info("Created user: {}", created);
+    final String encodedPassword = this.passwordEncodingUseCase.encode(
+      source.password()
+    );
 
-    return created;
+    User user = new User(
+      source.identifier(),
+      source.email(),
+      encodedPassword,
+      source.role(),
+      source.firstName(),
+      source.lastName(),
+      source.gender(),
+      source.birthDate(),
+      source.livingPlace()
+    );
+
+    user = this.userRepository.insertUser(user);
+    logger.info("Created user: {}", user);
+
+    return user;
   }
 }

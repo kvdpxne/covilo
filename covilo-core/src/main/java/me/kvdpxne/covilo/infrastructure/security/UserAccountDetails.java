@@ -1,7 +1,7 @@
 package me.kvdpxne.covilo.infrastructure.security;
 
 import lombok.RequiredArgsConstructor;
-import me.kvdpxne.covilo.domain.model.User;
+import me.kvdpxne.covilo.infrastructure.jpa.entity.UserEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,9 +12,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public final class UserAccountDetails implements UserDetails {
 
-  private final User user;
+  private final UserEntity user;
 
-  public User getUser() {
+  public UserEntity getUser() {
     return this.user;
   }
 

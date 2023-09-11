@@ -5,8 +5,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import me.kvdpxne.covilo.domain.persistence.TokenRepository;
-import me.kvdpxne.covilo.infrastructure.jwts.TokenService;
+import me.kvdpxne.covilo.infrastructure.jpa.repository.TokenDao;
+import me.kvdpxne.covilo.infrastructure.jwt.TokenService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,7 +29,7 @@ public final class TokenAuthenticationRequestFilter extends OncePerRequestFilter
 
   private final TokenService tokenService;
   private final UserDetailsService userDetailsService;
-  private final TokenRepository tokenRepository;
+  private final TokenDao tokenRepository;
 
   /**
    * Same contract as for doFilter, but guaranteed to be just invoked once per

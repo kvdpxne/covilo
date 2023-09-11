@@ -1,11 +1,11 @@
-package me.kvdpxne.covilo.infrastructure.jwts;
+package me.kvdpxne.covilo.infrastructure.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import me.kvdpxne.covilo.domain.model.User;
+import me.kvdpxne.covilo.infrastructure.jpa.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -41,26 +41,26 @@ public final class TokenService {
     return claimsResolver.apply(claims);
   }
 
-  public String generateToken(User userDetails) {
+  public String generateToken(UserEntity userDetails) {
     return generateToken(new HashMap<>(), userDetails);
   }
 
   public String generateToken(
     Map<String, Object> extraClaims,
-    User userDetails
+    UserEntity userDetails
   ) {
     return buildToken(extraClaims, userDetails, jwtExpiration);
   }
 
   public String generateRefreshToken(
-    User userDetails
+    UserEntity userDetails
   ) {
     return buildToken(new HashMap<>(), userDetails, refreshExpiration);
   }
 
   private String buildToken(
     Map<String, Object> extraClaims,
-    User userDetails,
+    UserEntity userDetails,
     long expiration
   ) {
     return Jwts
@@ -73,7 +73,7 @@ public final class TokenService {
       .compact();
   }
 
-  public boolean isTokenValid(String token, User userDetails) {
+  public boolean isTokenValid(String token, UserEntity userDetails) {
     final String username = extractUsername(token);
     return (username.equals(userDetails.getEmail())) && !isTokenExpired(token);
   }

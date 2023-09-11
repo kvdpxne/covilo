@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import me.kvdpxne.covilo.application.payload.LoginRequest;
 import me.kvdpxne.covilo.application.payload.SignupRequest;
-import me.kvdpxne.covilo.api.response.AuthenticationResponse;
+import me.kvdpxne.covilo.application.dto.TokenDto;
 import me.kvdpxne.covilo.domain.exception.AuthenticationException;
 import me.kvdpxne.covilo.domain.exception.UserNotFoundException;
 import me.kvdpxne.covilo.domain.service.UserAuthenticationService;
@@ -25,14 +25,14 @@ public class AuthenticationController {
   private final UserAuthenticationService service;
 
   @PostMapping("/register")
-  public ResponseEntity<AuthenticationResponse> register(
+  public ResponseEntity<TokenDto> register(
     @RequestBody final SignupRequest request
   ) throws AuthenticationException {
     return ResponseEntity.ok(service.signup(request));
   }
 
   @PostMapping("/login")
-  public ResponseEntity<AuthenticationResponse> login(@RequestBody LoginRequest request) throws UserNotFoundException {
+  public ResponseEntity<TokenDto> login(@RequestBody LoginRequest request) throws UserNotFoundException {
     return ResponseEntity.ok(service.login(request));
   }
 

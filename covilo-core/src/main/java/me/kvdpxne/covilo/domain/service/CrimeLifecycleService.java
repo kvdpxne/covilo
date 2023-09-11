@@ -7,23 +7,23 @@ import lombok.extern.slf4j.Slf4j;
 import me.kvdpxne.covilo.application.CrimeLifecycleUseCase;
 import me.kvdpxne.covilo.domain.exception.CrimeAlreadyExistsException;
 import me.kvdpxne.covilo.domain.exception.CrimeNotFoundException;
-import me.kvdpxne.covilo.domain.model.Crime;
-import me.kvdpxne.covilo.domain.persistence.CrimeRepository;
+import me.kvdpxne.covilo.infrastructure.jpa.entity.CrimeEntity;
+import me.kvdpxne.covilo.infrastructure.jpa.repository.CrimeDao;
 
 @Slf4j
 @RequiredArgsConstructor
 public class CrimeLifecycleService implements CrimeLifecycleUseCase {
 
-  private final CrimeRepository crimeRepository;
+  private final CrimeDao crimeRepository;
 
   @Override
-  public Crime getCrimeByIdentifier(final UUID identifier) throws CrimeNotFoundException {
+  public CrimeEntity getCrimeByIdentifier(final UUID identifier) throws CrimeNotFoundException {
     return this.crimeRepository.findById(identifier)
       .orElseThrow(CrimeNotFoundException::new);
   }
 
   @Override
-  public Crime createCrime(final Crime crime) throws CrimeAlreadyExistsException {
+  public CrimeEntity createCrime(final CrimeEntity crime) throws CrimeAlreadyExistsException {
     Objects.requireNonNull(crime);
 
     final var identifier = crime.getIdentifier();
@@ -35,7 +35,7 @@ public class CrimeLifecycleService implements CrimeLifecycleUseCase {
       }
 //    }
 
-    final Crime created = this.crimeRepository.save(crime);
+    final CrimeEntity created = this.crimeRepository.save(crime);
     logger.debug("Created crime: {}", crime);
 
     return created;

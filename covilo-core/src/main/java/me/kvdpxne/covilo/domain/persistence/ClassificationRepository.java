@@ -1,10 +1,11 @@
 package me.kvdpxne.covilo.domain.persistence;
 
-import me.kvdpxne.covilo.domain.model.Classification;
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import java.util.UUID;
+import me.kvdpxne.covilo.domain.model.Classification;
 
-public interface ClassificationRepository
-  extends JpaRepository<Classification, UUID> {
+public interface ClassificationRepository {
+
+  Classification findClassificationByIdentifierOrNull(final UUID identifier);
+
+  Classification findClassificationByNameOrNull(final String name);
 }

@@ -1,7 +1,7 @@
 import {City, User} from "../index";
 import {Category} from "../models/category";
 
-export interface ReportCrimeRequest {
+export type ReportCrimeRequest = {
   title: string;
   description: string;
   categories: Category[];

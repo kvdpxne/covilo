@@ -1,7 +1,7 @@
 package me.kvdpxne.covilo.infrastructure.security;
 
 import lombok.RequiredArgsConstructor;
-import me.kvdpxne.covilo.domain.persistence.UserRepository;
+import me.kvdpxne.covilo.infrastructure.jpa.repository.UserDao;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public final class UserAccountDetailsService implements UserDetailsService {
 
-  private final UserRepository userRepository;
+  private final UserDao userRepository;
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

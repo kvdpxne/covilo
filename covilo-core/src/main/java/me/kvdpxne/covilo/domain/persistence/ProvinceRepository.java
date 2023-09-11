@@ -1,9 +1,11 @@
 package me.kvdpxne.covilo.domain.persistence;
 
-import me.kvdpxne.covilo.domain.model.Province;
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import java.util.UUID;
+import me.kvdpxne.covilo.domain.model.Province;
 
-public interface ProvinceRepository extends JpaRepository<Province, UUID> {
+public interface ProvinceRepository {
+
+  Province findProvinceByIdentifierOrNull(final UUID identifier);
+
+  Province findProvinceByNameOrNull(final String name);
 }

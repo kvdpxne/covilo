@@ -2,8 +2,8 @@ package me.kvdpxne.covilo.api;
 
 import jakarta.servlet.http.HttpServletRequest;
 import me.kvdpxne.covilo.application.dto.UserDto;
-import me.kvdpxne.covilo.domain.model.Token;
-import me.kvdpxne.covilo.domain.persistence.TokenRepository;
+import me.kvdpxne.covilo.infrastructure.jpa.entity.TokenEntity;
+import me.kvdpxne.covilo.infrastructure.jpa.repository.TokenDao;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "api/0.1.0/")
 public class UserController {
 
-  private final TokenRepository tokenRepository;
+  private final TokenDao tokenRepository;
 
-  public UserController(TokenRepository tokenRepository) {
+  public UserController(TokenDao tokenRepository) {
     this.tokenRepository = tokenRepository;
   }
 
@@ -25,7 +25,7 @@ public class UserController {
         .substring("Bearer ".length());
 
     return tokenRepository.findByToken(token)
-      .map(Token::getUser)
+      .map(TokenEntity::getUser)
       .map(it -> new UserDto(
         it.getIdentifier(),
         it.getEmail(),

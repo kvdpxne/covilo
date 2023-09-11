@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.kvdpxne.covilo.application.payload.LoginRequest;
 import me.kvdpxne.covilo.application.payload.SignupRequest;
-import me.kvdpxne.covilo.api.response.AuthenticationResponse;
+import me.kvdpxne.covilo.application.dto.TokenDto;
 import me.kvdpxne.covilo.application.UserAuthenticationUseCase;
 import me.kvdpxne.covilo.application.UserLifecycleUseCase;
 import me.kvdpxne.covilo.domain.exception.AuthenticationException;
@@ -19,12 +19,14 @@ import me.kvdpxne.covilo.domain.exception.UserAlreadyExistsException;
 import me.kvdpxne.covilo.domain.exception.UserNotFoundException;
 import me.kvdpxne.covilo.domain.model.Gender;
 import me.kvdpxne.covilo.domain.model.Role;
-import me.kvdpxne.covilo.domain.model.Token;
-import me.kvdpxne.covilo.domain.model.TokenType;
 import me.kvdpxne.covilo.domain.model.User;
-import me.kvdpxne.covilo.domain.persistence.TokenRepository;
 import me.kvdpxne.covilo.domain.persistence.UserRepository;
-import me.kvdpxne.covilo.infrastructure.jwts.TokenService;
+import me.kvdpxne.covilo.infrastructure.jpa.entity.TokenEntity;
+import me.kvdpxne.covilo.domain.model.TokenType;
+import me.kvdpxne.covilo.infrastructure.jpa.entity.UserEntity;
+import me.kvdpxne.covilo.infrastructure.jpa.repository.TokenDao;
+import me.kvdpxne.covilo.infrastructure.jwt.TokenService;
+import me.kvdpxne.covilo.shared.EmailValidator;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -39,35 +41,17 @@ public final class UserAuthenticationService
 
   private final UserLifecycleUseCase userLifecycleUseCase;
 
-  private final TokenRepository tokenRepository;
+  private final TokenDao tokenRepository;
 
   private final TokenService tokenService;
 
   private final AuthenticationManager authenticationManager;
 
-  public AuthenticationResponse signup(
+  public TokenDto signup(
     final SignupRequest request
   ) throws AuthenticationException {
-    /* Gmail Special Case for Emails
-     *
-     * There's one special case that applies only to the Gmail domain: it's
-     * permission to use the character + character in the local part of the
-     * email. For the Gmail domain, the two email addresses
-     * username+something@gmail.com and username@gmail.com are the same.
-     *
-     * Also, username@gmail.com is similar to user+name@gmail.com.
-     *
-     * We must implement a slightly different regex that will pass the email
-     * validation for this special case as well:
-     */
-    var pattern = "^(?=.{1,64}@)[A-Za-z0-9+_-]+(\\.[A-Za-z0-9+_-]+)*@[^-]"
-      + "[A-Za-z0-9+-]+(\\.[A-Za-z0-9+-]+)*(\\.[A-Za-z]{2,})$";
 
-    var email = request.getEmail();
-
-    if (!email.matches(pattern)) {
-      throw new InvalidEmailAddressException();
-    }
+    EmailValidator.checkEmail(request.getEmail());
 
     var password = request.getPassword();
     var confirmPassword = request.getConfirmPassword();
@@ -86,10 +70,10 @@ public final class UserAuthenticationService
     var brithDate = request.getBirthDate();
     brithDate = null == brithDate ? LocalDate.now() : brithDate;
 
-    var user = User.builder()
+    var user = UserEntity.builder()
       .firstName(request.getFirstname())
       .lastName(request.getLastname())
-      .email(email)
+      .email(request.getEmail())
       .password(password)
       .role(role)
       .gender(gender)
@@ -106,15 +90,17 @@ public final class UserAuthenticationService
     var refreshToken = tokenService.generateRefreshToken(user);
     saveUserToken(user, jwtToken);
 
-    return AuthenticationResponse.builder()
+    return TokenDto.builder()
       .accessToken(jwtToken)
       .refreshToken(refreshToken)
       .build();
   }
 
-  public AuthenticationResponse login(
+  public TokenDto login(
     final LoginRequest request
   ) throws UserNotFoundException {
+
+
     authenticationManager.authenticate(
       new UsernamePasswordAuthenticationToken(
         request.email(),
@@ -129,14 +115,14 @@ public final class UserAuthenticationService
 
     revokeAllUserTokens(user);
     saveUserToken(user, jwtToken);
-    return AuthenticationResponse.builder()
+    return TokenDto.builder()
       .accessToken(jwtToken)
       .refreshToken(refreshToken)
       .build();
   }
 
-  private void saveUserToken(User user, String jwtToken) {
-    var token = Token.builder()
+  private void saveUserToken(UserEntity user, String jwtToken) {
+    var token = TokenEntity.builder()
       .user(user)
       .token(jwtToken)
       .tokenType(TokenType.BEARER)
@@ -146,7 +132,7 @@ public final class UserAuthenticationService
     tokenRepository.save(token);
   }
 
-  private void revokeAllUserTokens(User user) {
+  private void revokeAllUserTokens(UserEntity user) {
     var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getIdentifier());
     if (validUserTokens.isEmpty())
       return;
@@ -166,7 +152,7 @@ public final class UserAuthenticationService
       return HttpStatus.UNAUTHORIZED;
     }
     final String refreshToken = header.substring(7);
-    final Token token = tokenRepository.findByToken(refreshToken).orElse(null);
+    final TokenEntity token = tokenRepository.findByToken(refreshToken).orElse(null);
 
     System.out.println(token);
 
@@ -181,7 +167,7 @@ public final class UserAuthenticationService
         var accessToken = tokenService.generateToken(user);
         revokeAllUserTokens(user);
         saveUserToken(user, accessToken);
-        var authResponse = AuthenticationResponse.builder()
+        var authResponse = TokenDto.builder()
           .accessToken(accessToken)
           .refreshToken(refreshToken)
           .build();

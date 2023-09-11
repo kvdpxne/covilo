@@ -4,12 +4,12 @@ import lombok.RequiredArgsConstructor;
 import me.kvdpxne.covilo.application.dto.CityDto;
 import me.kvdpxne.covilo.application.dto.CountryDto;
 import me.kvdpxne.covilo.application.dto.ProvinceDto;
-import me.kvdpxne.covilo.domain.model.City;
-import me.kvdpxne.covilo.domain.model.Country;
-import me.kvdpxne.covilo.domain.model.Province;
-import me.kvdpxne.covilo.domain.persistence.CityRepository;
-import me.kvdpxne.covilo.domain.persistence.CountryRepository;
-import me.kvdpxne.covilo.domain.persistence.ProvinceRepository;
+import me.kvdpxne.covilo.infrastructure.jpa.entity.CityEntity;
+import me.kvdpxne.covilo.infrastructure.jpa.entity.CountryEntity;
+import me.kvdpxne.covilo.infrastructure.jpa.entity.ProvinceEntity;
+import me.kvdpxne.covilo.infrastructure.jpa.repository.CityDao;
+import me.kvdpxne.covilo.infrastructure.jpa.repository.CountryDao;
+import me.kvdpxne.covilo.infrastructure.jpa.repository.ProvinceDao;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.MediaType;
@@ -24,9 +24,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class GeographicalController {
 
-  private final CountryRepository countryRepository;
-  private final ProvinceRepository provinceRepository;
-  private final CityRepository cityRepository;
+  private final CountryDao countryRepository;
+  private final ProvinceDao provinceRepository;
+  private final CityDao cityRepository;
 
   @GetMapping(path = "/countries")
   public ResponseEntity<Collection<CountryDto>> getCountries() {
@@ -42,12 +42,12 @@ public class GeographicalController {
   public Collection<ProvinceDto> getProvinces(
     @RequestParam("country") UUID identifier
   ) {
-    final Province sampler = Province.builder()
-      .country(Country.builder().identifier(identifier).build())
+    final ProvinceEntity sampler = ProvinceEntity.builder()
+      .country(CountryEntity.builder().identifier(identifier).build())
       .build();
 
     final ExampleMatcher exampleMatcher = ExampleMatcher.matching().withIgnoreNullValues();
-    final Example<Province> example = Example.of(sampler, exampleMatcher);
+    final Example<ProvinceEntity> example = Example.of(sampler, exampleMatcher);
 
     return provinceRepository.findAll(example).stream().map(it ->
       new ProvinceDto(
@@ -61,15 +61,15 @@ public class GeographicalController {
   public Collection<CityDto> getCities(
     @RequestParam(name = "province") UUID identifier
   ) {
-    final City sampler = City.builder()
-      .province(Province.builder().identifier(identifier).build())
+    final CityEntity sampler = CityEntity.builder()
+      .province(ProvinceEntity.builder().identifier(identifier).build())
       .build();
 
     final ExampleMatcher exampleMatcher = ExampleMatcher.matching()
       .withIgnorePaths("population")
       .withIgnoreNullValues();
 
-    final Example<City> example = Example.of(sampler, exampleMatcher);
+    final Example<CityEntity> example = Example.of(sampler, exampleMatcher);
 
     return cityRepository.findAll(example).stream().map(it -> new CityDto(
       it.getIdentifier(),

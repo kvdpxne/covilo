@@ -1,9 +1,11 @@
 package me.kvdpxne.covilo.domain.persistence;
 
-import me.kvdpxne.covilo.domain.model.Country;
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import java.util.UUID;
+import me.kvdpxne.covilo.domain.model.Country;
 
-public interface CountryRepository extends JpaRepository<Country, UUID> {
+public interface CountryRepository {
+
+  Country findCountryByIdentifierOrNull(final UUID identifier);
+
+  Country findCountryByNameOrNull(final String name);
 }

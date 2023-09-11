@@ -9,11 +9,10 @@ import me.kvdpxne.covilo.application.dto.CrimeDto;
 import me.kvdpxne.covilo.application.mapper.CrimeMapper;
 import me.kvdpxne.covilo.domain.exception.CrimeAlreadyExistsException;
 import me.kvdpxne.covilo.domain.exception.CrimeNotFoundException;
-import me.kvdpxne.covilo.domain.model.Crime;
-import me.kvdpxne.covilo.domain.persistence.CrimeRepository;
+import me.kvdpxne.covilo.infrastructure.jpa.entity.CrimeEntity;
+import me.kvdpxne.covilo.infrastructure.jpa.repository.CrimeDao;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CrimeController {
 
   private final CrimeLifecycleUseCase crimeLifecycleUseCase;
-  private final CrimeRepository crimeRepository;
+  private final CrimeDao crimeRepository;
   private final CrimeMapper crimeMapper;
 
   @GetMapping("/crimes")
@@ -41,7 +40,7 @@ public class CrimeController {
 
   @GetMapping("/crime/{identifier}")
   public ResponseEntity<CrimeDto> getCrimeByIdentifier(@PathVariable final UUID identifier) {
-    final Crime crime;
+    final CrimeEntity crime;
 
     try {
       crime = this.crimeLifecycleUseCase.getCrimeByIdentifier(identifier);
@@ -55,7 +54,7 @@ public class CrimeController {
 
   @PostMapping("/crime/report")
   public ResponseEntity<CrimeDto> reportCrime(@RequestBody ReportCrimeRequest request) {
-    Crime crime = this.crimeMapper.toDomain(request);
+    CrimeEntity crime = this.crimeMapper.toDomain(request);
 
     try {
       crime = this.crimeLifecycleUseCase.createCrime(crime);

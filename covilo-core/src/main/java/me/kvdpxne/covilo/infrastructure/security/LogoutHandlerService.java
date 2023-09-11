@@ -3,7 +3,7 @@ package me.kvdpxne.covilo.infrastructure.security;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import me.kvdpxne.covilo.domain.persistence.TokenRepository;
+import me.kvdpxne.covilo.infrastructure.jpa.repository.TokenDao;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public final class LogoutHandlerService implements LogoutHandler {
 
-  private final TokenRepository tokenRepository;
+  private final TokenDao tokenRepository;
 
   /**
    * Causes a logout to be completed.

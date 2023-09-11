@@ -1,14 +1,9 @@
 package me.kvdpxne.covilo.domain.persistence;
 
-import me.kvdpxne.covilo.domain.model.Crime;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import java.util.UUID;
+import me.kvdpxne.covilo.domain.model.Crime;
 
-public interface CrimeRepository
-  extends JpaRepository<Crime, UUID> {
+public interface CrimeRepository {
 
-  Page<Crime> findByPlace_Identifier(UUID identifier, Pageable pageable);
+  Crime findCrimeByIdentifierOrNull(final UUID identifier);
 }

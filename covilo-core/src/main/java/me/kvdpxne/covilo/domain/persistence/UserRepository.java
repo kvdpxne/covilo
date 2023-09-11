@@ -1,14 +1,15 @@
 package me.kvdpxne.covilo.domain.persistence;
 
-import me.kvdpxne.covilo.domain.model.User;
-import org.springframework.data.repository.CrudRepository;
-
-import java.util.Optional;
 import java.util.UUID;
+import me.kvdpxne.covilo.domain.model.User;
 
-public interface UserRepository extends CrudRepository<User, UUID> {
+public interface UserRepository {
 
-  Optional<User> findByEmail(final String email);
+  User findUserByIdentifierOrNull(final UUID identifier);
+  User findUserByEmailOrNull(final String email);
 
-  boolean existsByEmail(final String email);
+  User insertUser(final User user);
+
+  boolean existsUserByIdentifier(final UUID identifier);
+  boolean existsUserByEmail(final String email);
 }
