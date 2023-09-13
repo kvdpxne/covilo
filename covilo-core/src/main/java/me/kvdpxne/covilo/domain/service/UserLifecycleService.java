@@ -109,17 +109,9 @@ public final class UserLifecycleService implements UserLifecycleUseCase {
       source.password()
     );
 
-    User user = new User(
-      source.identifier(),
-      source.email(),
-      encodedPassword,
-      source.role(),
-      source.firstName(),
-      source.lastName(),
-      source.gender(),
-      source.birthDate(),
-      source.livingPlace()
-    );
+    User user = source.toBuilder()
+      .password(encodedPassword)
+      .build();
 
     user = this.userRepository.insertUser(user);
     logger.info("Created user: {}", user);

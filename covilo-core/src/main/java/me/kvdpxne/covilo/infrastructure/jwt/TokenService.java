@@ -5,6 +5,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
+import me.kvdpxne.covilo.domain.model.User;
 import me.kvdpxne.covilo.infrastructure.jpa.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -16,21 +18,10 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Service
+@RequiredArgsConstructor
 public final class TokenService {
 
-  @Value("${application.security.jwt.secret-key}")
-  private String secretKey;
-
-  @Value("${application.security.jwt.expiration}")
-  private long jwtExpiration;
-
-  @Value("${application.security.jwt.refresh-token.expiration}")
-  private long refreshExpiration;
-
-  private Key getSignInKey() {
-    final var decoded = Decoders.BASE64.decode(this.secretKey);
-    return Keys.hmacShaKeyFor(decoded);
-  }
+  private final TokenConfiguration tokenConfiguration;
 
   public String extractUsername(String token) {
     return extractClaim(token, Claims::getSubject);
@@ -41,41 +32,9 @@ public final class TokenService {
     return claimsResolver.apply(claims);
   }
 
-  public String generateToken(UserEntity userDetails) {
-    return generateToken(new HashMap<>(), userDetails);
-  }
-
-  public String generateToken(
-    Map<String, Object> extraClaims,
-    UserEntity userDetails
-  ) {
-    return buildToken(extraClaims, userDetails, jwtExpiration);
-  }
-
-  public String generateRefreshToken(
-    UserEntity userDetails
-  ) {
-    return buildToken(new HashMap<>(), userDetails, refreshExpiration);
-  }
-
-  private String buildToken(
-    Map<String, Object> extraClaims,
-    UserEntity userDetails,
-    long expiration
-  ) {
-    return Jwts
-      .builder()
-      .setClaims(extraClaims)
-      .setSubject(userDetails.getEmail())
-      .setIssuedAt(new Date(System.currentTimeMillis()))
-      .setExpiration(new Date(System.currentTimeMillis() + expiration))
-      .signWith(getSignInKey(), SignatureAlgorithm.HS256)
-      .compact();
-  }
-
-  public boolean isTokenValid(String token, UserEntity userDetails) {
+  public boolean isTokenValid(String token, User userDetails) {
     final String username = extractUsername(token);
-    return (username.equals(userDetails.getEmail())) && !isTokenExpired(token);
+    return (username.equals(userDetails.email())) && !isTokenExpired(token);
   }
 
   private boolean isTokenExpired(String token) {
@@ -89,7 +48,7 @@ public final class TokenService {
   private Claims extractAllClaims(String token) {
     return Jwts
       .parserBuilder()
-      .setSigningKey(getSignInKey())
+      .setSigningKey(tokenConfiguration.getKey())
       .build()
       .parseClaimsJws(token)
       .getBody();

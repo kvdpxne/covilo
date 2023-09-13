@@ -1,7 +1,9 @@
 package me.kvdpxne.covilo.infrastructure.jpa.adapter;
 
+import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import me.kvdpxne.covilo.domain.model.Token;
 import me.kvdpxne.covilo.domain.persistence.TokenRepository;
@@ -25,6 +27,14 @@ public final class TokenRepositoryAdapter implements TokenRepository {
   }
 
   @Override
+  public Collection<Token> findValidTokensByUserIdentifier(final UUID identifier) {
+    return this.tokenDao.findAllValidTokenByUser(identifier)
+      .stream()
+      .map(this.tokenPersistenceMapper::toToken)
+      .toList();
+  }
+
+  @Override
   public Token findTokenByIdentifierOrNull(final UUID identifier) {
     final var entity = this.tokenDao.findById(identifier);
     return this.toTokenOrNull(entity);
@@ -41,5 +51,10 @@ public final class TokenRepositoryAdapter implements TokenRepository {
     var entity = this.tokenPersistenceMapper.toTokenEntity(token);
     entity = this.tokenDao.save(entity);
     return this.tokenPersistenceMapper.toToken(entity);
+  }
+
+  @Override
+  public void insertTokens(final Collection<Token> tokens) {
+    tokens.forEach(this::insertToken);
   }
 }

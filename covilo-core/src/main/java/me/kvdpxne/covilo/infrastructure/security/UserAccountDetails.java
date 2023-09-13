@@ -1,26 +1,25 @@
 package me.kvdpxne.covilo.infrastructure.security;
 
+import java.util.Collection;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import me.kvdpxne.covilo.infrastructure.jpa.entity.UserEntity;
+import me.kvdpxne.covilo.domain.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
-
 @RequiredArgsConstructor
 public final class UserAccountDetails implements UserDetails {
 
-  private final UserEntity user;
+  private final User user;
 
-  public UserEntity getUser() {
+  public User getUser() {
     return this.user;
   }
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    var role = this.user.getRole();
+    var role = this.user.role();
 
     var authorities = role
       .getPermissions()
@@ -34,12 +33,12 @@ public final class UserAccountDetails implements UserDetails {
 
   @Override
   public String getPassword() {
-    return this.user.getPassword();
+    return this.user.password();
   }
 
   @Override
   public String getUsername() {
-    return this.user.getEmail();
+    return this.user.email();
   }
 
   @Override

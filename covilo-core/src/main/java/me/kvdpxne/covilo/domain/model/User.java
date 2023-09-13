@@ -2,7 +2,9 @@ package me.kvdpxne.covilo.domain.model;
 
 import java.time.LocalDate;
 import java.util.UUID;
+import lombok.Builder;
 
+@Builder(toBuilder = true)
 public record User(
   UUID identifier,
   String email,
