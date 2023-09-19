@@ -53,7 +53,7 @@ public class CityEntity {
 
   @Enumerated(EnumType.STRING)
   @Column(name = "_capital")
-  private CapitalType capital;
+  private CapitalType capitalType;
 
   @Column(name = "_population", nullable = false)
   private int population;

@@ -8,7 +8,7 @@ public record CityDto(
   UUID identifier,
   String name,
   String nationalName,
-  CapitalType capital,
+  CapitalType capitalType,
   int population
 ) {
 }

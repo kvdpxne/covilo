@@ -12,7 +12,7 @@ import {Router} from "@angular/router";
 import {AuthenticationService} from "../service/authentication.service";
 import {TokenAuthenticationStrategy} from "../service/token-authentication-strategy";
 import {AUTHENTICATION_STRATEGY} from "../service/authentication-strategy";
-import {Token} from "../payload/token";
+import {Token} from "../../core/model/token";
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
@@ -51,7 +51,6 @@ export class AuthenticationInterceptor implements HttpInterceptor {
 
   private handleForbiddenError(): void {
     this.authenticationService.logout().subscribe((): void => {
-      this.tokenAuthenticationStrategy.doLogout();
       this.router.navigateByUrl("/").catch(error => throwError(() => error));
     });
   }
@@ -71,7 +70,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
     }
     return this.authenticationService.refreshToken().pipe(
       switchMap((token: Token) => {
-        return next.handle(this.authenticateRequest(request, token.accessToken));
+        return next.handle(this.authenticateRequest(request, token.token));
       }),
       catchError(error => {
         if (403 === error.status) {

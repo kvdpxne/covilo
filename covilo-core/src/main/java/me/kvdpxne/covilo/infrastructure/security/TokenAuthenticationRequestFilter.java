@@ -4,9 +4,11 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
-import me.kvdpxne.covilo.infrastructure.jpa.repository.TokenDao;
-import me.kvdpxne.covilo.infrastructure.jwt.TokenService;
+import me.kvdpxne.covilo.application.ITokenService;
+import me.kvdpxne.covilo.application.exception.TokenException;
+import me.kvdpxne.covilo.infrastructure.jpa.repository.ITokenJpaRepository;
 import org.springframework.http.HttpHeaders;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,8 +18,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
-
 @Component
 @RequiredArgsConstructor
 public final class TokenAuthenticationRequestFilter extends OncePerRequestFilter {
@@ -25,11 +25,16 @@ public final class TokenAuthenticationRequestFilter extends OncePerRequestFilter
   /**
    *
    */
-  private static final String AUTHENTICATION_PATH = "/api/0.1.0/auth";
+  public static final String PATH = "/api/0.1.0/auth";
 
-  private final TokenService tokenService;
+  /**
+   *
+   */
+  public static final String PREFIX = "Bearer=";
+
+  private final ITokenService tokenLifecycleUserCase;
   private final UserDetailsService userDetailsService;
-  private final TokenDao tokenRepository;
+  private final ITokenJpaRepository tokenRepository;
 
   /**
    * Same contract as for doFilter, but guaranteed to be just invoked once per
@@ -40,7 +45,7 @@ public final class TokenAuthenticationRequestFilter extends OncePerRequestFilter
   public void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response,
                                @NonNull FilterChain filterChain
   ) throws ServletException, IOException {
-    if (request.getServletPath().contains(AUTHENTICATION_PATH)) {
+    if (request.getServletPath().contains(PATH)) {
       filterChain.doFilter(request, response);
       return;
     }
@@ -52,13 +57,20 @@ public final class TokenAuthenticationRequestFilter extends OncePerRequestFilter
     }
 
     var header = request.getHeader(HttpHeaders.AUTHORIZATION);
-    if (null == header || !header.startsWith("Bearer ")) {
+    if (null == header || !header.startsWith(PREFIX)) {
       filterChain.doFilter(request, response);
       return;
     }
 
     var token = header.substring(7);
-    var userEmail = tokenService.extractUsername(token);
+
+    final String userEmail;
+    try {
+      userEmail = this.tokenLifecycleUserCase.extractSubject(token);
+    } catch (final TokenException exception) {
+      filterChain.doFilter(request, response);
+      return;
+    }
 
     if (null == userEmail) {
       filterChain.doFilter(request, response);
@@ -71,7 +83,7 @@ public final class TokenAuthenticationRequestFilter extends OncePerRequestFilter
       .map(t -> !t.isExpired() && !t.isRevoked())
       .orElse(false);
 
-    if (tokenService.isTokenValid(token, ((UserAccountDetails) userDetails).getUser()) && isTokenValid) {
+    if (userEmail.equals(userDetails.getUsername()) && isTokenValid) {
       var authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
       authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
       SecurityContextHolder.getContext().setAuthentication(authToken);

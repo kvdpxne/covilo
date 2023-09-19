@@ -1,10 +1,11 @@
 import {Component} from "@angular/core";
 import {City, Country, CrimeService, GeographicalService, Province, User} from "../core";
 import {ActivatedRoute} from "@angular/router";
-import {Continent} from "../core/models/continent";
-import {Category} from "../core/models/category";
+import {Continent} from "../core/model/continent";
+import {Category} from "../core/model/category";
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {ReportCrimeRequest} from "../core/playload/report-crime-request";
+import {Book} from "../core/aggregate/book";
 
 interface ReportForm {
 
@@ -135,9 +136,9 @@ export class ReportingComponent {
    * All available countries
    */
   private getAvailableCountries(): void {
-    this.geographicalService.getCountriesByContinent(Continent.EUROPE).subscribe({
-      next: (value: Country[]): void => {
-        this.countries = value.sort((a: Country, b: Country) => {
+    this.geographicalService.getCountries().subscribe({
+      next: (value: Book<Country>): void => {
+        this.countries = value.content.sort((a: Country, b: Country) => {
           return a.name.localeCompare(b.name);
         });
       }
@@ -152,8 +153,8 @@ export class ReportingComponent {
       throw new Error("Cannot get regions if country is undefined.");
     }
     this.geographicalService.getProvincesByCountry(this.currentCountry).subscribe({
-      next: (value: Province[]): void => {
-        this.regions = value.sort((a: Province, b: Province) => {
+      next: (value: Book<Province>): void => {
+        this.regions = value.content.sort((a: Province, b: Province) => {
           return a.nationalName.localeCompare(b.nationalName);
         });
       }
@@ -168,8 +169,8 @@ export class ReportingComponent {
       throw new Error("Cannot get cities if country or region is undefined.");
     }
     this.geographicalService.getCitiesByProvince(this.currentProvince).subscribe({
-      next: (value: City[]): void => {
-        this.cities = value.sort((a, b) => {
+      next: (value: Book<City>): void => {
+        this.cities = value.content.sort((a, b) => {
           return a.nationalName.localeCompare(b.nationalName);
         });
       }

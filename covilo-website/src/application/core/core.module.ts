@@ -19,8 +19,8 @@ import {
   FooterComponent,
   NavigationComponent,
   NotificationComponent
-} from "./components";
-import { LanguageSwitchComponent } from "./components"
+} from "./component";
+import { LanguageSwitchComponent } from "./component"
 
 @NgModule({
   declarations: [

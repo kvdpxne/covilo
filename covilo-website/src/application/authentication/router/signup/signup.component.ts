@@ -2,8 +2,8 @@ import {Component} from '@angular/core';
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthenticationService} from "../../service/authentication.service";
 import {Router} from "@angular/router";
-import {SignupRequest} from "../../payload/signup-request";
-import {Token} from "../../payload/token";
+import {SignupRequest} from "../../../core/playload/signup-request";
+import {Token} from "../../../core/model/token";
 import {throwError} from "rxjs";
 
 interface SignupForm {

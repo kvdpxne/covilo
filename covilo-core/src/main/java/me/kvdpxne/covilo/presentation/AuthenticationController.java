@@ -1,0 +1,105 @@
+package me.kvdpxne.covilo.presentation;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import lombok.RequiredArgsConstructor;
+import me.kvdpxne.covilo.application.IUserAuthenticationService;
+import me.kvdpxne.covilo.application.dto.TokenDto;
+import me.kvdpxne.covilo.application.exception.InvalidPasswordException;
+import me.kvdpxne.covilo.application.exception.TokenException;
+import me.kvdpxne.covilo.application.exception.UserAlreadyExistsException;
+import me.kvdpxne.covilo.application.exception.UserNotFoundException;
+import me.kvdpxne.covilo.application.mapper.ITokenMapper;
+import me.kvdpxne.covilo.application.payload.LoginRequest;
+import me.kvdpxne.covilo.application.payload.SignupRequest;
+import me.kvdpxne.covilo.domain.model.Token;
+import me.kvdpxne.covilo.infrastructure.security.TokenAuthenticationRequestFilter;
+import me.kvdpxne.covilo.shared.EmailValidationFailedException;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RequiredArgsConstructor
+@RequestMapping(TokenAuthenticationRequestFilter.PATH)
+@RestController
+public final class AuthenticationController {
+
+  private final IUserAuthenticationService userAuthenticationService;
+  private final ITokenMapper tokenMapper;
+
+  @PostMapping("/register")
+  public ResponseEntity<TokenDto> signup(
+    @Validated @RequestBody final SignupRequest request
+  ) {
+    final Token token;
+    try {
+      token = this.userAuthenticationService.createAuthentication(request);
+    } catch (final InvalidPasswordException | EmailValidationFailedException exception) {
+      return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+    } catch (final UserAlreadyExistsException exception) {
+      return ResponseEntity.status(HttpStatus.CONFLICT).build();
+    }
+    return ResponseEntity.ok(
+      this.tokenMapper.toTokenDto(token)
+    );
+  }
+
+  @PostMapping("/login")
+  public ResponseEntity<TokenDto> login(
+    @Validated @RequestBody final LoginRequest request
+  ) {
+    final Token token;
+    try {
+      token = this.userAuthenticationService.authenticate(request);
+    } catch (final EmailValidationFailedException exception) {
+      return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+    } catch (final UserNotFoundException exception) {
+      return ResponseEntity.notFound().build();
+    }
+    return ResponseEntity.ok(
+      this.tokenMapper.toTokenDto(token)
+    );
+  }
+
+  @PostMapping("/refresh-token")
+  public ResponseEntity<?> refreshToken(
+    final HttpServletRequest request,
+    final HttpServletResponse response
+  ) throws UserNotFoundException, IOException {
+
+    final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+    final String prefix = TokenAuthenticationRequestFilter.PREFIX;
+
+    if (null == header || !header.startsWith(prefix)) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    final String compactToken = header.substring(prefix.length());
+    final Token token;
+    try {
+      token = this.userAuthenticationService.refreshAuthentication(compactToken);
+    } catch (final TokenException exception) {
+      //
+      //
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    }
+
+    if (null == token || token.revoked()) {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    }
+
+    new ObjectMapper().writeValue(
+      response.getOutputStream(),
+      this.tokenMapper.toTokenDto(token)
+    );
+
+    return ResponseEntity.ok().build();
+  }
+}

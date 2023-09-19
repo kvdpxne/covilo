@@ -3,22 +3,24 @@ package me.kvdpxne.covilo.domain.service;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import me.kvdpxne.covilo.application.PasswordEncodingUseCase;
-import me.kvdpxne.covilo.application.UserLifecycleUseCase;
-import me.kvdpxne.covilo.domain.exception.UserAlreadyExistsException;
-import me.kvdpxne.covilo.domain.exception.UserNotFoundException;
+import me.kvdpxne.covilo.application.IPasswordEncodingUseCase;
+import me.kvdpxne.covilo.application.IUserLifecycleService;
+import me.kvdpxne.covilo.application.exception.UserAlreadyExistsException;
+import me.kvdpxne.covilo.application.exception.UserNotFoundException;
 import me.kvdpxne.covilo.domain.model.User;
-import me.kvdpxne.covilo.domain.persistence.UserRepository;
+import me.kvdpxne.covilo.domain.persistence.IUserRepository;
+import me.kvdpxne.covilo.shared.EmailValidator;
 
 /**
  * Service responsible for the user's life cycle.
  */
 @Slf4j
 @RequiredArgsConstructor
-public final class UserLifecycleService implements UserLifecycleUseCase {
+public final class UserLifecycleService
+  implements IUserLifecycleService {
 
-  private final UserRepository userRepository;
-  private final PasswordEncodingUseCase passwordEncodingUseCase;
+  private final IUserRepository userRepository;
+  private final IPasswordEncodingUseCase passwordEncodingUseCase;
 
   /**
    * @throws UserNotFoundException If the user with the given identifier could
@@ -28,12 +30,9 @@ public final class UserLifecycleService implements UserLifecycleUseCase {
   public User getUserByIdentifier(
     final UUID identifier
   ) throws UserNotFoundException {
-    final User user = this.userRepository.findUserByIdentifierOrNull(identifier);
+    final var user = this.userRepository.findUserByIdentifierOrNull(identifier);
     if (null == user) {
-      throw new UserNotFoundException(
-        "User with identifier \"%s\" does not exist.",
-        identifier
-      );
+      UserNotFoundException.byIdentifier(identifier);
     }
     return user;
   }
@@ -46,12 +45,9 @@ public final class UserLifecycleService implements UserLifecycleUseCase {
   public User getUserByEmail(
     final String email
   ) throws UserNotFoundException {
-    final User user = this.userRepository.findUserByEmailOrNull(email);
+    final var user = this.userRepository.findUserByEmailOrNull(email);
     if (null == user) {
-      throw new UserNotFoundException(
-        "User with email address \"%s\" does not exist.",
-        email
-      );
+      UserNotFoundException.byEmail(email);
     }
     return user;
   }
@@ -64,12 +60,9 @@ public final class UserLifecycleService implements UserLifecycleUseCase {
   private void checkExistsUserByIdentifier(
     final User user
   ) throws UserAlreadyExistsException {
-    final UUID identifier = user.identifier();
+    final var identifier = user.identifier();
     if (this.userRepository.existsUserByIdentifier(identifier)) {
-      throw new UserAlreadyExistsException(
-        "User with identifier \"%s\" already exists.",
-        identifier
-      );
+      UserAlreadyExistsException.byIdentifier(identifier);
     }
   }
 
@@ -81,12 +74,11 @@ public final class UserLifecycleService implements UserLifecycleUseCase {
   private void checkExistsUserByEmail(
     final User user
   ) throws UserAlreadyExistsException {
-    final String email = user.email();
-    if (this.userRepository.existsUserByEmail(email)) {
-      throw new UserAlreadyExistsException(
-        "User with email \"%s\" already exists.",
-        email
-      );
+    final var email = user.email();
+    // Checks whether the email address is correct and whether another user has
+    // already been assigned this email address.
+    if (this.checkUserExistsByEmail(email)) {
+      UserAlreadyExistsException.byEmail(email);
     }
   }
 
@@ -105,17 +97,36 @@ public final class UserLifecycleService implements UserLifecycleUseCase {
     this.checkExistsUserByIdentifier(source);
     this.checkExistsUserByEmail(source);
 
-    final String encodedPassword = this.passwordEncodingUseCase.encode(
+    // Encodes the raw password according to the given rules defined in the
+    // application infrastructure.
+    final var encodedPassword = this.passwordEncodingUseCase.encode(
       source.password()
     );
 
-    User user = source.toBuilder()
+    var user = source.toBuilder()
       .password(encodedPassword)
       .build();
 
-    user = this.userRepository.insertUser(user);
-    logger.info("Created user: {}", user);
+    try {
+      user = this.userRepository.insertUser(user);
+    } catch (final Throwable throwable) {
+      throw new RuntimeException(
+        "An unhandled exception occurred while inserting a user.",
+        throwable
+      );
+    }
+
+    logger.atDebug()
+      .setMessage("Created user: {}")
+      .addArgument(user)
+      .log();
 
     return user;
+  }
+
+  @Override
+  public boolean checkUserExistsByEmail(final String email) {
+    EmailValidator.checkEmail(email);
+    return this.userRepository.existsUserByEmail(email);
   }
 }

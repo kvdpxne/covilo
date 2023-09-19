@@ -2,7 +2,7 @@ import {Component, OnInit} from "@angular/core";
 import {ActivatedRoute, UrlSegment} from "@angular/router";
 import {City, Crime, CrimeService} from "src/application/core";
 import {GeographicalService} from "../../core";
-import {Category} from "../../core/models/category";
+import {Category} from "../../core/model/category";
 
 @Component({
   selector: "covilo-result-details",
@@ -123,8 +123,8 @@ export class ResultDetailsComponent implements OnInit {
 
       this.geographicalService.getCity(lastSegment).subscribe(it => this.city = it);
       this.crimeService.getCrimes(lastSegment).subscribe(it => {
-        this.crimes = it
-        this.filteredCrimes = it
+        this.crimes = it.content
+        this.filteredCrimes = it.content
       });
     }
 

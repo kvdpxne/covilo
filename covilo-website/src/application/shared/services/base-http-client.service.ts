@@ -117,10 +117,10 @@ export abstract class BaseHttpClient {
 
   private handleResponse<T>(source: Observable<T>): Observable<T> {
     return source.pipe(
-      retry({
-        count: 3,
-        delay: 1000
-      }),
+      // retry({
+      //   count: 1,
+      //   delay: 1000
+      // }),
       catchError(this.handleError),
       map(response => {
         console.debug(response)

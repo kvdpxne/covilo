@@ -4,40 +4,46 @@ import java.util.Objects;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import me.kvdpxne.covilo.application.CrimeLifecycleUseCase;
-import me.kvdpxne.covilo.domain.exception.CrimeAlreadyExistsException;
-import me.kvdpxne.covilo.domain.exception.CrimeNotFoundException;
-import me.kvdpxne.covilo.infrastructure.jpa.entity.CrimeEntity;
-import me.kvdpxne.covilo.infrastructure.jpa.repository.CrimeDao;
+import me.kvdpxne.covilo.application.ICrimeLifecycleService;
+import me.kvdpxne.covilo.application.exception.CrimeAlreadyExistsException;
+import me.kvdpxne.covilo.application.exception.CrimeNotFoundException;
+import me.kvdpxne.covilo.domain.model.Crime;
+import me.kvdpxne.covilo.domain.persistence.ICrimeRepository;
 
 @Slf4j
 @RequiredArgsConstructor
-public class CrimeLifecycleService implements CrimeLifecycleUseCase {
+public class CrimeLifecycleService implements ICrimeLifecycleService {
 
-  private final CrimeDao crimeRepository;
+  private final ICrimeRepository crimeRepository;
 
   @Override
-  public CrimeEntity getCrimeByIdentifier(final UUID identifier) throws CrimeNotFoundException {
-    return this.crimeRepository.findById(identifier)
-      .orElseThrow(CrimeNotFoundException::new);
+  public Crime getCrimeByIdentifier(final UUID identifier) throws CrimeNotFoundException {
+    final Crime crime = this.crimeRepository.findCrimeByIdentifierOrNull(identifier);
+    if (null == crime) {
+      throw new CrimeNotFoundException(
+        "",
+        identifier
+      );
+    }
+    return crime;
   }
 
   @Override
-  public CrimeEntity createCrime(final CrimeEntity crime) throws CrimeAlreadyExistsException {
+  public Crime createCrime(final Crime crime) throws CrimeAlreadyExistsException {
     Objects.requireNonNull(crime);
 
-    final var identifier = crime.getIdentifier();
+    final var identifier = crime.identifier();
 //    if (null != identifier) {
       //
       //
-      if (this.crimeRepository.existsById(identifier)) {
+      if (this.crimeRepository.existsCrimeByIdentifier(identifier)) {
         throw new CrimeAlreadyExistsException("");
       }
 //    }
 
-    final CrimeEntity created = this.crimeRepository.save(crime);
-    logger.debug("Created crime: {}", crime);
+    final Crime inserted = this.crimeRepository.insertCrime(crime);
+    logger.debug("Created crime: {}", inserted);
 
-    return created;
+    return inserted;
   }
 }

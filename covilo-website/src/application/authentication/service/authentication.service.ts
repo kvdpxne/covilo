@@ -4,11 +4,11 @@ import {catchError, Observable, of, tap} from "rxjs"
 import {ApiHttpClientService, User} from "../../"
 
 import {LoginRequest} from "../"
-import {Token} from "../payload/token";
+import {Token} from "../../core/model/token";
 import {AUTHENTICATION_STRATEGY, AuthenticationStrategy} from "./authentication-strategy";
 import {TokenAuthenticationStrategy} from "./token-authentication-strategy";
 import {map} from "rxjs/operators";
-import {SignupRequest} from "../payload/signup-request";
+import {SignupRequest} from "../../core/playload/signup-request";
 
 @Injectable({
   providedIn: "root"

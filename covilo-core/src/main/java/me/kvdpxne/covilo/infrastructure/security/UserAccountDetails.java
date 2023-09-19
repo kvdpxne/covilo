@@ -2,20 +2,12 @@ package me.kvdpxne.covilo.infrastructure.security;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
 import me.kvdpxne.covilo.domain.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-@RequiredArgsConstructor
-public final class UserAccountDetails implements UserDetails {
-
-  private final User user;
-
-  public User getUser() {
-    return this.user;
-  }
+public record UserAccountDetails(User user) implements UserDetails  {
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {

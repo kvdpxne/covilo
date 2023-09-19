@@ -1,9 +1,9 @@
 import {Component} from "@angular/core"
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthenticationService} from "../../service/authentication.service";
-import {LoginRequest} from "../../payload/login-request";
+import {LoginRequest} from "../../../core/playload/login-request";
 import {Router} from "@angular/router";
-import {Token} from "../../payload/token";
+import {Token} from "../../../core/model/token";
 import {throwError} from "rxjs";
 
 interface LoginForm {
@@ -86,9 +86,9 @@ export class LoginComponent {
       password: password
     };
 
-    this.authenticationService.login(request).subscribe((token: Token) => {
-      console.log(token);
-      this.router.navigate(["/"]).catch(error => throwError(error));
+    this.authenticationService.login(request).subscribe((): void => {
+      // noinspection JSIgnoredPromiseFromCall
+      this.router.navigate(["/"])
     });
   }
 }

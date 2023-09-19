@@ -1,12 +1,12 @@
 package me.kvdpxne.covilo.infrastructure.security.encoding;
 
-import me.kvdpxne.covilo.application.PasswordEncodingUseCase;
+import me.kvdpxne.covilo.application.IPasswordEncodingUseCase;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public final class PasswordEncodingService
-  implements PasswordEncodingUseCase {
+  implements IPasswordEncodingUseCase {
 
   private final PasswordEncoder passwordEncoder;
 

@@ -1,5 +1,5 @@
 import {City, User} from "../index";
-import {Category} from "../models/category";
+import {Category} from "../model/category";
 
 export type ReportCrimeRequest = {
   title: string;

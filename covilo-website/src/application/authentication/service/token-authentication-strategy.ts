@@ -1,5 +1,5 @@
 import {AuthenticationStrategy} from "./authentication-strategy";
-import {Token} from "../payload/token";
+import {Token} from "../../core/model/token";
 import {Observable, of} from "rxjs";
 import {User} from "../../core";
 import {StorageService} from "../../shared/services/storage.service";
@@ -32,7 +32,7 @@ export class TokenAuthenticationStrategy implements AuthenticationStrategy<Token
   }
 
   doLogin(data: Token): void {
-    this.storageService.setValue(StorageKey.TOKEN, data.accessToken);
+    this.storageService.setValue(StorageKey.TOKEN, data.token);
   }
 
   doLogout(): void {

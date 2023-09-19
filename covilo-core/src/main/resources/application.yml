@@ -1,7 +1,4 @@
 spring:
-  application:
-    name: "Covilo"
-    version: "${version}"
   datasource:
     url: jdbc:postgresql://localhost:5432/covilo
     username: postgres
@@ -12,10 +9,13 @@ spring:
 
 application:
 
+  name: "Covilo"
+  version: "${version}"
+
   security:
     jwt:
-      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
-      expiration: 86400000 # a day
+      secret-key: 06pp4fYygg2rayGB1Z47HdjEfTf2qa8A7H7DDZfW0nQnG4nvrE0EVfgP3Jf9aDWa
+      expiration: 60000 # a day
       refresh-token:
         expiration: 604800000 # 7 days
 

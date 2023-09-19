@@ -1,15 +1,15 @@
-export * from "./components";
+export * from "./component";
 
 // All available application models
-export * from "./models/capital-type";
-export * from "./models/crime";
-export * from "./models/classification";
-export * from "./models/city";
-export * from "./models/country";
-export * from "./models/province";
-export * from "./models/user";
+export * from "./model/capital-type";
+export * from "./model/crime";
+export * from "./model/classification";
+export * from "./model/city";
+export * from "./model/country";
+export * from "./model/province";
+export * from "./model/user";
 
 // All available application services
-export * from "./services/crime.service";
-export * from "./services/geographical.service";
-export * from "./services/user.service";
+export * from "./service/crime.service";
+export * from "./service/geographical.service";
+export * from "./service/user.service";
