@@ -12,6 +12,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -69,6 +70,12 @@ public class UserEntity {
   @ManyToOne
   @JoinColumn(name = "_living_place")
   private CityEntity livingPlace;
+
+  @Column(name = "_created_date")
+  private LocalDateTime createdDate;
+
+  @Column(name = "_last_modified_date")
+  private LocalDateTime lastCreatedDate;
 
   @ToString.Exclude
   @OneToMany(mappedBy = "user", orphanRemoval = true)

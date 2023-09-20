@@ -30,7 +30,7 @@ public final class TokenAuthenticationRequestFilter extends OncePerRequestFilter
   /**
    *
    */
-  public static final String PREFIX = "Bearer=";
+  public static final String PREFIX = "Bearer ";
 
   private final ITokenService tokenLifecycleUserCase;
   private final UserDetailsService userDetailsService;

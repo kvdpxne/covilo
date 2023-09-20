@@ -1,7 +1,9 @@
 package me.kvdpxne.covilo.domain.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
+import me.kvdpxne.covilo.domain.aggregation.Auditable;
 
 public record User(
   UUID identifier,
@@ -12,8 +14,10 @@ public record User(
   String lastName,
   Gender gender,
   LocalDate birthDate,
-  City livingPlace
-) {
+  City livingPlace,
+  LocalDateTime createdDate,
+  LocalDateTime lastModifiedDate
+) implements Auditable {
 
   public String fullName() {
     return firstName + " " + lastName;
@@ -35,6 +39,8 @@ public record User(
     private Gender gender;
     private LocalDate birthDate;
     private City livingPlace;
+    private LocalDateTime createdDate;
+    private LocalDateTime lastModifiedDate;
 
     private Builder(
       final UUID identifier,
@@ -45,7 +51,9 @@ public record User(
       final String lastName,
       final Gender gender,
       final LocalDate birthDate,
-      final City livingPlace
+      final City livingPlace,
+      final LocalDateTime createdDate,
+      final LocalDateTime lastModifiedDate
     ) {
       this.identifier = identifier;
       this.email = email;
@@ -56,6 +64,8 @@ public record User(
       this.gender = gender;
       this.birthDate = birthDate;
       this.livingPlace = livingPlace;
+      this.createdDate = createdDate;
+      this.lastModifiedDate = lastModifiedDate;
     }
 
     public Builder() {
@@ -107,10 +117,24 @@ public record User(
       return this;
     }
 
+    public Builder createdDate(final LocalDateTime createdDate) {
+      this.createdDate = createdDate;
+      return this;
+    }
+
+    public Builder lastModifiedDate(final LocalDateTime lastModifiedDate) {
+      this.lastModifiedDate = lastModifiedDate;
+      return this;
+    }
+
     @Override
     public User build() {
       if (null == this.identifier) {
         this.identifier = UUID.randomUUID();
+      }
+
+      if (null == this.createdDate) {
+        this.createdDate = LocalDateTime.now();
       }
 
       return new User(
@@ -122,7 +146,9 @@ public record User(
         this.lastName,
         this.gender,
         this.birthDate,
-        this.livingPlace
+        this.livingPlace,
+        this.createdDate,
+        this.lastModifiedDate
       );
     }
   }
@@ -137,7 +163,9 @@ public record User(
       this.lastName,
       this.gender,
       this.birthDate,
-      this.livingPlace
+      this.livingPlace,
+      this.createdDate,
+      this.lastModifiedDate
     );
   }
 }

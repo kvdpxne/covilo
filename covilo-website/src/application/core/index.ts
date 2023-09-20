@@ -1,3 +1,10 @@
+export * from "./aggregate/auditable";
+export * from "./aggregate/identifiable"
+
+export * from "./aggregate/book"
+export * from "./aggregate/book-attributes"
+
+
 export * from "./component";
 
 // All available application models
