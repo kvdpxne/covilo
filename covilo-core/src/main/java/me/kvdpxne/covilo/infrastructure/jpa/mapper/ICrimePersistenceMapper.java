@@ -5,7 +5,15 @@ import me.kvdpxne.covilo.infrastructure.jpa.entity.CrimeEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper(
+  uses = {
+    ICategoryPersistenceMapper.class,
+    ICityPersistenceMapper.class,
+    IUserPersistenceMapper.class
+  },
+  componentModel = MappingConstants.ComponentModel.SPRING,
+  implementationName = "CrimePersistenceMapperImpl"
+)
 public interface ICrimePersistenceMapper {
 
   CrimeEntity toCrimeEntity(final Crime source);

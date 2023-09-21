@@ -5,7 +5,13 @@ import me.kvdpxne.covilo.infrastructure.jpa.entity.TokenEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper(
+  uses = {
+    IUserPersistenceMapper.class
+  },
+  componentModel = MappingConstants.ComponentModel.SPRING,
+  implementationName = "TokenPersistenceMapperImpl"
+)
 public interface ITokenPersistenceMapper {
 
   TokenEntity toTokenEntity(final Token source);

@@ -10,6 +10,11 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 
 @Mapper(
+  uses = {
+    ICategoryMapper.class,
+    ICityMapper.class,
+    IUserMapper.class
+  },
   componentModel = MappingConstants.ComponentModel.SPRING,
   implementationName = "CrimeMapperImpl"
 )

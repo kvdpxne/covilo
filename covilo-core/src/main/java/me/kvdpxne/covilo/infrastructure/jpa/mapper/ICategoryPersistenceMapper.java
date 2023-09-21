@@ -5,7 +5,13 @@ import me.kvdpxne.covilo.infrastructure.jpa.entity.CategoryEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper(
+  uses = {
+    ICategoryPersistenceMapper.class
+  },
+  componentModel = MappingConstants.ComponentModel.SPRING,
+  implementationName = "CategoryPersistenceMapperImpl"
+)
 public interface ICategoryPersistenceMapper {
 
   CategoryEntity toCategoryEntity(final Category source);

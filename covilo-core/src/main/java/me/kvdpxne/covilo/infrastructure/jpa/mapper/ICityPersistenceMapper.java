@@ -5,7 +5,13 @@ import me.kvdpxne.covilo.infrastructure.jpa.entity.CityEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper(
+  uses = {
+    IProvincePersistenceMapper.class
+  },
+  componentModel = MappingConstants.ComponentModel.SPRING,
+  implementationName = "CityPersistenceMapperImpl"
+)
 public interface ICityPersistenceMapper {
 
   CityEntity toCityEntity(final City source);

@@ -5,7 +5,13 @@ import me.kvdpxne.covilo.infrastructure.jpa.entity.UserEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper(
+  uses = {
+    ICityPersistenceMapper.class
+  },
+  componentModel = MappingConstants.ComponentModel.SPRING,
+  implementationName = "UserPersistenceMapperImpl"
+)
 public interface IUserPersistenceMapper {
 
   UserEntity toUserEntity(final User source);

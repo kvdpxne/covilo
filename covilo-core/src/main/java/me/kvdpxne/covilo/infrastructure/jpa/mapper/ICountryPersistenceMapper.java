@@ -5,7 +5,10 @@ import me.kvdpxne.covilo.infrastructure.jpa.entity.CountryEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper(
+  componentModel = MappingConstants.ComponentModel.SPRING,
+  implementationName = "CountryPersistenceMapperImpl"
+)
 public interface ICountryPersistenceMapper {
 
   CountryEntity toCountryEntity(final Country source);
