@@ -22,50 +22,48 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
 @Entity
-@Table(name = "_crime")
-public class CrimeEntity {
+@Table(name = "crime")
+public final class CrimeEntity {
 
-  @Builder.Default
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
-  @Column(name = "_identifier", nullable = false, updatable = false)
-  private UUID identifier = UUID.randomUUID();
+  @Column(name = "identifier", nullable = false, updatable = false)
+  private UUID identifier;
 
-  @Column(name = "_title")
+  @Column(name = "title")
   private String title;
 
   @Lob
-  @Column(name = "_description")
+  @Column(name = "description")
   private String description;
 
   @ToString.Exclude
   @ManyToMany
-  @JoinTable(name = "_crime_categories",
-    joinColumns = @JoinColumn(name = "_crime"),
-    inverseJoinColumns = @JoinColumn(name = "_categories"))
+  @JoinTable(name = "crime_categories",
+    joinColumns = @JoinColumn(name = "crime_identifier"),
+    inverseJoinColumns = @JoinColumn(name = "category_identifier"))
   private Set<CategoryEntity> categories = new LinkedHashSet<>();
 
-  @Column(name = "_time")
+  @Column(name = "time")
   private LocalDateTime time;
 
   @ToString.Exclude
   @ManyToOne
-  @JoinColumn(name = "_reporter")
+  @JoinColumn(name = "reporter")
   private UserEntity reporter;
 
   @ToString.Exclude
   @ManyToOne(optional = false)
-  @JoinColumn(name = "_place", nullable = false)
+  @JoinColumn(name = "place", nullable = false)
   private CityEntity place;
 
-  @Column(name = "_confirmed", nullable = false)
+  @Column(name = "confirmed", nullable = false)
   private boolean confirmed;
 
 }

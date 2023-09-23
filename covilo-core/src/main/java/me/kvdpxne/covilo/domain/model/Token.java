@@ -1,10 +1,11 @@
 package me.kvdpxne.covilo.domain.model;
 
 import java.util.UUID;
+import me.kvdpxne.covilo.domain.aggregation.IBuilder;
 
 public record Token(
   UUID identifier,
-  String token,
+  String compactToken,
   TokenType tokenType,
   User user,
   boolean revoked,
@@ -14,7 +15,7 @@ public record Token(
   public Builder toBuilder() {
     return new Builder(
       this.identifier,
-      this.token,
+      this.compactToken,
       this.tokenType,
       this.user,
       this.revoked,

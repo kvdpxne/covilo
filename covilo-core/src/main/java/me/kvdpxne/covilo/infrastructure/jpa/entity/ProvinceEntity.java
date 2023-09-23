@@ -13,37 +13,34 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
 @Entity
-@Table(name = "_province")
-public class ProvinceEntity {
+@Table(name = "province")
+public final class ProvinceEntity {
 
-  @Builder.Default
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
-  @Column(name = "_identifier", nullable = false, updatable = false)
-  private UUID identifier = UUID.randomUUID();
+  @Column(name = "identifier", nullable = false, updatable = false)
+  private UUID identifier;
 
-  @Column(name = "_name")
+  @Column(name = "name")
   private String name;
 
-  @Column(name = "_national_name", nullable = false, unique = true)
+  @Column(name = "national_name", nullable = false, unique = true)
   private String nationalName;
 
   @ToString.Exclude
   @ManyToOne(optional = false)
-  @JoinColumn(name = "_country", nullable = false)
+  @JoinColumn(name = "country", nullable = false)
   private CountryEntity country;
 
   @ToString.Exclude

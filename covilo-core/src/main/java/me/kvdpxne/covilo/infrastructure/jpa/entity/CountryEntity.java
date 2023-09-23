@@ -13,7 +13,6 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,31 +20,29 @@ import lombok.ToString;
 import me.kvdpxne.covilo.domain.model.AdministrativeDivisionType;
 import me.kvdpxne.covilo.domain.model.Continent;
 
-@Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
 @Entity
-@Table(name = "_country")
-public class CountryEntity {
+@Table(name = "country")
+public final class CountryEntity {
 
-  @Builder.Default
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
-  @Column(name = "_identifier", nullable = false, updatable = false)
-  private UUID identifier = UUID.randomUUID();
+  @Column(name = "identifier", nullable = false, updatable = false)
+  private UUID identifier;
 
-  @Column(name = "_name", nullable = false, unique = true)
+  @Column(name = "name", nullable = false, unique = true)
   private String name;
 
   @Enumerated(EnumType.STRING)
-  @Column(name = "administrative_division_type")
-  private AdministrativeDivisionType administrativeDivisionType;
+  @Column(name = "administrative_division")
+  private AdministrativeDivisionType administrativeDivision;
 
   @Enumerated(EnumType.STRING)
-  @Column(name = "_continent", nullable = false)
+  @Column(name = "continent", nullable = false)
   private Continent continent;
 
   @ToString.Exclude

@@ -39,7 +39,7 @@ public final class TokenDao implements ITokenRepository {
 
   @Override
   public User findUserByCompactTokenOrNull(final String compactToken) {
-    return this.repository.findByToken(compactToken)
+    return this.repository.findByCompactToken(compactToken)
       .map(token -> this.userMapper.toUser(token.getUser()))
       .orElse(null);
   }
@@ -52,7 +52,7 @@ public final class TokenDao implements ITokenRepository {
 
   @Override
   public Token findTokenByTokenOrNull(final String token) {
-    final var entity = this.repository.findByToken(token);
+    final var entity = this.repository.findByCompactToken(token);
     return this.toTokenOrNull(entity);
   }
 

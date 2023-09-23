@@ -1,4 +1,4 @@
-package me.kvdpxne.covilo.domain.model;
+package me.kvdpxne.covilo.domain.aggregation;
 
 public interface IBuilder<T> {
 

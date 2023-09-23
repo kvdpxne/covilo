@@ -12,45 +12,42 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import me.kvdpxne.covilo.domain.model.TokenType;
 
-@Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-@Entity(name = "token")
-@Table(name = "_token")
-public class TokenEntity {
+@Entity
+@Table(name = "token")
+public final class TokenEntity {
 
-  @Builder.Default
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
-  @Column(name = "_identifier", nullable = false, updatable = false)
-  private UUID identifier = UUID.randomUUID();
+  @Column(name = "identifier", nullable = false, updatable = false)
+  private UUID identifier;
 
-  @Column(name = "_token", unique = true)
-  private String token;
+  @Column(name = "compact_token", unique = true)
+  private String compactToken;
 
   @Enumerated(EnumType.STRING)
-  @Column(name = "_token_type")
-  private TokenType tokenType = TokenType.BEARER;
+  @Column(name = "type")
+  private TokenType tokenType;
 
-  @Column(name = "_revoked", nullable = false)
+  @Column(name = "revoked", nullable = false)
   private boolean revoked;
 
-  @Column(name = "_expired", nullable = false)
+  @Column(name = "expired", nullable = false)
   private boolean expired;
 
   @ToString.Exclude
   @ManyToOne
-  @JoinColumn(name = "_user_identifier")
+  @JoinColumn(name = "user_identifier")
   private UserEntity user;
 
 }

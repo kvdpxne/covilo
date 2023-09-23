@@ -79,7 +79,7 @@ public final class TokenAuthenticationRequestFilter extends OncePerRequestFilter
 
     var userDetails = userDetailsService.loadUserByUsername(userEmail);
 
-    var isTokenValid = tokenRepository.findByToken(token)
+    var isTokenValid = tokenRepository.findByCompactToken(token)
       .map(t -> !t.isExpired() && !t.isRevoked())
       .orElse(false);
 

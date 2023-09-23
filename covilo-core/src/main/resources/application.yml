@@ -1,16 +1,14 @@
 spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/covilo
-    username: postgres
-    password: postgres
-    driver-class-name: org.postgresql.Driver
   main:
     banner-mode: off
+  jpa:
+    properties:
+      hibernate:
+        globally_quoted_identifiers: true
 
 application:
-
-  name: "Covilo"
-  version: "${version}"
+  name: Covilo
+  version: ${version}
 
   security:
     jwt:
@@ -18,7 +16,3 @@ application:
       expiration: 60000 # a day
       refresh-token:
         expiration: 604800000 # 7 days
-
-covilo:
-  allowed-origins:
-    - "http://localhost:4200"

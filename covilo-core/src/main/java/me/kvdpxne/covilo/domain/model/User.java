@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import me.kvdpxne.covilo.domain.aggregation.Auditable;
+import me.kvdpxne.covilo.domain.aggregation.IBuilder;
 
 public record User(
   UUID identifier,

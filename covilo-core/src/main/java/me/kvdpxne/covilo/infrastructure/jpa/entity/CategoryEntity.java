@@ -13,34 +13,31 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
 @Entity
-@Table(name = "_category")
-public class CategoryEntity {
+@Table(name = "category")
+public final class CategoryEntity {
 
-  @Builder.Default
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
-  @Column(name = "_identifier", nullable = false, updatable = false)
-  private UUID identifier = UUID.randomUUID();
+  @Column(name = "identifier", nullable = false, updatable = false)
+  private UUID identifier;
 
-  @Column(name = "_name", nullable = false, unique = true)
+  @Column(name = "name", nullable = false, unique = true)
   private String name;
 
   @ToString.Exclude
   @ManyToOne
-  @JoinColumn(name = "_classification")
+  @JoinColumn(name = "classification_identifier")
   private ClassificationEntity classification;
 
   @ToString.Exclude

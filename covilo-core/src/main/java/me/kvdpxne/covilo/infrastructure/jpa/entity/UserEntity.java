@@ -19,7 +19,6 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,60 +26,59 @@ import lombok.ToString;
 import me.kvdpxne.covilo.domain.model.Gender;
 import me.kvdpxne.covilo.domain.model.Role;
 
-@Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-@Entity(name = "user")
-@Table(name = "_user")
-public class UserEntity {
+@Entity
+@Table(name = "user")
+public final class UserEntity {
 
-  @Builder.Default
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
-  @Column(name = "_identifier", nullable = false, updatable = false)
-  private UUID identifier = UUID.randomUUID();
+  @Column(name = "identifier", nullable = false, updatable = false)
+  private UUID identifier;
 
-  @Column(name = "_email", unique = true)
+  @Column(name = "email", nullable = false, unique = true)
   private String email;
 
-  @Column(name = "_password")
+  @Column(name = "password", nullable = false)
   private String password;
 
   @Enumerated(EnumType.STRING)
-  @Column(name = "_role")
+  @Column(name = "role", nullable = false)
   private Role role;
 
-  @Column(name = "_first_name")
+  @Column(name = "first_name")
   private String firstName;
 
-  @Column(name = "_last_name")
+  @Column(name = "last_name")
   private String lastName;
 
   @Enumerated(EnumType.STRING)
-  @Column(name = "_gender")
+  @Column(name = "gender")
   private Gender gender;
 
-  @Column(name = "_birth_date", nullable = false)
+  @Column(name = "birth_date", nullable = false)
   private LocalDate birthDate;
 
   @ToString.Exclude
   @ManyToOne
-  @JoinColumn(name = "_living_place")
+  @JoinColumn(name = "living_place_identifier")
   private CityEntity livingPlace;
 
-  @Column(name = "_created_date")
+  @Column(name = "created_date", nullable = false, updatable = false)
   private LocalDateTime createdDate;
 
-  @Column(name = "_last_modified_date")
-  private LocalDateTime lastCreatedDate;
+  @Column(name = "last_modified_date")
+  private LocalDateTime lastModifiedDate;
 
   @ToString.Exclude
   @OneToMany(mappedBy = "user", orphanRemoval = true)
   private Set<TokenEntity> tokens = new LinkedHashSet<>();
 
+  @ToString.Exclude
   @OneToMany(mappedBy = "reporter", orphanRemoval = true)
   private Collection<CrimeEntity> crimes = new ArrayList<>();
 }

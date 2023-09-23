@@ -13,13 +13,13 @@ public interface ITokenJpaRepository
   extends JpaRepositoryViaIdentifier<TokenEntity> {
 
   @Query(value = """
-    SELECT t FROM token t INNER JOIN user u\s
+    SELECT t FROM TokenEntity t INNER JOIN UserEntity u\s
     ON t.user.identifier = u.identifier\s
     WHERE u.identifier = :identifier AND (t.expired = false OR t.revoked = false)\s
     """)
   Collection<TokenEntity> findAllValidTokenByUser(final UUID identifier);
 
-  Optional<TokenEntity> findByToken(final String token);
+  Optional<TokenEntity> findByCompactToken(final String token);
 
   Collection<TokenEntity> findByUser_Identifier(final UUID identifier);
 }

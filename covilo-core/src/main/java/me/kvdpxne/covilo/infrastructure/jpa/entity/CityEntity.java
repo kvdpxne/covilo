@@ -17,45 +17,42 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import me.kvdpxne.covilo.domain.model.CapitalType;
 
-@Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
 @Entity
-@Table(name = "_city")
-public class CityEntity {
+@Table(name = "city")
+public final class CityEntity {
 
-  @Builder.Default
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
-  @Column(name = "_identifier", nullable = false, updatable = false)
-  private UUID identifier = UUID.randomUUID();
+  @Column(name = "identifier", nullable = false, updatable = false)
+  private UUID identifier;
 
-  @Column(name = "_name")
+  @Column(name = "name")
   private String name;
 
-  @Column(name = "_national_name", nullable = false, unique = true)
+  @Column(name = "national_name", nullable = false, unique = true)
   private String nationalName;
 
   @ToString.Exclude
   @ManyToOne(optional = false)
-  @JoinColumn(name = "_province", nullable = false)
+  @JoinColumn(name = "province", nullable = false)
   private ProvinceEntity province;
 
   @Enumerated(EnumType.STRING)
-  @Column(name = "_capital")
+  @Column(name = "capital")
   private CapitalType capitalType;
 
-  @Column(name = "_population", nullable = false)
+  @Column(name = "population", nullable = false)
   private int population;
 
   @ToString.Exclude
