@@ -2,6 +2,7 @@ package me.kvdpxne.covilo.infrastructure.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.web.WebProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -35,6 +36,7 @@ public class SecurityConfiguration {
   private final TokenAuthenticationRequestFilter authenticationRequestFilter;
   private final LogoutHandler logoutHandler;
   private final CorsConfigurationSource corsConfigurationSource;
+  private final WebProperties webProperties;
 
   @Bean
   SecurityFilterChain securityFilterChain(HttpSecurity security) throws Exception {
@@ -43,11 +45,14 @@ public class SecurityConfiguration {
       .csrf(AbstractHttpConfigurer::disable)
       .authorizeHttpRequests(configurer -> {
         configurer.requestMatchers(
+          "/api/0.1.0/storage/**",
           "/api/0.1.0/geographical/**",
           "/api/0.1.0/search/**",
           "/api/0.1.0/crimes/**",
           "/api/0.1.0/crime/**",
           "/api/0.1.0/auth/**",
+
+          "/xdd/**",
 
           "/v2/api-docs",
           "/v3/api-docs",
@@ -62,12 +67,12 @@ public class SecurityConfiguration {
         ).permitAll();
 
         configurer.requestMatchers(
-          "/api/0.1.0/user/**"
+          "/api/0.1.0/me/**"
         ).authenticated();
 
         // Denies access to all other URLs not defined above for all users
         // regardless of role or permission.
-        configurer.anyRequest().denyAll();
+        configurer.anyRequest().permitAll();
       })
       .exceptionHandling(configurer -> {
         // TODO more advanced error handling

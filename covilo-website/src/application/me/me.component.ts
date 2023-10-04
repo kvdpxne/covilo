@@ -1,5 +1,6 @@
 import {Component, OnInit} from "@angular/core";
 import {User, UserService} from "../core";
+import {Link} from "../shared";
 
 @Component({
   selector: "app-me",

@@ -17,7 +17,7 @@ public final class PasswordEncodingService
   @Override
   public String encode(final String password) {
     // Uses the defined PasswordEncoder from the PasswordEncoderConfiguration
-    // to encode the given raw password.
+    // to encode the given raw currentPassword.
     return this.passwordEncoder.encode(password);
   }
 }

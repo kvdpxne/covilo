@@ -78,7 +78,7 @@ public final class UserLifecycleService
     // Checks whether the email address is correct and whether another user has
     // already been assigned this email address.
     if (this.checkUserExistsByEmail(email)) {
-      UserAlreadyExistsException.byEmail(email);
+      throw UserAlreadyExistsException.byEmail(email);
     }
   }
 
@@ -97,7 +97,7 @@ public final class UserLifecycleService
     this.checkExistsUserByIdentifier(source);
     this.checkExistsUserByEmail(source);
 
-    // Encodes the raw password according to the given rules defined in the
+    // Encodes the raw currentPassword according to the given rules defined in the
     // application infrastructure.
     final var encodedPassword = this.passwordEncodingUseCase.encode(
       source.password()
@@ -122,6 +122,44 @@ public final class UserLifecycleService
       .log();
 
     return user;
+  }
+
+  @Override
+  public void updateUserEmail(final User user, final String newEmail) {
+    logger.info("Changing email address for user: {}", user);
+    this.userRepository.updateUserEmailByIdentifier(user.identifier(), newEmail);
+  }
+
+  @Override
+  public void updateUserPassword(final User user, final String newPassword) {
+    logger.info("Changing password for user: {}", user);
+  }
+
+  @Override
+  public void updateUser(final User user) throws UserNotFoundException {
+
+  }
+
+  @Override
+  public void deleteUserByIdentifier(
+    final UUID identifier
+  ) throws UserNotFoundException {
+
+    if (this.userRepository.existsUserByIdentifier(identifier)) {
+      throw UserNotFoundException.byIdentifier(identifier);
+    }
+
+    this.userRepository.deleteUserByIdentifier(identifier);
+
+    logger.atDebug()
+      .setMessage("Deleted user: {}")
+      .addArgument(identifier)
+      .log();
+  }
+
+  @Override
+  public void deleteUser(final User user) throws UserNotFoundException {
+    this.deleteUserByIdentifier(user.identifier());
   }
 
   @Override

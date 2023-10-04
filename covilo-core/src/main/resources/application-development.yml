@@ -12,6 +12,9 @@ spring:
       hibernate:
         format_sql: true
         generate_statistics: true
+  web:
+    resources:
+      static-locations: file:run
 
 logging:
   level:
@@ -21,3 +24,7 @@ logging:
 covilo:
   allowed-origins:
     - "http://localhost:4200"
+
+application:
+  storage:
+    parent: run/data

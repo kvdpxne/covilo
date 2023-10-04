@@ -9,7 +9,7 @@ public class UserNotFoundException extends UserException {
     super(String.format(message, arguments));
   }
 
-  public static void byIdentifier(
+  public static UserNotFoundException byIdentifier(
     final Object identifier
   ) throws UserNotFoundException {
     throw new UserNotFoundException(

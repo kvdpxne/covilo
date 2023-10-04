@@ -4,7 +4,7 @@ import {City, Country, Province} from "src/application/core";
 import {GeographicalService} from "../../core";
 import {Continent} from "../../core/model/continent";
 import {throwError} from "rxjs";
-import {Book} from "../../core/aggregate/book";
+import {Book} from "../../core/aggregation/book";
 
 @Component({
   templateUrl: "./home.component.html",

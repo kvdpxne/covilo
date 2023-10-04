@@ -70,7 +70,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
     }
     return this.authenticationService.refreshToken().pipe(
       switchMap((token: Token) => {
-        return next.handle(this.authenticateRequest(request, token.token));
+        return next.handle(this.authenticateRequest(request, token.compactToken));
       }),
       catchError(error => {
         if (403 === error.status) {

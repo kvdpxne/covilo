@@ -1,5 +1,6 @@
 package me.kvdpxne.covilo.infrastructure.jpa.dao;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +40,29 @@ public final class UserDao
     var entity = this.mapper.toUserEntity(user);
     entity = this.repository.save(entity);
     return this.mapper.toUser(entity);
+  }
+
+  @Override
+  public void updateUserEmailByIdentifier(final UUID identifier, final String email) {
+    this.repository.updateEmailAndLastModifiedDateByIdentifier(
+      identifier,
+      email,
+      LocalDateTime.now()
+    );
+  }
+
+  @Override
+  public void updateUserPasswordByIdentifier(final UUID identifier, final String password) {
+    this.repository.updatePasswordAndLastModifiedDateByIdentifier(
+      identifier,
+      password,
+      LocalDateTime.now()
+    );
+  }
+
+  @Override
+  public void deleteUserByIdentifier(final UUID identifier) {
+    this.repository.deleteById(identifier);
   }
 
   @Override

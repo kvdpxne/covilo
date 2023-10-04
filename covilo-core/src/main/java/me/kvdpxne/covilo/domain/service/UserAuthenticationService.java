@@ -41,12 +41,12 @@ public final class UserAuthenticationService
     // Checks whether the provided email address is correct and whether another
     // user has this address assigned to their account.
     if (this.userLifecycleUseCase.checkUserExistsByEmail(email)) {
-      UserAlreadyExistsException.byEmail(email);
+      throw UserAlreadyExistsException.byEmail(email);
     }
 
     final var password = request.password();
-    // Checks whether the confirmed password is the same as the original
-    // password.
+    // Checks whether the confirmed currentPassword is the same as the original
+    // currentPassword.
     if (!password.equals(request.confirmPassword())) {
       throw new InvalidPasswordException();
     }

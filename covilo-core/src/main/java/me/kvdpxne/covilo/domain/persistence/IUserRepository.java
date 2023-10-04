@@ -10,6 +10,12 @@ public interface IUserRepository {
 
   User insertUser(final User user);
 
+  void updateUserEmailByIdentifier(final UUID identifier, final String email);
+
+  void updateUserPasswordByIdentifier(final UUID identifier, final String password);
+
+  void deleteUserByIdentifier(final UUID identifier);
+
   boolean existsUserByIdentifier(final UUID identifier);
   boolean existsUserByEmail(final String email);
 }

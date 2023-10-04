@@ -5,7 +5,7 @@ import {Continent} from "../core/model/continent";
 import {Category} from "../core/model/category";
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {ReportCrimeRequest} from "../core/playload/report-crime-request";
-import {Book} from "../core/aggregate/book";
+import {Book} from "../core/aggregation/book";
 
 interface ReportForm {
 

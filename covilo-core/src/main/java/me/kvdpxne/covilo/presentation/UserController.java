@@ -1,40 +1,31 @@
 package me.kvdpxne.covilo.presentation;
 
-import jakarta.servlet.http.HttpServletRequest;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import me.kvdpxne.covilo.application.dto.UserDto;
-import me.kvdpxne.covilo.application.mapper.IUserMapper;
-import me.kvdpxne.covilo.domain.model.User;
-import me.kvdpxne.covilo.domain.persistence.ITokenRepository;
-import me.kvdpxne.covilo.infrastructure.security.TokenAuthenticationRequestFilter;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import me.kvdpxne.covilo.application.exception.UserNotFoundException;
+import me.kvdpxne.covilo.domain.service.UserLifecycleService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
+@RequestMapping(path = "api/0.1.0/user")
 @RestController
-@RequestMapping(path = "api/0.1.0/")
-public class UserController {
+public final class UserController {
 
-  private final ITokenRepository tokenRepository;
-  private final IUserMapper userMapper;
+  private final UserLifecycleService userLifecycleService;
 
-  @GetMapping("user/me")
-  public ResponseEntity<UserDto> me(
-    final HttpServletRequest request
-  ) {
-    final String compactToken = request.getHeader(HttpHeaders.AUTHORIZATION)
-      .substring(TokenAuthenticationRequestFilter.PREFIX.length());
-
-    final User user = this.tokenRepository.findUserByCompactTokenOrNull(compactToken);
-    if (null == user) {
-      return ResponseEntity.notFound().build();
-    }
-
-    return ResponseEntity.ok(
-      this.userMapper.toUserDto(user)
-    );
+  @ResponseStatus(code = HttpStatus.OK)
+  @DeleteMapping(path = "{identifier}")
+  public void deleteUser(
+    @PathVariable final UUID identifier
+  ) throws UserNotFoundException {
+    // If the method does not find a user with the given identifier, it throws
+    // a UserNotFoundException exception.
+    this.userLifecycleService.deleteUserByIdentifier(identifier);
   }
 }

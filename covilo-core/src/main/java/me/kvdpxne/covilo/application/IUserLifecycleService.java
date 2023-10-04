@@ -20,6 +20,16 @@ public interface IUserLifecycleService {
    */
   User createUser(final User user) throws UserAlreadyExistsException;
 
+  void updateUserEmail(final User user, final String newEmail) throws UserNotFoundException;
+
+  void updateUserPassword(final User user, final String newPassword) throws UserNotFoundException;
+
+  void updateUser(final User user) throws UserNotFoundException;
+
+  void deleteUserByIdentifier(final UUID identifier) throws UserNotFoundException;
+
+  void deleteUser(final User user) throws UserNotFoundException;
+
   /**
    * @throws NullPointerException If the given email address is null.
    * @throws IllegalArgumentException

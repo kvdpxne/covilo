@@ -5,7 +5,7 @@ import {Observable} from "rxjs";
 import {Country} from "../model/country";
 import {Province} from "../model/province";
 import {City} from "../model/city";
-import {Book} from "../aggregate/book";
+import {Book} from "../aggregation/book";
 
 @Injectable({
   providedIn: "root"

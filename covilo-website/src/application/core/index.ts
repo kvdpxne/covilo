@@ -1,8 +1,8 @@
-export * from "./aggregate/auditable";
-export * from "./aggregate/identifiable"
+export * from "./aggregation/auditable";
+export * from "./aggregation/identifiable"
 
-export * from "./aggregate/book"
-export * from "./aggregate/book-attributes"
+export * from "./aggregation/book"
+export * from "./aggregation/book-attributes"
 
 
 export * from "./component";

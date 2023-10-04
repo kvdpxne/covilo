@@ -8,5 +8,5 @@ export interface Country {
   identifier: string;
   name: string;
   continent: Continent;
-  administrativeDivisionType: AdministrativeDivisionType;
+  administrativeDivision: AdministrativeDivisionType;
 }

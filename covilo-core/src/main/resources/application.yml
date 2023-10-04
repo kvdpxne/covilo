@@ -13,6 +13,9 @@ application:
   security:
     jwt:
       secret-key: 06pp4fYygg2rayGB1Z47HdjEfTf2qa8A7H7DDZfW0nQnG4nvrE0EVfgP3Jf9aDWa
-      expiration: 60000 # a day
+      expiration: 604800000 # a day
       refresh-token:
         expiration: 604800000 # 7 days
+
+  storage:
+    avatars: avatars

@@ -4,7 +4,7 @@ import {ApiHttpClientService} from "../../shared";
 import {Crime} from "../index";
 import {Category} from "../model/category";
 import {ReportCrimeRequest} from "../playload/report-crime-request";
-import {Book} from "../aggregate/book";
+import {Book} from "../aggregation/book";
 
 @Injectable({
   providedIn: "root"

@@ -1,7 +1,7 @@
 import {Gender} from "./gender";
 import {City} from "./city";
-import {Auditable} from "../aggregate/auditable";
-import {Identifiable} from "../aggregate/identifiable";
+import {Auditable} from "../aggregation/auditable";
+import {Identifiable} from "../aggregation/identifiable";
 
 export interface User extends Identifiable, Auditable {
   email: string;

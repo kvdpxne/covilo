@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 import me.kvdpxne.covilo.domain.aggregation.Auditable;
 import me.kvdpxne.covilo.domain.aggregation.IBuilder;
+import me.kvdpxne.covilo.domain.aggregation.Identity;
 
 public record User(
   UUID identifier,
@@ -18,7 +19,7 @@ public record User(
   City livingPlace,
   LocalDateTime createdDate,
   LocalDateTime lastModifiedDate
-) implements Auditable {
+) implements Identity<String>, Auditable {
 
   public String fullName() {
     return firstName + " " + lastName;
@@ -27,6 +28,12 @@ public record User(
   public boolean containsFullName() {
     return null != this.firstName && null != this.lastName
       && !this.firstName.isBlank() && !this.lastName.isBlank();
+  }
+
+
+  @Override
+  public String identity() {
+    return this.identifier.toString();
   }
 
   public static final class Builder implements IBuilder<User> {

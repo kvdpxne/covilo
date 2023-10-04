@@ -15,6 +15,10 @@ export class UserService {
   }
 
   public getMe(): Observable<User> {
-    return this.api.get2<User>("user/me", {})
+    return this.api.get2<User>("me", {})
+  }
+
+  public viewAvatar(): Observable<string> {
+    return this.api.get2<string>("me/avatar")
   }
 }

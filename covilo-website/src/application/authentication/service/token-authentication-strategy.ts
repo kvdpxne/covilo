@@ -32,7 +32,7 @@ export class TokenAuthenticationStrategy implements AuthenticationStrategy<Token
   }
 
   doLogin(data: Token): void {
-    this.storageService.setValue(StorageKey.TOKEN, data.token);
+    this.storageService.setValue(StorageKey.TOKEN, data.compactToken);
   }
 
   doLogout(): void {

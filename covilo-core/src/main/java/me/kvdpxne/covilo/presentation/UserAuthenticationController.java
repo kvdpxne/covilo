@@ -17,6 +17,7 @@ import me.kvdpxne.covilo.application.payload.SignupRequest;
 import me.kvdpxne.covilo.domain.model.Token;
 import me.kvdpxne.covilo.infrastructure.security.TokenAuthenticationRequestFilter;
 import me.kvdpxne.covilo.shared.EmailValidationFailedException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,10 +27,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequiredArgsConstructor
-@RequestMapping(TokenAuthenticationRequestFilter.PATH)
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
+@RequestMapping(path = TokenAuthenticationRequestFilter.PATH)
 @RestController
-public final class AuthenticationController {
+public final class UserAuthenticationController {
 
   private final IUserAuthenticationService userAuthenticationService;
   private final ITokenMapper tokenMapper;
@@ -37,14 +38,12 @@ public final class AuthenticationController {
   @PostMapping("/register")
   public ResponseEntity<TokenDto> signup(
     @Validated @RequestBody final SignupRequest request
-  ) {
+  ) throws UserAlreadyExistsException {
     final Token token;
     try {
       token = this.userAuthenticationService.createAuthentication(request);
     } catch (final InvalidPasswordException | EmailValidationFailedException exception) {
       return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
-    } catch (final UserAlreadyExistsException exception) {
-      return ResponseEntity.status(HttpStatus.CONFLICT).build();
     }
     return ResponseEntity.ok(
       this.tokenMapper.toTokenDto(token)

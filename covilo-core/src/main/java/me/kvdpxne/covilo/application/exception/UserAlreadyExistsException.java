@@ -18,7 +18,7 @@ public class UserAlreadyExistsException extends UserException {
   /**
    *
    */
-  public static void byEmail(
+  public static UserAlreadyExistsException byEmail(
     final String email
   ) throws UserAlreadyExistsException {
     throw new UserAlreadyExistsException(

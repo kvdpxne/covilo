@@ -3,14 +3,12 @@
     <img class="avatar-image"
          src="https://cdn.discordapp.com/embed/avatars/0.png" alt="avatar">
     <span>
-          <!-- TODO replace to username -->
+          {{ me?.email }}
 
         </span>
   </div>
   <div ngbDropdownMenu>
-    <button ngbDropdownItem>Action - 1</button>
-    <button ngbDropdownItem>Another Action</button>
-    <button ngbDropdownItem>Something else is here</button>
+    <button ngbDropdownItem routerLink="me/overview">Overview</button>
     <div class="dropdown-divider"></div>
 
     <button ngbDropdownItem
