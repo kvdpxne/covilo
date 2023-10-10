@@ -1,0 +1,10 @@
+<!-- TODO Improve performance -->
+<!-- Angular suggests using the ngSrc directive to improve performance -->
+<!-- instead of the src attribute. -->
+<!-- See: https://angular.io/guide/image-directive -->
+<img [src]="avatarReference"
+     [height]="size"
+     [width]="size"
+     (error)="handleNotFoundImage()"
+     class="rounded-5"
+     alt="">

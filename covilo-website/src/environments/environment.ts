@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   apiUrl: "http://localhost:8080/api/0.1.0/",
-  resourceUrl: "http://localhost:8080/xdd/"
+  resourceUrl: "http://localhost:8080/run/data"
 }
 
 /*

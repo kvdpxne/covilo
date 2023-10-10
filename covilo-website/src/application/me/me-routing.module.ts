@@ -2,7 +2,7 @@ import {NgModule} from "@angular/core";
 import {RouterModule, Routes} from "@angular/router";
 import {MeComponent} from "./me.component";
 import {meGuard} from "./guard/me.guard";
-import {OverviewComponent} from "./router";
+import {ChangeAvatarComponent, ChangePasswordComponent, OverviewComponent} from "./router";
 
 const routes: Routes = [{
   path: "me",
@@ -14,6 +14,12 @@ const routes: Routes = [{
     path: "",
     redirectTo: "overview",
     pathMatch: "full"
+  }, {
+    path: "change-avatar",
+    component: ChangeAvatarComponent
+  }, {
+    path: "change-password",
+    component: ChangePasswordComponent
   }, {
     path: "overview",
     component: OverviewComponent

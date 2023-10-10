@@ -1,11 +1,9 @@
 <div ngbDropdown class="nav-item">
   <div ngbDropdownToggle>
-    <img class="avatar-image"
-         src="https://cdn.discordapp.com/embed/avatars/0.png" alt="avatar">
+    <avatar-image [size]="24"/>
     <span>
-          {{ me?.email }}
-
-        </span>
+      {{ me?.email }}
+    </span>
   </div>
   <div ngbDropdownMenu>
     <button ngbDropdownItem routerLink="me/overview">Overview</button>

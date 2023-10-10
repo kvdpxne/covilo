@@ -1,23 +1,29 @@
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {MeComponent} from './me.component';
+import {NgModule} from "@angular/core";
+import {CommonModule} from "@angular/common";
+import {MeComponent} from "./me.component";
 import {MeRoutingModule} from "./me-routing.module";
-import { OverviewComponent } from './router/overview/overview.component';
-import { SideNavigationBarComponent } from './component/side-navigation-bar/side-navigation-bar.component';
-import { SideNavigationComponent } from './component/side-navigation/side-navigation.component';
+import {ChangeAvatarComponent, OverviewComponent} from "./router";
+import {SideNavigationBarComponent, SideNavigationComponent} from "./component";
 import {SharedModule} from "../shared";
+import { ChangePasswordComponent } from "./router";
 
 @NgModule({
   declarations: [
     MeComponent,
     OverviewComponent,
     SideNavigationBarComponent,
-    SideNavigationComponent
+    SideNavigationComponent,
+    ChangeAvatarComponent,
+    ChangePasswordComponent
+  ],
+  exports: [
   ],
   imports: [
     CommonModule,
     MeRoutingModule,
+
     SharedModule
   ]
 })
-export class MeModule { }
+export class MeModule {
+}

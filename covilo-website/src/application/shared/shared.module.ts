@@ -7,7 +7,7 @@ import { NgbDropdownModule } from "@ng-bootstrap/ng-bootstrap"
 import { NavigationBackDirective } from "./directives/navigation-back.directive"
 
 import {
-  ApiHttpClientService, CardListComponent,
+  ApiHttpClientService, AvatarImageComponent, CardListComponent,
   InputComponent,
   TextFilterPipe
 } from "./";
@@ -16,6 +16,7 @@ import { BreadcrumbComponent } from "./components";
 
 @NgModule({
   declarations: [
+    AvatarImageComponent,
     TextFilterPipe,
     InputComponent,
     NavigationBackDirective,
@@ -24,6 +25,7 @@ import { BreadcrumbComponent } from "./components";
     BreadcrumbComponent
   ],
   exports: [
+    AvatarImageComponent,
     InputComponent,
     NavigationBackDirective,
     CardListComponent,

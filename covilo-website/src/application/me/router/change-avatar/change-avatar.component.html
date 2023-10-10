@@ -1,0 +1,57 @@
+<div class="d-grid gap-3 gap-lg-5">
+
+  <div class="card">
+    <div class="card-header border-bottom">
+      <h4 class="card-header-title">
+        Upload an Avatar
+      </h4>
+    </div>
+
+    <div class="card-body">
+      <p class="card-text">
+        Must be jpg, png or webp format. No NSFM allowed. No copyrighted
+        images. Maximum of 512 x 512 pixels (resized automatically).
+      </p>
+
+      <input type="file" class="form-control" (change)="onChange($event)"/>
+
+      <div *ngIf="file" class="mt-2">
+        <section class="file-info">
+          File details:
+          <ul>
+            <li>Name: {{file.name}}</li>
+            <li>Last modified: {{ lastModifiedDate }}</li>
+            <li>Type: {{file.type}}</li>
+            <li>Size: {{file.size}} bytes</li>
+          </ul>
+        </section>
+
+        <button (click)="onUpload()" class="btn btn-primary">
+          Upload the file
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="card">
+    <div class="card-header border-bottom">
+      <h4 class="card-header-title">
+        Remove avatar
+      </h4>
+    </div>
+
+    <div class="card-body">
+      <p class="card-text">
+        You can remove this picture by clicking the button below. Don't forget
+        to upload another though, or else you will have an N\A image in its
+        place.
+      </p>
+
+      <button (click)="onDelete()" class="btn btn-danger">
+        Delete avatar
+      </button>
+    </div>
+  </div>
+
+</div>

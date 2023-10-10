@@ -23,7 +23,7 @@
   <div class="row">
 
     <div class="col-lg-3">
-      <side-navigation-bar [fullName]="me?.firstName + ' ' + me?.lastName" [email]="me?.email"/>
+      <side-navigation-bar [user]="this.user" [fullName]="user?.firstName + ' ' + user?.lastName" [email]="user?.email"/>
     </div>
 
 

@@ -35,18 +35,6 @@ export abstract class BaseHttpClient {
     )
   }
 
-  public get<T>(
-    url: string,
-    showLoader: boolean = false,
-    loadingContent: string | null = null
-  ): Observable<T> {
-    const response = this.httpClient.get<T>(this.getUrl() + url, {
-      headers: this.getHttpHeaders(),
-      params: new BaseHttpParams(showLoader, loadingContent)
-    })
-    return this.handleResponse<T>(response)
-  }
-
   public post<T>(
     url: string,
     data: any,
@@ -61,16 +49,14 @@ export abstract class BaseHttpClient {
   }
 
   public put<T>(
-    url: string,
-    data: any,
-    showLoader: boolean = false,
-    loadingContent: string | null = null
+    path: string,
+    body: any
   ): Observable<T> {
-    const response = this.httpClient.put<T>(this.getUrl() + url, data, {
-      headers: this.getHttpHeaders(),
-      params: new BaseHttpParams(showLoader, loadingContent)
-    })
-    return this.handleResponse<T>(response)
+    return this.handleResponse<T>(
+      this.httpClient.put<T>(this.getUrl().concat(path), body, {
+        headers: this.getHttpHeaders()
+      })
+    )
   }
 
   public delete<T>(
@@ -87,7 +73,7 @@ export abstract class BaseHttpClient {
 
   private getHttpHeaders(): HttpHeaders {
     return new HttpHeaders()
-    .append("Content-Type", "application/json")
+    // .append("Content-Type", "application/json")
     .append("Accept", "*/*")
     .append("Accept-Language", "en")
     .append("Cache-Control", "no-cache")

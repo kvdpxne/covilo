@@ -92,8 +92,8 @@ export class ApplicationComponent implements OnInit {
   }
 
   private builtInIcons(): void {
-    this.iconSet.add(new Icon("github", new Link("GitHub", "")))
-    this.iconSet.add(new Icon("git", new Link("Git", "")))
+    this.iconSet.add(new Icon("github", new Link("GitHub", "https://github.com/kvdpxne/covilo")))
+    this.iconSet.add(new Icon("git", new Link("Git", "https://github.com/kvdpxne/covilo.git")))
   }
 
   private builtInLinks(): void {

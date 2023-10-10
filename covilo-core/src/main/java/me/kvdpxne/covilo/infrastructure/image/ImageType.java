@@ -2,6 +2,7 @@ package me.kvdpxne.covilo.infrastructure.image;
 
 import java.util.Collection;
 import java.util.Set;
+import java.util.function.Predicate;
 import lombok.Getter;
 import me.kvdpxne.covilo.shared.Validation;
 
@@ -54,26 +55,15 @@ public enum ImageType {
   }
 
   /**
-   * @throws NullPointerException     If the given extension is null.
-   * @throws IllegalArgumentException If the given extension is empty or
-   *                                  contains only spaces.
+   * @throws NullPointerException If the given predicate is null.
    */
-  public static ImageType getImageTypeByExtension(
-    final String extension
+  public static ImageType getImageTypeBy(
+    final Predicate<ImageType> predicate
   ) {
-    Validation.check(
-      extension,
-      "The given extension cannot be null."
-    );
-    Validation.check(
-      extension.isBlank(),
-      "The given extension cannot be empty or contain only spaces."
-    );
+    Validation.check(predicate, "The given predicate cannot be null.");
     for (final ImageType imageType : ImageType.values()) {
-      for (final String imageExtension : imageType.extensions) {
-        if (imageExtension.equalsIgnoreCase(extension)) {
-          return imageType;
-        }
+      if (predicate.test(imageType)) {
+        return imageType;
       }
     }
     return null;

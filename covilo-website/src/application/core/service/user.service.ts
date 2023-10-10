@@ -1,5 +1,5 @@
-import { Injectable } from "@angular/core"
-import { ApiHttpClientService } from "../../shared"
+import {Injectable} from "@angular/core";
+import {ApiHttpClientService} from "../../shared";
 import {Observable} from "rxjs";
 import {User} from "../model/user";
 
@@ -15,10 +15,14 @@ export class UserService {
   }
 
   public getMe(): Observable<User> {
-    return this.api.get2<User>("me", {})
+    return this.api.get2<User>("me", {}).pipe();
   }
 
-  public viewAvatar(): Observable<string> {
-    return this.api.get2<string>("me/avatar")
+  public uploadAvatar(file: FormData): Observable<void> {
+    return this.api.post2<void>("me/avatar", file);
+  }
+
+  public deleteAvatar(): Observable<void> {
+    return this.api.delete<void>("me/delete");
   }
 }

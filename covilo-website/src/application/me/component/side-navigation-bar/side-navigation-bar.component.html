@@ -1,0 +1,24 @@
+<!-- Navbar -->
+<div class="navbar-expand-lg navbar-light">
+  <div id="sidebarNav" class="collapse navbar-collapse navbar-vertical">
+    <!-- Card -->
+    <div class="card flex-grow-1 mb-5">
+      <div class="card-body">
+        <!-- Avatar -->
+        <div class="d-none d-lg-block text-center mb-5">
+
+          <div class="mb-3">
+            <avatar-image [size]="184"/>
+          </div>
+
+          <h4 class="card-title mb-0">{{ fullName }}</h4>
+          <p class="card-text small">{{ email }}</p>
+        </div>
+
+        <!--        -->
+        <side-navigation [content]="fs"/>
+
+      </div>
+    </div>
+  </div>
+</div>

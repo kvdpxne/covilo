@@ -1,24 +1,32 @@
 import {Component, OnInit} from "@angular/core";
 import {User, UserService} from "../core";
-import {Link} from "../shared";
 
 @Component({
   selector: "app-me",
   templateUrl: "./me.component.html",
-  styleUrls: ["./me.component.scss"]
+  styleUrls: [
+    "./me.component.scss"
+  ]
 })
-export class MeComponent implements OnInit {
+export class MeComponent
+  implements OnInit {
 
   private readonly userService: UserService;
-  public me?: User;
+  public user?: User;
 
-  constructor(userService: UserService) {
+  public constructor(userService: UserService) {
     this.userService = userService;
   }
 
   public ngOnInit(): void {
-    this.userService.getMe().subscribe((user: User): void => {
-      this.me = user;
+    //
+    this.userService.getMe().subscribe({
+      next: (user: User): void => {
+        this.user = user;
+      },
+      error: (): void => {
+        console.debug("The user has not been authenticated.");
+      }
     });
   }
 }

@@ -6,8 +6,12 @@ import me.kvdpxne.covilo.application.dto.UserDto;
 import me.kvdpxne.covilo.application.exception.UserNotFoundException;
 import me.kvdpxne.covilo.application.mapper.IUserMapper;
 import me.kvdpxne.covilo.application.payload.UpdateEmailRequest;
+import me.kvdpxne.covilo.application.payload.UpdatePasswordRequest;
 import me.kvdpxne.covilo.domain.model.User;
 import me.kvdpxne.covilo.domain.persistence.ITokenRepository;
+import me.kvdpxne.covilo.domain.service.UserLifecycleService;
+import me.kvdpxne.covilo.infrastructure.image.ImageMimeTypeNotSupportedException;
+import me.kvdpxne.covilo.infrastructure.image.ImageType;
 import me.kvdpxne.covilo.infrastructure.security.TokenAuthenticationRequestFilter;
 import me.kvdpxne.covilo.infrastructure.storage.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +36,7 @@ public final class UserMeController {
   private final ITokenRepository tokenRepository;
   private final IUserMapper userMapper;
   private final StorageService storageService;
+  private final UserLifecycleService userLifecycleService;
 
   private User getUserByCompactToken(
     final HttpServletRequest request
@@ -64,16 +70,25 @@ public final class UserMeController {
   public ResponseEntity<?> updateEmail(
     final HttpServletRequest httpServletRequest,
     @RequestBody final UpdateEmailRequest request
-  ) {
+  ) throws UserNotFoundException {
+    final User user = this.getUserByCompactToken(httpServletRequest);
+    this.userLifecycleService.updateUserEmail(user, request.newEmail());
+
     return ResponseEntity.ok().build();
   }
 
   @PutMapping("password")
-  public ResponseEntity<?> updatePassword() {
+  public ResponseEntity<?> updatePassword(
+    final HttpServletRequest httpServletRequest,
+    @RequestBody final UpdatePasswordRequest request
+  ) throws UserNotFoundException {
+    final User user = this.getUserByCompactToken(httpServletRequest);
+    this.userLifecycleService.updateUserEmail(user, request.newPassword());
+
     return ResponseEntity.ok().build();
   }
 
-  @PutMapping(
+  @PostMapping(
     path = "avatar",
     consumes = MediaType.MULTIPART_FORM_DATA_VALUE
   )
@@ -87,6 +102,19 @@ public final class UserMeController {
     final User user = this.tokenRepository.findUserByCompactTokenOrNull(compactToken);
     if (null == user) {
       return ResponseEntity.notFound().build();
+    }
+
+    final String mimeType = multipartFile.getContentType();
+    final ImageType imageType = ImageType.getImageTypeBy(
+      //
+      //
+      type -> type.getMimeType().equals(mimeType)
+    );
+
+    if (null == imageType) {
+      throw new ImageMimeTypeNotSupportedException(
+        String.format("Mime type \"%s\" is not supported.", mimeType)
+      );
     }
 
     this.storageService.storeUserAvatar(
