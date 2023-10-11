@@ -2,26 +2,29 @@ import {NgModule} from "@angular/core";
 import {CommonModule} from "@angular/common";
 import {MeComponent} from "./me.component";
 import {MeRoutingModule} from "./me-routing.module";
-import {ChangeAvatarComponent, OverviewComponent} from "./router";
+import {ChangeAvatarComponent, ChangePasswordComponent, OverviewComponent} from "./router";
 import {SideNavigationBarComponent, SideNavigationComponent} from "./component";
+import {TranslateModule} from "@ngx-translate/core";
 import {SharedModule} from "../shared";
-import { ChangePasswordComponent } from "./router";
 
 @NgModule({
   declarations: [
-    MeComponent,
-    OverviewComponent,
-    SideNavigationBarComponent,
     SideNavigationComponent,
+    SideNavigationBarComponent,
+
     ChangeAvatarComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    OverviewComponent,
+
+    MeComponent
   ],
-  exports: [
-  ],
+  exports: [],
   imports: [
     CommonModule,
-    MeRoutingModule,
 
+    TranslateModule.forChild(),
+
+    MeRoutingModule,
     SharedModule
   ]
 })

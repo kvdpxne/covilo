@@ -1,11 +1,10 @@
 import {Component, OnInit} from "@angular/core";
 import {ActivatedRoute, UrlSegment} from "@angular/router";
 import {City, Crime, CrimeService} from "src/application/core";
-import {GeographicalService} from "../../core";
-import {Category} from "../../core/model/category";
+import {Category, GeographicalService} from "../../core";
 
 @Component({
-  selector: "covilo-result-details",
+  selector: "router-result-details",
   templateUrl: "./result-details.component.html"
 })
 export class ResultDetailsComponent implements OnInit {
@@ -50,35 +49,35 @@ export class ResultDetailsComponent implements OnInit {
       series: [
         {
           name: new Date(2023, 6, 1).getTime(),
-          value: 10,
+          value: 10
         },
         {
           name: new Date(2023, 6, 2).getTime(),
-          value: 15,
+          value: 15
         },
         {
           name: new Date(2023, 6, 3).getTime(),
-          value: 8,
-        },
-      ],
+          value: 8
+        }
+      ]
     },
     {
       name: "Confirmed",
       series: [
         {
           name: new Date(2023, 6, 1).getTime(),
-          value: 7,
+          value: 7
         },
         {
           name: new Date(2023, 6, 2).getTime(),
-          value: 14,
+          value: 14
         },
         {
           name: new Date(2023, 6, 3).getTime(),
-          value: 1,
-        },
-      ],
-    },
+          value: 1
+        }
+      ]
+    }
   ];
 
   public constructor(
@@ -123,12 +122,12 @@ export class ResultDetailsComponent implements OnInit {
 
       this.geographicalService.getCity(lastSegment).subscribe(it => this.city = it);
       this.crimeService.getCrimes(lastSegment).subscribe(it => {
-        this.crimes = it.content
-        this.filteredCrimes = it.content
+        this.crimes = it.content;
+        this.filteredCrimes = it.content;
       });
     }
 
-    this.crimeService.getCategories().subscribe(it => this.categories = it)
+    this.crimeService.getCategories().subscribe(it => this.categories = it);
   }
 
   public filterBy(category: Category) {

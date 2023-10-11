@@ -1,13 +1,12 @@
 import {AuthenticationStrategy} from "./authentication-strategy";
-import {Token} from "../../core/model/token";
+import {Token, User} from "../../core";
 import {Observable, of} from "rxjs";
-import {User} from "../../core";
-import {StorageService} from "../../shared/services/storage.service";
-import {StorageKey} from "../../shared/services/storage-key";
+import {StorageKey, StorageService} from "../../shared";
 
-export class TokenAuthenticationStrategy implements AuthenticationStrategy<Token> {
+export class TokenAuthenticationStrategy
+  implements AuthenticationStrategy<Token> {
 
-  private readonly storageService: StorageService
+  private readonly storageService: StorageService;
 
   constructor(storageService: StorageService) {
     this.storageService = storageService;
@@ -24,7 +23,7 @@ export class TokenAuthenticationStrategy implements AuthenticationStrategy<Token
       const payload: string = window.atob(encodedPayload);
       return of(JSON.parse(payload));
     }
-    return of(null)
+    return of(null);
   }
 
   isLogged(): boolean {
@@ -36,6 +35,6 @@ export class TokenAuthenticationStrategy implements AuthenticationStrategy<Token
   }
 
   doLogout(): void {
-    localStorage.removeItem("token");
+    localStorage.removeItem(StorageKey.TOKEN);
   }
 }

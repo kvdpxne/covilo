@@ -1,37 +1,38 @@
-import { BrowserModule } from "@angular/platform-browser"
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations"
-import { NgModule } from "@angular/core"
-import { FormsModule, ReactiveFormsModule } from "@angular/forms"
-import { HttpClient, HttpClientModule } from "@angular/common/http"
+import {BrowserModule} from "@angular/platform-browser";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {NgModule} from "@angular/core";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {HttpClient, HttpClientModule} from "@angular/common/http";
 
-import { TranslateLoader, TranslateModule } from "@ngx-translate/core"
-import { TranslateHttpLoader } from "@ngx-translate/http-loader"
+import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
+import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 
-import { NgbModule } from "@ng-bootstrap/ng-bootstrap"
-
-//
-import { CoreModule } from "./core/core.module"
+import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 
 //
-import { SharedModule } from "./shared"
+import {CoreModule} from "./core";
 
 //
-import { AuthenticationModule } from "./authentication"
+import {SharedModule} from "./shared";
 
-import { ApplicationRoutingModule } from "./application-routing.module"
+//
+import {AuthenticationModule} from "./authentication";
 
-import { ApplicationComponent } from "./application.component"
+import {ApplicationRoutingModule} from "./application-routing.module";
+
+import {ApplicationComponent} from "./application.component";
 
 import {
+  ComingSoonComponent,
   HomeComponent,
+  InteractiveMapComponent,
   PageNotFoundComponent,
   ResultDetailsComponent,
   StatisticsComponent
-} from "./apperance"
-import {MeModule} from "./me/me.module";
+} from "./apperance";
+import {MeModule} from "./me";
 import {LineChartModule} from "@swimlane/ngx-charts";
-import { ReportingComponent } from './reporting/reporting.component';
-import { ComingSoonComponent } from "./apperance";
+import {ReportingComponent} from "./reporting/reporting.component";
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { ComingSoonComponent } from "./apperance";
     ResultDetailsComponent,
     StatisticsComponent,
     ReportingComponent,
-    ComingSoonComponent
+    ComingSoonComponent,
+    InteractiveMapComponent
   ],
   imports: [
     BrowserModule,
@@ -69,7 +71,7 @@ import { ComingSoonComponent } from "./apperance";
     ApplicationRoutingModule,
 
     NgbModule,
-    LineChartModule,
+    LineChartModule
   ],
   exports: [
     ApplicationComponent
@@ -82,5 +84,5 @@ export class ApplicationModule {
 }
 
 export function createTranslateLoader(http: HttpClient) {
-  return new TranslateHttpLoader(http, "assets/localization/", ".json")
+  return new TranslateHttpLoader(http, "assets/localization/", ".json");
 }

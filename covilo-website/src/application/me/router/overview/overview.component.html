@@ -1,77 +1,83 @@
 <div class="d-grid gap-3 gap-lg-5">
-  <!-- Card -->
   <div class="card">
     <div class="card-header border-bottom">
-      <h4 class="card-header-title">Basic info</h4>
+      <h4 class="card-header-title">
+        {{ "me.overview.basicInformation" | translate }}
+      </h4>
     </div>
 
-    <!-- Body -->
     <div class="card-body">
-      <!-- Form -->
       <div class="row mb-4">
-        <label for="firstNameLabel" class="col-sm-3 col-form-label form-label">Full name <i
-          class="bi-question-circle text-body ms-1" data-bs-toggle="tooltip" data-bs-placement="top"
-          aria-label="Displayed on public forums, such as Front."
-          data-bs-original-title="Displayed on public forums, such as Front."></i></label>
+        <label class="col-sm-3 col-form-label form-label">
+          {{ "me.overview.fullName" | translate }}
+          <i class="bi-question-circle text-body ms-1">
+
+          </i>
+        </label>
 
         <div class="col-sm-9">
-          <div class="input-group">
-            <input type="text" class="form-control" name="firstName" id="firstNameLabel" placeholder="Clarice">
-            <input type="text" class="form-control" name="lastName" id="lastNameLabel" placeholder="Boone">
+          <div>
+            {{ user?.firstName }} {{ user?.lastName }}
           </div>
         </div>
       </div>
 
       <div class="row mb-4">
-        <label for="emailLabel" class="col-sm-3 col-form-label form-label">
-          Displayed name
+        <label class="col-sm-3 col-form-label form-label">
+          {{ "me.overview.email" | translate }}
+          <i class="bi-question-circle text-body ms-1">
+
+          </i>
         </label>
 
         <div class="col-sm-9">
-          <input type="email" class="form-control" name="email" id="emailLabel"
-                 placeholder="clarice@example.com">
+          <div>
+            {{ user?.email }}
+          </div>
         </div>
       </div>
 
       <div class="row mb-4">
-        <label for="emailLabel" class="col-sm-3 col-form-label form-label">Email</label>
+        <label class="col-sm-3 col-form-label form-label">
+          {{ "me.overview.gender" | translate }}
+          <i class="bi-question-circle text-body ms-1">
+
+          </i>
+        </label>
 
         <div class="col-sm-9">
-          <input type="email" class="form-control" name="email" id="emailLabel"
-                 placeholder="clarice@example.com">
+          <div>
+            {{ user?.gender | titlecase }}
+          </div>
         </div>
       </div>
 
       <div class="row mb-4">
-        <label class="col-sm-3 col-form-label form-label">Gender</label>
+        <label class="col-sm-3 col-form-label form-label">
+          {{ "me.overview.createdDate" | translate }}
+          <i class="bi-question-circle text-body ms-1">
+
+          </i>
+        </label>
 
         <div class="col-sm-9">
-          <div class="input-group input-group-md-down-break">
-            <!-- Radio Check -->
-            <label class="form-control" for="genderTypeRadio1">
-                    <span class="form-check">
-                      <input type="radio" class="form-check-input" name="genderTypeRadio" id="genderTypeRadio1">
-                      <span class="form-check-label">Male</span>
-                    </span>
-            </label>
-            <!-- End Radio Check -->
+          <div>
+            {{ user?.createdDate }}
+          </div>
+        </div>
+      </div>
 
-            <!-- Radio Check -->
-            <label class="form-control" for="genderTypeRadio2">
-                    <span class="form-check">
-                      <input type="radio" class="form-check-input" name="genderTypeRadio" id="genderTypeRadio2" checked="">
-                      <span class="form-check-label">Female</span>
-                    </span>
-            </label>
-            <!-- End Radio Check -->
+      <div class="row mb-4">
+        <label class="col-sm-3 col-form-label form-label">
+          {{ "me.overview.lastModifiedDate" | translate }}
+          <i class="bi-question-circle text-body ms-1">
 
-            <!-- Radio Check -->
-            <label class="form-control" for="genderTypeRadio3">
-                    <span class="form-check">
-                      <input type="radio" class="form-check-input" name="genderTypeRadio" id="genderTypeRadio3">
-                      <span class="form-check-label">Other</span>
-                    </span>
-            </label>
+          </i>
+        </label>
+
+        <div class="col-sm-9">
+          <div>
+            {{ user?.lastModifiedDate }}
           </div>
         </div>
       </div>

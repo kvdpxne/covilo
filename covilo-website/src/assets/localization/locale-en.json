@@ -78,9 +78,23 @@
     "navigation": {
       "home": "Home page",
       "report": "Report",
+      "interactive-map": "Interactive map",
       "statistics": "Statistics",
       "login": "Log in",
       "signup": "Sign up"
+    }
+  },
+  "me": {
+    "side-navigation": {
+      "account": "Account"
+    },
+    "overview": {
+      "basicInformation": "Basic information",
+      "fullName": "Full name",
+      "email": "Email address",
+      "gender": "Gender",
+      "createdDate": "Created date",
+      "lastModifiedDate": "Last modified date"
     }
   },
   "shared": {

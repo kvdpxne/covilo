@@ -1,11 +1,17 @@
 import {Component} from "@angular/core";
-import {City, Country, CrimeService, GeographicalService, Province, User} from "../core";
+import {
+  Book,
+  Category,
+  City,
+  Country,
+  CrimeService,
+  GeographicalService,
+  Province,
+  ReportCrimeRequest,
+  User
+} from "../core";
 import {ActivatedRoute} from "@angular/router";
-import {Continent} from "../core/model/continent";
-import {Category} from "../core/model/category";
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
-import {ReportCrimeRequest} from "../core/playload/report-crime-request";
-import {Book} from "../core/aggregation/book";
 
 interface ReportForm {
 
@@ -19,9 +25,8 @@ interface ReportForm {
 }
 
 @Component({
-  selector: "reporting-route",
-  templateUrl: "./reporting.component.html",
-  styleUrls: ["./reporting.component.scss"]
+  selector: "router-reporting",
+  templateUrl: "./reporting.component.html"
 })
 export class ReportingComponent {
 
@@ -55,7 +60,6 @@ export class ReportingComponent {
     route: ActivatedRoute,
     geographicalService: GeographicalService,
     crimeService: CrimeService,
-
     formBuilder: FormBuilder
   ) {
     this.geographicalService = geographicalService;
@@ -181,14 +185,14 @@ export class ReportingComponent {
    *
    */
   public submit(): void {
-    const datetime: Date | null = this.datetime.value
+    const datetime: Date | null = this.datetime.value;
     const city: City | null = this.city.value;
     const reporter: User | undefined = undefined;
     const category: Category | null = this.category.value;
     const description: string | null = this.description.value;
 
     if (!datetime || !city || !category || !description) {
-      return
+      return;
     }
 
     const request: ReportCrimeRequest = {
@@ -201,11 +205,11 @@ export class ReportingComponent {
       confirmed: false
     };
 
-    console.log("log request")
-    console.log(request)
+    console.log("log request");
+    console.log(request);
 
     this.crimeService.report(request).subscribe({
       next: (value) => console.log(value)
-    })
+    });
   }
 }

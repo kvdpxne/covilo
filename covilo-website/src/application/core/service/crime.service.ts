@@ -18,7 +18,7 @@ export class CrimeService {
   }
 
   public getCategories(): Observable<Category[]> {
-    return this.api.get2("search/categories")
+    return this.api.get2("search/categories");
   }
 
   public getCrimes(city: string): Observable<Book<Crime>> {
@@ -28,6 +28,6 @@ export class CrimeService {
   }
 
   public report(request: ReportCrimeRequest): Observable<Crime> {
-    return this.api.post2<Crime>("crime/report", request)
+    return this.api.post2<Crime>("crime/report", request);
   }
 }

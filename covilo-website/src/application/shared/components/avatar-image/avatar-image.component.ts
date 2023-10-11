@@ -1,24 +1,22 @@
 import {Component, Input, OnInit} from "@angular/core";
-import {UserService} from "../../../core/service/user.service";
-import {User} from "../../../core/model/user";
+import {User, UserLifecycleService} from "../../../core";
 import {environment} from "../../../../environments/environment";
 
 @Component({
   selector: "avatar-image",
   templateUrl: "./avatar-image.component.html"
 })
-export class AvatarImageComponent implements OnInit {
+export class AvatarImageComponent
+  implements OnInit {
 
   @Input()
   public size?: number;
 
-  private readonly userService: UserService;
-  private user?: User;
-
+  private readonly userLifecycleService: UserLifecycleService;
   public avatarReference?: string;
 
-  public constructor(userService: UserService) {
-    this.userService = userService;
+  public constructor(userLifecycleService: UserLifecycleService) {
+    this.userLifecycleService = userLifecycleService;
   }
 
   private getUrlToUserAvatar(user: User): string {
@@ -34,20 +32,11 @@ export class AvatarImageComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.userService.getMe().subscribe({
+    this.userLifecycleService.user.subscribe({
       next: (user: User): void => {
-        this.user = user;
+        this.avatarReference = this.getUrlToUserAvatar(user);
       },
-      error: (): void => {
-        this.handleNotFoundImage();
-      },
-      complete: (): void => {
-        if (this.user) {
-          this.avatarReference = this.getUrlToUserAvatar(this.user);
-          return;
-        }
-        this.handleNotFoundImage();
-      }
+      error: (): void => this.handleNotFoundImage()
     });
   }
 }

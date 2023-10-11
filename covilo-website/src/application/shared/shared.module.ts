@@ -1,41 +1,45 @@
-import { ModuleWithProviders, NgModule } from "@angular/core"
-import { CommonModule } from "@angular/common"
-import { FormsModule } from "@angular/forms"
-import { TranslateModule } from "@ngx-translate/core"
-import { NgbDropdownModule } from "@ng-bootstrap/ng-bootstrap"
-
-import { NavigationBackDirective } from "./directives/navigation-back.directive"
+import {ModuleWithProviders, NgModule} from "@angular/core";
+import {CommonModule} from "@angular/common";
+import {FormsModule} from "@angular/forms";
+import {TranslateModule} from "@ngx-translate/core";
+import {NgbDropdownModule} from "@ng-bootstrap/ng-bootstrap";
 
 import {
-  ApiHttpClientService, AvatarImageComponent, CardListComponent,
+  ApiHttpClientService,
+  AvatarImageComponent,
+  BreadcrumbComponent,
+  CardComponent,
+  CardListComponent,
   InputComponent,
+  NavigationBackDirective,
   TextFilterPipe
 } from "./";
-import { CardComponent } from './components';
-import { BreadcrumbComponent } from "./components";
 
 @NgModule({
   declarations: [
     AvatarImageComponent,
-    TextFilterPipe,
-    InputComponent,
-    NavigationBackDirective,
+    BreadcrumbComponent,
     CardComponent,
     CardListComponent,
-    BreadcrumbComponent
+    InputComponent,
+
+    NavigationBackDirective,
+    TextFilterPipe
   ],
   exports: [
     AvatarImageComponent,
-    InputComponent,
-    NavigationBackDirective,
+    BreadcrumbComponent,
+    CardComponent,
     CardListComponent,
-    BreadcrumbComponent
+    InputComponent,
+
+    NavigationBackDirective
   ],
   imports: [
     CommonModule,
+    FormsModule,
     TranslateModule.forChild(),
-    NgbDropdownModule,
-    FormsModule
+    NgbDropdownModule
   ]
 })
 export class SharedModule {
@@ -44,6 +48,6 @@ export class SharedModule {
     return {
       ngModule: SharedModule,
       providers: [ApiHttpClientService]
-    }
+    };
   }
 }

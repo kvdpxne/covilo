@@ -2,7 +2,7 @@ import {Component} from "@angular/core";
 import {UserService} from "../../../core";
 
 @Component({
-  selector: "change-avatar",
+  selector: "route-change-avatar",
   templateUrl: "./change-avatar.component.html"
 })
 export class ChangeAvatarComponent {

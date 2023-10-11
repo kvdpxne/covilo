@@ -78,9 +78,23 @@
     "navigation": {
       "home": "Strona główna",
       "report": "Zgłoś",
+      "interactive-map": "Interaktywna mapa",
       "statistics": "Statystyki",
       "login": "Logowanie",
       "signup": "Rejestracja"
+    }
+  },
+  "me": {
+    "side-navigation": {
+      "account": "Konto"
+    },
+    "overview": {
+      "basicInformation": "Podstawowe informacje",
+      "fullName": "Pełna nazwa",
+      "email": "Adres email",
+      "gender": "Płeć",
+      "createdDate": "Data utworzenia",
+      "lastModifiedDate": "Data ostatniej modyfikacji"
     }
   },
   "shared": {

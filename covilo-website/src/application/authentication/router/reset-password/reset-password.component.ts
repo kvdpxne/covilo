@@ -1,9 +1,9 @@
 import {Component} from "@angular/core";
 import {FormControl, Validators} from "@angular/forms";
-import {ResetPasswordRequest} from "../../../core/playload/reset-password-request";
+import {ResetPasswordRequest} from "../../../core";
 
 @Component({
-  selector: "covilo-authentication-forgot-password",
+  selector: "router-authentication-reset-password",
   templateUrl: "./reset-password.component.html"
 })
 export class ResetPasswordComponent {

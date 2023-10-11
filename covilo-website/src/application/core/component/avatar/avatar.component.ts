@@ -1,25 +1,25 @@
 import {Component, OnInit} from "@angular/core";
 import {AuthenticationService} from "../../../authentication";
 import {User} from "../../model/user";
-import {UserService} from "../../service/user.service";
+import {UserLifecycleService} from "../../service/user-lifecycle.service";
 
 @Component({
   selector: "covilo-avatar",
-  templateUrl: "./avatar.component.html",
-  styleUrls: ["./avatar.component.scss"]
+  templateUrl: "./avatar.component.html"
 })
-export class AvatarComponent implements OnInit {
+export class AvatarComponent
+  implements OnInit {
 
-  private readonly userService: UserService;
+  private readonly userLifecycleService: UserLifecycleService;
   private readonly authenticationService: AuthenticationService;
 
   public me?: User;
 
   public constructor(
-    userService: UserService,
-    authenticationService: AuthenticationService,
+    userLifecycleService: UserLifecycleService,
+    authenticationService: AuthenticationService
   ) {
-    this.userService = userService;
+    this.userLifecycleService = userLifecycleService;
     this.authenticationService = authenticationService;
   }
 
@@ -28,8 +28,8 @@ export class AvatarComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.userService.getMe().subscribe((user: User): void => {
-      this.me = user;
+    this.userLifecycleService.user.subscribe({
+      next: (user: User): User => this.me = user
     });
   }
 }

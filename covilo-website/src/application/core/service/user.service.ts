@@ -8,21 +8,24 @@ import {User} from "../model/user";
 })
 export class UserService {
 
-  private readonly api: ApiHttpClientService;
+  private readonly httpClientService: ApiHttpClientService;
 
-  constructor(api: ApiHttpClientService) {
-    this.api = api;
+  public constructor(httpClientService: ApiHttpClientService) {
+    this.httpClientService = httpClientService;
   }
 
-  public getMe(): Observable<User> {
-    return this.api.get2<User>("me", {}).pipe();
+  /**
+   *
+   */
+  public get me(): Observable<User> {
+    return this.httpClientService.get2<User>("me");
   }
 
   public uploadAvatar(file: FormData): Observable<void> {
-    return this.api.post2<void>("me/avatar", file);
+    return this.httpClientService.post2<void>("me/avatar", file);
   }
 
   public deleteAvatar(): Observable<void> {
-    return this.api.delete<void>("me/delete");
+    return this.httpClientService.delete<void>("me/delete");
   }
 }

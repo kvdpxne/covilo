@@ -2,7 +2,7 @@ import {NgModule} from "@angular/core"
 import {CommonModule} from "@angular/common"
 import {FormsModule, ReactiveFormsModule} from "@angular/forms"
 import {TranslateModule} from "@ngx-translate/core"
-import {ApplicationRoutingModule} from "./authentication-routing.module"
+import {AuthenticationRoutingModule} from "./authentication-routing.module"
 import {AuthenticationComponent, ResetPasswordComponent, LoginComponent} from "./"
 import {SharedModule} from "../shared"
 import {AUTHENTICATION_STRATEGY_PROVIDER} from "./service/authentication-strategy";
@@ -25,8 +25,8 @@ import {SignupComponent} from './router';
     FormsModule,
     ReactiveFormsModule,
     TranslateModule.forChild(),
-    ApplicationRoutingModule,
-    SharedModule
+    SharedModule,
+    AuthenticationRoutingModule,
   ]
 })
 export class AuthenticationModule {

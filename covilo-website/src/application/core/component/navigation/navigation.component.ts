@@ -1,7 +1,5 @@
-import {Component, Input, OnInit} from "@angular/core";
-import {Link} from "../../../shared/types/link";
-import {StorageService} from "../../../shared/services/storage.service";
-import {StorageKey} from "../../../shared/services/storage-key";
+import {Component, Input} from "@angular/core";
+import {Link, StorageKey, StorageService} from "../../../shared";
 
 @Component({
   selector: "a-navigation",
@@ -10,14 +8,14 @@ import {StorageKey} from "../../../shared/services/storage-key";
 export class NavigationComponent {
 
   // If true, will collapse the element or show it otherwise
-  isCollapsed: boolean = true
+  isCollapsed: boolean = true;
 
   private readonly storageService: StorageService;
 
   isLoggedIn: boolean;
 
   @Input()
-  itemList!: Set<Link>
+  itemList!: Set<Link>;
 
   constructor(storageService: StorageService) {
     this.storageService = storageService;
@@ -25,6 +23,6 @@ export class NavigationComponent {
   }
 
   toggleCollapse(): void {
-    this.isCollapsed = !this.isCollapsed
+    this.isCollapsed = !this.isCollapsed;
   };
 }

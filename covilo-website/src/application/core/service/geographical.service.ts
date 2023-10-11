@@ -19,7 +19,7 @@ export class GeographicalService {
   }
 
   public getCountries(): Observable<Book<Country>> {
-    return this.api.get2("geographical/countries")
+    return this.api.get2("geographical/countries");
   }
 
   public getCountriesByContinent(continent: Continent): Observable<Country[]> {

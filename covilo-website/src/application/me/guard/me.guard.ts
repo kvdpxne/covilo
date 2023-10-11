@@ -8,7 +8,7 @@ export const meGuard: CanActivateFn = (): Observable<boolean> => {
   const router: Router = inject(Router);
   const authenticationService: AuthenticationService = inject(AuthenticationService);
 
-  return authenticationService.isLoggedIn().pipe(
+  return authenticationService.isLogged().pipe(
     tap((isLogged: boolean): void => {
       if (!isLogged) {
         router.navigateByUrl("/authentication/login").catch(error => throwError(() => error));

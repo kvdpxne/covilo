@@ -1,12 +1,11 @@
 import {Component, OnInit} from "@angular/core";
 import {Router} from "@angular/router";
 import {City, Country, Province} from "src/application/core";
-import {GeographicalService} from "../../core";
-import {Continent} from "../../core/model/continent";
+import {Book, GeographicalService} from "../../core";
 import {throwError} from "rxjs";
-import {Book} from "../../core/aggregation/book";
 
 @Component({
+  selector: "router-home",
   templateUrl: "./home.component.html",
   styleUrls: [
     "./home.component.scss"

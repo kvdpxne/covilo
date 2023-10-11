@@ -1,9 +1,9 @@
 import {Observable} from "rxjs";
 import {User} from "../../core";
-import {FactoryProvider, inject, Injectable, InjectionToken} from "@angular/core";
+import {FactoryProvider, inject, InjectionToken} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {TokenAuthenticationStrategy} from "./token-authentication-strategy";
-import {StorageService} from "../../shared/services/storage.service";
+import {StorageService} from "../../shared";
 
 export interface AuthenticationStrategy<T> {
 

@@ -1,10 +1,8 @@
-import {Component} from "@angular/core"
+import {Component} from "@angular/core";
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthenticationService} from "../../service/authentication.service";
-import {LoginRequest} from "../../../core/playload/login-request";
+import {LoginRequest} from "../../../core";
 import {Router} from "@angular/router";
-import {Token} from "../../../core/model/token";
-import {throwError} from "rxjs";
 
 interface LoginForm {
 
@@ -13,7 +11,7 @@ interface LoginForm {
 }
 
 @Component({
-  selector: "covilo-authentication-login",
+  selector: "router-authentication-login",
   templateUrl: "./login.component.html"
 })
 export class LoginComponent {
@@ -87,8 +85,9 @@ export class LoginComponent {
     };
 
     this.authenticationService.login(request).subscribe((): void => {
-      // noinspection JSIgnoredPromiseFromCall
-      this.router.navigate(["/"])
+      this.router.navigate(["/"]).catch((reason: any): void => {
+        console.error(reason);
+      });
     });
   }
 }

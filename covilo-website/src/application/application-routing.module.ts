@@ -1,8 +1,8 @@
-import {NgModule} from "@angular/core"
-import {RouterModule, Routes} from "@angular/router"
+import {NgModule} from "@angular/core";
+import {RouterModule, Routes} from "@angular/router";
 import {
   ComingSoonComponent,
-  HomeComponent,
+  HomeComponent, InteractiveMapComponent,
   PageNotFoundComponent,
   ResultDetailsComponent,
   StatisticsComponent
@@ -14,6 +14,10 @@ const routes: Routes = [
     path: "",
     pathMatch: "full",
     component: HomeComponent
+  },
+  {
+    path: "interactive-map",
+    component: InteractiveMapComponent
   },
   {
     path: "result-details/:city",
@@ -36,7 +40,7 @@ const routes: Routes = [
     pathMatch: "full",
     component: PageNotFoundComponent
   }
-]
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

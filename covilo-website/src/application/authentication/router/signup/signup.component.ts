@@ -1,10 +1,8 @@
-import {Component} from '@angular/core';
+import {Component} from "@angular/core";
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthenticationService} from "../../service/authentication.service";
 import {Router} from "@angular/router";
-import {SignupRequest} from "../../../core/playload/signup-request";
-import {Token} from "../../../core/model/token";
-import {throwError} from "rxjs";
+import {SignupRequest} from "../../../core";
 
 interface SignupForm {
 
@@ -18,8 +16,8 @@ interface SignupForm {
 }
 
 @Component({
-  selector: "covilo-authentication-signup",
-  templateUrl: "./signup.component.html",
+  selector: "router-authentication-signup",
+  templateUrl: "./signup.component.html"
 })
 export class SignupComponent {
 
@@ -46,7 +44,7 @@ export class SignupComponent {
       email: new FormControl<string | null>(null),
       password: new FormControl<string | null>(null),
       confirmPassword: new FormControl<string | null>(null),
-      privacyPolicy: new FormControl<boolean | null>(false),
+      privacyPolicy: new FormControl<boolean | null>(false)
     }, {
       validators: Validators.required
     });
@@ -98,10 +96,10 @@ export class SignupComponent {
 
   public submit(): void {
     //
-    const email           : string  | null = this.email.value;
-    const password        : string  | null = this.password.value;
-    const confirmPassword : string  | null = this.password.value;
-    const privacyPolicy   : boolean | null = this.privacyPolicy.value;
+    const email: string | null = this.email.value;
+    const password: string | null = this.password.value;
+    const confirmPassword: string | null = this.password.value;
+    const privacyPolicy: boolean | null = this.privacyPolicy.value;
 
     // Checks if the values are not null or empty.
     if (!email || !password || !confirmPassword || !privacyPolicy) {
@@ -110,17 +108,18 @@ export class SignupComponent {
 
     //
     const request: SignupRequest = {
-      firstName       : "Sergio",
-      lastName        : "Drugi",
-      email           : email,
-      password        : password,
-      confirmPassword : confirmPassword,
-      privacyPolicy   : privacyPolicy
+      firstName: "Sergio",
+      lastName: "Drugi",
+      email: email,
+      password: password,
+      confirmPassword: confirmPassword,
+      privacyPolicy: privacyPolicy
     };
 
-    this.authenticationService.signup(request).subscribe((token: Token) => {
-      console.log(token);
-      this.router.navigate(["/"]).catch(error => throwError(error));
+    this.authenticationService.signup(request).subscribe((): void => {
+      this.router.navigate(["/"]).catch((reason: any): void => {
+        console.error(reason);
+      });
     });
   }
 }

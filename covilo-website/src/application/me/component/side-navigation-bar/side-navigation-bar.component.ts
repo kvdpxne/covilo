@@ -1,21 +1,11 @@
 import {Component, Input} from "@angular/core";
 import {Link} from "../../../shared";
-import {environment} from "../../../../environments/environment";
-import {User} from "../../../core";
 
 @Component({
   selector: "side-navigation-bar",
-  templateUrl: "./side-navigation-bar.component.html",
-  styleUrls: [
-    "./side-navigation-bar.component.scss"
-  ]
+  templateUrl: "./side-navigation-bar.component.html"
 })
 export class SideNavigationBarComponent {
-
-  @Input()
-  public user?: User
-
-  public avatar: string = `${environment.resourceUrl}`
 
   @Input()
   public fullName?: string;

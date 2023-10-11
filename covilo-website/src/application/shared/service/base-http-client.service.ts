@@ -27,7 +27,7 @@ export abstract class BaseHttpClient {
     )
   }
 
-  public post2<T>(path: string, body: any): Observable<T> {
+  public post2<T>(path: string, body: any = {}): Observable<T> {
     return this.handleResponse<T>(
       this.httpClient.post<T>(this.getUrl().concat(path), body, {
         headers: this.getHttpHeaders()

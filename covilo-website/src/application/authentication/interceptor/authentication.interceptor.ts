@@ -12,7 +12,7 @@ import {Router} from "@angular/router";
 import {AuthenticationService} from "../service/authentication.service";
 import {TokenAuthenticationStrategy} from "../service/token-authentication-strategy";
 import {AUTHENTICATION_STRATEGY} from "../service/authentication-strategy";
-import {Token} from "../../core/model/token";
+import {Token} from "../../core";
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {

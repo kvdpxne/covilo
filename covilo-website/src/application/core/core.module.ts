@@ -7,7 +7,7 @@ import {NgbAlertModule, NgbCollapseModule, NgbDropdownModule, NgbPopover} from "
 import {TranslateModule} from "@ngx-translate/core";
 
 //
-import {SharedModule} from "src/application/shared";
+import {SharedModule} from "../shared";
 
 //
 import {

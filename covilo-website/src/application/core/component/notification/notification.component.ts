@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from "@angular/core"
-import { NgbAlertConfig } from "@ng-bootstrap/ng-bootstrap"
+import {Component, Input, OnInit} from "@angular/core";
+import {NgbAlertConfig} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: "a-notification",
@@ -9,17 +9,17 @@ import { NgbAlertConfig } from "@ng-bootstrap/ng-bootstrap"
 export class NotificationComponent implements OnInit {
 
   @Input()
-  visible?: boolean
+  visible?: boolean;
 
   constructor(private readonly settings: NgbAlertConfig) {
-    settings.dismissible = true
-    settings.animation = true
+    settings.dismissible = true;
+    settings.animation = true;
   }
 
   ngOnInit(): void {
   }
 
   onClose() {
-    this.visible = false
+    this.visible = false;
   }
 }

@@ -1,60 +1,99 @@
 import {Inject, Injectable} from "@angular/core";
 import {catchError, Observable, of, tap} from "rxjs";
 
-import {ApiHttpClientService, User} from "../../";
+import {ApiHttpClientService} from "../../shared";
 
-import {LoginRequest} from "../";
-import {Token} from "../../core/model/token";
+import {LoginRequest, SignupRequest, Token, User, UserLifecycleService, UserService} from "../../core";
 import {AUTHENTICATION_STRATEGY, AuthenticationStrategy} from "./authentication-strategy";
 import {TokenAuthenticationStrategy} from "./token-authentication-strategy";
 import {map} from "rxjs/operators";
-import {SignupRequest} from "../../core/playload/signup-request";
 
 @Injectable({
   providedIn: "root"
 })
 export class AuthenticationService {
 
-  private readonly apiHttpClientService: ApiHttpClientService;
+  private readonly httpClientService: ApiHttpClientService;
   private readonly authenticationStrategy: AuthenticationStrategy<any>;
+
+  private readonly userService: UserService;
+  private readonly userLifecycleService: UserLifecycleService;
 
   constructor(
     httpClientService: ApiHttpClientService,
-    @Inject(AUTHENTICATION_STRATEGY) authenticationStrategy: TokenAuthenticationStrategy
+    @Inject(AUTHENTICATION_STRATEGY) authenticationStrategy: TokenAuthenticationStrategy,
+    userService: UserService,
+    userLifecycleService: UserLifecycleService
   ) {
-    this.apiHttpClientService = httpClientService;
+    this.httpClientService = httpClientService;
     this.authenticationStrategy = authenticationStrategy;
+    this.userService = userService;
+    this.userLifecycleService = userLifecycleService;
   }
 
+  /**
+   * Sends a request to send non-sensitive user data and then saves it to
+   * temporary memory to avoid repeated requests.
+   */
+  public cacheMe(): void {
+    this.userService.me.subscribe((user: User): void => {
+      this.userLifecycleService.addUser(user);
+    });
+  }
+
+  /**
+   * Sends a user registration request.
+   */
   public signup(request: SignupRequest): Observable<Token> {
-    return this.apiHttpClientService.post<Token>("auth/register", request).pipe(
-      tap((token: Token): void => this.authenticationStrategy.doLogin(token))
+    const path: string = "auth/register";
+    return this.httpClientService.post2<Token>(path, request).pipe(
+      tap((token: Token): void => {
+        this.authenticationStrategy.doLogin(token);
+        this.cacheMe();
+      })
     );
   }
 
+  /**
+   * Sends a user login request.
+   */
   public login(request: LoginRequest): Observable<Token> {
-    return this.apiHttpClientService.post<Token>("auth/login", request).pipe(
-      tap((token: Token): void => this.authenticationStrategy.doLogin(token))
+    const path: string = "auth/login";
+    return this.httpClientService.post2<Token>(path, request).pipe(
+      tap((token: Token): void => {
+        this.authenticationStrategy.doLogin(token);
+        this.cacheMe();
+      })
     );
   }
 
-  public isLoggedIn(): Observable<boolean> {
+  public isLogged(): Observable<boolean> {
     return this.authenticationStrategy.getCurrentUser().pipe(
       map((user: User | null) => !!user),
       catchError(() => of(false))
     );
   }
 
+  /**
+   * Sends a request to refresh the user's authentication token.
+   */
   public refreshToken(): Observable<Token> {
-    return this.apiHttpClientService.post<Token>("auth/refresh-token", {}).pipe(
-      tap((token: Token): void => this.authenticationStrategy.doLogin(token))
+    const path: string = "auth/refresh-token";
+    return this.httpClientService.post2<Token>(path).pipe(
+      tap((token: Token): void => {
+        this.authenticationStrategy.doLogin(token);
+        this.cacheMe();
+      })
     );
   }
 
   public logout(refresh: boolean = false): Observable<never> {
-    return this.apiHttpClientService.post<never>("auth/logout", {}).pipe(
+    const path: string = "auth/logout";
+    return this.httpClientService.post2<never>(path).pipe(
       tap((): void => {
         this.authenticationStrategy.doLogout();
+        this.userLifecycleService.removeUser();
+
         if (refresh) {
           location.reload();
         }

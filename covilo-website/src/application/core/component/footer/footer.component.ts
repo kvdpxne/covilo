@@ -1,7 +1,5 @@
-import { Component, Input, OnInit } from "@angular/core"
-import { Section } from "../../../shared/types/section"
-import { Icon } from "../../../shared/types/icon"
-import { Link } from "../../../shared/types/link"
+import {Component, Input, OnInit} from "@angular/core";
+import {Icon, Link, Section} from "../../../shared";
 
 @Component({
   selector: "app-footer",
@@ -12,21 +10,21 @@ import { Link } from "../../../shared/types/link"
 })
 export class FooterComponent implements OnInit {
 
-  @Input() sectionSet: Set<Section> | undefined
-  @Input() iconSet: Set<Icon> | undefined
-  @Input() linkSet: Set<Link> | undefined
+  @Input() sectionSet: Set<Section> | undefined;
+  @Input() iconSet: Set<Icon> | undefined;
+  @Input() linkSet: Set<Link> | undefined;
 
   // Current year
-  year: string | undefined
+  year: string | undefined;
 
   constructor() {
-    const projectStartYear: number = 2022
-    const currentYear: number = new Date().getFullYear()
+    const projectStartYear: number = 2022;
+    const currentYear: number = new Date().getFullYear();
 
     if (projectStartYear >= currentYear) {
-      this.year = projectStartYear.toString()
+      this.year = projectStartYear.toString();
     } else {
-      this.year = `${projectStartYear} - ${currentYear}`
+      this.year = `${projectStartYear} - ${currentYear}`;
     }
   }
 

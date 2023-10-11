@@ -3,10 +3,7 @@ import {NavigationStart, Router} from "@angular/router";
 
 @Component({
   selector: "covilo-authentication",
-  templateUrl: "./authentication.component.html",
-  styleUrls: [
-    "./authentication.component.scss"
-  ]
+  templateUrl: "./authentication.component.html"
 })
 export class AuthenticationComponent {
 
@@ -15,11 +12,11 @@ export class AuthenticationComponent {
   public constructor(router: Router) {
     router.events.subscribe(event => {
       if (event instanceof NavigationStart) {
-        this.childPath = this.normalize(event.url)
+        this.childPath = this.normalize(event.url);
       }
     });
     if (!this.childPath) {
-      this.childPath = this.normalize(router.url)
+      this.childPath = this.normalize(router.url);
     }
   }
 
@@ -27,10 +24,10 @@ export class AuthenticationComponent {
     url = url.replace(/\//g, ".").substring(1);
 
     const index = url.indexOf("-");
-    url = url.replace(/-/g, "")
+    url = url.replace(/-/g, "");
 
     return url.substring(0, index)
       .concat(url.charAt(index).toUpperCase())
-      .concat(url.substring(index + 1))
+      .concat(url.substring(index + 1));
   }
 }
