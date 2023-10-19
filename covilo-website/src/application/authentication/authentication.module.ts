@@ -1,13 +1,14 @@
-import {NgModule} from "@angular/core"
-import {CommonModule} from "@angular/common"
-import {FormsModule, ReactiveFormsModule} from "@angular/forms"
-import {TranslateModule} from "@ngx-translate/core"
-import {AuthenticationRoutingModule} from "./authentication-routing.module"
-import {AuthenticationComponent, ResetPasswordComponent, LoginComponent} from "./"
-import {SharedModule} from "../shared"
+import {NgModule} from "@angular/core";
+import {CommonModule} from "@angular/common";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {TranslateModule} from "@ngx-translate/core";
+import {AuthenticationRoutingModule} from "./authentication-routing.module";
+import {SharedModule} from "../shared";
 import {AUTHENTICATION_STRATEGY_PROVIDER} from "./service/authentication-strategy";
 import {AUTHENTICATION_INTERCEPTOR_PROVIDER} from "./interceptor/authentication.interceptor";
-import {SignupComponent} from './router';
+import {LoginComponent, ResetPasswordComponent, SignupComponent} from "./router";
+import {NavigationBarComponent, SideBarComponent} from "./component";
+import {AuthenticationComponent} from "./authentication.component";
 
 @NgModule({
   providers: [
@@ -15,10 +16,12 @@ import {SignupComponent} from './router';
     AUTHENTICATION_INTERCEPTOR_PROVIDER
   ],
   declarations: [
-    AuthenticationComponent,
-    ResetPasswordComponent,
+    NavigationBarComponent,
+    SideBarComponent,
     LoginComponent,
-    SignupComponent
+    ResetPasswordComponent,
+    SignupComponent,
+    AuthenticationComponent
   ],
   imports: [
     CommonModule,
@@ -26,7 +29,7 @@ import {SignupComponent} from './router';
     ReactiveFormsModule,
     TranslateModule.forChild(),
     SharedModule,
-    AuthenticationRoutingModule,
+    AuthenticationRoutingModule
   ]
 })
 export class AuthenticationModule {

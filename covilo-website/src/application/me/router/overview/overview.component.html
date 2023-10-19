@@ -7,78 +7,59 @@
     </div>
 
     <div class="card-body">
-      <div class="row mb-4">
-        <label class="col-sm-3 col-form-label form-label">
+      <div class="row mb-3 align-items-center">
+        <div class="col-sm-3 col-form-label form-label">
           {{ "me.overview.fullName" | translate }}
-          <i class="bi-question-circle text-body ms-1">
-
-          </i>
-        </label>
+        </div>
 
         <div class="col-sm-9">
-          <div>
-            {{ user?.firstName }} {{ user?.lastName }}
-          </div>
+          {{ user?.firstName }} {{ user?.lastName }}
         </div>
       </div>
 
-      <div class="row mb-4">
-        <label class="col-sm-3 col-form-label form-label">
+      <div class="row mb-3 align-items-center">
+        <div class="col-sm-3 col-form-label form-label">
           {{ "me.overview.email" | translate }}
-          <i class="bi-question-circle text-body ms-1">
-
-          </i>
-        </label>
+        </div>
 
         <div class="col-sm-9">
-          <div>
-            {{ user?.email }}
-          </div>
+          {{ user?.email }}
         </div>
       </div>
 
-      <div class="row mb-4">
-        <label class="col-sm-3 col-form-label form-label">
+      <div class="row mb-3 align-items-center">
+        <div class="col-sm-3 col-form-label form-label">
           {{ "me.overview.gender" | translate }}
-          <i class="bi-question-circle text-body ms-1">
-
-          </i>
-        </label>
+        </div>
 
         <div class="col-sm-9">
-          <div>
-            {{ user?.gender | titlecase }}
-          </div>
+          {{ user?.gender | titlecase }}
         </div>
       </div>
 
-      <div class="row mb-4">
-        <label class="col-sm-3 col-form-label form-label">
+      <div class="row mb-3 align-items-center">
+        <div class="col-sm-3 col-form-label form-label">
           {{ "me.overview.createdDate" | translate }}
           <i class="bi-question-circle text-body ms-1">
 
           </i>
-        </label>
+        </div>
 
         <div class="col-sm-9">
-          <div>
-            {{ user?.createdDate }}
-          </div>
+          {{ user?.createdDate }}
         </div>
       </div>
 
-      <div class="row mb-4">
-        <label class="col-sm-3 col-form-label form-label">
+      <div class="row mb-3 align-items-center">
+        <div class="col-sm-3 col-form-label form-label">
           {{ "me.overview.lastModifiedDate" | translate }}
           <i class="bi-question-circle text-body ms-1">
 
           </i>
-        </label>
+        </div>
 
         <div class="col-sm-9">
-          <div>
-            {{ user?.lastModifiedDate }}
-          </div>
+          {{ user?.lastModifiedDate }}
         </div>
       </div>
 

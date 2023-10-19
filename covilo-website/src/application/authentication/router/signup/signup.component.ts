@@ -1,8 +1,8 @@
 import {Component} from "@angular/core";
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthenticationService} from "../../service/authentication.service";
-import {Router} from "@angular/router";
 import {SignupRequest} from "../../../core";
+import {NavigationService} from "../../../shared";
 
 interface SignupForm {
 
@@ -26,7 +26,7 @@ export class SignupComponent {
    */
   private readonly formGroup: FormGroup<SignupForm>;
 
-  private readonly router: Router;
+  private readonly navigationService: NavigationService;
 
   /**
    *
@@ -35,7 +35,7 @@ export class SignupComponent {
 
   constructor(
     formBuilder: FormBuilder,
-    router: Router,
+    navigationService: NavigationService,
     authenticationService: AuthenticationService
   ) {
     // Initializes the standard form group with the FormGroup constructor
@@ -49,7 +49,7 @@ export class SignupComponent {
       validators: Validators.required
     });
     //
-    this.router = router;
+    this.navigationService = navigationService;
     // Initiates the standard services.
     this.authenticationService = authenticationService;
   }
@@ -117,9 +117,7 @@ export class SignupComponent {
     };
 
     this.authenticationService.signup(request).subscribe((): void => {
-      this.router.navigate(["/"]).catch((reason: any): void => {
-        console.error(reason);
-      });
+      this.navigationService.navigateToHomePage();
     });
   }
 }

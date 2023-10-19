@@ -3,14 +3,13 @@
   <div class="card">
     <div class="card-header border-bottom">
       <h4 class="card-header-title">
-        Upload an Avatar
+        {{ "me.changeAvatar.uploadAvatar" | translate }}
       </h4>
     </div>
 
     <div class="card-body">
       <p class="card-text">
-        Must be jpg, png or webp format. No NSFM allowed. No copyrighted
-        images. Maximum of 512 x 512 pixels (resized automatically).
+        {{ "me.changeAvatar.uploadRequirements" | translate }}
       </p>
 
       <input type="file" class="form-control" (change)="onChange($event)"/>
@@ -27,7 +26,7 @@
         </section>
 
         <button (click)="onUpload()" class="btn btn-primary">
-          Upload the file
+          {{ "me.changeAvatar.uploadFile" | translate }}
         </button>
       </div>
     </div>
@@ -37,19 +36,17 @@
   <div class="card">
     <div class="card-header border-bottom">
       <h4 class="card-header-title">
-        Remove avatar
+        {{ "me.changeAvatar.removeAvatar" | translate }}
       </h4>
     </div>
 
     <div class="card-body">
       <p class="card-text">
-        You can remove this picture by clicking the button below. Don't forget
-        to upload another though, or else you will have an N\A image in its
-        place.
+        {{ "me.changeAvatar.removeInformation" | translate }}
       </p>
 
       <button (click)="onDelete()" class="btn btn-danger">
-        Delete avatar
+        {{ "me.changeAvatar.deleteAvatar" | translate }}
       </button>
     </div>
   </div>

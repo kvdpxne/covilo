@@ -1,5 +1,5 @@
 import {Component, OnInit} from "@angular/core";
-import {User, UserLifecycleService, UserService} from "../core";
+import {User, UserLifecycleService} from "../core";
 
 @Component({
   selector: "app-me",
@@ -8,16 +8,10 @@ import {User, UserLifecycleService, UserService} from "../core";
 export class MeComponent
   implements OnInit {
 
-  private readonly userService: UserService;
   private readonly userLifecycleService: UserLifecycleService;
-
   public user?: User;
 
-  public constructor(
-    userService: UserService,
-    userLifecycleService: UserLifecycleService
-  ) {
-    this.userService = userService;
+  public constructor(userLifecycleService: UserLifecycleService) {
     this.userLifecycleService = userLifecycleService;
   }
 

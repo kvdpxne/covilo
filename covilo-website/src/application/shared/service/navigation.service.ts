@@ -1,7 +1,6 @@
 import {Injectable} from "@angular/core";
 import {Location} from "@angular/common";
-import {Event, NavigationEnd, Router} from "@angular/router";
-import {throwError} from "rxjs";
+import {Event, NavigationEnd, NavigationExtras, Router} from "@angular/router";
 
 @Injectable({
   providedIn: "root"
@@ -28,14 +27,39 @@ export class NavigationService {
     });
   }
 
+  public navigateTo(
+    commands: any | any[],
+    extras?: NavigationExtras
+  ): void {
+    // Checks whether the passed parameter is an array, if not, it will be
+    // added to the newly created 1-element array.
+    if (!Array.isArray(commands)) {
+      commands = [commands];
+    }
+
+    this.router.navigate(commands, extras).catch((reason: any): void => {
+      console.error(reason);
+    });
+  }
+
+  public navigateToHomePage(
+    extras?: NavigationExtras
+  ): void {
+    this.navigateTo("/", extras);
+  }
+
+  public forward(): void {
+    this.location.forward();
+  }
+
   /**
    * Navigates back in the platform's history or the site home page when
    * history
    */
-  back(): void {
+  public back(): void {
     this.history.pop();
     if (0 >= this.history.length) {
-      this.router.navigateByUrl("/").catch(error => throwError(() => error));
+      this.navigateToHomePage();
       return;
     }
     this.location.back();

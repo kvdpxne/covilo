@@ -46,7 +46,7 @@ export class AuthenticationService {
    */
   public signup(request: SignupRequest): Observable<Token> {
     const path: string = "auth/register";
-    return this.httpClientService.post2<Token>(path, request).pipe(
+    return this.httpClientService.post<Token>(path, request).pipe(
       tap((token: Token): void => {
         this.authenticationStrategy.doLogin(token);
         this.cacheMe();
@@ -59,7 +59,7 @@ export class AuthenticationService {
    */
   public login(request: LoginRequest): Observable<Token> {
     const path: string = "auth/login";
-    return this.httpClientService.post2<Token>(path, request).pipe(
+    return this.httpClientService.post<Token>(path, request).pipe(
       tap((token: Token): void => {
         this.authenticationStrategy.doLogin(token);
         this.cacheMe();
@@ -79,7 +79,7 @@ export class AuthenticationService {
    */
   public refreshToken(): Observable<Token> {
     const path: string = "auth/refresh-token";
-    return this.httpClientService.post2<Token>(path).pipe(
+    return this.httpClientService.post<Token>(path).pipe(
       tap((token: Token): void => {
         this.authenticationStrategy.doLogin(token);
         this.cacheMe();
@@ -89,7 +89,7 @@ export class AuthenticationService {
 
   public logout(refresh: boolean = false): Observable<never> {
     const path: string = "auth/logout";
-    return this.httpClientService.post2<never>(path).pipe(
+    return this.httpClientService.post<never>(path).pipe(
       tap((): void => {
         this.authenticationStrategy.doLogout();
         this.userLifecycleService.removeUser();

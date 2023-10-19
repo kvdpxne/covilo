@@ -19,27 +19,27 @@ export class GeographicalService {
   }
 
   public getCountries(): Observable<Book<Country>> {
-    return this.api.get2("geographical/countries");
+    return this.api.get("geographical/countries");
   }
 
   public getCountriesByContinent(continent: Continent): Observable<Country[]> {
-    return this.api.get2("geographical/countries", {});
+    return this.api.get("geographical/countries", {});
   }
 
   public getProvincesByCountry(country: Country): Observable<Book<Province>> {
-    return this.api.get2("geographical/provinces", {
+    return this.api.get("geographical/provinces", {
       country: country.identifier
     });
   }
 
   public getCitiesByProvince(province: Province): Observable<Book<City>> {
-    return this.api.get2("geographical/cities", {
+    return this.api.get("geographical/cities", {
       provinceIdentifier: province.identifier
     });
   }
 
   public getCity(identifier: string): Observable<City> {
-    return this.api.get2<City>("geographical/city", {
+    return this.api.get<City>("geographical/city", {
       identifier: identifier
     });
   }

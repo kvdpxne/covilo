@@ -2,7 +2,7 @@ import {Component} from "@angular/core";
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthenticationService} from "../../service/authentication.service";
 import {LoginRequest} from "../../../core";
-import {Router} from "@angular/router";
+import {NavigationService} from "../../../shared";
 
 interface LoginForm {
 
@@ -21,7 +21,7 @@ export class LoginComponent {
    */
   private readonly formGroup: FormGroup<LoginForm>;
 
-  private readonly router: Router;
+  private readonly navigationService: NavigationService;
 
   /**
    *
@@ -30,7 +30,7 @@ export class LoginComponent {
 
   constructor(
     formBuilder: FormBuilder,
-    router: Router,
+    navigationService: NavigationService,
     authenticationService: AuthenticationService
   ) {
     // Initializes the standard form group with the FormGroup constructor
@@ -42,7 +42,7 @@ export class LoginComponent {
       validators: Validators.required
     });
     //
-    this.router = router;
+    this.navigationService = navigationService;
     // Initiates the standard services.
     this.authenticationService = authenticationService;
   }
@@ -85,9 +85,7 @@ export class LoginComponent {
     };
 
     this.authenticationService.login(request).subscribe((): void => {
-      this.router.navigate(["/"]).catch((reason: any): void => {
-        console.error(reason);
-      });
+      this.navigationService.navigateToHomePage();
     });
   }
 }

@@ -18,11 +18,11 @@ export class UserService {
    *
    */
   public get me(): Observable<User> {
-    return this.httpClientService.get2<User>("me");
+    return this.httpClientService.get<User>("me");
   }
 
   public uploadAvatar(file: FormData): Observable<void> {
-    return this.httpClientService.post2<void>("me/avatar", file);
+    return this.httpClientService.post<void>("me/avatar", file);
   }
 
   public deleteAvatar(): Observable<void> {

@@ -5,7 +5,7 @@
   <hr>
   <ul class="nav nav-pills flex-column mb-auto">
     <li *ngFor="let item of content">
-      <a [href]="item.reference" class="nav-link">
+      <a [routerLink]="item.reference" class="nav-link">
         {{ item.name }}
       </a>
     </li>

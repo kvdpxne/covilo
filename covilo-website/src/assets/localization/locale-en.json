@@ -17,7 +17,16 @@
     }
   },
   "authentication": {
-    "login":{
+    "navigationBar": {
+      "goToHomePage": "Go to Home page"
+    },
+    "sideBar": {
+      "quote": {
+        "content": "Thanks to this service, I feel more confident and more involved in the safety of my neighborhood. Together we can make our community even safer. Together we are strong!",
+        "job": "Deputy Director of Social Safety at Google Inc."
+      }
+    },
+    "login": {
       "title": "Welcome back",
       "description": "Login to manage your account.",
       "email": "Your email",
@@ -88,6 +97,14 @@
     "side-navigation": {
       "account": "Account"
     },
+    "changeAvatar": {
+      "uploadAvatar": "Upload an avatar",
+      "uploadRequirements": "Must be jpg, png or webp format. No NSFM allowed. No copyrighted images. Maximum of 512 x 512 pixels (resized automatically).",
+      "uploadFile": "Upload the file",
+      "removeAvatar": "Remove avatar",
+      "removeInformation": "You can remove this picture by clicking the button below. Don't forget to upload another though, or else you will have an N\\A image in its place.",
+      "deleteAvatar": "Delete avatar"
+    },
     "overview": {
       "basicInformation": "Basic information",
       "fullName": "Full name",
@@ -104,7 +121,6 @@
       "city": "City"
     }
   },
-
   "country": {
     "poland": "Poland"
   }

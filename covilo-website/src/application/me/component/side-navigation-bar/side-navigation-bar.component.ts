@@ -15,12 +15,12 @@ export class SideNavigationBarComponent {
 
   public fs: Link[] = [{
     name: "Overview",
-    reference: "./me/overview"
+    reference: "/me/overview"
   }, {
     name: "Change avatar",
-    reference: "./me/change-avatar"
+    reference: "/me/change-avatar"
   }, {
     name: "Change password",
-    reference: "./me/change-password"
+    reference: "/me/change-password"
   }];
 }

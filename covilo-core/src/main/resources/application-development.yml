@@ -23,6 +23,7 @@ logging:
 
 covilo:
   allowed-origins:
+    - "http://localhost"
     - "http://localhost:4200"
 
 application:

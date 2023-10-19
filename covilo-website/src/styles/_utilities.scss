@@ -20,5 +20,30 @@ $utilities: (
   ),
 );
 
+$utilities: map-merge($utilities, (
+  "background-position": (
+    property: background-position,
+    class: bg-position,
+    values: top bottom left right center
+  ),
+  "background-repeat": (
+  property: "background-repeat",
+    class: bg-repeat,
+    values: (
+      x: repeat-x,
+      y: repeat-y,
+      xy: repeat,
+      space: space,
+      round: round,
+      0: no-repeat
+    )
+  ),
+  "background-size": (
+    property: "background-size",
+    class: bg-size,
+    values: cover contain
+  )
+));
+
 
 @import "bootstrap/scss/utilities/api";

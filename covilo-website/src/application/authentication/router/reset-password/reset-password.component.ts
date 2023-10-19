@@ -1,6 +1,7 @@
 import {Component} from "@angular/core";
 import {FormControl, Validators} from "@angular/forms";
 import {ResetPasswordRequest} from "../../../core";
+import {NavigationService} from "../../../shared";
 
 @Component({
   selector: "router-authentication-reset-password",
@@ -10,13 +11,17 @@ export class ResetPasswordComponent {
 
   public readonly email: FormControl<string | null>;
 
-  constructor() {
+  private readonly navigationService: NavigationService;
+
+  public constructor(navigationService: NavigationService) {
     this.email = new FormControl<string | null>(null, {
       validators: [
         Validators.required,
         Validators.email
       ]
     });
+
+    this.navigationService = navigationService;
   }
 
   public isEmailValid(): boolean {
@@ -35,5 +40,6 @@ export class ResetPasswordComponent {
     };
 
     // TODO reset password request
+    this.navigationService.navigateToHomePage();
   }
 }

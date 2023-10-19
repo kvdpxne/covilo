@@ -17,6 +17,15 @@
     }
   },
   "authentication": {
+    "navigationBar": {
+      "goToHomePage": "Przejdź na Stronę główną"
+    },
+    "sideBar": {
+      "quote": {
+        "content": "Dzięki temu serwisowi czuję się pewniej i bardziej zaangażowana w bezpieczeństwo mojej okolicy. Razem możemy sprawić, że nasza społeczność stanie się jeszcze bezpieczniejsza. Razem jesteśmy silni!",
+        "job": "Zastępca dyrektora ds. bezpieczeństwa społecznego w Google Inc."
+      }
+    },
     "login":{
       "title": "Witaj ponownie",
       "description": "Zaloguj się, aby zarządzać swoim kontem.",
@@ -87,6 +96,14 @@
   "me": {
     "side-navigation": {
       "account": "Konto"
+    },
+    "changeAvatar": {
+      "uploadAvatar": "Prześlij awatar",
+      "uploadRequirements": "Musi mieć format jpg, png lub webp. Niedozwolone NSFM. Brak obrazów chronionych prawem autorskim. Maksymalnie 512 x 512 pikseli (rozmiar zmieniany automatycznie).",
+      "uploadFile": "Prześlij plik",
+      "removeAvatar": "Usuń awatar",
+      "removeInformation": "Możesz usunąć to zdjęcie, klikając przycisk poniżej. Nie zapomnij jednak przesłać innego, w przeciwnym razie na jego miejscu pojawi się obraz N\\A.",
+      "deleteAvatar": "Usuń awatar"
     },
     "overview": {
       "basicInformation": "Podstawowe informacje",
