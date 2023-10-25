@@ -60,10 +60,17 @@ export class InputMultipleSelectComponent<T extends Nameable> {
     this.selectedOptionsEmitter = new EventEmitter<T[]>();
   }
 
+  public translateOption(option: T): string {
+    if (option.translatableNameKey) {
+      return this.translateService.instant(option.translatableNameKey)
+    }
+    throw Error("The key to translating the name is undefined.");
+  }
+
   public get translatedSelectedOptions(): string {
     if (0 !== this.selectedOptions.length) {
       return this.selectedOptions.map<string>((selectedOption: T): string =>
-        this.translateService.instant(selectedOption.translatableNameKey)
+        this.translateOption(selectedOption)
       ).join(", ");
     }
     return this.translateService.instant(this.title);

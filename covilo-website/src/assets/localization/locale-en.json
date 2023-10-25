@@ -13,6 +13,10 @@
       "description": "Description",
       "submit": "Publish"
     },
+    "resultDetails": {
+      "category": "Category",
+      "language": "Language"
+    },
     "pageNotFound": {
       "description": "The page you are looking for was moved, removed or might never existed.",
       "home": "Go to homepage"

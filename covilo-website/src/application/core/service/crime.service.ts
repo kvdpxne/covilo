@@ -35,7 +35,21 @@ export class CrimeService {
   public getCrimes(city: string): Observable<Book<Crime>> {
     return this.api.get<Book<Crime>>("crimes", {
       city: city
-    });
+    }).pipe(
+      map(value => {
+        value.content = value.content.map(it => new Crime(
+          it.identifier,
+          it.title,
+          it.description,
+          it.categories.map(category => this.buildCategory(category)),
+          it.time,
+          it.place,
+          it.reporter,
+          it.confirmed
+        ));
+        return value;
+      })
+    )
   }
 
   public report(request: ReportCrimeRequest): Observable<Crime> {

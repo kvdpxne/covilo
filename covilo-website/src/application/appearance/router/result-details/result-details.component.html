@@ -61,22 +61,32 @@
 
         <div class="card card-body shadow p-4 mb-4">
           <h4 class="mb-4">
-            Category
+            {{ "appearance.resultDetails.category" | translate }}
           </h4>
           <div class="row">
             <div class="col-xxl-6">
-              <div *ngFor="let it of categories" (click)="filterBy(it)" class="form-check">
-                <input [id]="it.name" class="form-check-input" type="checkbox">
-                <label class="form-check-label" [for]="it.name">
-                  {{ it.name | titlecase }}
+
+              <div *ngFor="let it of categories"
+                   (click)="filterBy(it)"
+                   class="form-check">
+                <input [id]="it.name"
+                       class="form-check-input"
+                       type="checkbox">
+                <label [for]="it.name"
+                       class="form-check-label" >
+                  {{ it.translatableNameKey | translate }}
                 </label>
               </div>
+
+
             </div>
           </div>
         </div>
 
         <div class="card card-body shadow p-4 mb-4">
-          <h4 class="mb-3">Language</h4>
+          <h4 class="mb-3">
+            {{ "appearance.resultDetails.language" | translate }}
+          </h4>
           <ul class="list-inline mb-0 g-3">
             <li *ngFor="let it of ['English', 'Poland']" class="list-inline-item mb-2">
               <input type="checkbox" class="btn-check" [id]="it">

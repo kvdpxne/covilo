@@ -10,9 +10,9 @@ export class CardTagComponent {
    * Name of the translation key after which the name will be translated.
    */
   @Input()
-  public translateKey: string;
+  public translatableNameKey: string;
 
   constructor() {
-    this.translateKey = "";
+    this.translatableNameKey = "";
   }
 }

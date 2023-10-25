@@ -13,6 +13,10 @@
       "description": "Opis",
       "submit": "Opublikuj"
     },
+    "resultDetails": {
+      "category": "Kategoria",
+      "language": "Język"
+    },
     "pageNotFound": {
       "description": "Strona, której szukasz, została przeniesiona, usunięta lub mogła nigdy nie istnieć.",
       "home": "Przejdź do strony głównej"
