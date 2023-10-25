@@ -1,5 +1,6 @@
 package me.kvdpxne.covilo.domain.service;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -30,20 +31,36 @@ public class CrimeLifecycleService implements ICrimeLifecycleService {
 
   @Override
   public Crime createCrime(final Crime crime) throws CrimeAlreadyExistsException {
-    Objects.requireNonNull(crime);
-
-    final var identifier = crime.identifier();
-//    if (null != identifier) {
-      //
-      //
-      if (this.crimeRepository.existsCrimeByIdentifier(identifier)) {
-        throw new CrimeAlreadyExistsException("");
-      }
-//    }
-
-    final Crime inserted = this.crimeRepository.insertCrime(crime);
-    logger.debug("Created crime: {}", inserted);
-
-    return inserted;
+    Objects.requireNonNull(
+      crime,
+      "The given parameter cannot be null."
+    );
+    var identifier = crime.identifier();
+    var rebuilt = crime;
+    if (null == identifier) {
+      identifier = UUID.randomUUID();
+      rebuilt = rebuilt.toBuilder()
+        .identifier(identifier)
+        .build();
+    }
+    if (null == rebuilt.createdDate()) {
+      rebuilt = rebuilt.toBuilder()
+        .createdDate(LocalDateTime.now())
+        .build();
+    }
+    if (this.crimeRepository.existsCrimeByIdentifier(identifier)) {
+      throw new CrimeAlreadyExistsException(
+        String.format(
+          "The crime model with the identifier \"%s\" already exists.",
+          identifier
+        )
+      );
+    }
+    rebuilt = this.crimeRepository.insertCrime(rebuilt);
+    logger.atDebug()
+      .setMessage("Created crime: {}")
+      .addArgument(rebuilt)
+      .log();
+    return rebuilt;
   }
 }

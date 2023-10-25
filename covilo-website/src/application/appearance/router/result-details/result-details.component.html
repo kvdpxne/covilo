@@ -1,0 +1,100 @@
+<div class="container">
+
+  <div>
+    <h2>
+      {{ city?.nationalName }}
+    </h2>
+  </div>
+
+  <div class="row">
+    <ngx-charts-line-chart
+      [results]="multi"
+      [xAxis]="true"
+      [yAxis]="true"
+      [legend]="true"
+      [showXAxisLabel]="true"
+      [showYAxisLabel]="true"
+      xAxisLabel="When"
+      yAxisLabel="Count"
+    />
+  </div>
+
+<!--  <div class="row g-3 align-items-center mb-4">-->
+<!--    <div class="col-md-4">-->
+<!--      <h4 class="mb-0">-->
+<!--        Showing {{ start }}-{{ end }} of {{ max }} result-->
+<!--      </h4>-->
+<!--    </div>-->
+<!--  </div>-->
+
+  <div class="row">
+    <div class="col-xl-9 col-xxl-8">
+      <div class="row g-4">
+
+        <div class="col-md-4">
+          <h4 class="mb-0">
+            Showing {{ start + 1 }}-{{ end }} of {{ max }} result
+          </h4>
+        </div>
+
+        <!-- List of filtered crime cards. -->
+        <card-list [crimes]="filteredCrimes!!"
+                          [start]="start"
+                          [end]="end"/>
+
+        <div class="col-12">
+          <div class="mt-4 d-flex justify-content-center">
+
+            <ngb-pagination [collectionSize]="max"
+                            [maxSize]="PAGE_COUNT"
+                            [(page)]="page"
+                            [pageSize]="PAGE_ITEM_COUNT"/>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-xxl-4">
+
+      <div class="offcanvas-xl offcanvas-end" tabindex="-1" id="offcanvasSidebar">
+
+        <div class="card card-body shadow p-4 mb-4">
+          <h4 class="mb-4">
+            Category
+          </h4>
+          <div class="row">
+            <div class="col-xxl-6">
+              <div *ngFor="let it of categories" (click)="filterBy(it)" class="form-check">
+                <input [id]="it.name" class="form-check-input" type="checkbox">
+                <label class="form-check-label" [for]="it.name">
+                  {{ it.name | titlecase }}
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card card-body shadow p-4 mb-4">
+          <h4 class="mb-3">Language</h4>
+          <ul class="list-inline mb-0 g-3">
+            <li *ngFor="let it of ['English', 'Poland']" class="list-inline-item mb-2">
+              <input type="checkbox" class="btn-check" [id]="it">
+              <label class="btn btn-light btn-primary-soft-check" [for]="it">
+                {{ it }}
+              </label>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <div class="row">
+    <button type="button" routerLink="/reporting">
+      Report new Crime
+    </button>
+  </div>
+</div>

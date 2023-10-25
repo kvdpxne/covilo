@@ -3,6 +3,16 @@
     "home": {
       "search": "Search"
     },
+    "report": {
+      "header": "Let's change our neighborhood together.",
+      "fs": "All you need to do is fill out the short form below to help anyone else who wants information about this place.",
+      "date": "Date of the incident",
+      "categories": "Categories",
+      "selectCategories": "Select categories",
+      "title": "Title",
+      "description": "Description",
+      "submit": "Publish"
+    },
     "pageNotFound": {
       "description": "The page you are looking for was moved, removed or might never existed.",
       "home": "Go to homepage"
@@ -91,6 +101,14 @@
       "statistics": "Statistics",
       "login": "Log in",
       "signup": "Sign up"
+    },
+    "model": {
+      "category": {
+        "homicide": "Homicide",
+        "assault": "Assault",
+        "robbery": "Robbery",
+        "rape": "Rape"
+      }
     }
   },
   "me": {
@@ -119,6 +137,10 @@
       "country": "Country",
       "region": "Region",
       "city": "City"
+    },
+    "inputMultipleSelect": {
+      "search": "Search",
+      "selectAll": "Select all"
     }
   },
   "country": {

@@ -3,6 +3,7 @@ import {TranslateService} from "@ngx-translate/core";
 import {Icon, Link, Section} from "./shared";
 import {NavigationStart, Router} from "@angular/router";
 import {AuthenticationService} from "./authentication";
+import {NgbDropdownConfig} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: "app-root",
@@ -25,10 +26,13 @@ export class ApplicationComponent
   constructor(
     router: Router,
     translateService: TranslateService,
-    authenticationService: AuthenticationService
+    authenticationService: AuthenticationService,
+    ngbDropdownConfiguration: NgbDropdownConfig
   ) {
     this.translateService = translateService;
     this.authenticationService = authenticationService;
+
+    ngbDropdownConfiguration.autoClose = "outside";
 
     router.events.subscribe(event => {
       if (event instanceof NavigationStart) {

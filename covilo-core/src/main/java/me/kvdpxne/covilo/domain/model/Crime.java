@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.UUID;
 import lombok.Builder;
+import me.kvdpxne.covilo.domain.aggregation.Auditable;
+import me.kvdpxne.covilo.domain.aggregation.Identity;
 
 @Builder(toBuilder = true)
 public record Crime(
@@ -14,6 +16,8 @@ public record Crime(
   LocalDateTime time,
   User reporter,
   City place,
-  boolean confirmed
-) {
+  boolean confirmed,
+  LocalDateTime createdDate,
+  LocalDateTime lastModifiedDate
+) implements Identity<UUID>, Auditable {
 }

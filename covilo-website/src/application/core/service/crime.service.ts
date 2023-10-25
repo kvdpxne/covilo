@@ -5,6 +5,7 @@ import {Crime} from "../index";
 import {Category} from "../model/category";
 import {ReportCrimeRequest} from "../playload/report-crime-request";
 import {Book} from "../aggregation/book";
+import {map} from "rxjs/operators";
 
 @Injectable({
   providedIn: "root"
@@ -17,12 +18,22 @@ export class CrimeService {
     this.api = api;
   }
 
+  private buildCategory(category: Category): Category {
+    return new Category(
+      category.identifier,
+      category.name,
+      category.classification
+    );
+  }
+
   public getCategories(): Observable<Category[]> {
-    return this.api.get("search/categories");
+    return this.api.get<Category[]>("search/categories").pipe(
+      map(arr => arr.map(it => this.buildCategory(it)))
+    );
   }
 
   public getCrimes(city: string): Observable<Book<Crime>> {
-    return this.api.get("crimes", {
+    return this.api.get<Book<Crime>>("crimes", {
       city: city
     });
   }

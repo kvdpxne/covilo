@@ -1,5 +1,7 @@
 package me.kvdpxne.covilo.application.exception;
 
+import java.util.UUID;
+
 public class CrimeAlreadyExistsException extends CrimeException {
 
   public CrimeAlreadyExistsException() {
@@ -8,5 +10,14 @@ public class CrimeAlreadyExistsException extends CrimeException {
 
   public CrimeAlreadyExistsException(String message) {
     super(message);
+  }
+
+  public static CrimeAlreadyExistsException byIdentifier(final UUID identifier) {
+    throw new CrimeAlreadyExistsException(
+      String.format(
+        "the crime model with the identifier \"%s\" already exists.",
+        identifier
+      )
+    );
   }
 }

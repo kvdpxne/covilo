@@ -27,7 +27,7 @@ $utilities: map-merge($utilities, (
     values: top bottom left right center
   ),
   "background-repeat": (
-  property: "background-repeat",
+    property: "background-repeat",
     class: bg-repeat,
     values: (
       x: repeat-x,
@@ -42,6 +42,11 @@ $utilities: map-merge($utilities, (
     property: "background-size",
     class: bg-size,
     values: cover contain
+  ),
+  "cursor": (
+    property: "cursor",
+    class: cursor,
+    values: pointer
   )
 ));
 

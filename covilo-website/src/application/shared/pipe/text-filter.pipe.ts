@@ -1,4 +1,4 @@
-import { Pipe, PipeTransform } from "@angular/core"
+import {Pipe, PipeTransform} from "@angular/core";
 
 @Pipe({
   name: "textFilter",
@@ -6,24 +6,31 @@ import { Pipe, PipeTransform } from "@angular/core"
 })
 export class TextFilterPipe implements PipeTransform {
 
-  transform(items?: any[], search?: string): any[] {
+  public transform(
+    items?: any[],
+    search?: string | null
+  ): any[] {
     if (!items) {
-      return []
+      return [];
     }
     // return the original array if search text is undefined or empty
     if (!search || 0 === search.length) {
-      return items
+      return items;
     }
 
-    search = search.toLowerCase()
+    search = search.toLowerCase();
     return items.filter(item => {
+      if (typeof (item) === "string") {
+        return item.toLowerCase().includes(search!!);
+      }
+
       if ("nationalName" in item) {
-        return item.nationalName.toLocaleLowerCase().includes(search)
+        return item.nationalName.toLocaleLowerCase().includes(search);
       }
       if ("name" in item) {
-        return item.name.toLocaleLowerCase().includes(search)
+        return item.name.toLocaleLowerCase().includes(search);
       }
-      return item.toLowerCase().includes(search)
-    })
+      return item.toLowerCase().includes(search);
+    });
   }
 }

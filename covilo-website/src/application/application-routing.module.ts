@@ -1,13 +1,15 @@
 import {NgModule} from "@angular/core";
 import {RouterModule, Routes} from "@angular/router";
+
 import {
-  ComingSoonComponent,
-  HomeComponent, InteractiveMapComponent,
-  PageNotFoundComponent,
+  HomeComponent,
+  InteractiveMapComponent,
   ResultDetailsComponent,
   StatisticsComponent
-} from "./apperance";
-import {ReportingComponent} from "./reporting/reporting.component";
+} from "./appearance";
+
+import {ReportComponent} from "./appearance/router/report/report.component";
+import {ComingSoonComponent, PageNotFoundComponent} from "./communication";
 
 const routes: Routes = [
   {
@@ -29,7 +31,7 @@ const routes: Routes = [
   },
   {
     path: "reporting",
-    component: ReportingComponent
+    component: ReportComponent
   },
   {
     path: "coming-soon",

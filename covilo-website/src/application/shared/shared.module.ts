@@ -1,6 +1,6 @@
 import {ModuleWithProviders, NgModule} from "@angular/core";
 import {CommonModule} from "@angular/common";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {TranslateModule} from "@ngx-translate/core";
 import {NgbDropdownModule} from "@ng-bootstrap/ng-bootstrap";
 
@@ -8,36 +8,33 @@ import {
   ApiHttpClientService,
   AvatarImageComponent,
   BreadcrumbComponent,
-  CardComponent,
-  CardListComponent,
-  InputComponent,
+  InputSelectComponent,
   NavigationBackDirective,
   TextFilterPipe
 } from "./";
+import {InputMultipleSelectComponent} from "./components";
 
 @NgModule({
   declarations: [
     AvatarImageComponent,
     BreadcrumbComponent,
-    CardComponent,
-    CardListComponent,
-    InputComponent,
+    InputSelectComponent,
+    InputMultipleSelectComponent,
 
     NavigationBackDirective,
-    TextFilterPipe
+    TextFilterPipe,
   ],
   exports: [
     AvatarImageComponent,
     BreadcrumbComponent,
-    CardComponent,
-    CardListComponent,
-    InputComponent,
-
+    InputSelectComponent,
+    InputMultipleSelectComponent,
     NavigationBackDirective
   ],
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     TranslateModule.forChild(),
     NgbDropdownModule
   ]

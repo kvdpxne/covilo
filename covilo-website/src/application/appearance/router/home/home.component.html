@@ -1,0 +1,82 @@
+<div class="container">
+  <div class="row align-items-center g-lg-5 py-5">
+    <div class="col-lg-7 text-center text-lg-start">
+      <h1 class="display-4 fw-bold lh-1 mb-3">
+        Vertically centered hero sign-up form
+      </h1>
+      <p class="col-lg-10 fs-4">
+        Below is an example form built entirely with Bootstrap’s form controls.
+        Each required form group has a validation state that can be triggered
+        by attempting to submit the form without completing it.
+      </p>
+    </div>
+    <div class="col-md-10 mx-auto col-lg-5">
+      <form class="p-4 p-md-5 border rounded-3 bg-light" method="get">
+        <div class="form-floating mb-3">
+
+          <input-select (key)="setCountry($event)"
+                   [disabled]="false"
+                   [suggestions]="countries"
+                   name="country">
+
+          </input-select>
+        </div>
+
+        <div class="form-floating mb-3">
+          <input-select (key)="setRegion($event)"
+                   [disabled]="canEnabled(currentCountry)"
+                   [suggestions]="regions"
+                   name="region">
+
+          </input-select>
+        </div>
+
+        <div class="form-floating mb-3">
+          <input-select (key)="setCity($event)"
+                   [disabled]="canEnabled(currentProvince)"
+                   [suggestions]="cities"
+                   name="city">
+
+          </input-select>
+        </div>
+
+        <hr class="my-4">
+        <button (click)="go()" class="w-100 btn btn-lg btn-primary"
+                type="submit">
+          {{ "appearance.home.search" | translate }}
+        </button>
+      </form>
+    </div>
+  </div>
+
+</div>
+
+<!-- -->
+<!-- -->
+<!--<div class="container px-4 py-5">-->
+<!--  <h2 class="pb-2 border-bottom">-->
+<!--    {{ "feature.header" | translate }}-->
+<!--  </h2>-->
+<!--  <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">-->
+<!--    <div *ngFor="let item of ['collection', 'person-circle', 'toggles2']" class="col">-->
+<!--      <div-->
+<!--        class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">-->
+<!--        <i class="bi bi-{{ item }}">-->
+
+<!--        </i>-->
+<!--      </div>-->
+<!--      <h2>-->
+<!--        {{ "feature.title" | translate }}-->
+<!--      </h2>-->
+<!--      <p>-->
+<!--        {{ "feature.description" | translate}}-->
+<!--      </p>-->
+<!--      <a class="icon-link d-inline-flex align-items-center" href="#">-->
+<!--        Call to action-->
+<!--        <i class="bi bi-chevron-right">-->
+<!--          &lt;!&ndash; &ndash;&gt;-->
+<!--        </i>-->
+<!--      </a>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->

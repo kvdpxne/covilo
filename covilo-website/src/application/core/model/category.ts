@@ -1,19 +1,34 @@
 import {Classification} from "./classification";
+import {Identifiable} from "../aggregation/identifiable";
+import {Nameable} from "../aggregation/nameable";
 
-export interface Category {
+export class Category implements Identifiable, Nameable {
 
   /**
    * A random unique identifier.
    */
-  identifier: string;
+  public readonly identifier: string;
 
   /**
    * A unique name.
    */
-  name: string;
+  public readonly name: string;
+
+  public readonly translatableNameKey: string;
 
   /**
    * Classification to which a given category is classified.
    */
-  classification: Classification;
+  public readonly classification: Classification;
+
+  public constructor(
+    identifier: string,
+    name: string,
+    classification: Classification
+  ) {
+    this.identifier = identifier;
+    this.name = name;
+    this.translatableNameKey = "core.model.category.".concat(this.name);
+    this.classification = classification;
+  }
 }

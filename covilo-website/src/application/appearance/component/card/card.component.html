@@ -1,0 +1,20 @@
+<div class="card shadow overflow-hidden p-2 my-4">
+  <div class="row g-0">
+
+    <div class="card">
+
+      <div class="card-header">
+        {{ getCategories(crime!) }}
+      </div>
+
+      <div class="card-body">
+        {{ crime?.description }}
+      </div>
+
+      <div class="card-footer">
+        <card-tag-list [translateKeys]="this.categoryNames"/>
+      </div>
+    </div>
+
+  </div>
+</div>

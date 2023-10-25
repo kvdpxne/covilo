@@ -22,28 +22,16 @@ import {ApplicationRoutingModule} from "./application-routing.module";
 
 import {ApplicationComponent} from "./application.component";
 
-import {
-  ComingSoonComponent,
-  HomeComponent,
-  InteractiveMapComponent,
-  PageNotFoundComponent,
-  ResultDetailsComponent,
-  StatisticsComponent
-} from "./apperance";
+import {AppearanceModule} from "./appearance";
 import {MeModule} from "./me";
 import {LineChartModule} from "@swimlane/ngx-charts";
-import {ReportingComponent} from "./reporting/reporting.component";
+import {ComingSoonComponent, PageNotFoundComponent} from "./communication";
 
 @NgModule({
   declarations: [
     ApplicationComponent,
-    HomeComponent,
     PageNotFoundComponent,
-    ResultDetailsComponent,
-    StatisticsComponent,
-    ReportingComponent,
-    ComingSoonComponent,
-    InteractiveMapComponent
+    ComingSoonComponent
   ],
   imports: [
     BrowserModule,
@@ -66,6 +54,8 @@ import {ReportingComponent} from "./reporting/reporting.component";
      */
     SharedModule.forRoot(),
     CoreModule,
+
+    AppearanceModule,
     AuthenticationModule,
     MeModule,
     ApplicationRoutingModule,

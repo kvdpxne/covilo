@@ -1,0 +1,39 @@
+<div ngbDropdown>
+  <div ngbDropdownToggle
+       class="form-select">
+    {{ translatedSelectedOptions }}
+  </div>
+  <div ngbDropdownMenu
+       class="w-100 overflow-x-hidden overflow-y-auto"
+       style="max-height: 284px;">
+    <div class="container">
+      <ng-container *ngIf="showSearcher || showSelectAll">
+        <input *ngIf="showSearcher"
+               [formControl]="searcher"
+               [name]="name"
+               [placeholder]="'shared.inputMultipleSelect.search' | translate"
+               class="form-control"
+               type="text"
+               autocomplete="off">
+        <div *ngIf="showSelectAll"
+             (click)="addOrRemoveAllOptions()"
+             class="ms-1 my-1">
+          <span class="cursor-pointer small">
+            {{ "shared.inputMultipleSelect.selectAll" | translate }}
+          </span>
+        </div>
+        <hr>
+      </ng-container>
+      <div ngbDropdownItem
+           *ngFor="let option of options | textFilter: searcher.value;"
+           (click)="addOrRemoveOption(option)"
+           class="ps-2 cursor-pointer">
+        <input [name]="option.name"
+               [checked]="containsOption(option)"
+               type="checkbox"
+               class="me-1">
+        {{ option.translatableNameKey | translate }}
+      </div>
+    </div>
+  </div>
+</div>

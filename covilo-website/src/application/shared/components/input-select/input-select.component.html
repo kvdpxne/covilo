@@ -1,0 +1,28 @@
+<div ngbDropdown
+     [autoClose]="true">
+  <label [for]="name" class="fw-bold mb-1">
+    {{ placeholder | translate }}
+  </label>
+  <input #input
+         ngbDropdownToggle
+         [(ngModel)]="value"
+         [disabled]="disabled"
+         [id]="name"
+         [name]="name"
+         [placeholder]="placeholder | translate"
+         autocomplete="off"
+         class="form-select"
+         value="">
+
+  <!--a drop-down list filtered by the value in the input selector -->
+  <div class="list" ngbDropdownMenu>
+    <div (click)="setKey(item)"
+         *ngFor="let item of suggestions | textFilter: value; index as i"
+         [tabIndex]="i"
+         class="list-item"
+         ngbDropdownItem>
+      {{ getSuggestionReadableName(item) | translate }}
+    </div>
+  </div>
+
+</div>

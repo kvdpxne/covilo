@@ -1,0 +1,23 @@
+<div class="navbar navbar-expand navbar-light w-100 position-absolute">
+  <div class="container-fluid">
+    <div class="navbar-nav w-100">
+      <a class="navbar-brand d-none d-lg-flex me-auto"
+         routerLink="/">
+        <span class="text-light">
+          Covilo
+        </span>
+      </a>
+      <div class="ms-auto">
+        <a class="link link-secondary" routerLink="/">
+          <i class="bi-chevron-left me-1 small">
+            <!-- This component should not have any body -->
+            <!-- because it represents an icon. -->
+          </i>
+          <span class="fw-bold">
+            {{ "authentication.navigationBar.goToHomePage" | translate }}
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

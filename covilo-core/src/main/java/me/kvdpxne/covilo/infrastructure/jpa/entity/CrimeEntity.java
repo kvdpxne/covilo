@@ -39,8 +39,7 @@ public final class CrimeEntity {
   @Column(name = "title")
   private String title;
 
-  @Lob
-  @Column(name = "description")
+  @Column(name = "description", length = 256)
   private String description;
 
   @ToString.Exclude

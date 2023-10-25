@@ -1,0 +1,5 @@
+<div *ngFor="let crime of crimes | slice: start : end"
+     class="col-12">
+
+  <card [crime]="crime"/>
+</div>

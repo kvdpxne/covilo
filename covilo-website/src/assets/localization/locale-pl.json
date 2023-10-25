@@ -3,6 +3,16 @@
     "home": {
       "search": "Szukaj"
     },
+    "report": {
+      "header": "Zmieńmy naszą okolice razem.",
+      "fs": "Jedyne, co musisz zrobić, to wypełnić krótki formularz poniżej aby pomóc wszystkim innym którzy chcą uzyskać informacje o danym miejscu.",
+      "date": "Data zdarzenia",
+      "categories": "Kategorie",
+      "selectCategories": "Wybierz kategorie",
+      "title": "Nagłówek",
+      "description": "Opis",
+      "submit": "Opublikuj"
+    },
     "pageNotFound": {
       "description": "Strona, której szukasz, została przeniesiona, usunięta lub mogła nigdy nie istnieć.",
       "home": "Przejdź do strony głównej"
@@ -91,6 +101,14 @@
       "statistics": "Statystyki",
       "login": "Logowanie",
       "signup": "Rejestracja"
+    },
+    "model": {
+      "category": {
+        "homicide": "Zabójstwo",
+        "assault": "Napaść",
+        "robbery": "Rozbój",
+        "rape": "Gwałt"
+      }
     }
   },
   "me": {
@@ -119,6 +137,10 @@
       "country": "Państwo",
       "region": "Region",
       "city": "Miasto"
+    },
+    "inputMultipleSelect": {
+      "search": "Szukaj",
+      "selectAll": "Wybierz wszystko"
     }
   },
 
