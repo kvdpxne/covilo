@@ -1,5 +1,5 @@
 import {Component} from "@angular/core";
-import {Router} from "@angular/router";
+import {NavigationService} from "../../../shared";
 
 @Component({
   selector: "router-interactive-map",
@@ -7,7 +7,7 @@ import {Router} from "@angular/router";
 })
 export class InteractiveMapComponent {
 
-  public constructor(router: Router) {
-    router.navigate(["/coming-soon"]).catch(error => console.error(error));
+  public constructor(navigationService: NavigationService) {
+    navigationService.navigateTo("/coming-soon");
   }
 }
