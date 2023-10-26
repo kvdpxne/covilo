@@ -18,7 +18,7 @@
     <!-- Displays information about incorrect completion of a field -->
     <!-- with a recognizable name. -->
     <span *ngIf="(formElement.submitted || isEmailValid()) && email.errors" class="invalid-feedback">
-      {{ "application.authentication.invalid-email" | translate }}
+      {{ "authentication.signup.invalidEmail" | translate }}
     </span>
   </div>
 
@@ -40,7 +40,7 @@
     <!-- Displays information about incorrect completion of a field -->
     <!-- with a password. -->
     <span *ngIf="(formElement.submitted || isPasswordValid()) && password.errors" class="invalid-feedback">
-      {{ "application.authentication.invalid-password" | translate }}
+      {{ "authentication.signup.invalidPassword" | translate }}
     </span>
   </div>
 
@@ -62,7 +62,7 @@
     <!-- Displays information about incorrect completion of a field -->
     <!-- with a password. -->
     <span *ngIf="(formElement.submitted || isConfirmPasswordValid()) && confirmPassword.errors" class="invalid-feedback">
-      {{ "application.authentication.invalid-password" | translate }}
+      {{ "authentication.signup.invalidConfirmPassword" | translate }}
     </span>
   </div>
 
@@ -81,8 +81,9 @@
       </a>
     </label>
 
-    <span *ngIf="(formElement.submitted || isPrivacyPolicyValid()) && privacyPolicy.errors" class="invalid-feedback">
-      {{ "authentication.signup.acceptPrivacyPolicy" | translate }}
+    <span *ngIf="(formElement.submitted || isPrivacyPolicyValid()) && privacyPolicy.errors"
+         class="invalid-feedback d-block">
+      {{ "authentication.signup.invalidPrivacyPolicy" | translate }}
     </span>
 
   </div>

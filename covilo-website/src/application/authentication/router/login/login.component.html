@@ -19,7 +19,7 @@
     <!-- with a recognizable name. -->
     <span *ngIf="(formElement.submitted || isEmailValid()) && email.errors"
           class="invalid-feedback">
-        {{ "authentication.invalid-email" | translate }}
+        {{ "authentication.login.invalidEmail" | translate }}
       </span>
   </div>
 
@@ -48,7 +48,7 @@
     <!-- with a password. -->
     <span *ngIf="(formElement.submitted || isPasswordValid()) && password.errors"
           class="invalid-feedback">
-        {{ "authentication.invalid-password" | translate }}
+        {{ "authentication.login.invalidPassword" | translate }}
       </span>
   </div>
 

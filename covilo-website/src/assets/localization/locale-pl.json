@@ -44,8 +44,10 @@
       "title": "Witaj ponownie",
       "description": "Zaloguj się, aby zarządzać swoim kontem.",
       "email": "Twój email",
+      "invalidEmail": "Proszę podać prawidłowy adres email.",
       "password": "Twoje hasło",
       "forgotPassword": "Zapomniałeś hasła?",
+      "invalidPassword": "Proszę podać prawidłowe hasło.",
       "login": "Zaloguj sie",
       "signup": {
         "question": "Nie masz jeszcze konta?",
@@ -56,6 +58,7 @@
       "title": "Zapomniałeś hasła?",
       "description": "Wpisz poniżej swój adres email, a my pomożemy Ci odzyskać twoje konto.",
       "email": "Twój email",
+      "invalidEmail": "Proszę podać prawidłowy adres email.",
       "login": "Powrót do logowania",
       "placeholder": "Wpisz swój adres email",
       "submit": "Wyślij"
@@ -64,12 +67,16 @@
       "title": "Witaj w Covilo",
       "description": "Wypełnij formularz, aby rozpocząć..",
       "email": "Twój email",
+      "invalidEmail": "Proszę podać prawidłowy adres email.",
       "password": "Hasło",
+      "invalidPassword": "Twoje hasło jest nieprawidłowe.",
       "confirmPassword": "Potwierdź hasło",
+      "invalidConfirmPassword": "Hasło nie jest zgodne z hasłem potwierdzenia.",
       "privacyPolicy": {
         "content": "Przesyłając ten formularz, przeczytałem i zaakceptowałem",
         "link": "Polityka prywatności"
       },
+      "invalidPrivacyPolicy": "Proszę zaakceptować naszą Politykę Prywatności.",
       "signup": "Zarejestruj się",
       "login": {
         "question": "Posiadasz już konto?",

@@ -44,8 +44,10 @@
       "title": "Welcome back",
       "description": "Login to manage your account.",
       "email": "Your email",
+      "invalidEmail": "Please enter a valid email address.",
       "password": "Your password",
       "forgotPassword": "Forgot password?",
+      "invalidPassword": "Please enter a valid password.",
       "login": "Log in",
       "signup": {
         "question": "Don't have an account yet?",
@@ -56,6 +58,7 @@
       "title": "Forgot password?",
       "description": "Enter your email address below and we'll help you recover your account.",
       "email": "Your email",
+      "invalidEmail": "Please enter a valid email address.",
       "login": "Back to Log in",
       "placeholder": "Enter your email address",
       "submit": "Submit"
@@ -64,12 +67,16 @@
       "title": "Welcome to Covilo",
       "description": "Fill out the form to get started.",
       "email": "Your email",
+      "invalidEmail": "Please enter a valid email address.",
       "password": "Password",
+      "invalidPassword": "Your password is invalid.",
       "confirmPassword": "Confirm Password",
+      "invalidConfirmPassword": "Password does not match the confirm password.",
       "privacyPolicy": {
         "content": "By submitting this form I have read and acknowledged the",
         "link": "Privacy Policy"
       },
+      "invalidPrivacyPolicy": "Please accept our Privacy Policy.",
       "signup": "Sign up",
       "login": {
         "question": "Already have an account?",
