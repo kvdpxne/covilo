@@ -1,5 +1,6 @@
 package me.kvdpxne.covilo.domain.service;
 
+import java.time.LocalDate;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -105,6 +106,7 @@ public final class UserLifecycleService
 
     var user = source.toBuilder()
       .password(encodedPassword)
+      .birthDate(LocalDate.now()) // TODO remove it
       .build();
 
     try {
