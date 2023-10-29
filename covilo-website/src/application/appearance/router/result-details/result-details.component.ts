@@ -42,43 +42,7 @@ export class ResultDetailsComponent implements OnInit {
   public page: number = 1;
 
   public categories?: Category[];
-
-  multi = [
-    {
-      name: "Unconfirmed",
-      series: [
-        {
-          name: new Date(2023, 6, 1).getTime(),
-          value: 10
-        },
-        {
-          name: new Date(2023, 6, 2).getTime(),
-          value: 15
-        },
-        {
-          name: new Date(2023, 6, 3).getTime(),
-          value: 8
-        }
-      ]
-    },
-    {
-      name: "Confirmed",
-      series: [
-        {
-          name: new Date(2023, 6, 1).getTime(),
-          value: 7
-        },
-        {
-          name: new Date(2023, 6, 2).getTime(),
-          value: 14
-        },
-        {
-          name: new Date(2023, 6, 3).getTime(),
-          value: 1
-        }
-      ]
-    }
-  ];
+  public selectedCategories: Category[] = [];
 
   public constructor(
     route: ActivatedRoute,
@@ -130,23 +94,31 @@ export class ResultDetailsComponent implements OnInit {
     this.crimeService.getCategories().subscribe(it => this.categories = it);
   }
 
-  public filterBy(category: Category) {
-    this.filteredCrimes = [];
-    if (!this.crimes) {
+  public handleChanges(categories: Category[]): void {
+    this.selectedCategories = categories;
+    console.log(this.selectedCategories);
+  }
+
+  public filter(): void {
+    if (!this.crimes?.length) {
       return;
     }
-    for (const crime of this.crimes) {
-      const categories = crime.categories;
-      if (!categories || 0 === categories.length) {
-        continue;
-      }
-      for (const category2 of categories) {
-        if (category2.identifier === category.identifier) {
-          this.filteredCrimes.push(crime);
-          // console.log(category2.name)
-        }
-      }
+    const categories: Category[] | undefined = this.selectedCategories;
+    const size: number = categories?.length;
+    if (!size) {
+      this.filteredCrimes = this.crimes;
+      return;
     }
-    // console.log(this.filterCrimes)
+    this.filteredCrimes = this.crimes.filter((crime: Crime): boolean => {
+      let i: number = 0;
+      return crime.categories.some((category: Category): boolean =>
+        categories.some((selectedCategory: Category): boolean => {
+          if (category.identifier === selectedCategory.identifier) {
+            i++;
+          }
+          return size === i;
+        })
+      );
+    });
   }
 }

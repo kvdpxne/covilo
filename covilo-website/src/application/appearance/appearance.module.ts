@@ -7,6 +7,7 @@ import {NgxChartsModule} from "@swimlane/ngx-charts";
 import {SharedModule} from "../shared";
 import {CardComponent, CardListComponent, CardTagComponent, CardTagListComponent} from "./component";
 import {HomeComponent, InteractiveMapComponent, ReportComponent, ResultDetailsComponent, StatisticsComponent} from "./router";
+import { FilterByCategoryComponent } from "./component";
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import {HomeComponent, InteractiveMapComponent, ReportComponent, ResultDetailsCo
     InteractiveMapComponent,
     ReportComponent,
     ResultDetailsComponent,
-    StatisticsComponent
+    StatisticsComponent,
+    FilterByCategoryComponent
   ],
   exports: [
     CardListComponent

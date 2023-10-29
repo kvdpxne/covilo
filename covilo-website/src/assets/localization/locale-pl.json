@@ -15,7 +15,9 @@
     },
     "resultDetails": {
       "category": "Kategoria",
-      "language": "Język"
+      "language": "Język",
+      "showing": "Wyświetlanie {{start}}-{{end}} z {{max}} wyników",
+      "filter": "Filtruj wyniki"
     },
     "pageNotFound": {
       "description": "Strona, której szukasz, została przeniesiona, usunięta lub mogła nigdy nie istnieć.",

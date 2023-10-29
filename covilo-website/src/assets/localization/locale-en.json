@@ -15,7 +15,9 @@
     },
     "resultDetails": {
       "category": "Category",
-      "language": "Language"
+      "language": "Language",
+      "showing": "Showing {{start}}-{{end}} of {{max}} result",
+      "filter": "Filter results"
     },
     "pageNotFound": {
       "description": "The page you are looking for was moved, removed or might never existed.",

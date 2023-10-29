@@ -1,0 +1,21 @@
+<div class="card card-body shadow p-4 mb-4">
+  <h4 class="mb-4">
+    {{ "appearance.resultDetails.category" | translate }}
+  </h4>
+  <div class="row">
+    <div class="col-xxl-6">
+      <div *ngFor="let category of categories"
+           (click)="addOrRemoveCategory(category)"
+           class="form-check">
+        <input [id]="category.name"
+               [name]="category.name"
+               class="form-check-input"
+               type="checkbox">
+        <label [for]="category.name"
+               class="form-check-label">
+          {{ category.translatableNameKey | translate }}
+        </label>
+      </div>
+    </div>
+  </div>
+</div>
