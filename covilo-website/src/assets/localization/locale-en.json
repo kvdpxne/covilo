@@ -121,6 +121,11 @@
         "assault": "Assault",
         "robbery": "Robbery",
         "rape": "Rape"
+      },
+      "gender": {
+        "female": "Female",
+        "male": "Male",
+        "non_binary": "Non-binary"
       }
     }
   },
@@ -141,8 +146,12 @@
       "fullName": "Full name",
       "email": "Email address",
       "gender": "Gender",
+      "birthDate": "Birth date",
       "createdDate": "Created date",
-      "lastModifiedDate": "Last modified date"
+      "createdDateExplanation": "The date your account was created.",
+      "lastModifiedDate": "Last modified date",
+      "lastModifiedDateExplanation": "The date your account details were last modified.",
+      "lastModifiedDateNone": "Not registered."
     }
   },
   "shared": {

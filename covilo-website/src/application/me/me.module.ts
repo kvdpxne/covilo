@@ -6,6 +6,7 @@ import {ChangeAvatarComponent, ChangePasswordComponent, OverviewComponent} from 
 import {SideNavigationBarComponent, SideNavigationComponent} from "./component";
 import {TranslateModule} from "@ngx-translate/core";
 import {SharedModule} from "../shared";
+import {NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import {SharedModule} from "../shared";
     TranslateModule.forChild(),
 
     MeRoutingModule,
-    SharedModule
+    SharedModule,
+    NgbTooltip
   ]
 })
 export class MeModule {

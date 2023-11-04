@@ -121,6 +121,11 @@
         "assault": "Napaść",
         "robbery": "Rozbój",
         "rape": "Gwałt"
+      },
+      "gender": {
+        "female": "Kobieta",
+        "male": "Mężczyzna",
+        "non_binary": "Niebinarny"
       }
     }
   },
@@ -141,8 +146,12 @@
       "fullName": "Pełna nazwa",
       "email": "Adres email",
       "gender": "Płeć",
+      "birthDate": "Data urodzenia",
       "createdDate": "Data utworzenia",
-      "lastModifiedDate": "Data ostatniej modyfikacji"
+      "createdDateExplanation": "Data utworzenia twojego konta.",
+      "lastModifiedDate": "Data ostatniej modyfikacji",
+      "lastModifiedDateExplanation": "Data ostatniej modyfikacji danych twojego konta.",
+      "lastModifiedDateNone": "Nie zarejestrowano"
     }
   },
   "shared": {

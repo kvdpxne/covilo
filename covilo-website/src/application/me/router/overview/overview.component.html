@@ -33,33 +33,47 @@
         </div>
 
         <div class="col-sm-9">
-          {{ user?.gender | titlecase }}
+          {{ "core.model.gender." + user?.gender!! | lowercase | translate }}
+        </div>
+      </div>
+
+      <div class="row mb-3 align-items-center">
+        <div class="col-sm-3 col-form-label form-label">
+          {{ "me.overview.birthDate" | translate }}
+        </div>
+
+        <div class="col-sm-9">
+          {{ user?.birthDate | date: "mediumDate" }}
         </div>
       </div>
 
       <div class="row mb-3 align-items-center">
         <div class="col-sm-3 col-form-label form-label">
           {{ "me.overview.createdDate" | translate }}
-          <i class="bi-question-circle text-body ms-1">
+          <i ngbTooltip="{{ 'me.overview.createdDateExplanation' | translate }}"
+             class="bi-question-circle text-body ms-1">
 
           </i>
         </div>
 
         <div class="col-sm-9">
-          {{ user?.createdDate }}
+          {{ user?.createdDate | date: "medium" }}
         </div>
       </div>
 
       <div class="row mb-3 align-items-center">
         <div class="col-sm-3 col-form-label form-label">
           {{ "me.overview.lastModifiedDate" | translate }}
-          <i class="bi-question-circle text-body ms-1">
+          <i ngbTooltip="{{ 'me.overview.lastModifiedDateExplanation' | translate }}"
+             class="bi-question-circle text-body ms-1">
 
           </i>
         </div>
 
         <div class="col-sm-9">
-          {{ user?.lastModifiedDate }}
+          {{ user?.lastModifiedDate
+          ? (user?.lastModifiedDate | date: "medium")
+          : "me.overview.lastModifiedDateNone" | translate }}
         </div>
       </div>
 
