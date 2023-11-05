@@ -6,3 +6,10 @@ export class Link {
   ) {
   }
 }
+
+export const buildLinkArrayWithChildren = (root: string, paths: string[]): Link[] => {
+  return paths.map(path => new Link(
+    path,
+    root + "/" + path
+  ));
+};

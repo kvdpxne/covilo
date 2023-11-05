@@ -1,5 +1,6 @@
-import {Component, Input} from "@angular/core";
+import {Component} from "@angular/core";
 import {Link} from "../../../shared";
+import {ROUTE_LINKS} from "../../me-routing.module";
 
 @Component({
   selector: "side-navigation",
@@ -7,6 +8,5 @@ import {Link} from "../../../shared";
 })
 export class SideNavigationComponent {
 
-  @Input()
-  content?: Link[];
+  public readonly links: Link[] = ROUTE_LINKS;
 }

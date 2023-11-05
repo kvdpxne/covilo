@@ -2,6 +2,7 @@ import {Component, OnInit} from "@angular/core";
 import {AuthenticationService} from "../../../authentication";
 import {User} from "../../model/user";
 import {UserLifecycleService} from "../../service/user-lifecycle.service";
+import {ROUTE_LINKS} from "../../../me/me-routing.module";
 
 @Component({
   selector: "covilo-avatar",
@@ -32,4 +33,6 @@ export class AvatarComponent
       next: (user: User): User => this.me = user
     });
   }
+
+  protected readonly ROUTE_LINKS = ROUTE_LINKS;
 }

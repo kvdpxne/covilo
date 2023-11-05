@@ -2,9 +2,22 @@ import {NgModule} from "@angular/core";
 import {RouterModule, Routes} from "@angular/router";
 import {MeComponent} from "./me.component";
 import {meGuard} from "./guard/me.guard";
-import {ChangeAvatarComponent, ChangePasswordComponent, OverviewComponent} from "./router";
+import {ChangeAvatarComponent, ChangePasswordComponent, OverviewComponent, RouteName} from "./router";
+import {buildLinkArrayWithChildren, Link} from "../shared";
 
-const routes: Routes = [{
+/**
+ *
+ */
+export const ROUTE_LINKS: Link[] = buildLinkArrayWithChildren("/me", [
+  RouteName.OVERVIEW,
+  RouteName.CHANGE_PASSWORD,
+  RouteName.CHANGE_AVATAR,
+]);
+
+/**
+ *
+ */
+const ROUTES: Routes = [{
   path: "me",
   component: MeComponent,
   canActivate: [
@@ -12,22 +25,22 @@ const routes: Routes = [{
   ],
   children: [{
     path: "",
-    redirectTo: "overview",
+    redirectTo: RouteName.OVERVIEW,
     pathMatch: "full"
   }, {
-    path: "change-avatar",
+    path: RouteName.CHANGE_AVATAR,
     component: ChangeAvatarComponent
   }, {
-    path: "change-password",
+    path: RouteName.CHANGE_PASSWORD,
     component: ChangePasswordComponent
   }, {
-    path: "overview",
+    path: RouteName.OVERVIEW,
     component: OverviewComponent
   }]
 }];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
+  imports: [RouterModule.forChild(ROUTES)],
   exports: [RouterModule]
 })
 export class MeRoutingModule {}

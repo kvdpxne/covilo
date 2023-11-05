@@ -6,7 +6,13 @@
     </span>
   </div>
   <div ngbDropdownMenu>
-    <button ngbDropdownItem routerLink="me/overview">Overview</button>
+    <ng-container *ngFor="let item of ROUTE_LINKS">
+      <a ngbDropdownItem
+         [routerLink]="item.reference">
+        {{ "me.side-navigation." + item.name | translate }}
+      </a>
+    </ng-container>
+
     <div class="dropdown-divider"></div>
 
     <button ngbDropdownItem

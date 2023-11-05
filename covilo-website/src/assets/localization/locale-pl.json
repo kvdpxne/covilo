@@ -136,7 +136,10 @@
   },
   "me": {
     "side-navigation": {
-      "account": "Konto"
+      "account": "Konto",
+      "change_avatar": "Zmień avatar",
+      "change_password": "Zmień hasło",
+      "overview": "Podgląd"
     },
     "changeAvatar": {
       "uploadAvatar": "Prześlij awatar",

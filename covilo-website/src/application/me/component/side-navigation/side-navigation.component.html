@@ -4,9 +4,9 @@
   </div>
   <hr>
   <ul class="nav nav-pills flex-column mb-auto">
-    <li *ngFor="let item of content">
+    <li *ngFor="let item of links">
       <a [routerLink]="item.reference" class="nav-link">
-        {{ item.name }}
+        {{ "me.side-navigation." + item.name | translate }}
       </a>
     </li>
   </ul>

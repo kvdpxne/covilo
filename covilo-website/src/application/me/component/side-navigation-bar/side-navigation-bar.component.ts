@@ -1,5 +1,4 @@
 import {Component, Input} from "@angular/core";
-import {Link} from "../../../shared";
 
 @Component({
   selector: "side-navigation-bar",
@@ -12,15 +11,4 @@ export class SideNavigationBarComponent {
 
   @Input()
   public email?: string;
-
-  public fs: Link[] = [{
-    name: "Overview",
-    reference: "/me/overview"
-  }, {
-    name: "Change avatar",
-    reference: "/me/change-avatar"
-  }, {
-    name: "Change password",
-    reference: "/me/change-password"
-  }];
 }
