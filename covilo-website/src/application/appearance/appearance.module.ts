@@ -8,6 +8,7 @@ import {SharedModule} from "../shared";
 import {CardComponent, CardListComponent, CardTagComponent, CardTagListComponent} from "./component";
 import {HomeComponent, InteractiveMapComponent, ReportComponent, ResultDetailsComponent, StatisticsComponent} from "./router";
 import { FilterByCategoryComponent } from "./component";
+import {RouterLink} from "@angular/router";
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { FilterByCategoryComponent } from "./component";
     NgbPagination,
     NgxChartsModule,
 
-    SharedModule
+    SharedModule,
+    RouterLink
   ]
 })
 export class AppearanceModule {

@@ -1,7 +1,12 @@
 {
   "appearance": {
     "home": {
-      "search": "Szukaj"
+      "hero": {
+        "header": "Zgłaszaj Przestępstwa Online",
+        "description": "Dowiedz się, jak możesz zgłosić przestępstwo w prosty sposób. Nasza aplikacja umożliwia szybkie zgłaszanie przestępstw i incydentów, aby poprawić bezpieczeństwo społeczności."
+      },
+      "search": "Szukaj",
+      "report": "Zgłoś"
     },
     "report": {
       "header": "Zmieńmy naszą okolice razem.",

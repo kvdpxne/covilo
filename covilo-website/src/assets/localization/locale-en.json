@@ -1,7 +1,12 @@
 {
   "appearance": {
     "home": {
-      "search": "Search"
+      "hero": {
+        "header": "Report Crimes Online",
+        "description": "Find out how you can easily report a crime. Our app allows you to quickly report crimes and incidents to improve community safety."
+      },
+      "search": "Search",
+      "report": "Report"
     },
     "report": {
       "header": "Let's change our neighborhood together.",
