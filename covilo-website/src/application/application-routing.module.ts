@@ -4,11 +4,10 @@ import {RouterModule, Routes} from "@angular/router";
 import {
   HomeComponent,
   InteractiveMapComponent,
+  ReportComponent,
   ResultDetailsComponent,
   StatisticsComponent
 } from "./appearance";
-
-import {ReportComponent} from "./appearance/router/report/report.component";
 import {ComingSoonComponent, PageNotFoundComponent} from "./communication";
 
 const routes: Routes = [

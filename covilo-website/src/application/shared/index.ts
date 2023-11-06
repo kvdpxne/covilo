@@ -3,7 +3,6 @@ export * from "./components";
 export * from "./service/api-http-client.service";
 export * from "./service/base-http-client.service";
 export * from "./service/base-http-parameters-builder";
-export * from "./service/base-http-params";
 export * from "./service/navigation.service";
 export * from "./service/storage.service";
 export * from "./service/storage-key";

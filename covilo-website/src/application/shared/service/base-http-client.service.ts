@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
-import {catchError, Observable, OperatorFunction, throwError} from "rxjs";
+import {catchError, Observable, throwError} from "rxjs";
 import {map} from "rxjs/operators";
 import {BaseHttpParametersBuilder} from "./base-http-parameters-builder";
 
@@ -30,21 +30,6 @@ export abstract class BaseHttpClient {
         }
       )
     );
-  }
-
-  public get2<T>(
-    partial: {path: string, parameters?: any, mapper: (value: T) => T}
-  ): Observable<T> {
-
-    return this.handleResponse<T>(
-      this.httpClient.get<T>(this.getUrl().concat(partial.path), {
-          headers: this.getHttpHeaders(),
-          params: BaseHttpParametersBuilder.buildQueryParameters(partial.parameters)
-        }
-      )
-    ).pipe(
-      map<T, T>(partial.mapper)
-    )
   }
 
   /**

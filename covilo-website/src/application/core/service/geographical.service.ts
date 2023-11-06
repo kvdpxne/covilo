@@ -22,10 +22,6 @@ export class GeographicalService {
     return this.api.get("geographical/countries");
   }
 
-  public getCountriesByContinent(continent: Continent): Observable<Country[]> {
-    return this.api.get("geographical/countries", {});
-  }
-
   public getProvincesByCountry(country: Country): Observable<Book<Province>> {
     return this.api.get("geographical/provinces", {
       country: country.identifier
