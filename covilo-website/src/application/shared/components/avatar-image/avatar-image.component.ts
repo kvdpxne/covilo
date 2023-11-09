@@ -20,7 +20,7 @@ export class AvatarImageComponent
   }
 
   private getUrlToUserAvatar(user: User): string {
-    return `${environment.resourceUrl}/avatars/${user.identifier}.png`;
+    return `${environment.resourceUrl}/avatars/${user.identifier}.webp`;
   }
 
   private getUrlToUserDefaultAvatar(): string {
