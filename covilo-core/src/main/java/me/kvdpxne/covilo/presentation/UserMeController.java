@@ -126,7 +126,7 @@ public final class UserMeController {
     if (this.storageService instanceof FileSystemStorageService
       fileSystemStorage) {
       try (final OutputStream output = fileSystemStorage.openOutputStream(
-        multipartFile, user.identifier().toString(), FileType.AVATAR)) {
+        user.identifier().toString().concat(".webp"), FileType.AVATAR)) {
         this.imageConverterService.convertImage(multipartFile.getInputStream(),
           output);
       } catch (final IOException exception) {

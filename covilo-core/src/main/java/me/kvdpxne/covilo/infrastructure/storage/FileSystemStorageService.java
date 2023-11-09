@@ -71,17 +71,15 @@ public final class FileSystemStorageService
    *
    */
   public OutputStream openOutputStream(
-    final MultipartFile file,
     final String name,
     final FileType fileType
   ) throws IOException {
-    final String fileExtension = this.getFileExtension(file);
     final Path path = Path.of(switch (fileType) {
       case AVATAR -> this.storageConfiguration.getAvatars();
     });
     final Path destination = this.resolve(
       path,
-      name.concat(fileExtension)
+      name
     );
     return Files.newOutputStream(destination);
   }
