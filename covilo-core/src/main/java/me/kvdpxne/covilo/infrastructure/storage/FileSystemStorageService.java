@@ -2,6 +2,7 @@ package me.kvdpxne.covilo.infrastructure.storage;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
@@ -58,7 +59,34 @@ public final class FileSystemStorageService
     return result.normalize().toAbsolutePath();
   }
 
-  private void store(
+  private String getFileExtension(final MultipartFile file) {
+    final String fileName = file.getOriginalFilename();
+    if (null == fileName) {
+      throw new FileNameNotAvailableException();
+    }
+    return fileName.substring(fileName.lastIndexOf('.'));
+  }
+
+  /**
+   *
+   */
+  public OutputStream openOutputStream(
+    final MultipartFile file,
+    final String name,
+    final FileType fileType
+  ) throws IOException {
+    final String fileExtension = this.getFileExtension(file);
+    final Path path = Path.of(switch (fileType) {
+      case AVATAR -> this.storageConfiguration.getAvatars();
+    });
+    final Path destination = this.resolve(
+      path,
+      name.concat(fileExtension)
+    );
+    return Files.newOutputStream(destination);
+  }
+
+  public void store(
     final Path path,
     final String name,
     final MultipartFile file
@@ -67,8 +95,7 @@ public final class FileSystemStorageService
       throw new StorageException("Failed to store empty file.");
     }
 
-    final String fileName = file.getOriginalFilename();
-    final String fileExtension = fileName.substring(fileName.indexOf('.'));
+    final String fileExtension = this.getFileExtension(file);
 
     try {
       //

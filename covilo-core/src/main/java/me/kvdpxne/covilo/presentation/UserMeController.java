@@ -1,6 +1,8 @@
 package me.kvdpxne.covilo.presentation;
 
 import jakarta.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.io.OutputStream;
 import lombok.RequiredArgsConstructor;
 import me.kvdpxne.covilo.application.dto.UserDto;
 import me.kvdpxne.covilo.application.exception.UserNotFoundException;
@@ -10,9 +12,12 @@ import me.kvdpxne.covilo.application.payload.UpdatePasswordRequest;
 import me.kvdpxne.covilo.domain.model.User;
 import me.kvdpxne.covilo.domain.persistence.ITokenRepository;
 import me.kvdpxne.covilo.domain.service.UserLifecycleService;
+import me.kvdpxne.covilo.infrastructure.image.ImageConverterService;
 import me.kvdpxne.covilo.infrastructure.image.ImageMimeTypeNotSupportedException;
 import me.kvdpxne.covilo.infrastructure.image.ImageType;
 import me.kvdpxne.covilo.infrastructure.security.TokenAuthenticationRequestFilter;
+import me.kvdpxne.covilo.infrastructure.storage.FileSystemStorageService;
+import me.kvdpxne.covilo.infrastructure.storage.FileType;
 import me.kvdpxne.covilo.infrastructure.storage.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -37,6 +42,8 @@ public final class UserMeController {
   private final IUserMapper userMapper;
   private final StorageService storageService;
   private final UserLifecycleService userLifecycleService;
+
+  private final ImageConverterService imageConverterService;
 
   private User getUserByCompactToken(
     final HttpServletRequest request
@@ -116,12 +123,16 @@ public final class UserMeController {
         String.format("Mime type \"%s\" is not supported.", mimeType)
       );
     }
-
-    this.storageService.storeUserAvatar(
-      user.identifier().toString(),
-      multipartFile
-    );
-
+    if (this.storageService instanceof FileSystemStorageService
+      fileSystemStorage) {
+      try (final OutputStream output = fileSystemStorage.openOutputStream(
+        multipartFile, user.identifier().toString(), FileType.AVATAR)) {
+        this.imageConverterService.convertImage(multipartFile.getInputStream(),
+          output);
+      } catch (final IOException exception) {
+        throw new RuntimeException(exception);
+      }
+    }
     return ResponseEntity.ok().build();
   }
 
