@@ -47,14 +47,17 @@ public final class ImageConverterService {
   }
 
   public void convertImage(
-    final InputStream input,
+    final InputStream inputStream,
     final Object output
   ) {
     final BufferedImage image;
-    try {
-      image = ImageIO.read(input);
-    } catch (final IOException exception) {
-      throw new RuntimeException(exception);
+    try (inputStream) {
+      image = ImageIO.read(inputStream);
+    } catch (final IOException cause) {
+      throw new ImageException(
+        "Failed to read the given image stream.",
+        cause
+      );
     }
     final ImageWriter writer = this.getImageWriter(ImageType.WEBP);
     final ImageWriteParam parameter = this.configureParameter(writer.getLocale());
@@ -62,8 +65,11 @@ public final class ImageConverterService {
       output)) {
       writer.setOutput(outputStream);
       writer.write(null, new IIOImage(image, null, null), parameter);
-    } catch (final IOException exception) {
-      throw new RuntimeException("");
+    } catch (final IOException cause) {
+      throw new ImageException(
+        "Failed to convert the image.",
+        cause
+      );
     } finally {
       writer.dispose();
     }
