@@ -10,7 +10,7 @@
 # Build output
 out/
 
-# Kotlin
+# Java
 # Compiled class file
 *.class
 
@@ -46,5 +46,8 @@ dist/
 node_modules/
 
 # Miscellaneous
+# Working directory
+run/
+
 # Log file
 *.log
