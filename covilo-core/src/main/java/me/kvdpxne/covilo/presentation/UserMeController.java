@@ -10,9 +10,13 @@ import me.kvdpxne.covilo.application.payload.UpdatePasswordRequest;
 import me.kvdpxne.covilo.domain.model.User;
 import me.kvdpxne.covilo.domain.persistence.ITokenRepository;
 import me.kvdpxne.covilo.domain.service.UserLifecycleService;
+import me.kvdpxne.covilo.infrastructure.image.ImageConverterService;
+import me.kvdpxne.covilo.infrastructure.image.ImageMimeTypeNotAvailableException;
 import me.kvdpxne.covilo.infrastructure.image.ImageMimeTypeNotSupportedException;
 import me.kvdpxne.covilo.infrastructure.image.ImageType;
 import me.kvdpxne.covilo.infrastructure.security.TokenAuthenticationRequestFilter;
+import me.kvdpxne.covilo.infrastructure.storage.FileSystemStorageService;
+import me.kvdpxne.covilo.infrastructure.storage.StorageLocationType;
 import me.kvdpxne.covilo.infrastructure.storage.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -37,6 +41,8 @@ public final class UserMeController {
   private final IUserMapper userMapper;
   private final StorageService storageService;
   private final UserLifecycleService userLifecycleService;
+
+  private final ImageConverterService imageConverterService;
 
   private User getUserByCompactToken(
     final HttpServletRequest request
@@ -96,32 +102,33 @@ public final class UserMeController {
     final HttpServletRequest request,
     @RequestParam("file") final MultipartFile multipartFile
   ) {
-    final String compactToken = request.getHeader(HttpHeaders.AUTHORIZATION)
-      .substring(TokenAuthenticationRequestFilter.PREFIX.length());
-
-    final User user = this.tokenRepository.findUserByCompactTokenOrNull(compactToken);
-    if (null == user) {
+    final User user;
+    try {
+      user = this.getUserByCompactToken(request);
+    } catch (final UserNotFoundException exception) {
       return ResponseEntity.notFound().build();
     }
-
     final String mimeType = multipartFile.getContentType();
-    final ImageType imageType = ImageType.getImageTypeBy(
-      //
-      //
-      type -> type.getMimeType().equals(mimeType)
-    );
-
-    if (null == imageType) {
-      throw new ImageMimeTypeNotSupportedException(
-        String.format("Mime type \"%s\" is not supported.", mimeType)
+    if (null == mimeType || mimeType.isBlank()) {
+      throw new ImageMimeTypeNotAvailableException();
+    }
+    ImageType.getImageTypeBy(
+      imageType -> imageType.getMimeType().equals(mimeType)
+    ).orElseThrow(() -> new ImageMimeTypeNotSupportedException(mimeType));
+    if (this.storageService instanceof FileSystemStorageService
+      fileSystemStorage
+    ) {
+      // Closing the input and output streams is unnecessary because the method
+      // closes the streams when converting an image when they are no longer
+      // needed for its proper execution.
+      this.imageConverterService.convertImage(
+        fileSystemStorage.openInputStream(multipartFile),
+        fileSystemStorage.openOutputStream(
+          user.getAvatarFileName(),
+          StorageLocationType.AVATAR
+        )
       );
     }
-
-    this.storageService.storeUserAvatar(
-      user.identifier().toString(),
-      multipartFile
-    );
-
     return ResponseEntity.ok().build();
   }
 

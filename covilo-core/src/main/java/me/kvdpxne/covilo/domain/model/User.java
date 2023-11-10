@@ -30,6 +30,13 @@ public record User(
       && !this.firstName.isBlank() && !this.lastName.isBlank();
   }
 
+  /**
+   *
+   */
+  public String getAvatarFileName() {
+    return this.identifier.toString().concat(".webp");
+  }
+
   public static final class Builder implements IBuilder<User> {
 
     private UUID identifier;
