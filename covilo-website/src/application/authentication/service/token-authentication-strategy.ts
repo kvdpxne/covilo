@@ -13,7 +13,7 @@ export class TokenAuthenticationStrategy
   }
 
   getToken(): string | null {
-    return this.storageService.load(StorageKey.TOKEN);
+    return this.storageService.load<string>(StorageKey.TOKEN);
   }
 
   getCurrentUser(): Observable<User | null> {
@@ -31,7 +31,7 @@ export class TokenAuthenticationStrategy
   }
 
   doLogin(data: Token): void {
-    this.storageService.store(StorageKey.TOKEN, data.compactToken);
+    this.storageService.store<string>(StorageKey.TOKEN, data.compactToken);
   }
 
   doLogout(): void {

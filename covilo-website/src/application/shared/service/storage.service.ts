@@ -7,7 +7,7 @@ import {StorageType} from "./storage-type";
 })
 export class StorageService {
 
-  public load(
+  public load<T>(
     key: StorageKey | string,
     type: StorageType = StorageType.LOCAL_STORAGE
   ): any {
@@ -37,15 +37,15 @@ export class StorageService {
       case "number":
         return +textValue;
       case "object":
-        return JSON.parse(textValue);
+        return JSON.parse(textValue) as T;
       default:
         return null;
     }
   }
 
-  public store(
+  public store<T>(
     key: StorageKey | string,
-    value: any,
+    value: T,
     type: StorageType = StorageType.LOCAL_STORAGE
   ): void {
     if (!value) {
@@ -99,9 +99,9 @@ export class StorageService {
 
   public has(
     key: StorageKey | string,
-    storageType: StorageType = StorageType.LOCAL_STORAGE
+    type: StorageType = StorageType.LOCAL_STORAGE
   ): boolean {
-    switch (storageType) {
+    switch (type) {
       case StorageType.LOCAL_STORAGE:
         return this.inStorage(key, localStorage);
       case StorageType.SESSION_STORAGE:
