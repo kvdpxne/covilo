@@ -11,6 +11,6 @@
          class="form-control form-control-lg"
          required>
   <span *ngIf="(sent || isValid()) && hasErrors()" class="invalid-feedback">
-    {{ invalidText }}
+    {{ feedback }}
   </span>
 </div>

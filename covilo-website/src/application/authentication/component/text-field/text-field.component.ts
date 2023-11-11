@@ -18,7 +18,7 @@ export class TextFieldComponent {
   public text!: string
 
   @Input()
-  public invalidText!: string
+  public feedback!: string
 
   @Input()
   public group!: FormGroup;

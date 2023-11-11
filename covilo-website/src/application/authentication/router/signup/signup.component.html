@@ -4,7 +4,7 @@
                 [sent]="form.submitted"
                 [autocomplete]="true"
                 [text]="translate('firstName')"
-                [invalidText]="translate('invalidFirstName')"
+                [feedback]="translate('invalidFirstName')"
                 type="date"
                 name="birthDate"/>
   </ng-container>
@@ -13,14 +13,14 @@
                 [sent]="form.submitted"
                 [autocomplete]="true"
                 [text]="translate('firstName')"
-                [invalidText]="translate('invalidFirstName')"
+                [feedback]="translate('invalidFirstName')"
                 name="firstName"
                 placeholder="Sergio"/>
     <text-field [group]="basicData"
                 [sent]="form.submitted"
                 [autocomplete]="true"
                 [text]="translate('lastName')"
-                [invalidText]="translate('invalidLastName')"
+                [feedback]="translate('invalidLastName')"
                 name="lastName"
                 placeholder="Mendez"/>
   </ng-container>
@@ -29,7 +29,7 @@
                 [sent]="form.submitted"
                 [autocomplete]="true"
                 [text]="translate('email')"
-                [invalidText]="translate('invalidEmail')"
+                [feedback]="translate('invalidEmail')"
                 type="email"
                 name="email"
                 placeholder="sergio.diaz@gmail.com"/>
@@ -37,7 +37,7 @@
                 [sent]="form.submitted"
                 [autocomplete]="true"
                 [text]="translate('password')"
-                [invalidText]="translate('invalidPassword')"
+                [feedback]="translate('invalidPassword')"
                 type="password"
                 name="password"
                 placeholder="{{ 'authentication.validation.passwordRequirements' | translate }}"/>
@@ -45,7 +45,7 @@
                 [sent]="form.submitted"
                 [autocomplete]="true"
                 [text]="translate('confirmPassword')"
-                [invalidText]="translate('invalidConfirmPassword')"
+                [feedback]="translate('invalidConfirmPassword')"
                 type="password"
                 name="confirmPassword"
                 placeholder="{{ 'authentication.validation.passwordRequirements' | translate }}"/>
