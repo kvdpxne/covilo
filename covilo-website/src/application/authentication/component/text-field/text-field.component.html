@@ -1,0 +1,16 @@
+<div [formGroup]="group" class="mb-3">
+  <label [for]="name" class="form-label">
+    {{ text }}
+  </label>
+  <input [formControlName]="name"
+         [ngClass]="{ 'is-invalid' : sent && hasErrors() || isValid() }"
+         [type]="type"
+         [id]="name"
+         [placeholder]="placeholder"
+         [autocomplete]="autocomplete"
+         class="form-control form-control-lg"
+         required>
+  <span *ngIf="(sent || isValid()) && hasErrors()" class="invalid-feedback">
+    {{ invalidText }}
+  </span>
+</div>

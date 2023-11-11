@@ -1,92 +1,76 @@
-<form #formElement="ngForm" (ngSubmit)="submit()">
+<form #form="ngForm" (ngSubmit)="submit()">
+  <ng-container *ngIf="showStage(stage.QUALIFICATION)">
+    <text-field [group]="qualification"
+                [sent]="form.submitted"
+                [autocomplete]="true"
+                [text]="translate('firstName')"
+                [invalidText]="translate('invalidFirstName')"
+                type="date"
+                name="birthDate"/>
+  </ng-container>
+  <ng-container *ngIf="showStage(stage.BASIC_DATA)">
+    <text-field [group]="basicData"
+                [sent]="form.submitted"
+                [autocomplete]="true"
+                [text]="translate('firstName')"
+                [invalidText]="translate('invalidFirstName')"
+                name="firstName"
+                placeholder="Sergio"/>
+    <text-field [group]="basicData"
+                [sent]="form.submitted"
+                [autocomplete]="true"
+                [text]="translate('lastName')"
+                [invalidText]="translate('invalidLastName')"
+                name="lastName"
+                placeholder="Mendez"/>
+  </ng-container>
+  <ng-container *ngIf="showStage(stage.AUTHENTICATION_DATA)">
+    <text-field [group]="authenticationData"
+                [sent]="form.submitted"
+                [autocomplete]="true"
+                [text]="translate('email')"
+                [invalidText]="translate('invalidEmail')"
+                type="email"
+                name="email"
+                placeholder="sergio.diaz@gmail.com"/>
+    <text-field [group]="authenticationData"
+                [sent]="form.submitted"
+                [autocomplete]="true"
+                [text]="translate('password')"
+                [invalidText]="translate('invalidPassword')"
+                type="password"
+                name="password"
+                placeholder="{{ 'authentication.validation.passwordRequirements' | translate }}"/>
+    <text-field [group]="authenticationData"
+                [sent]="form.submitted"
+                [autocomplete]="true"
+                [text]="translate('confirmPassword')"
+                [invalidText]="translate('invalidConfirmPassword')"
+                type="password"
+                name="confirmPassword"
+                placeholder="{{ 'authentication.validation.passwordRequirements' | translate }}"/>
+    <div class="form-check mb-3">
 
-  <div class="mb-3">
+      <input [formControl]="privacyPolicy"
+             id="privacyPolicyModal"
+             class="form-check-input"
+             type="checkbox"
+             required>
 
-    <label for="emailModal" class="form-label">
-      {{ "authentication.signup.email" | translate }}
-    </label>
+      <label for="privacyPolicyModal" class="form-check-label small">
+        {{ "authentication.signup.privacyPolicy.content" | translate }}
+        <a routerLink="/privacy-policy" class="link">
+          {{ "authentication.signup.privacyPolicy.link" | translate }}
+        </a>
+      </label>
 
-    <input [formControl]="email"
-           [ngClass]="{ 'is-invalid' : formElement.submitted && email.errors || isEmailValid() }"
-           placeholder="sergio.diaz@gmail.com"
-           id="emailModal"
-           class="form-control form-control-lg"
-           type="email"
-           autocomplete="on"
-           required>
-
-    <!-- Displays information about incorrect completion of a field -->
-    <!-- with a recognizable name. -->
-    <span *ngIf="(formElement.submitted || isEmailValid()) && email.errors" class="invalid-feedback">
-      {{ "authentication.signup.invalidEmail" | translate }}
-    </span>
-  </div>
-
-  <div class="mb-3">
-
-    <label for="passwordModal" class="form-label">
-      {{ "authentication.signup.password" | translate }}
-    </label>
-
-    <input [formControl]="password"
-           [ngClass]="{ 'is-invalid' : formElement.submitted && password.errors || isPasswordValid() }"
-           placeholder="{{ 'authentication.validation.passwordRequirements' | translate }}"
-           id="passwordModal"
-           class="form-control form-control-lg"
-           type="password"
-           autocomplete="off"
-           required>
-
-    <!-- Displays information about incorrect completion of a field -->
-    <!-- with a password. -->
-    <span *ngIf="(formElement.submitted || isPasswordValid()) && password.errors" class="invalid-feedback">
-      {{ "authentication.signup.invalidPassword" | translate }}
-    </span>
-  </div>
-
-  <div class="mb-3">
-
-    <label for="confirmPasswordModal" class="form-label">
-      {{ "authentication.signup.confirmPassword" | translate }}
-    </label>
-
-    <input [formControl]="confirmPassword"
-           [ngClass]="{ 'is-invalid' : formElement.submitted && confirmPassword.errors || isConfirmPasswordValid() }"
-           placeholder="{{ 'authentication.validation.passwordRequirements' | translate }}"
-           id="confirmPasswordModal"
-           class="form-control form-control-lg"
-           type="password"
-           autocomplete="off"
-           required>
-
-    <!-- Displays information about incorrect completion of a field -->
-    <!-- with a password. -->
-    <span *ngIf="(formElement.submitted || isConfirmPasswordValid()) && confirmPassword.errors" class="invalid-feedback">
-      {{ "authentication.signup.invalidConfirmPassword" | translate }}
-    </span>
-  </div>
-
-  <div class="form-check mb-3">
-
-    <input [formControl]="privacyPolicy"
-           id="privacyPolicyModal"
-           class="form-check-input"
-           type="checkbox"
-           required>
-
-    <label for="privacyPolicyModal" class="form-check-label small">
-      {{ "authentication.signup.privacyPolicy.content" | translate }}
-      <a routerLink="/privacy-policy" class="link">
-        {{ "authentication.signup.privacyPolicy.link" | translate }}
-      </a>
-    </label>
-
-    <span *ngIf="(formElement.submitted || isPrivacyPolicyValid()) && privacyPolicy.errors"
-         class="invalid-feedback d-block">
+      <span *ngIf="(form.submitted || isPrivacyPolicyValid()) && privacyPolicy.errors"
+            class="invalid-feedback d-block">
       {{ "authentication.signup.invalidPrivacyPolicy" | translate }}
     </span>
 
-  </div>
+    </div>
+  </ng-container>
 
   <div class="d-grid mb-3">
     <button class="btn btn-primary btn-lg" type="submit">

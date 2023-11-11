@@ -9,6 +9,7 @@ import {AUTHENTICATION_INTERCEPTOR_PROVIDER} from "./interceptor/authentication.
 import {LoginComponent, ResetPasswordComponent, SignupComponent} from "./router";
 import {NavigationBarComponent, SideBarComponent} from "./component";
 import {AuthenticationComponent} from "./authentication.component";
+import {TextFieldComponent} from "./component/text-field/text-field.component";
 
 @NgModule({
   providers: [
@@ -29,7 +30,8 @@ import {AuthenticationComponent} from "./authentication.component";
     ReactiveFormsModule,
     TranslateModule.forChild(),
     SharedModule,
-    AuthenticationRoutingModule
+    AuthenticationRoutingModule,
+    TextFieldComponent
   ]
 })
 export class AuthenticationModule {
