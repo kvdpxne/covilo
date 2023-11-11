@@ -34,15 +34,15 @@ dependencies {
 
   implementation(libraries.openapi)
 
-  annotationProcessor(libraries.mapstruct.processor)
+  // https://github.com/mapstruct/mapstruct
   implementation(libraries.mapstruct.core)
+  annotationProcessor(libraries.mapstruct.processor)
 
   implementation(libraries.imageio.webp)
 
-  implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
-  runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
-  runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
-
+  // https://github.com/jwtk/jjwt
+  implementation(libraries.jjwt.api)
+  runtimeOnly(libraries.bundles.jjwt.runtime)
 }
 
 def targetJavaVersion = 17
