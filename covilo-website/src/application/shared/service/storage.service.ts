@@ -84,6 +84,22 @@ export class StorageService {
     }
   }
 
+  public delete(
+    key: StorageKey | string,
+    type: StorageType = StorageType.LOCAL_STORAGE
+  ): void {
+    switch (type) {
+      case StorageType.LOCAL_STORAGE:
+        localStorage.removeItem(key);
+        break;
+      case StorageType.SESSION_STORAGE:
+        localStorage.removeItem(key);
+        return;
+      default:
+        throw Error("Unknown storage type.");
+    }
+  }
+
   private inStorage(key: StorageKey | string, storage: Storage): boolean {
     const length: number = storage.length;
     if (0 >= length) {

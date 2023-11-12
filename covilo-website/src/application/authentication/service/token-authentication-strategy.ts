@@ -35,6 +35,6 @@ export class TokenAuthenticationStrategy
   }
 
   doLogout(): void {
-    localStorage.removeItem(StorageKey.TOKEN);
+    this.storageService.delete(StorageKey.TOKEN);
   }
 }

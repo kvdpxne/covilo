@@ -73,6 +73,11 @@
     "signup": {
       "title": "Witaj w Covilo",
       "description": "Wypełnij formularz, aby rozpocząć..",
+
+      "birthDate": "Data urodzenia",
+      "firstName": "Imię",
+      "lastName": "Nazwisko",
+
       "email": "Twój email",
       "invalidEmail": "Proszę podać prawidłowy adres email.",
       "password": "Hasło",

@@ -3,7 +3,7 @@
     <text-field [group]="qualification"
                 [sent]="form.submitted"
                 [autocomplete]="true"
-                [text]="translate('firstName')"
+                [text]="translate('birthDate')"
                 [feedback]="translate('invalidFirstName')"
                 type="date"
                 name="birthDate"/>
@@ -49,31 +49,33 @@
                 type="password"
                 name="confirmPassword"
                 placeholder="{{ 'authentication.validation.passwordRequirements' | translate }}"/>
-    <div class="form-check mb-3">
+<!--    <div class="form-check mb-3">-->
 
-      <input [formControl]="privacyPolicy"
-             id="privacyPolicyModal"
-             class="form-check-input"
-             type="checkbox"
-             required>
+<!--      <input [formControl]="privacyPolicy"-->
+<!--             id="privacyPolicyModal"-->
+<!--             class="form-check-input"-->
+<!--             type="checkbox"-->
+<!--             required>-->
 
-      <label for="privacyPolicyModal" class="form-check-label small">
-        {{ "authentication.signup.privacyPolicy.content" | translate }}
-        <a routerLink="/privacy-policy" class="link">
-          {{ "authentication.signup.privacyPolicy.link" | translate }}
-        </a>
-      </label>
+<!--      <label for="privacyPolicyModal" class="form-check-label small">-->
+<!--        {{ "authentication.signup.privacyPolicy.content" | translate }}-->
+<!--        <a routerLink="/privacy-policy" class="link">-->
+<!--          {{ "authentication.signup.privacyPolicy.link" | translate }}-->
+<!--        </a>-->
+<!--      </label>-->
 
-      <span *ngIf="(form.submitted || isPrivacyPolicyValid()) && privacyPolicy.errors"
-            class="invalid-feedback d-block">
-      {{ "authentication.signup.invalidPrivacyPolicy" | translate }}
-    </span>
+<!--      <span *ngIf="(form.submitted || isPrivacyPolicyValid()) && privacyPolicy.errors"-->
+<!--            class="invalid-feedback d-block">-->
+<!--      {{ "authentication.signup.invalidPrivacyPolicy" | translate }}-->
+<!--    </span>-->
 
-    </div>
+<!--    </div>-->
   </ng-container>
 
   <div class="d-grid mb-3">
-    <button class="btn btn-primary btn-lg" type="submit">
+    <button [disabled]="!showStage(stage.INTIMATION)"
+            class="btn btn-primary btn-lg"
+            type="submit">
       {{ "authentication.signup.signup" | translate }}
     </button>
   </div>

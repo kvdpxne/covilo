@@ -106,7 +106,6 @@ public final class UserLifecycleService
 
     var user = source.toBuilder()
       .password(encodedPassword)
-      .birthDate(LocalDate.now()) // TODO remove it
       .build();
 
     try {

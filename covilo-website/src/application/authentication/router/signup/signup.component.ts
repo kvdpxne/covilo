@@ -1,47 +1,37 @@
-import {Component} from "@angular/core";
-import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {Component, OnInit} from "@angular/core";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AuthenticationService} from "../../service/authentication.service";
-import {SignupRequest} from "../../../core";
 import {NavigationService, StorageService} from "../../../shared";
 import {SignupStage} from "./signup-stage";
-import {SignupForm, SignupFormGroup} from "./signup-form";
 import {TranslateService} from "@ngx-translate/core";
+import {SignupFormData} from "./signup-form-data";
+import {SignupRequest} from "../../../core";
 
 @Component({
   selector: "router-authentication-signup",
   templateUrl: "./signup.component.html"
 })
-export class SignupComponent {
+export class SignupComponent
+  implements OnInit {
 
-  /**
-   * A group of control forms needed to hold user authentication information.
-   */
-  public readonly signupForm: SignupFormGroup;
-
+  private readonly translateService: TranslateService;
   private readonly navigationService: NavigationService;
-
   private readonly storageService: StorageService;
+  private readonly authenticationService: AuthenticationService;
 
   /**
    *
    */
-  private readonly authenticationService: AuthenticationService;
-
-  protected readonly stage = SignupStage;
+  public readonly stage: typeof SignupStage;
 
   /**
    * Current stage of user registration.
    */
   public currentStage: SignupStage;
 
-  private translateService: TranslateService;
+  public signupForm: FormGroup;
 
-  /**
-   *
-   */
-  public readonly lastStage: SignupStage;
-
-  public test: FormGroup;
+  public signupFormData: SignupFormData;
 
   public constructor(
     formBuilder: FormBuilder,
@@ -50,8 +40,9 @@ export class SignupComponent {
     storageService: StorageService,
     authenticationService: AuthenticationService
   ) {
-
-    this.test = formBuilder.group({
+    // Initializes the standard form group with the FormGroup constructor
+    // needed to hold the user authentication information.
+    this.signupForm = formBuilder.group({
       qualification: formBuilder.group({
         birthDate: [new Date()]
       }),
@@ -69,20 +60,6 @@ export class SignupComponent {
       validators: Validators.required
     });
 
-    // Initializes the standard form group with the FormGroup constructor
-    // needed to hold the user authentication information.
-    this.signupForm = formBuilder.group<SignupForm>({
-      birthDate: new FormControl<Date | null>(null),
-      firstName: new FormControl<string | null>(null),
-      lastName: new FormControl<string | null>(null),
-      email: new FormControl<string | null>(null),
-      password: new FormControl<string | null>(null),
-      confirmPassword: new FormControl<string | null>(null),
-      privacyPolicy: new FormControl<boolean>(false)
-    }, {
-      validators: Validators.required
-    });
-
     this.translateService = translateService;
 
     //
@@ -90,37 +67,40 @@ export class SignupComponent {
     this.storageService = storageService;
     this.authenticationService = authenticationService;
 
-    //
-    this.currentStage = this.stage.QUALIFICATION;
-    this.lastStage = Object.keys(this.stage).length;
+    this.stage = SignupStage;
 
-    // Only for application development.
-    this.currentStage = this.lastStage;
+    //
+    this.currentStage = SignupStage.QUALIFICATION;
+    this.signupFormData = new SignupFormData();
   }
 
   public translate(key: string): string {
-    return this.translateService.instant("authentication.signup.".concat(key));
+    return this.translateService.instant(`authentication.signup.${key}`);
   }
 
   public get qualification(): FormGroup {
-    return this.test.get("qualification") as FormGroup;
+    return this.signupForm.get("qualification") as FormGroup;
   }
 
   public get basicData(): FormGroup {
-    return this.test.get("basicData") as FormGroup;
+    return this.signupForm.get("basicData") as FormGroup;
   }
 
   public get authenticationData(): FormGroup {
-    return this.test.get("authenticationData") as FormGroup;
+    return this.signupForm.get("authenticationData") as FormGroup;
+  }
+
+  private value(key: string): string {
+    return this.authenticationData.get(key)?.value;
   }
 
   /**
    *
    */
-  public nextStage(): void {
+  public nextStage(stage: SignupStage): void {
     const nextStage: number = 1 + this.currentStage;
-    this.currentStage = nextStage >= this.lastStage
-      ? this.lastStage
+    this.currentStage = nextStage > stage
+      ? stage
       : nextStage;
   }
 
@@ -131,61 +111,37 @@ export class SignupComponent {
     return this.currentStage >= stage;
   }
 
-  private get controls() {
-    return this.signupForm.controls;
-  }
-
-  public get email(): FormControl<string | null> {
-    return this.controls.email;
-  }
-
-  public get password(): FormControl<string | null> {
-    return this.controls.password;
-  }
-
-  public get confirmPassword(): FormControl<string | null> {
-    return this.controls.confirmPassword;
-  }
-
-  public get privacyPolicy(): FormControl<boolean | null> {
-    return this.controls.privacyPolicy;
-  }
-
-  public isPrivacyPolicyValid(): boolean {
-    const control: AbstractControl<boolean | null, boolean> = this.privacyPolicy;
-    return control.invalid && (control.dirty || control.touched);
+  public updateSignupData(): void {
+    this.storageService.store<SignupFormData>("signup_data", this.signupFormData);
   }
 
   public submit(): void {
     //
-    const email: string | null = this.email.value;
-    const password: string | null = this.password.value;
-    const confirmPassword: string | null = this.confirmPassword.value;
-    const privacyPolicy: boolean | null = this.privacyPolicy.value;
+    const birthDate: Date = this.signupFormData.birthDate!;
+    const firstName: string = this.signupFormData.firstName!;
+    const lastName: string = this.signupFormData.lastName!;
+    const email: string = this.signupFormData.email!;
 
-    console.log(password);
-
-    // Checks if the values are not null or empty.
-    if (!email || !password || !confirmPassword || !privacyPolicy) {
-      return;
-    }
+    //
+    const password: string = this.value("password");
+    const confirmPassword: string = this.value("confirmPassword");
 
     //
     const request: SignupRequest = {
-      firstName: "Sergio",
-      lastName: "Drugi",
+      birthDate: birthDate,
+      firstName: firstName,
+      lastName: lastName,
       email: email,
       password: password,
       confirmPassword: confirmPassword,
-      privacyPolicy: privacyPolicy
+      privacyPolicy: true
     };
 
+    //
     this.authenticationService.signup(request).subscribe((): void => {
       this.navigationService.navigateToHomePage();
     });
   }
-
-  birthDate: FormControl<Date | null> = new FormControl<Date | null>(null);
 
   private isAdult(birthDate: Date): boolean {
     const birth: Date = new Date(birthDate);
@@ -204,11 +160,43 @@ export class SignupComponent {
     return 18 <= age;
   }
 
-  public handleBirthDateChange(): void {
-    const value = this.birthDate.value;
+  public handleQualificationChange(): void {
+    this.qualification.valueChanges.subscribe(value => {
+      if (this.isAdult(value.birthDate)) {
+        this.signupFormData.birthDate = value.birthDate;
+        this.updateSignupData();
+        this.nextStage(SignupStage.BASIC_DATA);
+      }
+    });
+  }
 
-    if (value && this.isAdult(value)) {
-      this.nextStage();
-    }
+  public handleBasicDataChange(): void {
+    this.basicData.valueChanges.subscribe(value => {
+      const firstName: string = value.firstName;
+      const lastName: string = value.lastName;
+      if (firstName && lastName) {
+        this.signupFormData.firstName = firstName;
+        this.signupFormData.lastName = lastName;
+        this.updateSignupData();
+        this.nextStage(SignupStage.AUTHENTICATION_DATA);
+      }
+    });
+  }
+
+  public handleAuthenticationDataChange(): void {
+    this.authenticationData.valueChanges.subscribe(value => {
+      const email: string = value.email;
+      if (email && value.password && value.confirmPassword) {
+        this.signupFormData.email = email;
+        this.updateSignupData();
+        this.nextStage(SignupStage.INTIMATION);
+      }
+    });
+  }
+
+  public ngOnInit(): void {
+    this.handleQualificationChange();
+    this.handleBasicDataChange();
+    this.handleAuthenticationDataChange();
   }
 }
