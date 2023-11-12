@@ -20,9 +20,9 @@
       </ul>
 
       <div class="navbar-nav">
-        <covilo-avatar *ngIf="!isLoggedIn"/>
+        <covilo-avatar *ngIf="isLoggedIn"/>
 
-        <ng-template [ngIf]="isLoggedIn">
+        <ng-template [ngIf]="!isLoggedIn">
           <button class="btn btn-sm btn-outline-primary me-1"
                   routerLink="./authentication/login"
                   type="button">
