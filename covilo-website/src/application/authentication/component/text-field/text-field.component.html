@@ -1,16 +1,40 @@
-<div [formGroup]="group" class="mb-3">
-  <label [for]="name" class="form-label">
+<div [formGroup]="group"
+     [class.form-check]="checkboxType"
+     class="mb-3">
+  <label [for]="name"
+         [class.form-check-label]="checkboxType"
+         [class.form-lable]="!checkboxType">
     {{ text }}
+    <ng-content/>
   </label>
-  <input [formControlName]="name"
-         [ngClass]="{ 'is-invalid' : sent && hasErrors() || isValid() }"
-         [type]="type"
+  <!-- TODO It causes headaches. -->
+  <!-- https://github.com/angular/angular/issues/7329 -->
+  <!-- https://github.com/angular/angular/issues/13243 -->
+  <!-- TL;DR Angular cannot dynamically bind the input type. -->
+  <input *ngIf="dataType"
+         [formControlName]="name"
+         [ngClass]="{ 'is-invalid' : sent && errors || valid }"
+         [id]="name"
+         class="form-control form-control-lg"
+         type="date">
+  <input *ngIf="checkboxType"
+         [formControlName]="name"
+         [ngClass]="{ 'is-invalid' : sent && errors || valid }"
+         [id]="name"
+         class="form-check-input"
+         type="checkbox">
+  <!-- Yes, there is dynamic type binding here, but it does not matter for --->
+  <!-- the application because the returned value will be a string anyway. -->
+  <input *ngIf="!dataType && !checkboxType"
+         [formControlName]="name"
+         [ngClass]="{ 'is-invalid' : sent && errors || valid }"
          [id]="name"
          [placeholder]="placeholder"
          [autocomplete]="autocomplete"
-         class="form-control form-control-lg"
-         required>
-  <span *ngIf="(sent || isValid()) && hasErrors()" class="invalid-feedback">
+         [type]="type"
+         class="form-control form-control-lg">
+  <span *ngIf="(sent || valid) && errors"
+        class="invalid-feedback">
     {{ feedback }}
   </span>
 </div>

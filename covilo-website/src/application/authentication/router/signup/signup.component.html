@@ -1,4 +1,5 @@
-<form #form="ngForm" (ngSubmit)="submit()">
+<form #form="ngForm"
+      (ngSubmit)="submit()">
   <ng-container *ngIf="showStage(stage.QUALIFICATION)">
     <text-field [group]="qualification"
                 [sent]="form.submitted"
@@ -35,7 +36,6 @@
                 placeholder="sergio.diaz@gmail.com"/>
     <text-field [group]="authenticationData"
                 [sent]="form.submitted"
-                [autocomplete]="true"
                 [text]="translate('password')"
                 [feedback]="translate('invalidPassword')"
                 type="password"
@@ -43,35 +43,22 @@
                 placeholder="{{ 'authentication.validation.passwordRequirements' | translate }}"/>
     <text-field [group]="authenticationData"
                 [sent]="form.submitted"
-                [autocomplete]="true"
                 [text]="translate('confirmPassword')"
                 [feedback]="translate('invalidConfirmPassword')"
                 type="password"
                 name="confirmPassword"
                 placeholder="{{ 'authentication.validation.passwordRequirements' | translate }}"/>
-<!--    <div class="form-check mb-3">-->
-
-<!--      <input [formControl]="privacyPolicy"-->
-<!--             id="privacyPolicyModal"-->
-<!--             class="form-check-input"-->
-<!--             type="checkbox"-->
-<!--             required>-->
-
-<!--      <label for="privacyPolicyModal" class="form-check-label small">-->
-<!--        {{ "authentication.signup.privacyPolicy.content" | translate }}-->
-<!--        <a routerLink="/privacy-policy" class="link">-->
-<!--          {{ "authentication.signup.privacyPolicy.link" | translate }}-->
-<!--        </a>-->
-<!--      </label>-->
-
-<!--      <span *ngIf="(form.submitted || isPrivacyPolicyValid()) && privacyPolicy.errors"-->
-<!--            class="invalid-feedback d-block">-->
-<!--      {{ "authentication.signup.invalidPrivacyPolicy" | translate }}-->
-<!--    </span>-->
-
-<!--    </div>-->
+    <text-field [group]="authenticationData"
+                [sent]="form.submitted"
+                [text]="translate('privacyPolicy.content')"
+                [feedback]="translate('invalidPrivacyPolicy')"
+                type="checkbox"
+                name="privacyPolicy">
+      <a routerLink="/privacy-policy">
+        {{ "authentication.signup.privacyPolicy.link" | translate }}
+      </a>
+    </text-field>
   </ng-container>
-
   <div class="d-grid mb-3">
     <button [disabled]="!showStage(stage.INTIMATION)"
             class="btn btn-primary btn-lg"
@@ -79,14 +66,10 @@
       {{ "authentication.signup.signup" | translate }}
     </button>
   </div>
-
   <div class="text-center">
-    <p>
-      {{ "authentication.signup.login.question" | translate }}
-      <a routerLink="/authentication/login" class="link">
-        {{ "authentication.signup.login.link" | translate }}
-      </a>
-    </p>
+    {{ "authentication.signup.login.question" | translate }}
+    <a routerLink="/authentication/login">
+      {{ "authentication.signup.login.link" | translate }}
+    </a>
   </div>
-
 </form>

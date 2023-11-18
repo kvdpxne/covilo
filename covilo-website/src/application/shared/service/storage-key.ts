@@ -1,3 +1,4 @@
 export enum StorageKey {
-  TOKEN = "token"
+  TOKEN = "token",
+  SIGNUP_DATA = "signup_data"
 }

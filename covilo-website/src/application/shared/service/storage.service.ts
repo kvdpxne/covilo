@@ -10,7 +10,7 @@ export class StorageService {
   public load<T>(
     key: StorageKey | string,
     type: StorageType = StorageType.LOCAL_STORAGE
-  ): any {
+  ): T | null {
     let textValue: string | null;
     switch (type) {
       case StorageType.SESSION_STORAGE:
@@ -24,22 +24,13 @@ export class StorageService {
     }
 
     if (!textValue) {
-      return textValue;
+      return null;
     }
 
-    switch (typeof textValue) {
-      case "string":
-        return textValue;
-      case "boolean":
-        return !!textValue;
-      case "bigint":
-        return BigInt(textValue);
-      case "number":
-        return +textValue;
-      case "object":
-        return JSON.parse(textValue) as T;
-      default:
-        return null;
+    try {
+      return JSON.parse(textValue) as T;
+    } catch (cause) {
+      return textValue as T;
     }
   }
 
