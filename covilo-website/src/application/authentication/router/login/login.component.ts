@@ -1,8 +1,9 @@
 import {Component} from "@angular/core";
-import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthenticationService} from "../../service/authentication.service";
 import {LoginRequest} from "../../../core";
 import {NavigationService} from "../../../shared";
+import {TranslateService} from "@ngx-translate/core";
 
 interface LoginForm {
 
@@ -19,8 +20,9 @@ export class LoginComponent {
   /**
    * A group of control forms needed to hold user authentication information.
    */
-  private readonly formGroup: FormGroup<LoginForm>;
+  public readonly formGroup: FormGroup<LoginForm>;
 
+  private readonly translateService: TranslateService;
   private readonly navigationService: NavigationService;
 
   /**
@@ -30,49 +32,31 @@ export class LoginComponent {
 
   constructor(
     formBuilder: FormBuilder,
+    translateService: TranslateService,
     navigationService: NavigationService,
     authenticationService: AuthenticationService
   ) {
     // Initializes the standard form group with the FormGroup constructor
     // needed to hold the user authentication information.
-    this.formGroup = formBuilder.group<LoginForm>({
-      email: new FormControl<string | null>(null),
-      password: new FormControl<string | null>(null)
-    }, {
-      validators: Validators.required
+    this.formGroup = formBuilder.group({
+      email: ["", Validators.required, Validators.email],
+      password: ["", Validators.required]
     });
+    this.translateService = translateService;
     //
     this.navigationService = navigationService;
     // Initiates the standard services.
     this.authenticationService = authenticationService;
   }
 
-  private get controls() {
-    return this.formGroup.controls;
-  }
-
-  public get email(): FormControl<string | null> {
-    return this.controls.email;
-  }
-
-  public get password(): FormControl<string | null> {
-    return this.controls.password;
-  }
-
-  public isEmailValid(): boolean {
-    const control: AbstractControl<string | null, string> = this.email;
-    return control.invalid && (control.dirty || control.touched);
-  }
-
-  public isPasswordValid(): boolean {
-    const control: AbstractControl<string | null, string> = this.password;
-    return control.invalid && (control.dirty || control.touched);
+  public translate(key: string): string {
+    return this.translateService.instant(`authentication.login.${key}`);
   }
 
   public submit(): void {
     //
-    const email: string | null = this.email.value;
-    const password: string | null = this.password.value;
+    const email = this.formGroup.get("email")?.value;
+    const password = this.formGroup.get("password")?.value;
 
     // Checks if the values are not null or empty.
     if (!email || !password) {
