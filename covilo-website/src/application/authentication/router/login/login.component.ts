@@ -1,15 +1,10 @@
 import {Component} from "@angular/core";
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, NonNullableFormBuilder, Validators} from "@angular/forms";
 import {AuthenticationService} from "../../service/authentication.service";
 import {LoginRequest} from "../../../core";
 import {NavigationService} from "../../../shared";
 import {TranslateService} from "@ngx-translate/core";
-
-interface LoginForm {
-
-  email: FormControl<string | null>;
-  password: FormControl<string | null>;
-}
+import {LoginForm} from "./login-form";
 
 @Component({
   selector: "router-authentication-login",
@@ -36,16 +31,26 @@ export class LoginComponent {
     navigationService: NavigationService,
     authenticationService: AuthenticationService
   ) {
+    //
+    const builder: NonNullableFormBuilder = formBuilder.nonNullable;
+
     // Initializes the standard form group with the FormGroup constructor
     // needed to hold the user authentication information.
-    this.formGroup = formBuilder.group({
-      email: ["", Validators.required, Validators.email],
-      password: ["", Validators.required]
+    this.formGroup = builder.group<LoginForm>({
+      email: builder.control<string>("", [
+          Validators.required,
+          Validators.email
+        ]
+      ),
+      password: builder.control<string>("", Validators.required),
+      rememberMe: builder.control<boolean>(false)
     });
+
+    // Initializes dependency services.
     this.translateService = translateService;
-    //
+
+    // Initializes our services.
     this.navigationService = navigationService;
-    // Initiates the standard services.
     this.authenticationService = authenticationService;
   }
 
@@ -54,18 +59,22 @@ export class LoginComponent {
   }
 
   public submit(): void {
-    //
-    const email = this.formGroup.get("email")?.value;
-    const password = this.formGroup.get("password")?.value;
+    // Variables needed for user authentication.
+    const email: string = this.formGroup.controls["email"].value;
+    const password: string = this.formGroup.controls["password"].value;
 
     // Checks if the values are not null or empty.
     if (!email || !password) {
       return;
     }
 
+    //
+    const rememberMe: boolean = this.formGroup.controls["rememberMe"].value;
+
     const request: LoginRequest = {
       email: email,
-      password: password
+      password: password,
+      rememberMe: rememberMe
     };
 
     this.authenticationService.login(request).subscribe((): void => {

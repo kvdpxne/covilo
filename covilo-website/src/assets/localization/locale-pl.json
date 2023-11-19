@@ -55,6 +55,7 @@
       "password": "Twoje hasło",
       "forgotPassword": "Zapomniałeś hasła?",
       "invalidPassword": "Proszę podać prawidłowe hasło.",
+      "rememberMe": "Zapamiętaj mnie",
       "login": "Zaloguj sie",
       "signup": {
         "question": "Nie masz jeszcze konta?",

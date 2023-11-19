@@ -1,12 +1,18 @@
 <div [formGroup]="group"
      [class.form-check]="checkboxType"
      class="mb-3">
-  <div class="d-flex justify-content-between align-items-center">
+  <ng-container *ngIf="checkboxType">
     <label [for]="name"
-           [class.form-check-label]="checkboxType"
-           [class.form-lable]="!checkboxType">
+           class="form-check-label">
       {{ text }}
       <ng-content select="[inside]"/>
+    </label>
+  </ng-container>
+  <div *ngIf="!checkboxType"
+       class="d-flex justify-content-between align-items-center">
+    <label [for]="name"
+           class="form-label">
+      {{ text }}
     </label>
     <ng-content select="[outside]"/>
   </div>
@@ -36,7 +42,7 @@
          [autocomplete]="autocomplete"
          [type]="type"
          class="form-control form-control-lg">
-  <span *ngIf="(sent || valid) && errors"
+  <span *ngIf="feedback?.length && (sent || valid) && errors"
         class="invalid-feedback">
     {{ feedback }}
   </span>

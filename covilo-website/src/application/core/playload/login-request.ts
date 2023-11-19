@@ -10,4 +10,9 @@ export interface LoginRequest {
    * Password for accessing the user account.
    */
   password: string;
+
+  /**
+   *
+   */
+  rememberMe: boolean;
 }
