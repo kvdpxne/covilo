@@ -1,11 +1,12 @@
 import {Component, OnInit} from "@angular/core";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, NonNullableFormBuilder, Validators} from "@angular/forms";
 import {AuthenticationService} from "../../service/authentication.service";
 import {NavigationService, StorageKey, StorageService} from "../../../shared";
 import {SignupStage} from "./signup-stage";
 import {TranslateService} from "@ngx-translate/core";
 import {SignupFormData} from "./signup-form-data";
 import {SignupRequest} from "../../../core";
+import {AuthenticationDataFormStage, BasicDataFormStage, QualificationFormStage, SignupForm} from "./signup-form";
 
 @Component({
   selector: "router-authentication-signup",
@@ -14,7 +15,7 @@ import {SignupRequest} from "../../../core";
 export class SignupComponent
   implements OnInit {
 
-  private readonly signupForm: FormGroup;
+  private readonly signupForm: FormGroup<SignupForm>;
 
   private readonly translateService: TranslateService;
   private readonly navigationService: NavigationService;
@@ -36,21 +37,33 @@ export class SignupComponent
     storageService: StorageService,
     authenticationService: AuthenticationService
   ) {
+    //
+    const builder: NonNullableFormBuilder = formBuilder.nonNullable;
+
     // Initializes the standard form group with the FormGroup constructor
     // needed to hold the user authentication information.
-    this.signupForm = formBuilder.group({
-      qualification: formBuilder.group({
-        birthDate: ""
+    this.signupForm = builder.group<SignupForm>({
+      qualification: builder.group<QualificationFormStage>({
+        birthDate: builder.control<Date>(new Date())
       }),
-      basicData: formBuilder.group({
-        firstName: ["", Validators.required],
-        lastName: ["", Validators.required]
+      basicData: builder.group<BasicDataFormStage>({
+        firstName: builder.control<string>("", Validators.required),
+        lastName: builder.control<string>("", Validators.required)
       }),
-      authenticationData: formBuilder.group({
-        email: ["", Validators.email],
-        password: ["", Validators.required],
-        confirmPassword: ["", Validators.required],
-        privacyPolicy: [false, Validators.requiredTrue]
+      authenticationData: builder.group<AuthenticationDataFormStage>({
+        email: builder.control<string>("", [
+          Validators.required,
+          Validators.email
+        ]),
+        password: builder.control<string>("", [
+          Validators.required,
+          Validators.minLength(8)
+        ]),
+        confirmPassword: builder.control<string>("", [
+          Validators.required,
+          Validators.minLength(8)
+        ]),
+        privacyPolicy: builder.control<boolean>(false, Validators.requiredTrue)
       })
     });
 

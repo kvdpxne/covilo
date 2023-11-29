@@ -1,20 +1,52 @@
 import {FormControl, FormGroup} from "@angular/forms";
 
-export interface SignupForm {
-
-  birthDate: FormControl<Date | null>;
-
-  firstName: FormControl<string | null>;
-
-  lastName: FormControl<string | null>;
-
-  email: FormControl<string | null>;
-
-  password: FormControl<string | null>;
-
-  confirmPassword: FormControl<string | null>;
-
-  privacyPolicy: FormControl<boolean | null>;
+export interface QualificationFormStage {
+  /**
+   *
+   */
+  birthDate: FormControl<Date>;
 }
 
-export type SignupFormGroup = FormGroup<SignupForm>;
+export interface BasicDataFormStage {
+  /**
+   *
+   */
+  firstName: FormControl<string>;
+
+  /**
+   *
+   */
+  lastName: FormControl<string>;
+}
+
+export interface AuthenticationDataFormStage {
+  /**
+   *
+   */
+  email: FormControl<string>;
+
+  /**
+   *
+   */
+  password: FormControl<string>;
+
+  /**
+   *
+   */
+  confirmPassword: FormControl<string>;
+
+  /**
+   *
+   */
+  privacyPolicy: FormControl<boolean>;
+}
+
+export interface SignupForm {
+
+  qualification: FormGroup<QualificationFormStage>;
+
+  basicData: FormGroup<BasicDataFormStage>;
+
+
+  authenticationData: FormGroup<AuthenticationDataFormStage>;
+}
