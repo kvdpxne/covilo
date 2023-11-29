@@ -70,7 +70,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
     }
     return this.authenticationService.refreshToken().pipe(
       switchMap((token: Token) => {
-        return next.handle(this.authenticateRequest(request, token.compactToken));
+        return next.handle(this.authenticateRequest(request, token.compactAccessToken));
       }),
       catchError(error => {
         if (403 === error.status) {
@@ -84,8 +84,11 @@ export class AuthenticationInterceptor implements HttpInterceptor {
   /**
    * Identifies and handles a given HTTP request.
    */
-  public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const token: string | null = this.tokenAuthenticationStrategy.getToken();
+  public intercept(
+    request: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<HttpEvent<any>> {
+    const token: string | undefined = this.tokenAuthenticationStrategy.getToken()?.compactRefreshToken;
     if (!token) {
       return next.handle(request);
     }

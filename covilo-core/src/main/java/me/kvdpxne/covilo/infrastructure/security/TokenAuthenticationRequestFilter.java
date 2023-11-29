@@ -77,11 +77,11 @@ public final class TokenAuthenticationRequestFilter extends OncePerRequestFilter
       return;
     }
 
-    var userDetails = userDetailsService.loadUserByUsername(userEmail);
+    var userDetails = (UserAccountDetails) userDetailsService.loadUserByUsername(userEmail);
 
-    var isTokenValid = tokenRepository.findByCompactToken(token)
-      .map(t -> !t.isExpired() && !t.isRevoked())
-      .orElse(false);
+    var isTokenValid = tokenRepository.findByUser_Identifier(userDetails.user().identifier())
+      .stream()
+      .anyMatch(t -> !t.isExpired() && !t.isRevoked());
 
     if (userEmail.equals(userDetails.getUsername()) && isTokenValid) {
       var authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());

@@ -54,16 +54,8 @@ public final class UserAuthenticationController {
   public ResponseEntity<TokenDto> login(
     @Validated @RequestBody final LoginRequest request
   ) {
-    final Token token;
-    try {
-      token = this.userAuthenticationService.authenticate(request);
-    } catch (final EmailValidationFailedException exception) {
-      return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
-    } catch (final UserNotFoundException exception) {
-      return ResponseEntity.notFound().build();
-    }
     return ResponseEntity.ok(
-      this.tokenMapper.toTokenDto(token)
+      this.userAuthenticationService.authenticate(request)
     );
   }
 
@@ -96,7 +88,7 @@ public final class UserAuthenticationController {
 
     new ObjectMapper().writeValue(
       response.getOutputStream(),
-      this.tokenMapper.toTokenDto(token)
+      new TokenDto(token.compactToken(), compactToken)
     );
 
     return ResponseEntity.ok().build();

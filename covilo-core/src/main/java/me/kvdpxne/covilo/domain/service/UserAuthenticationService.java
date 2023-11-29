@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import me.kvdpxne.covilo.application.ITokenService;
 import me.kvdpxne.covilo.application.IUserAuthenticationService;
 import me.kvdpxne.covilo.application.IUserLifecycleService;
+import me.kvdpxne.covilo.application.dto.TokenDto;
 import me.kvdpxne.covilo.application.exception.InvalidPasswordException;
 import me.kvdpxne.covilo.application.exception.TokenExpiredException;
 import me.kvdpxne.covilo.application.exception.TokenSignatureException;
@@ -66,9 +67,9 @@ public final class UserAuthenticationService
     user = this.userLifecycleUseCase.createUser(user);
 
     //
-    Token token = new Token.Builder()
-      .token(this.tokenLifecycleUserCase.createCompactAccessToken(user))
-      .tokenType(TokenType.BEARER)
+    Token token = Token.builder()
+      .compactToken(this.tokenLifecycleUserCase.createCompactAccessToken(user))
+      .tokenType(TokenType.ACCESS)
       .user(user)
       .revoked(false)
       .expired(false)
@@ -87,7 +88,7 @@ public final class UserAuthenticationService
   }
 
   @Override
-  public Token authenticate(
+  public TokenDto authenticate(
     final LoginRequest request
   ) throws UserNotFoundException {
     final var email = request.email();
@@ -107,20 +108,22 @@ public final class UserAuthenticationService
     //
     final var user = this.userLifecycleUseCase.getUserByEmail(email);
 
-    //
-    Token token = new Token.Builder()
-      .token(this.tokenLifecycleUserCase.createCompactAccessToken(user))
-      .tokenType(TokenType.BEARER)
+    final var compactRefreshToken = this.tokenLifecycleUserCase
+      .createCompactRefreshToken(user);
+
+    final var compactAccessToken = this.tokenLifecycleUserCase
+      .createCompactAccessToken(user);
+
+    Token token = Token.builder()
+      .compactToken(compactRefreshToken)
+      .tokenType(TokenType.REFRESH)
       .user(user)
-      .revoked(false)
-      .expired(false)
       .build();
 
-    //
     this.tokenRepository.deleteAllTokensByUser(user);
-    token = this.tokenRepository.insertToken(token);
+    this.tokenRepository.insertToken(token);
 
-    return token;
+    return new TokenDto(compactAccessToken, compactRefreshToken);
   }
 
   @Override
@@ -136,18 +139,13 @@ public final class UserAuthenticationService
 
     final var user = this.userLifecycleUseCase.getUserByEmail(email);
     if (email.equals(user.email())) {
-      var token = new Token.Builder()
-        .token(this.tokenLifecycleUserCase.createCompactAccessToken(user))
-        .tokenType(TokenType.BEARER)
+      return Token.builder()
+        .compactToken(this.tokenLifecycleUserCase.createCompactAccessToken(user))
+        .tokenType(TokenType.ACCESS)
         .user(user)
         .revoked(false)
         .expired(false)
         .build();
-
-      //
-      this.tokenRepository.deleteAllTokensByUser(user);
-      token = this.tokenRepository.insertToken(token);
-      return token;
     }
 
     throw new TokenExpiredException();

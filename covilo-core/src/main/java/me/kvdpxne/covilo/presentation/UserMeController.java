@@ -2,6 +2,7 @@ package me.kvdpxne.covilo.presentation;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import me.kvdpxne.covilo.application.ITokenService;
 import me.kvdpxne.covilo.application.dto.UserDto;
 import me.kvdpxne.covilo.application.exception.UserNotFoundException;
 import me.kvdpxne.covilo.application.mapper.IUserMapper;
@@ -15,6 +16,7 @@ import me.kvdpxne.covilo.infrastructure.image.ImageMimeTypeNotAvailableException
 import me.kvdpxne.covilo.infrastructure.image.ImageMimeTypeNotSupportedException;
 import me.kvdpxne.covilo.infrastructure.image.ImageType;
 import me.kvdpxne.covilo.infrastructure.security.TokenAuthenticationRequestFilter;
+import me.kvdpxne.covilo.infrastructure.security.UserAccountDetails;
 import me.kvdpxne.covilo.infrastructure.storage.FileSystemStorageService;
 import me.kvdpxne.covilo.infrastructure.storage.StorageLocationType;
 import me.kvdpxne.covilo.infrastructure.storage.StorageService;
@@ -22,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,6 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
+//@PreAuthorize("hasRole('USER')")
 @RequestMapping(path = "api/0.1.0/me")
 @RestController
 public final class UserMeController {
@@ -40,6 +44,7 @@ public final class UserMeController {
   private final ITokenRepository tokenRepository;
   private final IUserMapper userMapper;
   private final StorageService storageService;
+  private final ITokenService tokenService;
   private final UserLifecycleService userLifecycleService;
 
   private final ImageConverterService imageConverterService;
@@ -47,12 +52,12 @@ public final class UserMeController {
   private User getUserByCompactToken(
     final HttpServletRequest request
   ) throws UserNotFoundException {
-    final String compactToken = request.getHeader(HttpHeaders.AUTHORIZATION)
+    final String compactToken = request
+      .getHeader(HttpHeaders.AUTHORIZATION)
       .substring(TokenAuthenticationRequestFilter.PREFIX.length());
 
-    final User user = this.tokenRepository.findUserByCompactTokenOrNull(
-      compactToken
-    );
+    final String email = this.tokenService.extractSubject(compactToken);
+    final User user = this.userLifecycleService.getUserByEmail(email);
 
     if (null == user) {
       throw new UserNotFoundException("");
@@ -61,37 +66,40 @@ public final class UserMeController {
     return user;
   }
 
-  @GetMapping
-  public ResponseEntity<UserDto> me(
-    final HttpServletRequest request
-  ) throws UserNotFoundException {
-    final User user = this.getUserByCompactToken(request);
-
-    return ResponseEntity.ok(
-      this.userMapper.toUserDto(user)
+  @GetMapping("me")
+  public UserDto getMe(
+    @AuthenticationPrincipal
+    final UserAccountDetails principal
+  ) {
+    return this.userMapper.toUserDto(
+      principal.user()
     );
   }
 
   @PutMapping("email")
-  public ResponseEntity<?> updateEmail(
-    final HttpServletRequest httpServletRequest,
-    @RequestBody final UpdateEmailRequest request
-  ) throws UserNotFoundException {
-    final User user = this.getUserByCompactToken(httpServletRequest);
-    this.userLifecycleService.updateUserEmail(user, request.newEmail());
-
-    return ResponseEntity.ok().build();
+  public void updateEmail(
+    @AuthenticationPrincipal
+    final UserAccountDetails principal,
+    @RequestBody
+    final UpdateEmailRequest request
+  ) {
+    this.userLifecycleService.updateUserEmail(
+      principal.user(),
+      request.newEmail()
+    );
   }
 
   @PutMapping("password")
-  public ResponseEntity<?> updatePassword(
-    final HttpServletRequest httpServletRequest,
-    @RequestBody final UpdatePasswordRequest request
-  ) throws UserNotFoundException {
-    final User user = this.getUserByCompactToken(httpServletRequest);
-    this.userLifecycleService.updateUserEmail(user, request.newPassword());
-
-    return ResponseEntity.ok().build();
+  public void updatePassword(
+    @AuthenticationPrincipal
+    final UserAccountDetails principal,
+    @RequestBody
+    final UpdatePasswordRequest request
+  ) {
+    this.userLifecycleService.updateUserPassword(
+      principal.user(),
+      request.newPassword()
+    );
   }
 
   @PostMapping(
@@ -132,9 +140,10 @@ public final class UserMeController {
     return ResponseEntity.ok().build();
   }
 
-  @DeleteMapping(path = "avatar")
+  @DeleteMapping("avatar")
   public ResponseEntity<?> deleteAvatar(
-    final HttpServletRequest request
+    @AuthenticationPrincipal
+    final UserAccountDetails principal
   ) {
     return ResponseEntity.ok().build();
   }

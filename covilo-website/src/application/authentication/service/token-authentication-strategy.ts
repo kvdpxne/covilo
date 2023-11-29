@@ -12,14 +12,15 @@ export class TokenAuthenticationStrategy
     this.storageService = storageService;
   }
 
-  getToken(): string | null {
-    return this.storageService.load<string>(StorageKey.TOKEN);
+  getToken(): Token | null {
+    return this.storageService.load<Token>(StorageKey.TOKEN);
   }
 
   getCurrentUser(): Observable<User | null> {
-    const token: string | null = this.getToken();
+    const token: Token | null = this.getToken();
+
     if (token) {
-      const encodedPayload: string = token.split(".")[1];
+      const encodedPayload: string = token.compactAccessToken.split(".")[1];
       const payload: string = window.atob(encodedPayload);
       return of(JSON.parse(payload));
     }
@@ -27,11 +28,14 @@ export class TokenAuthenticationStrategy
   }
 
   isLogged(): boolean {
-    return !this.getToken();
+    // Checks whether the given key exists in the store but does not check
+    // whether anything is assigned to this key.
+    return this.storageService.has(StorageKey.TOKEN);
   }
 
-  doLogin(data: Token): void {
-    this.storageService.store<string>(StorageKey.TOKEN, data.compactToken);
+  doLogin(token: Token): void {
+    this.storageService.store<Token>(StorageKey.TOKEN, token);
+    // console.log(this.storageService.load(StorageKey.TOKEN));
   }
 
   doLogout(): void {

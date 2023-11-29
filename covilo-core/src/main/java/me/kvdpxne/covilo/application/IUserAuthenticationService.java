@@ -1,5 +1,6 @@
 package me.kvdpxne.covilo.application;
 
+import me.kvdpxne.covilo.application.dto.TokenDto;
 import me.kvdpxne.covilo.application.exception.InvalidPasswordException;
 import me.kvdpxne.covilo.application.exception.TokenExpiredException;
 import me.kvdpxne.covilo.application.exception.TokenSignatureException;
@@ -15,7 +16,7 @@ public interface IUserAuthenticationService {
     final SignupRequest request
   ) throws UserAlreadyExistsException, InvalidPasswordException;
 
-  Token authenticate(final LoginRequest request) throws UserNotFoundException;
+  TokenDto authenticate(final LoginRequest request) throws UserNotFoundException;
 
   Token refreshAuthentication(final String token) throws UserNotFoundException, TokenExpiredException,
     TokenSignatureException;
