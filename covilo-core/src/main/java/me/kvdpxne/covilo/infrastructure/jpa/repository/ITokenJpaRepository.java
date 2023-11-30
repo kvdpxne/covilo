@@ -19,7 +19,10 @@ public interface ITokenJpaRepository
     """)
   Collection<TokenEntity> findAllValidTokenByUser(final UUID identifier);
 
-  Optional<TokenEntity> findByCompactToken(final String token);
+  Optional<TokenEntity> findTokenByCompactToken(final String token);
+
+
+  Optional<TokenEntity> findTokenByUser_Identifier(final UUID identifier);
 
   Collection<TokenEntity> findByUser_Identifier(final UUID identifier);
 }

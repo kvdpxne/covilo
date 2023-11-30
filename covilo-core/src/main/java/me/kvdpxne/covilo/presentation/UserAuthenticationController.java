@@ -15,6 +15,7 @@ import me.kvdpxne.covilo.application.mapper.ITokenMapper;
 import me.kvdpxne.covilo.application.payload.LoginRequest;
 import me.kvdpxne.covilo.application.payload.SignupRequest;
 import me.kvdpxne.covilo.domain.model.Token;
+import me.kvdpxne.covilo.infrastructure.security.Constants;
 import me.kvdpxne.covilo.infrastructure.security.TokenAuthenticationRequestFilter;
 import me.kvdpxne.covilo.shared.EmailValidationFailedException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-@RequestMapping(path = TokenAuthenticationRequestFilter.PATH)
+@RequestMapping(Constants.PATH)
 @RestController
 public final class UserAuthenticationController {
 
@@ -66,21 +67,14 @@ public final class UserAuthenticationController {
   ) throws UserNotFoundException, IOException {
 
     final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-    final String prefix = TokenAuthenticationRequestFilter.PREFIX;
+    final String prefix = Constants.PREFIX;
 
     if (null == header || !header.startsWith(prefix)) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
     final String compactToken = header.substring(prefix.length());
-    final Token token;
-    try {
-      token = this.userAuthenticationService.refreshAuthentication(compactToken);
-    } catch (final TokenException exception) {
-      //
-      //
-      return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-    }
+    final Token token = this.userAuthenticationService.refreshAuthentication(compactToken);
 
     if (null == token || token.revoked()) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN).build();

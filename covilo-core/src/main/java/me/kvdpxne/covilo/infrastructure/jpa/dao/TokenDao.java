@@ -38,8 +38,14 @@ public final class TokenDao implements ITokenRepository {
   }
 
   @Override
+  public Optional<Token> findTokenByUserIdentifier(final UUID identifier) {
+    return this.repository.findTokenByUser_Identifier(identifier)
+      .map(this.mapper::toToken);
+  }
+
+  @Override
   public User findUserByCompactTokenOrNull(final String compactToken) {
-    return this.repository.findByCompactToken(compactToken)
+    return this.repository.findTokenByCompactToken(compactToken)
       .map(token -> this.userMapper.toUser(token.getUser()))
       .orElse(null);
   }
@@ -51,9 +57,9 @@ public final class TokenDao implements ITokenRepository {
   }
 
   @Override
-  public Token findTokenByTokenOrNull(final String token) {
-    final var entity = this.repository.findByCompactToken(token);
-    return this.toTokenOrNull(entity);
+  public Optional<Token> findTokenByCompactToken(final String token) {
+    return this.repository.findTokenByCompactToken(token)
+      .map(this.mapper::toToken);
   }
 
   @Override
