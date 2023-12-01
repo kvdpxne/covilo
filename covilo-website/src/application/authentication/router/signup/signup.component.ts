@@ -1,6 +1,6 @@
 import {Component, OnInit} from "@angular/core";
 import {FormBuilder, FormGroup, NonNullableFormBuilder, Validators} from "@angular/forms";
-import {AuthenticationService} from "../../service/authentication.service";
+import {UserAuthenticationService} from "../../../core";
 import {NavigationService, StorageKey, StorageService} from "../../../shared";
 import {SignupStage} from "./signup-stage";
 import {TranslateService} from "@ngx-translate/core";
@@ -20,7 +20,7 @@ export class SignupComponent
   private readonly translateService: TranslateService;
   private readonly navigationService: NavigationService;
   private readonly storageService: StorageService;
-  private readonly authenticationService: AuthenticationService;
+  private readonly authenticationService: UserAuthenticationService;
 
   public readonly stage: typeof SignupStage;
   public signupFormData: SignupFormData;
@@ -35,7 +35,7 @@ export class SignupComponent
     translateService: TranslateService,
     navigationService: NavigationService,
     storageService: StorageService,
-    authenticationService: AuthenticationService
+    authenticationService: UserAuthenticationService
   ) {
     //
     const builder: NonNullableFormBuilder = formBuilder.nonNullable;

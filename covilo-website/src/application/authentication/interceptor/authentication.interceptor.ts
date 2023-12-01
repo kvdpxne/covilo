@@ -1,24 +1,24 @@
 import {ClassProvider, Inject, Injectable} from "@angular/core";
 import {
-  HttpRequest,
-  HttpHandler,
-  HttpEvent,
-  HttpInterceptor,
+  HTTP_INTERCEPTORS,
   HttpErrorResponse,
-  HTTP_INTERCEPTORS
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest
 } from "@angular/common/http";
-import {catchError, Observable, of, switchMap, throwError} from "rxjs";
+import {catchError, Observable, of, switchMap, tap, throwError} from "rxjs";
 import {Router} from "@angular/router";
-import {AuthenticationService} from "../service/authentication.service";
-import {TokenAuthenticationStrategy} from "../service/token-authentication-strategy";
-import {AUTHENTICATION_STRATEGY} from "../service/authentication-strategy";
+import {UserAuthenticationService} from "../../core";
+import {TokenAuthenticationStrategy} from "../service/token-authentication.strategy";
+import {AUTHENTICATION_STRATEGY} from "../service/authentication.strategy";
 import {Token} from "../../core";
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
 
   private readonly router: Router;
-  private readonly authenticationService: AuthenticationService;
+  private readonly authenticationService: UserAuthenticationService;
   private readonly tokenAuthenticationStrategy: TokenAuthenticationStrategy;
 
   /**
@@ -29,7 +29,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
 
   public constructor(
     router: Router,
-    authenticationService: AuthenticationService,
+    authenticationService: UserAuthenticationService,
     @Inject(AUTHENTICATION_STRATEGY) tokenAuthenticationStrategy: TokenAuthenticationStrategy
   ) {
     this.router = router;
@@ -41,10 +41,13 @@ export class AuthenticationInterceptor implements HttpInterceptor {
   /**
    * Signs each sending request with an access token.
    */
-  private authenticateRequest(request: HttpRequest<any>, accessToken: string): HttpRequest<any> {
+  private authenticateRequest(
+    request: HttpRequest<any>,
+    compactToken: string
+  ): HttpRequest<any> {
     return request.clone({
       setHeaders: {
-        Authorization: `Bearer ${accessToken}`
+        Authorization: `Bearer ${compactToken}`
       }
     });
   }
@@ -55,7 +58,10 @@ export class AuthenticationInterceptor implements HttpInterceptor {
     });
   }
 
-  private handleUnauthorizedError(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  private handleUnauthorizedError(
+    request: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<HttpEvent<any>> {
     if (this.isRefreshed) {
       return next.handle(request);
     }
@@ -65,12 +71,17 @@ export class AuthenticationInterceptor implements HttpInterceptor {
      * because the old, expired token is needed for the user to get a new
      * access token.
      */
-    if (this.tokenAuthenticationStrategy.isLogged()) {
+    if (!this.tokenAuthenticationStrategy.isLogged()) {
       return next.handle(request);
     }
     return this.authenticationService.refreshToken().pipe(
-      switchMap((token: Token) => {
-        return next.handle(this.authenticateRequest(request, token.compactAccessToken));
+      tap((): void => {
+        this.isRefreshed = false;
+      }),
+      switchMap((token: Token): Observable<HttpEvent<any>> => {
+        return next.handle(
+          this.authenticateRequest(request, token.compactAccessToken)
+        );
       }),
       catchError(error => {
         if (403 === error.status) {
@@ -88,19 +99,26 @@ export class AuthenticationInterceptor implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    const token: string | undefined = this.tokenAuthenticationStrategy.getToken()?.compactRefreshToken;
+    const token: Token | null = this.tokenAuthenticationStrategy.getToken();
     if (!token) {
       return next.handle(request);
     }
-    const authenticatedRequest: HttpRequest<any> = this.authenticateRequest(request, token);
+    let authenticatedRequest: HttpRequest<any> = this.authenticateRequest(
+      request,
+      token.compactAccessToken
+    );
     return next.handle(authenticatedRequest).pipe(
-      catchError((error: HttpErrorResponse) => {
+      catchError((error: HttpErrorResponse): Observable<any> => {
         if (401 === error.status) {
+          authenticatedRequest = this.authenticateRequest(
+            request,
+            token.compactRefreshToken
+          );
           return this.handleUnauthorizedError(authenticatedRequest, next);
         }
         if (403 === error.status) {
           this.handleForbiddenError();
-          return of()
+          return of();
         }
         return throwError(() => error);
       })

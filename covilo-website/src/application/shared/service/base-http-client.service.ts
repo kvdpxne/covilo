@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
-import {catchError, Observable, throwError} from "rxjs";
+import {catchError, Observable, retry, throwError} from "rxjs";
 import {map} from "rxjs/operators";
 import {BaseHttpParametersBuilder} from "./base-http-parameters-builder";
 
@@ -25,10 +25,9 @@ export abstract class BaseHttpClient {
   ): Observable<T> {
     return this.handleResponse<T>(
       this.httpClient.get<T>(this.getUrl().concat(path), {
-          headers: this.getHttpHeaders(),
-          params: BaseHttpParametersBuilder.buildQueryParameters(parameters)
-        }
-      )
+        headers: this.getHttpHeaders(),
+        params: BaseHttpParametersBuilder.buildQueryParameters(parameters)
+      })
     );
   }
 
@@ -102,7 +101,7 @@ export abstract class BaseHttpClient {
   /**
    * @see https://angular.io/guide/http#getting-error-details
    */
-  private handleError(error: HttpErrorResponse) {
+  private handleError(error: HttpErrorResponse): Observable<never> {
     if (0 === error.status) {
       // A client-side or network error occurred. Handle it accordingly.
       console.error("An error occurred:", error.error);
@@ -121,16 +120,12 @@ export abstract class BaseHttpClient {
   }
 
   private handleResponse<T>(source: Observable<T>): Observable<T> {
-    return source.pipe(
-      // retry({
-      //   count: 1,
-      //   delay: 1000
-      // }),
-      catchError(this.handleError),
-      map(response => {
-        console.debug(response);
-        return response;
-      })
+    return source.pipe<T, T>(
+      retry<T>({
+        count: 3,
+        delay: 1000
+      }),
+      catchError<T, Observable<never>>(this.handleError)
     );
   }
 }

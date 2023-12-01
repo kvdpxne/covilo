@@ -74,7 +74,15 @@ public final class UserAuthenticationController {
     }
 
     final String compactToken = header.substring(prefix.length());
-    final Token token = this.userAuthenticationService.refreshAuthentication(compactToken);
+
+    System.out.printf("TOKEN: %s%nCOMPACT TOKEN: %s%n", header, compactToken);
+    final Token token;
+
+    try {
+      token = this.userAuthenticationService.refreshAuthentication(compactToken);
+    } catch (final TokenException cause) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
 
     if (null == token || token.revoked()) {
       return ResponseEntity.status(HttpStatus.FORBIDDEN).build();

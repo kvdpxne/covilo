@@ -1,8 +1,8 @@
 import {Component, OnInit} from "@angular/core";
-import {AuthenticationService} from "../../../authentication";
 import {User} from "../../model/user";
 import {UserLifecycleService} from "../../service/user-lifecycle.service";
 import {ROUTE_LINKS} from "../../../me/me-routing.module";
+import {UserAuthenticationService} from "../../service/user-authentication.service";
 
 @Component({
   selector: "covilo-avatar",
@@ -12,13 +12,13 @@ export class AvatarComponent
   implements OnInit {
 
   private readonly userLifecycleService: UserLifecycleService;
-  private readonly authenticationService: AuthenticationService;
+  private readonly authenticationService: UserAuthenticationService;
 
   public me?: User;
 
   public constructor(
     userLifecycleService: UserLifecycleService,
-    authenticationService: AuthenticationService
+    authenticationService: UserAuthenticationService
   ) {
     this.userLifecycleService = userLifecycleService;
     this.authenticationService = authenticationService;

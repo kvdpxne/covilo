@@ -1,6 +1,6 @@
 import {Component} from "@angular/core";
 import {FormBuilder, FormGroup, NonNullableFormBuilder, Validators} from "@angular/forms";
-import {AuthenticationService} from "../../service/authentication.service";
+import {UserAuthenticationService} from "../../../core";
 import {LoginRequest} from "../../../core";
 import {NavigationService} from "../../../shared";
 import {TranslateService} from "@ngx-translate/core";
@@ -23,13 +23,13 @@ export class LoginComponent {
   /**
    *
    */
-  private readonly authenticationService: AuthenticationService;
+  private readonly authenticationService: UserAuthenticationService;
 
   constructor(
     formBuilder: FormBuilder,
     translateService: TranslateService,
     navigationService: NavigationService,
-    authenticationService: AuthenticationService
+    authenticationService: UserAuthenticationService
   ) {
     //
     const builder: NonNullableFormBuilder = formBuilder.nonNullable;
