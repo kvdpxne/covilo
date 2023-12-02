@@ -1,5 +1,7 @@
 package me.kvdpxne.covilo.application.dto;
 
 public record TokenDto(
-  String compactToken
+  String compactAccessToken,
+
+  String compactRefreshToken
 ) { }

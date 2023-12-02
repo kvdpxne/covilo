@@ -1,6 +1,6 @@
 package me.kvdpxne.covilo.application.exception;
 
-public class ApplicationException extends Exception {
+public class ApplicationException extends RuntimeException {
 
   public ApplicationException() {
   }

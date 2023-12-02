@@ -1,17 +1,17 @@
 import {Inject, Injectable} from "@angular/core";
-import {catchError, Observable, of, tap} from "rxjs";
+import {catchError, EMPTY, Observable, of, tap} from "rxjs";
 
 import {ApiHttpClientService} from "../../shared";
 
-import {LoginRequest, SignupRequest, Token, User, UserLifecycleService, UserService} from "../../core";
-import {AUTHENTICATION_STRATEGY, AuthenticationStrategy} from "./authentication-strategy";
-import {TokenAuthenticationStrategy} from "./token-authentication-strategy";
+import {LoginRequest, SignupRequest, Token, User, UserLifecycleService, UserService} from "../index";
+import {AUTHENTICATION_STRATEGY, AuthenticationStrategy} from "../../authentication/service/authentication.strategy";
+import {TokenAuthenticationStrategy} from "../../authentication/service/token-authentication.strategy";
 import {map} from "rxjs/operators";
 
 @Injectable({
   providedIn: "root"
 })
-export class AuthenticationService {
+export class UserAuthenticationService {
 
   private readonly httpClientService: ApiHttpClientService;
   private readonly authenticationStrategy: AuthenticationStrategy<any>;
@@ -68,10 +68,7 @@ export class AuthenticationService {
   }
 
   public isLogged(): Observable<boolean> {
-    return this.authenticationStrategy.getCurrentUser().pipe(
-      map((user: User | null) => !!user),
-      catchError(() => of(false))
-    );
+    return of(this.authenticationStrategy.isLogged());
   }
 
   /**
@@ -79,6 +76,7 @@ export class AuthenticationService {
    */
   public refreshToken(): Observable<Token> {
     const path: string = "auth/refresh-token";
+
     return this.httpClientService.post<Token>(path).pipe(
       tap((token: Token): void => {
         this.authenticationStrategy.doLogin(token);

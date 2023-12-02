@@ -1,14 +1,10 @@
 import {Component} from "@angular/core";
-import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {AuthenticationService} from "../../service/authentication.service";
+import {FormBuilder, FormGroup, NonNullableFormBuilder, Validators} from "@angular/forms";
+import {UserAuthenticationService} from "../../../core";
 import {LoginRequest} from "../../../core";
 import {NavigationService} from "../../../shared";
-
-interface LoginForm {
-
-  email: FormControl<string | null>;
-  password: FormControl<string | null>;
-}
+import {TranslateService} from "@ngx-translate/core";
+import {LoginForm} from "./login-form";
 
 @Component({
   selector: "router-authentication-login",
@@ -19,69 +15,66 @@ export class LoginComponent {
   /**
    * A group of control forms needed to hold user authentication information.
    */
-  private readonly formGroup: FormGroup<LoginForm>;
+  public readonly formGroup: FormGroup<LoginForm>;
 
+  private readonly translateService: TranslateService;
   private readonly navigationService: NavigationService;
 
   /**
    *
    */
-  private readonly authenticationService: AuthenticationService;
+  private readonly authenticationService: UserAuthenticationService;
 
   constructor(
     formBuilder: FormBuilder,
+    translateService: TranslateService,
     navigationService: NavigationService,
-    authenticationService: AuthenticationService
+    authenticationService: UserAuthenticationService
   ) {
+    //
+    const builder: NonNullableFormBuilder = formBuilder.nonNullable;
+
     // Initializes the standard form group with the FormGroup constructor
     // needed to hold the user authentication information.
-    this.formGroup = formBuilder.group<LoginForm>({
-      email: new FormControl<string | null>(null),
-      password: new FormControl<string | null>(null)
-    }, {
-      validators: Validators.required
+    this.formGroup = builder.group<LoginForm>({
+      email: builder.control<string>("", [
+          Validators.required,
+          Validators.email
+        ]
+      ),
+      password: builder.control<string>("", Validators.required),
+      rememberMe: builder.control<boolean>(false)
     });
-    //
+
+    // Initializes dependency services.
+    this.translateService = translateService;
+
+    // Initializes our services.
     this.navigationService = navigationService;
-    // Initiates the standard services.
     this.authenticationService = authenticationService;
   }
 
-  private get controls() {
-    return this.formGroup.controls;
-  }
-
-  public get email(): FormControl<string | null> {
-    return this.controls.email;
-  }
-
-  public get password(): FormControl<string | null> {
-    return this.controls.password;
-  }
-
-  public isEmailValid(): boolean {
-    const control: AbstractControl<string | null, string> = this.email;
-    return control.invalid && (control.dirty || control.touched);
-  }
-
-  public isPasswordValid(): boolean {
-    const control: AbstractControl<string | null, string> = this.password;
-    return control.invalid && (control.dirty || control.touched);
+  public translate(key: string): string {
+    return this.translateService.instant(`authentication.login.${key}`);
   }
 
   public submit(): void {
-    //
-    const email: string | null = this.email.value;
-    const password: string | null = this.password.value;
+    // Variables needed for user authentication.
+    const email: string = this.formGroup.controls["email"].value;
+    const password: string = this.formGroup.controls["password"].value;
 
     // Checks if the values are not null or empty.
     if (!email || !password) {
       return;
     }
 
+    //
+    const rememberMe: boolean = this.formGroup.controls["rememberMe"].value;
+
     const request: LoginRequest = {
       email: email,
-      password: password
+      password: password,
+      rememberMe: rememberMe
     };
 
     this.authenticationService.login(request).subscribe((): void => {

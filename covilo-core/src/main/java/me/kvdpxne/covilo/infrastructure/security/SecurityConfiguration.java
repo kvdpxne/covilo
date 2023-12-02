@@ -52,8 +52,6 @@ public class SecurityConfiguration {
           "/api/0.1.0/crime/**",
           "/api/0.1.0/auth/**",
 
-          "/xdd/**",
-
           "/v2/api-docs",
           "/v3/api-docs",
           "/v3/api-docs/**",

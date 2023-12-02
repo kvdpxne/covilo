@@ -2,7 +2,7 @@ import {Component, OnInit} from "@angular/core";
 import {TranslateService} from "@ngx-translate/core";
 import {Icon, Link, Section} from "./shared";
 import {NavigationStart, Router} from "@angular/router";
-import {AuthenticationService} from "./authentication";
+import {UserAuthenticationService} from "./core";
 import {NgbDropdownConfig} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
@@ -13,7 +13,7 @@ export class ApplicationComponent
   implements OnInit {
 
   private readonly translateService: TranslateService;
-  private readonly authenticationService: AuthenticationService;
+  private readonly authenticationService: UserAuthenticationService;
 
   showFooter: boolean = true;
   showHeader: boolean = true;
@@ -26,7 +26,7 @@ export class ApplicationComponent
   constructor(
     router: Router,
     translateService: TranslateService,
-    authenticationService: AuthenticationService,
+    authenticationService: UserAuthenticationService,
     ngbDropdownConfiguration: NgbDropdownConfig
   ) {
     this.translateService = translateService;

@@ -15,6 +15,7 @@ import me.kvdpxne.covilo.application.mapper.ITokenMapper;
 import me.kvdpxne.covilo.application.payload.LoginRequest;
 import me.kvdpxne.covilo.application.payload.SignupRequest;
 import me.kvdpxne.covilo.domain.model.Token;
+import me.kvdpxne.covilo.infrastructure.security.Constants;
 import me.kvdpxne.covilo.infrastructure.security.TokenAuthenticationRequestFilter;
 import me.kvdpxne.covilo.shared.EmailValidationFailedException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-@RequestMapping(path = TokenAuthenticationRequestFilter.PATH)
+@RequestMapping(Constants.PATH)
 @RestController
 public final class UserAuthenticationController {
 
@@ -54,16 +55,8 @@ public final class UserAuthenticationController {
   public ResponseEntity<TokenDto> login(
     @Validated @RequestBody final LoginRequest request
   ) {
-    final Token token;
-    try {
-      token = this.userAuthenticationService.authenticate(request);
-    } catch (final EmailValidationFailedException exception) {
-      return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
-    } catch (final UserNotFoundException exception) {
-      return ResponseEntity.notFound().build();
-    }
     return ResponseEntity.ok(
-      this.tokenMapper.toTokenDto(token)
+      this.userAuthenticationService.authenticate(request)
     );
   }
 
@@ -74,20 +67,21 @@ public final class UserAuthenticationController {
   ) throws UserNotFoundException, IOException {
 
     final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-    final String prefix = TokenAuthenticationRequestFilter.PREFIX;
+    final String prefix = Constants.PREFIX;
 
     if (null == header || !header.startsWith(prefix)) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
     final String compactToken = header.substring(prefix.length());
+
+    System.out.printf("TOKEN: %s%nCOMPACT TOKEN: %s%n", header, compactToken);
     final Token token;
+
     try {
       token = this.userAuthenticationService.refreshAuthentication(compactToken);
-    } catch (final TokenException exception) {
-      //
-      //
-      return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    } catch (final TokenException cause) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
     if (null == token || token.revoked()) {
@@ -96,7 +90,7 @@ public final class UserAuthenticationController {
 
     new ObjectMapper().writeValue(
       response.getOutputStream(),
-      this.tokenMapper.toTokenDto(token)
+      new TokenDto(token.compactToken(), compactToken)
     );
 
     return ResponseEntity.ok().build();

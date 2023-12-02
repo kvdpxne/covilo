@@ -55,6 +55,7 @@
       "password": "Twoje hasło",
       "forgotPassword": "Zapomniałeś hasła?",
       "invalidPassword": "Proszę podać prawidłowe hasło.",
+      "rememberMe": "Zapamiętaj mnie",
       "login": "Zaloguj sie",
       "signup": {
         "question": "Nie masz jeszcze konta?",
@@ -73,6 +74,11 @@
     "signup": {
       "title": "Witaj w Covilo",
       "description": "Wypełnij formularz, aby rozpocząć..",
+
+      "birthDate": "Data urodzenia",
+      "firstName": "Imię",
+      "lastName": "Nazwisko",
+
       "email": "Twój email",
       "invalidEmail": "Proszę podać prawidłowy adres email.",
       "password": "Hasło",

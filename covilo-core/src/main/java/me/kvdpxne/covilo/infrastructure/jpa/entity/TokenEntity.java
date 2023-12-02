@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.util.UUID;
@@ -32,7 +33,7 @@ public final class TokenEntity {
   @Column(name = "identifier", nullable = false, updatable = false)
   private UUID identifier;
 
-  @Column(name = "compact_token", unique = true)
+  @Column(name = "compact_token", unique = true, length = 512)
   private String compactToken;
 
   @Enumerated(EnumType.STRING)

@@ -2,12 +2,14 @@ import {Observable} from "rxjs";
 import {User} from "../../core";
 import {FactoryProvider, inject, InjectionToken} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
-import {TokenAuthenticationStrategy} from "./token-authentication-strategy";
+import {TokenAuthenticationStrategy} from "./token-authentication.strategy";
 import {StorageService} from "../../shared";
 
 export interface AuthenticationStrategy<T> {
 
-  getCurrentUser(): Observable<User | null>;
+  getCurrentUser(): Observable<User | never>;
+
+  isLogged(): boolean;
 
   doLogin(data: T): void;
 

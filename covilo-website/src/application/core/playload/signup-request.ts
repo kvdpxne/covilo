@@ -1,5 +1,7 @@
 export interface SignupRequest {
 
+  birthDate: Date;
+
   firstName: string;
 
   lastName: string;

@@ -5,36 +5,26 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import me.kvdpxne.covilo.application.ITokenService;
 import me.kvdpxne.covilo.application.exception.TokenException;
-import me.kvdpxne.covilo.infrastructure.jpa.repository.ITokenJpaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 @Component
-@RequiredArgsConstructor
-public final class TokenAuthenticationRequestFilter extends OncePerRequestFilter {
+public final class TokenAuthenticationRequestFilter
+  extends OncePerRequestFilter {
 
-  /**
-   *
-   */
-  public static final String PATH = "/api/0.1.0/auth";
-
-  /**
-   *
-   */
-  public static final String PREFIX = "Bearer ";
-
-  private final ITokenService tokenLifecycleUserCase;
-  private final UserDetailsService userDetailsService;
-  private final ITokenJpaRepository tokenRepository;
+  private final ITokenService tokenService;
+  private final UserAccountDetailsService userDetailsService;
 
   /**
    * Same contract as for doFilter, but guaranteed to be just invoked once per
@@ -42,50 +32,65 @@ public final class TokenAuthenticationRequestFilter extends OncePerRequestFilter
    * for details.
    */
   @Override
-  public void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response,
-                               @NonNull FilterChain filterChain
+  public void doFilterInternal(
+    HttpServletRequest request,
+    @NonNull HttpServletResponse response,
+    @NonNull FilterChain filterChain
   ) throws ServletException, IOException {
-    if (request.getServletPath().contains(PATH)) {
+    //
+    if (request.getServletPath().contains(Constants.PATH)) {
       filterChain.doFilter(request, response);
       return;
     }
 
-    //
     if (null != SecurityContextHolder.getContext().getAuthentication()) {
       filterChain.doFilter(request, response);
       return;
     }
 
-    var header = request.getHeader(HttpHeaders.AUTHORIZATION);
-    if (null == header || !header.startsWith(PREFIX)) {
+    final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+    final String prefix = Constants.PREFIX;
+
+    if (null == header || !header.startsWith(prefix)) {
       filterChain.doFilter(request, response);
       return;
     }
 
-    var token = header.substring(7);
+    final String compactToken = header.substring(prefix.length());
 
-    final String userEmail;
+    // Subject of the JWT (the user).
+    final String subject;
+
+    // Recipient for which the JWT is intended.
+    final UUID audience;
+
     try {
-      userEmail = this.tokenLifecycleUserCase.extractSubject(token);
+      subject = this.tokenService.extractSubject(compactToken);
+      audience = UUID.fromString(
+        this.tokenService.extractAudience(compactToken)
+      );
     } catch (final TokenException exception) {
       filterChain.doFilter(request, response);
       return;
     }
 
-    if (null == userEmail) {
+    if (null == subject) {
       filterChain.doFilter(request, response);
       return;
     }
 
-    var userDetails = userDetailsService.loadUserByUsername(userEmail);
+    final UserAccountDetails principal = (UserAccountDetails)
+      this.userDetailsService.loadUserByUsername(subject);
 
-    var isTokenValid = tokenRepository.findByCompactToken(token)
-      .map(t -> !t.isExpired() && !t.isRevoked())
-      .orElse(false);
-
-    if (userEmail.equals(userDetails.getUsername()) && isTokenValid) {
-      var authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-      authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+    if (principal.user().identifier().equals(audience)) {
+      var authToken = new UsernamePasswordAuthenticationToken(
+        principal,
+        null,
+        principal.getAuthorities()
+      );
+      authToken.setDetails(
+        new WebAuthenticationDetailsSource().buildDetails(request)
+      );
       SecurityContextHolder.getContext().setAuthentication(authToken);
     }
     filterChain.doFilter(request, response);

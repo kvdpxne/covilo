@@ -3,17 +3,18 @@ package me.kvdpxne.covilo.infrastructure.security;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import me.kvdpxne.covilo.domain.model.Token;
 import me.kvdpxne.covilo.domain.persistence.ITokenRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.stereotype.Component;
 
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 @Component
-@RequiredArgsConstructor
-public final class LogoutHandlerService implements LogoutHandler {
+public final class TokenLogoutHandler
+  implements LogoutHandler {
 
   private final ITokenRepository tokenRepository;
 
@@ -27,20 +28,14 @@ public final class LogoutHandlerService implements LogoutHandler {
     final Authentication authentication
   ) {
     final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-    final String prefix = TokenAuthenticationRequestFilter.PREFIX;
-
+    final String prefix = Constants.PREFIX;
     if (null == header || !header.startsWith(prefix)) {
       return;
     }
-
     final String compactToken = header.substring(prefix.length());
-    final Token token = this.tokenRepository.findTokenByTokenOrNull(compactToken);
-
-    if (null == token) {
-      return;
-    }
-
-    this.tokenRepository.deleteToken(token);
-    SecurityContextHolder.clearContext();
+    this.tokenRepository.findTokenByCompactToken(compactToken).ifPresent(it -> {
+      this.tokenRepository.deleteToken(it);
+      SecurityContextHolder.clearContext();
+    });
   }
 }

@@ -33,6 +33,7 @@ export * from "./playload/signup-request";
 export * from "./service/crime.service";
 export * from "./service/geographical.service";
 export * from "./service/user.service";
+export * from "./service/user-authentication.service";
 export * from "./service/user-lifecycle.service";
 
 export * from "./core.module";
