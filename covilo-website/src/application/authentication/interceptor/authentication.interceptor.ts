@@ -8,18 +8,17 @@ import {
   HttpRequest
 } from "@angular/common/http";
 import {catchError, Observable, of, switchMap, tap, throwError} from "rxjs";
-import {Router} from "@angular/router";
-import {UserAuthenticationService} from "../../core";
+import {Token, UserAuthenticationService} from "../../core";
 import {TokenAuthenticationStrategy} from "../service/token-authentication.strategy";
 import {AUTHENTICATION_STRATEGY} from "../service/authentication.strategy";
-import {Token} from "../../core";
+import {NavigationService} from "../../shared";
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
 
-  private readonly router: Router;
   private readonly authenticationService: UserAuthenticationService;
   private readonly tokenAuthenticationStrategy: TokenAuthenticationStrategy;
+  private readonly navigationService: NavigationService;
 
   /**
    * Determines whether the access token is currently being refreshed. By
@@ -28,13 +27,13 @@ export class AuthenticationInterceptor implements HttpInterceptor {
   private isRefreshed: boolean;
 
   public constructor(
-    router: Router,
     authenticationService: UserAuthenticationService,
-    @Inject(AUTHENTICATION_STRATEGY) tokenAuthenticationStrategy: TokenAuthenticationStrategy
+    @Inject(AUTHENTICATION_STRATEGY) tokenAuthenticationStrategy: TokenAuthenticationStrategy,
+    navigationService: NavigationService
   ) {
-    this.router = router;
     this.authenticationService = authenticationService;
     this.tokenAuthenticationStrategy = tokenAuthenticationStrategy;
+    this.navigationService = navigationService;
     this.isRefreshed = false;
   }
 
@@ -54,7 +53,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
 
   private handleForbiddenError(): void {
     this.authenticationService.logout().subscribe((): void => {
-      this.router.navigateByUrl("/").catch(error => throwError(() => error));
+      this.navigationService.navigateToHomePage();
     });
   }
 

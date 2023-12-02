@@ -3,12 +3,7 @@ import {Observable, of} from "rxjs";
 import {User} from "../../core";
 
 export class SessionAuthenticationStrategy
-  implements AuthenticationStrategy<any>{
-  doLogin(data: any): void {
-  }
-
-  doLogout(): void {
-  }
+  implements AuthenticationStrategy<any> {
 
   getCurrentUser(): Observable<User> {
     return of();
@@ -18,4 +13,9 @@ export class SessionAuthenticationStrategy
     return false;
   }
 
+  doLogin(data: any): void {
+  }
+
+  doLogout(): void {
+  }
 }

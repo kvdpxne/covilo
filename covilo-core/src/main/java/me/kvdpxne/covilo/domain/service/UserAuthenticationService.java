@@ -138,16 +138,12 @@ public final class UserAuthenticationService
     }
 
     final var user = this.userLifecycleUseCase.getUserByEmail(email);
-    if (email.equals(user.email())) {
-      return Token.builder()
-        .compactToken(this.tokenLifecycleUserCase.createCompactAccessToken(user))
-        .tokenType(TokenType.ACCESS)
-        .user(user)
-        .revoked(false)
-        .expired(false)
-        .build();
-    }
-
-    throw new TokenExpiredException();
+    return Token.builder()
+      .compactToken(this.tokenLifecycleUserCase.createCompactAccessToken(user))
+      .tokenType(TokenType.ACCESS)
+      .user(user)
+      .revoked(false)
+      .expired(false)
+      .build();
   }
 }
