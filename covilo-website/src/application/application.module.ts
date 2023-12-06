@@ -29,9 +29,7 @@ import {ComingSoonComponent, PageNotFoundComponent} from "./communication";
 
 @NgModule({
   declarations: [
-    ApplicationComponent,
-    PageNotFoundComponent,
-    ComingSoonComponent
+    ApplicationComponent
   ],
   imports: [
     BrowserModule,

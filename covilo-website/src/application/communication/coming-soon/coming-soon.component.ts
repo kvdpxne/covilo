@@ -1,8 +1,13 @@
 import {Component, OnDestroy, OnInit} from "@angular/core";
 import {Subscription, timer} from "rxjs";
+import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
   selector: "router-coming-soon",
+  standalone: true,
+  imports: [
+    TranslateModule
+  ],
   templateUrl: "./coming-soon.component.html"
 })
 export class ComingSoonComponent implements OnInit, OnDestroy {
