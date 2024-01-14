@@ -3,14 +3,14 @@ package me.kvdpxne.covilo.domain.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.kvdpxne.covilo.application.ITokenService;
-import me.kvdpxne.covilo.application.IUserAuthenticationService;
-import me.kvdpxne.covilo.application.IUserLifecycleService;
+import me.kvdpxne.covilo.domain.port.out.UserAuthenticationServicePort;
+import me.kvdpxne.covilo.domain.port.out.UserServicePort;
 import me.kvdpxne.covilo.application.dto.TokenDto;
-import me.kvdpxne.covilo.application.exception.InvalidPasswordException;
-import me.kvdpxne.covilo.application.exception.TokenExpiredException;
-import me.kvdpxne.covilo.application.exception.TokenSignatureException;
-import me.kvdpxne.covilo.application.exception.UserAlreadyExistsException;
-import me.kvdpxne.covilo.application.exception.UserNotFoundException;
+import me.kvdpxne.covilo.common.exceptions.UserInvalidPasswordException;
+import me.kvdpxne.covilo.common.exceptions.TokenExpiredException;
+import me.kvdpxne.covilo.common.exceptions.TokenSignatureException;
+import me.kvdpxne.covilo.common.exceptions.UserAlreadyExistsException;
+import me.kvdpxne.covilo.common.exceptions.UserNotFoundException;
 import me.kvdpxne.covilo.application.payload.LoginRequest;
 import me.kvdpxne.covilo.application.payload.SignupRequest;
 import me.kvdpxne.covilo.domain.model.Role;
@@ -21,13 +21,16 @@ import me.kvdpxne.covilo.domain.persistence.ITokenRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
+/**
+ * Service responsible for the user authentication process.
+ */
 @Slf4j
 @RequiredArgsConstructor
 public final class UserAuthenticationService
-  implements IUserAuthenticationService {
+  implements UserAuthenticationServicePort {
 
   //
-  private final IUserLifecycleService userLifecycleUseCase;
+  private final UserServicePort userLifecycleUseCase;
   private final ITokenService tokenLifecycleUserCase;
   //
   private final ITokenRepository tokenRepository;
@@ -37,7 +40,7 @@ public final class UserAuthenticationService
   @Override
   public Token createAuthentication(
     final SignupRequest request
-  ) throws UserAlreadyExistsException, InvalidPasswordException {
+  ) throws UserAlreadyExistsException, UserInvalidPasswordException {
     final var email = request.email();
     // Checks whether the provided email address is correct and whether another
     // user has this address assigned to their account.
@@ -49,7 +52,7 @@ public final class UserAuthenticationService
     // Checks whether the confirmed currentPassword is the same as the original
     // currentPassword.
     if (!password.equals(request.confirmPassword())) {
-      throw new InvalidPasswordException();
+      throw new UserInvalidPasswordException();
     }
 
     //

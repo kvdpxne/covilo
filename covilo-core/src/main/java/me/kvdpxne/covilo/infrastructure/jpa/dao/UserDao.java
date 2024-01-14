@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import me.kvdpxne.covilo.domain.model.User;
 import me.kvdpxne.covilo.domain.persistence.IUserRepository;
 import me.kvdpxne.covilo.infrastructure.jpa.entity.UserEntity;
@@ -11,6 +12,7 @@ import me.kvdpxne.covilo.infrastructure.jpa.mapper.IUserPersistenceMapper;
 import me.kvdpxne.covilo.infrastructure.jpa.repository.IUserJpaRepository;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public final class UserDao
@@ -43,21 +45,53 @@ public final class UserDao
   }
 
   @Override
-  public void updateUserEmailByIdentifier(final UUID identifier, final String email) {
-    this.repository.updateEmailAndLastModifiedDateByIdentifier(
-      identifier,
-      email,
-      LocalDateTime.now()
-    );
+  public boolean updateUserEmailByIdentifier(
+    final UUID identifier,
+    final String email
+  ) {
+    // The number of rows changed.
+    int rows = 0;
+
+    try {
+      rows = this.repository.updateEmailByIdentifier(
+        identifier,
+        email,
+        LocalDateTime.now()
+      );
+    } catch (final Throwable reason) {
+      logger.atError()
+        .setMessage("The request could not be handled for an unhandled reason.")
+        .setCause(reason.getCause())
+        .log();
+    }
+
+    return 0 != rows;
   }
 
   @Override
-  public void updateUserPasswordByIdentifier(final UUID identifier, final String password) {
-    this.repository.updatePasswordAndLastModifiedDateByIdentifier(
-      identifier,
-      password,
-      LocalDateTime.now()
-    );
+  public boolean updateUserPasswordByIdentifier(
+    final UUID identifier,
+    final String password
+  ) {
+    // The number of rows changed.
+    int rows = 0;
+
+    try {
+      rows = this.repository.updatePasswordByIdentifier(
+        identifier,
+        password,
+        LocalDateTime.now()
+      );
+    } catch (final Throwable reason) {
+      logger.atError()
+        .setMessage("For an unhandled reason, the email address could not be" +
+          "updated for the user with the identifier: {}")
+        .setCause(reason.getCause())
+        .addArgument(identifier)
+        .log();
+    }
+
+    return 0 != rows;
   }
 
   @Override

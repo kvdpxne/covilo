@@ -4,9 +4,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import me.kvdpxne.covilo.application.dto.UserDto;
 import me.kvdpxne.covilo.application.mapper.IUserMapper;
-import me.kvdpxne.covilo.application.payload.UpdateEmailRequest;
-import me.kvdpxne.covilo.application.payload.UpdatePasswordRequest;
-import me.kvdpxne.covilo.domain.service.UserLifecycleService;
+import me.kvdpxne.covilo.application.payload.UpdateUserMeEmailRequest;
+import me.kvdpxne.covilo.application.payload.UpdateUserMePasswordRequest;
+import me.kvdpxne.covilo.domain.port.out.UserMeServicePort;
 import me.kvdpxne.covilo.infrastructure.image.ImageConverterService;
 import me.kvdpxne.covilo.infrastructure.image.ImageMimeTypeNotAvailableException;
 import me.kvdpxne.covilo.infrastructure.image.ImageMimeTypeNotSupportedException;
@@ -29,16 +29,20 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-@RequestMapping(path = "api/0.1.0/me")
+@RequestMapping(path = "api/0.1.0/user/me")
 @RestController
 public final class UserMeController {
 
   private final IUserMapper userMapper;
   private final StorageService storageService;
-  private final UserLifecycleService userLifecycleService;
 
   private final ImageConverterService imageConverterService;
 
+  private final UserMeServicePort userMeServicePort;
+
+  /**
+   *
+   */
   @Operation
   @GetMapping
   public UserDto getMe(
@@ -50,29 +54,38 @@ public final class UserMeController {
     );
   }
 
+  /**
+   * Updates the email address of the currently authenticated user.
+   */
   @PutMapping("email")
   public void updateEmail(
     @AuthenticationPrincipal
     final UserAccountDetails principal,
     @RequestBody
-    final UpdateEmailRequest request
+    final UpdateUserMeEmailRequest request
   ) {
-    this.userLifecycleService.updateUserEmail(
+    this.userMeServicePort.updateMeEmail(
       principal.user(),
-      request.newEmail()
+      request.newEmail(),
+      request.currentPassword()
     );
   }
 
+  /**
+   * Updates the password of the currently authenticated user.
+   */
   @PutMapping("password")
   public void updatePassword(
     @AuthenticationPrincipal
     final UserAccountDetails principal,
     @RequestBody
-    final UpdatePasswordRequest request
+    final UpdateUserMePasswordRequest request
   ) {
-    this.userLifecycleService.updateUserPassword(
+    this.userMeServicePort.updateMePassword(
       principal.user(),
-      request.newPassword()
+      request.newPassword(),
+      request.confirmedPassword(),
+      request.currentPassword()
     );
   }
 

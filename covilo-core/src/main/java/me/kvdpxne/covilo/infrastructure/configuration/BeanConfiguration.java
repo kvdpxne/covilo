@@ -1,15 +1,18 @@
 package me.kvdpxne.covilo.infrastructure.configuration;
 
-import me.kvdpxne.covilo.application.IPasswordEncodingUseCase;
 import me.kvdpxne.covilo.application.ITokenService;
-import me.kvdpxne.covilo.application.IUserLifecycleService;
 import me.kvdpxne.covilo.domain.persistence.ICrimeRepository;
 import me.kvdpxne.covilo.domain.persistence.ITokenRepository;
 import me.kvdpxne.covilo.domain.persistence.IUserRepository;
+import me.kvdpxne.covilo.domain.port.out.UserPasswordEncodePort;
+import me.kvdpxne.covilo.domain.port.out.UserPasswordMatchesPort;
+import me.kvdpxne.covilo.domain.port.out.UserServicePort;
+import me.kvdpxne.covilo.domain.port.out.UserValidatorPort;
 import me.kvdpxne.covilo.domain.service.CrimeLifecycleService;
 import me.kvdpxne.covilo.domain.service.UserAuthenticationService;
-import me.kvdpxne.covilo.domain.service.UserLifecycleService;
-import me.kvdpxne.covilo.infrastructure.jpa.repository.ICrimeJpaRepository;
+import me.kvdpxne.covilo.domain.service.UserMeService;
+import me.kvdpxne.covilo.domain.service.UserService;
+import me.kvdpxne.covilo.domain.service.UserValidator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,7 +29,7 @@ public class BeanConfiguration {
 
   @Bean
   public UserAuthenticationService userAuthenticationService2(
-    final IUserLifecycleService userLifecycleUseCase,
+    final UserServicePort userLifecycleUseCase,
     final ITokenService tokenLifecycleUserCase,
     final ITokenRepository tokenRepository,
     final AuthenticationManager authenticationManager
@@ -39,11 +42,35 @@ public class BeanConfiguration {
     );
   }
 
+  /**
+   *
+   */
   @Bean
-  public UserLifecycleService userLifecycleService(
-    final IUserRepository userRepository,
-    final IPasswordEncodingUseCase passwordEncodingUseCase
+  public UserMeService getUserMeService(
+    final UserServicePort userServicePort,
+    final UserPasswordMatchesPort userPasswordMatchesPort
   ) {
-    return new UserLifecycleService(userRepository, passwordEncodingUseCase);
+    return new UserMeService(
+      userServicePort,
+      userPasswordMatchesPort
+    );
+  }
+
+  @Bean
+  public UserService getUserService(
+    final IUserRepository userRepository,
+    final UserPasswordEncodePort passwordEncodingUseCase,
+    final UserValidatorPort userValidatorService
+  ) {
+    return new UserService(
+      userRepository,
+      passwordEncodingUseCase,
+      userValidatorService
+    );
+  }
+
+  @Bean
+  public UserValidator userValidatorService() {
+    return new UserValidator();
   }
 }

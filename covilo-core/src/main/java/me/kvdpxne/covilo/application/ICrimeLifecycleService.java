@@ -1,8 +1,8 @@
 package me.kvdpxne.covilo.application;
 
 import java.util.UUID;
-import me.kvdpxne.covilo.application.exception.CrimeAlreadyExistsException;
-import me.kvdpxne.covilo.application.exception.CrimeNotFoundException;
+import me.kvdpxne.covilo.common.exceptions.CrimeAlreadyExistsException;
+import me.kvdpxne.covilo.common.exceptions.CrimeNotFoundException;
 import me.kvdpxne.covilo.domain.model.Crime;
 
 public interface ICrimeLifecycleService {

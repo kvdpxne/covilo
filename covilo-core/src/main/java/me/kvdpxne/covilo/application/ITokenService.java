@@ -1,7 +1,7 @@
 package me.kvdpxne.covilo.application;
 
-import me.kvdpxne.covilo.application.exception.TokenExpiredException;
-import me.kvdpxne.covilo.application.exception.TokenSignatureException;
+import me.kvdpxne.covilo.common.exceptions.TokenExpiredException;
+import me.kvdpxne.covilo.common.exceptions.TokenSignatureException;
 import me.kvdpxne.covilo.domain.model.User;
 
 public interface ITokenService {

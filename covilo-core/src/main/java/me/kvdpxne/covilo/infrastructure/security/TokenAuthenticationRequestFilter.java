@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import me.kvdpxne.covilo.application.ITokenService;
-import me.kvdpxne.covilo.application.exception.TokenException;
+import me.kvdpxne.covilo.common.exceptions.TokenException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.lang.NonNull;

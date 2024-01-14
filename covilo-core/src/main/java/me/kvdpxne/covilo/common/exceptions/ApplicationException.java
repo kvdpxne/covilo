@@ -1,4 +1,4 @@
-package me.kvdpxne.covilo.application.exception;
+package me.kvdpxne.covilo.common.exceptions;
 
 public class ApplicationException extends RuntimeException {
 

@@ -5,19 +5,18 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
-import me.kvdpxne.covilo.application.IUserAuthenticationService;
+import me.kvdpxne.covilo.domain.port.out.UserAuthenticationServicePort;
 import me.kvdpxne.covilo.application.dto.TokenDto;
-import me.kvdpxne.covilo.application.exception.InvalidPasswordException;
-import me.kvdpxne.covilo.application.exception.TokenException;
-import me.kvdpxne.covilo.application.exception.UserAlreadyExistsException;
-import me.kvdpxne.covilo.application.exception.UserNotFoundException;
+import me.kvdpxne.covilo.common.exceptions.UserInvalidEmailAddressException;
+import me.kvdpxne.covilo.common.exceptions.UserInvalidPasswordException;
+import me.kvdpxne.covilo.common.exceptions.TokenException;
+import me.kvdpxne.covilo.common.exceptions.UserAlreadyExistsException;
+import me.kvdpxne.covilo.common.exceptions.UserNotFoundException;
 import me.kvdpxne.covilo.application.mapper.ITokenMapper;
 import me.kvdpxne.covilo.application.payload.LoginRequest;
 import me.kvdpxne.covilo.application.payload.SignupRequest;
 import me.kvdpxne.covilo.domain.model.Token;
 import me.kvdpxne.covilo.infrastructure.security.Constants;
-import me.kvdpxne.covilo.infrastructure.security.TokenAuthenticationRequestFilter;
-import me.kvdpxne.covilo.shared.EmailValidationFailedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -33,7 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public final class UserAuthenticationController {
 
-  private final IUserAuthenticationService userAuthenticationService;
+  private final UserAuthenticationServicePort userAuthenticationService;
   private final ITokenMapper tokenMapper;
 
   @PostMapping("/register")
@@ -43,7 +42,7 @@ public final class UserAuthenticationController {
     final Token token;
     try {
       token = this.userAuthenticationService.createAuthentication(request);
-    } catch (final InvalidPasswordException | EmailValidationFailedException exception) {
+    } catch (final UserInvalidPasswordException | UserInvalidEmailAddressException exception) {
       return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
     return ResponseEntity.ok(

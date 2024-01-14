@@ -6,8 +6,8 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.kvdpxne.covilo.application.ICrimeLifecycleService;
-import me.kvdpxne.covilo.application.exception.CrimeAlreadyExistsException;
-import me.kvdpxne.covilo.application.exception.CrimeNotFoundException;
+import me.kvdpxne.covilo.common.exceptions.CrimeAlreadyExistsException;
+import me.kvdpxne.covilo.common.exceptions.CrimeNotFoundException;
 import me.kvdpxne.covilo.domain.model.Crime;
 import me.kvdpxne.covilo.domain.persistence.ICrimeRepository;
 
