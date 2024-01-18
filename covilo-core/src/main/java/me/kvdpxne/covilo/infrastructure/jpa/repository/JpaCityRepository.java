@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 public interface JpaCityRepository
   extends JpaRepositoryViaIdentifier<CityEntity> {
 
-  Page<CityEntity> findCityEntitiesByProvince_Identifier(final UUID identifier, final Pageable pageable);
+  Page<CityEntity> findCityEntitiesByRegion_Identifier(final UUID identifier, final Pageable pageable);
 
 
 }

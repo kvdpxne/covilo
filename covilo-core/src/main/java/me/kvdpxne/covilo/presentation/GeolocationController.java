@@ -9,14 +9,16 @@ import me.kvdpxne.covilo.application.dto.CityDto;
 import me.kvdpxne.covilo.application.dto.CountryDto;
 import me.kvdpxne.covilo.application.dto.ProvinceDto;
 import me.kvdpxne.covilo.application.mapper.AdministrativeDivisionMapper;
-import me.kvdpxne.covilo.application.mapper.ICityMapper;
-import me.kvdpxne.covilo.application.mapper.ICountryMapper;
-import me.kvdpxne.covilo.application.mapper.IProvinceMapper;
-import me.kvdpxne.covilo.domain.aggregation.Book;
-import me.kvdpxne.covilo.domain.aggregation.BookAttributes;
+import me.kvdpxne.covilo.application.mapper.CityMapper;
+import me.kvdpxne.covilo.application.mapper.CountryMapper;
+import me.kvdpxne.covilo.application.mapper.RegionMapper;
+import me.kvdpxne.covilo.common.constants.Endpoints;
+import me.kvdpxne.covilo.shared.Book;
+import me.kvdpxne.covilo.shared.BookAttributes;
 import me.kvdpxne.covilo.domain.model.AdministrativeDivision;
 import me.kvdpxne.covilo.domain.model.City;
 import me.kvdpxne.covilo.domain.model.Continent;
+import me.kvdpxne.covilo.domain.model.Region;
 import me.kvdpxne.covilo.domain.persistence.AdministrativeDivisionRepository;
 import me.kvdpxne.covilo.domain.persistence.CityRepository;
 import me.kvdpxne.covilo.domain.persistence.CountryRepository;
@@ -31,18 +33,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "/api/0.1.0/geographical", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = Endpoints.GEOLOCATION, produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class GeolocationController {
 
   private final AdministrativeDivisionRepository administrativeDivisionRepository;
 
   private final CountryRepository countryRepository;
-  private final ICountryMapper      countryMapper;
+  private final CountryMapper countryMapper;
   private final RegionRepository provinceRepository;
-  private final IProvinceMapper     provinceMapper;
+  private final RegionMapper provinceMapper;
   private final CityRepository cityRepository;
-  private final ICityMapper         cityMapper;
+  private final CityMapper cityMapper;
   private final AdministrativeDivisionMapper administrativeDivisionMapper;
 
   @PageableAsQueryParam
@@ -90,34 +92,46 @@ public class GeolocationController {
   }
 
   @PageableAsQueryParam
-  @GetMapping("provinces")
-  public ResponseEntity<BookDto<ProvinceDto>> getProvincesByCountry(
-    @RequestParam(name = "country") final UUID identifier,
-    @Parameter(hidden = true) final Pageable pageable
+  @GetMapping("regions")
+  public BookDto<ProvinceDto> getRegions(
+    @RequestParam(name = "country", required = false)
+    final UUID identifier,
+    @Parameter(hidden = true)
+    final Pageable pageable
   ) {
     final int page = pageable.getPageNumber();
     final int pageSize = pageable.getPageSize();
 
-    final var box = this.provinceRepository.findProvincesByCountryIdentifier(
-      identifier,
-      new BookAttributes(page, pageSize)
-    );
+    Book<Region> box;
+    if (null != identifier) {
+      box = this.provinceRepository.findProvincesByCountryIdentifier(
+        identifier,
+        new BookAttributes(page, pageSize)
+      );
+    } else {
+      box = this.provinceRepository.findProvinces(
+        new BookAttributes(0, 0)
+      );
+    }
 
     final var content = box.getContent()
       .stream()
-      .map(this.provinceMapper::toProvinceDto)
+      .map(this.provinceMapper::toRegionDto)
       .toArray(ProvinceDto[]::new);
 
-    return ResponseEntity.ok(
-      new BookDto<>(content, page, pageSize)
-    );
+    return new BookDto<>(content, page, content.length);
+
   }
 
   @PageableAsQueryParam
   @GetMapping("cities")
   public ResponseEntity<BookDto<CityDto>> getCities(
-    @RequestParam(name = "provinceIdentifier", required = false) final UUID identifier,
-    @Parameter(hidden = true) final Pageable pageable
+    @RequestParam(name = "country")
+    final UUID countryIdentifier,
+    @RequestParam(name = "provinceIdentifier", required = false)
+    final UUID identifier,
+    @Parameter(hidden = true)
+    final Pageable pageable
   ) {
     final int page = pageable.getPageNumber();
     final int pageSize = pageable.getPageSize();

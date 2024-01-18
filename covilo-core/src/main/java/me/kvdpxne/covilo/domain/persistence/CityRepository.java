@@ -1,9 +1,9 @@
 package me.kvdpxne.covilo.domain.persistence;
 
 import java.util.UUID;
-import me.kvdpxne.covilo.domain.aggregation.BookAttributes;
+import me.kvdpxne.covilo.shared.BookAttributes;
 import me.kvdpxne.covilo.domain.model.City;
-import me.kvdpxne.covilo.domain.aggregation.Book;
+import me.kvdpxne.covilo.shared.Book;
 
 public interface CityRepository {
 

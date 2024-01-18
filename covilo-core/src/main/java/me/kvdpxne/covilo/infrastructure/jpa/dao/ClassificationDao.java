@@ -14,16 +14,16 @@ import org.springframework.stereotype.Component;
 @Component
 public final class ClassificationDao implements ClassificationRepository {
 
-  private final JpaClassificationRepository classificationDao;
-  private final ClassificationPersistenceMapper classificationPersistenceMapper;
+  private final JpaClassificationRepository jpa;
+  private final ClassificationPersistenceMapper mapper;
 
   private Classification toClassificationOrNull(final Optional<ClassificationEntity> source) {
-    return source.map(this.classificationPersistenceMapper::toClassification).orElse(null);
+    return source.map(this.mapper::toClassification).orElse(null);
   }
 
   @Override
   public Classification findClassificationByIdentifierOrNull(final UUID identifier) {
-    final var entity = this.classificationDao.findById(identifier);
+    final var entity = this.jpa.findById(identifier);
     return this.toClassificationOrNull(entity);
   }
 

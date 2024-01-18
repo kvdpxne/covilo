@@ -6,12 +6,15 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 
 @Mapper(
+  uses = {
+    AdministrativeDivisionMapper.class
+  },
   componentModel = MappingConstants.ComponentModel.SPRING,
   implementationName = "CountryMapperImpl"
 )
-public interface ICountryMapper {
+public interface CountryMapper {
 
-  CountryDto toCountryDto(final Country source);
-
-  Country toCountry(final CountryDto source);
+  CountryDto toCountryDto(
+    final Country source
+  );
 }

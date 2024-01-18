@@ -1,7 +1,7 @@
 import {Component, OnInit} from "@angular/core";
 import {ActivatedRoute, UrlSegment} from "@angular/router";
 import {City, Crime, CrimeService} from "src/application/core";
-import {Category, GeographicalService} from "../../../core";
+import {Category, GeolocationService} from "../../../core";
 
 @Component({
   selector: "router-result-details",
@@ -21,7 +21,7 @@ export class ResultDetailsComponent implements OnInit {
 
   private readonly route: ActivatedRoute;
 
-  private readonly geographicalService: GeographicalService;
+  private readonly geographicalService: GeolocationService;
   private readonly crimeService: CrimeService;
 
   /**
@@ -46,7 +46,7 @@ export class ResultDetailsComponent implements OnInit {
 
   public constructor(
     route: ActivatedRoute,
-    geographicalService: GeographicalService,
+    geographicalService: GeolocationService,
     crimeService: CrimeService
   ) {
     this.PAGE_ITEM_COUNT = 5;

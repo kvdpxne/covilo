@@ -7,10 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.util.LinkedHashSet;
-import java.util.Set;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,8 +21,8 @@ import lombok.ToString;
 @Setter
 @ToString
 @Entity
-@Table(name = "province")
-public final class ProvinceEntity {
+@Table(name = "region")
+public final class RegionEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
@@ -40,11 +37,6 @@ public final class ProvinceEntity {
 
   @ToString.Exclude
   @ManyToOne(optional = false)
-  @JoinColumn(name = "country", nullable = false)
+  @JoinColumn(name = "country_identifier", nullable = false)
   private CountryEntity country;
-
-  @ToString.Exclude
-  @OneToMany(mappedBy = "province", orphanRemoval = true)
-  private Set<CityEntity> cities = new LinkedHashSet<>();
-
 }

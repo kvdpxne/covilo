@@ -13,8 +13,8 @@ import me.kvdpxne.covilo.shared.Validation;
 public final class UserMeService
   implements UserMeServicePort {
 
-  private final UserServicePort userServicePort;
-  private final UserPasswordMatchesPort userPasswordMatchesPort;
+  private final UserServicePort userService;
+  private final UserPasswordMatchesPort userPasswordMatches;
 
   private void checkPassword(
     final User me,
@@ -24,11 +24,18 @@ public final class UserMeService
     Validation.empty(rawPassword);
 
     final var currentPassword = me.password();
-    if (!this.userPasswordMatchesPort.matches(rawPassword, currentPassword)) {
+    if (!this.userPasswordMatches.matches(rawPassword, currentPassword)) {
       throw new UserPasswordsNotMatchException(
         "The given password does not match the user's password."
       );
     }
+  }
+
+  @Override
+  public void updateLastModifiedDate(
+    final User me
+  ) {
+    this.userService.updateLastModifiedDate(me);
   }
 
   /**
@@ -44,7 +51,7 @@ public final class UserMeService
     final String currentPassword
   ) {
     this.checkPassword(me, currentPassword);
-    this.userServicePort.updateUserEmail(me, newEmail);
+    this.userService.updateUserEmail(me, newEmail);
   }
 
   /**
@@ -72,7 +79,7 @@ public final class UserMeService
       throw new UserInvalidPasswordException();
     }
 
-    this.userServicePort.updateUserPassword(me, newPassword);
+    this.userService.updateUserPassword(me, newPassword);
   }
 
   @Override
@@ -81,6 +88,6 @@ public final class UserMeService
     final String currentPassword
   ) {
     this.checkPassword(me, currentPassword);
-    this.userServicePort.deleteUser(me);
+    this.userService.deleteUser(me);
   }
 }

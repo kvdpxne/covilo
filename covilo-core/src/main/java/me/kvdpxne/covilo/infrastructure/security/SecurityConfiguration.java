@@ -46,16 +46,19 @@ public class SecurityConfiguration {
       .csrf(AbstractHttpConfigurer::disable)
       .authorizeHttpRequests(configurer -> {
         configurer.requestMatchers(
-          "/api/0.1.0/storage/**",
-          "/api/0.1.0/geographical/**",
-          "/api/0.1.0/search/**",
-          "/api/0.1.0/crimes/**",
-          "/api/0.1.0/crime/**",
+//          "/api/0.1.0/storage/**",
+//          "/api/0.1.0/geographical/**",
+//          "/api/0.1.0/search/**",
+//          "/api/0.1.0/crimes/**",
+//          "/api/0.1.0/crime/**",
 
+          STR."\{Endpoints.GEOLOCATION}/**",
           STR."\{Endpoints.CRIME}/**",
 
           STR."\{Endpoints.USER}/**",
           STR."\{Endpoints.USER_AUTHENTICATION}/**",
+
+          "run/**",
 
           "/v2/api-docs",
           "/v3/api-docs",

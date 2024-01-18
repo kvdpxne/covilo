@@ -6,10 +6,13 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 
 @Mapper(
+  uses = {
+    RegionMapper.class
+  },
   componentModel = MappingConstants.ComponentModel.SPRING,
   implementationName = "CityMapperImpl"
 )
-public interface ICityMapper {
+public interface CityMapper {
 
   CityDto toCityDto(final City source);
 

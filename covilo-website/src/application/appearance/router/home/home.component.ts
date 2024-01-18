@@ -1,7 +1,7 @@
 import {Component, OnInit} from "@angular/core";
 import {Router} from "@angular/router";
 import {City, Country, Province} from "src/application/core";
-import {Book, GeographicalService} from "../../../core";
+import {Book, GeolocationService} from "../../../core";
 import {throwError} from "rxjs";
 
 @Component({
@@ -15,7 +15,7 @@ export class HomeComponent implements OnInit {
 
   private readonly router: Router;
 
-  private readonly geographicalService: GeographicalService;
+  private readonly geographicalService: GeolocationService;
 
   // available countries
   countries?: Country[];
@@ -37,7 +37,7 @@ export class HomeComponent implements OnInit {
 
   constructor(
     router: Router,
-    geographicalService: GeographicalService
+    geographicalService: GeolocationService
   ) {
     this.router = router;
     this.geographicalService = geographicalService;

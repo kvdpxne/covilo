@@ -34,4 +34,11 @@ public interface UserMeServicePort {
     final User me,
     final String currentPassword
   );
+
+  /**
+   *
+   */
+  void updateLastModifiedDate(
+    final User me
+  );
 }

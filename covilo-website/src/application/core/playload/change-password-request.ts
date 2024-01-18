@@ -8,10 +8,10 @@ export interface ChangePasswordRequest {
   /**
    *
    */
-  password: string;
+  newPassword: string;
 
   /**
    *
    */
-  confirmPassword: string;
+  confirmedPassword: string;
 }

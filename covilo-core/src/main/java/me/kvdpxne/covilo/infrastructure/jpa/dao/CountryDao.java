@@ -3,10 +3,9 @@ package me.kvdpxne.covilo.infrastructure.jpa.dao;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import me.kvdpxne.covilo.domain.aggregation.Book;
-import me.kvdpxne.covilo.domain.aggregation.BookAttributes;
+import me.kvdpxne.covilo.shared.Book;
+import me.kvdpxne.covilo.shared.BookAttributes;
 import me.kvdpxne.covilo.domain.model.Country;
 import me.kvdpxne.covilo.domain.persistence.CountryRepository;
 import me.kvdpxne.covilo.infrastructure.jpa.entity.CountryEntity;
@@ -19,7 +18,7 @@ import org.springframework.stereotype.Component;
 @Component
 public final class CountryDao implements CountryRepository {
 
-  private final JpaCountryRepository repository;
+  private final JpaCountryRepository jpa;
   private final CountryPersistenceMapper mapper;
 
   private Country toCountryOrNull(final Optional<CountryEntity> source) {
@@ -28,7 +27,7 @@ public final class CountryDao implements CountryRepository {
 
   @Override
   public List<Country> getAll() {
-    return this.repository.findAll()
+    return this.jpa.findAll()
       .stream()
       .map(this.mapper::toCountry)
       .toList();
@@ -37,7 +36,7 @@ public final class CountryDao implements CountryRepository {
   @Override
   public Book<Country> getAll(final BookAttributes attributes) {
     return Book.boxed(attributes, box ->
-      this.repository.findAll(
+      this.jpa.findAll(
           PageRequest.of(attributes.page(), attributes.size())
         )
         .map(this.mapper::toCountry)
@@ -47,20 +46,20 @@ public final class CountryDao implements CountryRepository {
 
   @Override
   public Country findCountryByIdentifierOrNull(final UUID identifier) {
-    final var entity = this.repository.findById(identifier);
+    final var entity = this.jpa.findById(identifier);
     return this.toCountryOrNull(entity);
   }
 
   @Override
   public Country findCountryByNameOrNull(final String name) {
-    final var entity = this.repository.findByNameAllIgnoreCase(name);
+    final var entity = this.jpa.findByNameAllIgnoreCase(name);
     return this.toCountryOrNull(entity);
   }
 
   @Override
   public Country insertCountry(final Country country) {
     return this.mapper.toCountry(
-      this.repository.save(
+      this.jpa.save(
         this.mapper.toCountryEntity(country)
       )
     );
@@ -68,7 +67,7 @@ public final class CountryDao implements CountryRepository {
 
   @Override
   public void deleteCountryByIdentifier(final UUID identifier) {
-    this.repository.deleteById(identifier);
+    this.jpa.deleteById(identifier);
   }
 
   @Override

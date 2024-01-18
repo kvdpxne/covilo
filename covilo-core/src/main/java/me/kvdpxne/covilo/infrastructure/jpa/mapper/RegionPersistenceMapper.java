@@ -1,7 +1,7 @@
 package me.kvdpxne.covilo.infrastructure.jpa.mapper;
 
 import me.kvdpxne.covilo.domain.model.Region;
-import me.kvdpxne.covilo.infrastructure.jpa.entity.ProvinceEntity;
+import me.kvdpxne.covilo.infrastructure.jpa.entity.RegionEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 
@@ -12,9 +12,9 @@ import org.mapstruct.MappingConstants;
   componentModel = MappingConstants.ComponentModel.SPRING,
   implementationName = "ProvincePersistenceMapperImpl"
 )
-public interface ProvincePersistenceMapper {
+public interface RegionPersistenceMapper {
 
-  ProvinceEntity toProvinceEntity(final Region source);
+  RegionEntity toProvinceEntity(final Region source);
 
-  Region toProvince(final ProvinceEntity source);
+  Region toProvince(final RegionEntity source);
 }

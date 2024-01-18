@@ -8,7 +8,7 @@ public record City(
   UUID identifier,
   String name,
   String nationalName,
-  Region province,
+  Region region,
   CapitalType capitalType,
   int population
 ) {}

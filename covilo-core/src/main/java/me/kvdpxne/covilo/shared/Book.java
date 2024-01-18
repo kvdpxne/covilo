@@ -1,4 +1,4 @@
-package me.kvdpxne.covilo.domain.aggregation;
+package me.kvdpxne.covilo.shared;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -11,7 +11,7 @@ public class Book<T> implements Iterable<T> {
   private final int index;
 
   public Book(final int index, final int count) {
-    this.elements = new ArrayList<>(count);
+    this.elements = 0 >= count ? new ArrayList<>() : new ArrayList<>(count);
     this.index = index;
   }
 

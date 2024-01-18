@@ -114,7 +114,7 @@ public final class UserService
       .build();
 
     try {
-      user = this.userRepository.insertUser(user);
+      user = this.userRepository.insert(user);
     } catch (final Throwable throwable) {
       throw new RuntimeException(
         "An unhandled exception occurred while inserting a user.",
@@ -128,6 +128,18 @@ public final class UserService
       .log();
 
     return user;
+  }
+
+  @Override
+  public void updateLastModifiedDate(
+    final User user
+  ) {
+    Validation.check(user);
+    if (this.userRepository.updateLastModifiedDateByIdentifier(
+      user.identifier()
+    )) {
+
+    }
   }
 
   /**
@@ -149,7 +161,7 @@ public final class UserService
     }
 
     try {
-      this.userRepository.updateUserEmailByIdentifier(
+      this.userRepository.updateEmailByIdentifier(
         user.identifier(),
         newEmail
       );
@@ -179,7 +191,7 @@ public final class UserService
       return;
     }
     final var encodedPassword = this.userPasswordEncodePort.encode(newPassword);
-    this.userRepository.updateUserPasswordByIdentifier(user.identifier(), encodedPassword);
+    this.userRepository.updatePasswordByIdentifier(user.identifier(), encodedPassword);
   }
 
   @Override

@@ -18,6 +18,15 @@ public interface JpaUserRepository
 
   @Transactional
   @Modifying
+  @Query("update UserEntity u set u.lastModifiedDate = ?1 where u.identifier = ?2")
+  int updateLastModifiedDateByIdentifier(
+    final LocalDateTime lastModifiedDate,
+    final UUID identifier
+  );
+
+
+  @Transactional
+  @Modifying
   @Query("update UserEntity u set u.email = ?1, u.lastModifiedDate = ?2 where u.identifier = ?3")
   int updateEmailByIdentifier(
     final UUID identifier,

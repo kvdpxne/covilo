@@ -1,12 +1,10 @@
 import {Inject, Injectable} from "@angular/core";
-import {catchError, EMPTY, Observable, of, tap} from "rxjs";
+import {Observable, of, tap} from "rxjs";
 
 import {ApiHttpClientService} from "../../shared";
 
 import {LoginRequest, SignupRequest, Token, User, UserLifecycleService, UserService} from "../index";
-import {AUTHENTICATION_STRATEGY, AuthenticationStrategy} from "../../authentication/service/authentication.strategy";
-import {TokenAuthenticationStrategy} from "../../authentication/service/token-authentication.strategy";
-import {map} from "rxjs/operators";
+import {AUTHENTICATION_STRATEGY, AuthenticationStrategy, TokenAuthenticationStrategy} from "../../authentication";
 
 @Injectable({
   providedIn: "root"
@@ -45,7 +43,7 @@ export class UserAuthenticationService {
    * Sends a user registration request.
    */
   public signup(request: SignupRequest): Observable<Token> {
-    const path: string = "auth/register";
+    const path: string = "authentication/register";
     return this.httpClientService.post<Token>(path, request).pipe(
       tap((token: Token): void => {
         this.authenticationStrategy.doLogin(token);
@@ -58,7 +56,7 @@ export class UserAuthenticationService {
    * Sends a user login request.
    */
   public login(request: LoginRequest): Observable<Token> {
-    const path: string = "auth/login";
+    const path: string = "authentication/login";
     return this.httpClientService.post<Token>(path, request).pipe(
       tap((token: Token): void => {
         this.authenticationStrategy.doLogin(token);
@@ -75,7 +73,7 @@ export class UserAuthenticationService {
    * Sends a request to refresh the user's authentication token.
    */
   public refreshToken(): Observable<Token> {
-    const path: string = "auth/refresh-token";
+    const path: string = "authentication/refresh-token";
 
     return this.httpClientService.post<Token>(path).pipe(
       tap((token: Token): void => {
@@ -86,7 +84,7 @@ export class UserAuthenticationService {
   }
 
   public logout(refresh: boolean = false): Observable<never> {
-    const path: string = "auth/logout";
+    const path: string = "authentication/logout";
     return this.httpClientService.post<never>(path).pipe(
       tap((): void => {
         this.authenticationStrategy.doLogout();

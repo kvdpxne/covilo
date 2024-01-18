@@ -8,6 +8,7 @@ import me.kvdpxne.covilo.application.payload.DeleteUserMeRequest;
 import me.kvdpxne.covilo.application.payload.UpdateUserMeEmailRequest;
 import me.kvdpxne.covilo.application.payload.UpdateUserMePasswordRequest;
 import me.kvdpxne.covilo.common.constants.Endpoints;
+import me.kvdpxne.covilo.domain.model.User;
 import me.kvdpxne.covilo.domain.port.out.UserMeServicePort;
 import me.kvdpxne.covilo.infrastructure.image.ImageConverterService;
 import me.kvdpxne.covilo.infrastructure.image.ImageMimeTypeNotAvailableException;
@@ -42,7 +43,7 @@ public final class UserMeController {
 
   private final ImageConverterService imageConverterService;
 
-  private final UserMeServicePort userMeServicePort;
+  private final UserMeServicePort userMeService;
 
   /**
    *
@@ -68,7 +69,7 @@ public final class UserMeController {
     @RequestBody
     final UpdateUserMeEmailRequest request
   ) {
-    this.userMeServicePort.updateMeEmail(
+    this.userMeService.updateMeEmail(
       principal.user(),
       request.newEmail(),
       request.currentPassword()
@@ -85,7 +86,7 @@ public final class UserMeController {
     @RequestBody
     final UpdateUserMePasswordRequest request
   ) {
-    this.userMeServicePort.updateMePassword(
+    this.userMeService.updateMePassword(
       principal.user(),
       request.newPassword(),
       request.confirmedPassword(),
@@ -107,22 +108,24 @@ public final class UserMeController {
     if (null == mimeType || mimeType.isBlank()) {
       throw new ImageMimeTypeNotAvailableException();
     }
+
     ImageType.getImageTypeBy(
       imageType -> imageType.getMimeType().equals(mimeType)
     ).orElseThrow(() -> new ImageMimeTypeNotSupportedException(mimeType));
-    if (this.storageService instanceof FileSystemStorageService
-      fileSystemStorage
-    ) {
+
+    if (this.storageService instanceof FileSystemStorageService storage) {
+      final User me = principal.user();
       // Closing the input and output streams is unnecessary because the method
       // closes the streams when converting an image when they are no longer
       // needed for its proper execution.
       this.imageConverterService.convertImage(
-        fileSystemStorage.openInputStream(multipartFile),
-        fileSystemStorage.openOutputStream(
-          principal.user().getAvatarFileName(),
+        storage.openInputStream(multipartFile),
+        storage.openOutputStream(
+          me.getAvatarFileName(),
           StorageLocationType.AVATAR
         )
       );
+      this.userMeService.updateLastModifiedDate(me);
     }
   }
 
@@ -136,6 +139,7 @@ public final class UserMeController {
     this.storageService.deleteUserAvatar(
       principal.getUsername()
     );
+    this.userMeService.updateLastModifiedDate(principal.user());
   }
 
   @DeleteMapping
@@ -145,7 +149,7 @@ public final class UserMeController {
     @RequestBody
     final DeleteUserMeRequest request
   ) {
-    this.userMeServicePort.deleteMe(
+    this.userMeService.deleteMe(
       principal.user(),
       request.currentPassword()
     );

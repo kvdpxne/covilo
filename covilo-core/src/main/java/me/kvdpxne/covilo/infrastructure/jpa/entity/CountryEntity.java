@@ -49,5 +49,5 @@ public final class CountryEntity {
 
   @ToString.Exclude
   @OneToMany(mappedBy = "country", orphanRemoval = true)
-  private Set<ProvinceEntity> provinces = new LinkedHashSet<>();
+  private Set<RegionEntity> provinces = new LinkedHashSet<>();
 }

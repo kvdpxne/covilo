@@ -5,7 +5,7 @@ import {
   City,
   Country,
   CrimeService,
-  GeographicalService,
+  GeolocationService,
   Province,
   ReportCrimeRequest,
   User
@@ -32,7 +32,7 @@ interface ReportForm {
 })
 export class ReportComponent {
 
-  private readonly geographicalService: GeographicalService;
+  private readonly geographicalService: GeolocationService;
 
   private readonly crimeService: CrimeService;
 
@@ -62,7 +62,7 @@ export class ReportComponent {
 
   constructor(
     route: ActivatedRoute,
-    geographicalService: GeographicalService,
+    geographicalService: GeolocationService,
     crimeService: CrimeService,
     formBuilder: FormBuilder
   ) {

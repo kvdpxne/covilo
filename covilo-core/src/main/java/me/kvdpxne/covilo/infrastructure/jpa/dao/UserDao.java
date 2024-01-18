@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 public final class UserDao
   implements UserRepository {
 
-  private final JpaUserRepository repository;
+  private final JpaUserRepository jpa;
   private final UserPersistenceMapper mapper;
 
   private User toUserOrNull(final Optional<UserEntity> source) {
@@ -27,25 +27,35 @@ public final class UserDao
 
   @Override
   public User findUserByIdentifierOrNull(final UUID identifier) {
-    final var entity = this.repository.findById(identifier);
+    final var entity = this.jpa.findById(identifier);
     return this.toUserOrNull(entity);
   }
 
   @Override
   public User findUserByEmailOrNull(final String email) {
-    final var entity = this.repository.findByEmail(email);
+    final var entity = this.jpa.findByEmail(email);
     return this.toUserOrNull(entity);
   }
 
   @Override
-  public User insertUser(final User user) {
+  public User insert(final User user) {
     var entity = this.mapper.toUserEntity(user);
-    entity = this.repository.save(entity);
+    entity = this.jpa.save(entity);
     return this.mapper.toUser(entity);
   }
 
   @Override
-  public boolean updateUserEmailByIdentifier(
+  public boolean updateLastModifiedDateByIdentifier(
+    final UUID identifier
+  ) {
+    return 0 != this.jpa.updateLastModifiedDateByIdentifier(
+      LocalDateTime.now(),
+      identifier
+    );
+  }
+
+  @Override
+  public boolean updateEmailByIdentifier(
     final UUID identifier,
     final String email
   ) {
@@ -53,7 +63,7 @@ public final class UserDao
     int rows = 0;
 
     try {
-      rows = this.repository.updateEmailByIdentifier(
+      rows = this.jpa.updateEmailByIdentifier(
         identifier,
         email,
         LocalDateTime.now()
@@ -69,7 +79,7 @@ public final class UserDao
   }
 
   @Override
-  public boolean updateUserPasswordByIdentifier(
+  public boolean updatePasswordByIdentifier(
     final UUID identifier,
     final String password
   ) {
@@ -77,7 +87,7 @@ public final class UserDao
     int rows = 0;
 
     try {
-      rows = this.repository.updatePasswordByIdentifier(
+      rows = this.jpa.updatePasswordByIdentifier(
         identifier,
         password,
         LocalDateTime.now()
@@ -96,16 +106,16 @@ public final class UserDao
 
   @Override
   public void deleteUserByIdentifier(final UUID identifier) {
-    this.repository.deleteById(identifier);
+    this.jpa.deleteById(identifier);
   }
 
   @Override
   public boolean existsUserByIdentifier(final UUID identifier) {
-    return this.repository.existsById(identifier);
+    return this.jpa.existsById(identifier);
   }
 
   @Override
   public boolean existsUserByEmail(final String email) {
-    return this.repository.existsByEmail(email);
+    return this.jpa.existsByEmail(email);
   }
 }

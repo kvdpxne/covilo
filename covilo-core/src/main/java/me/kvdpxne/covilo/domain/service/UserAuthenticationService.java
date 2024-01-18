@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.kvdpxne.covilo.application.ITokenService;
 import me.kvdpxne.covilo.domain.port.out.UserAuthenticationServicePort;
+import me.kvdpxne.covilo.domain.port.out.UserPasswordAuthenticationTokenPort;
 import me.kvdpxne.covilo.domain.port.out.UserServicePort;
 import me.kvdpxne.covilo.application.dto.TokenDto;
 import me.kvdpxne.covilo.common.exceptions.UserInvalidPasswordException;
@@ -18,8 +19,6 @@ import me.kvdpxne.covilo.domain.model.Token;
 import me.kvdpxne.covilo.domain.model.TokenType;
 import me.kvdpxne.covilo.domain.model.User;
 import me.kvdpxne.covilo.domain.persistence.TokenRepository;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 /**
  * Service responsible for the user authentication process.
@@ -29,13 +28,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 public final class UserAuthenticationService
   implements UserAuthenticationServicePort {
 
-  //
-  private final UserServicePort userLifecycleUseCase;
+  private final UserServicePort userService;
+  private final UserPasswordAuthenticationTokenPort userPasswordAuthenticationToken;
+
   private final ITokenService tokenLifecycleUserCase;
   //
   private final TokenRepository tokenRepository;
-
-  private final AuthenticationManager authenticationManager;
 
   @Override
   public Token createAuthentication(
@@ -44,7 +42,7 @@ public final class UserAuthenticationService
     final var email = request.email();
     // Checks whether the provided email address is correct and whether another
     // user has this address assigned to their account.
-    if (this.userLifecycleUseCase.checkUserExistsByEmail(email)) {
+    if (this.userService.checkUserExistsByEmail(email)) {
       throw UserAlreadyExistsException.byEmail(email);
     }
 
@@ -67,7 +65,7 @@ public final class UserAuthenticationService
       .build();
 
     //
-    user = this.userLifecycleUseCase.createUser(user);
+    user = this.userService.createUser(user);
 
     //
     Token token = Token.builder()
@@ -97,19 +95,17 @@ public final class UserAuthenticationService
     final var email = request.email();
     // Checks whether the provided email address is correct and whether another
     // user has this address assigned to their account.
-    if (!this.userLifecycleUseCase.checkUserExistsByEmail(email)) {
+    if (!this.userService.checkUserExistsByEmail(email)) {
       UserNotFoundException.byEmail(email);
     }
 
-    this.authenticationManager.authenticate(
-      new UsernamePasswordAuthenticationToken(
-        email,
-        request.password()
-      )
+    this.userPasswordAuthenticationToken.authenticate(
+      email,
+      request.password()
     );
 
     //
-    final var user = this.userLifecycleUseCase.getUserByEmail(email);
+    final var user = this.userService.getUserByEmail(email);
 
     final var compactRefreshToken = this.tokenLifecycleUserCase
       .createCompactRefreshToken(user);
@@ -140,7 +136,7 @@ public final class UserAuthenticationService
       throw new UserNotFoundException("");
     }
 
-    final var user = this.userLifecycleUseCase.getUserByEmail(email);
+    final var user = this.userService.getUserByEmail(email);
     return Token.builder()
       .compactToken(this.tokenLifecycleUserCase.createCompactAccessToken(user))
       .tokenType(TokenType.ACCESS)

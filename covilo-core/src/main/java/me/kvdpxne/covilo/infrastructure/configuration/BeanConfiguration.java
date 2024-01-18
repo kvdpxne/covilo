@@ -4,6 +4,7 @@ import me.kvdpxne.covilo.application.ITokenService;
 import me.kvdpxne.covilo.domain.persistence.CrimeRepository;
 import me.kvdpxne.covilo.domain.persistence.TokenRepository;
 import me.kvdpxne.covilo.domain.persistence.UserRepository;
+import me.kvdpxne.covilo.domain.port.out.UserPasswordAuthenticationTokenPort;
 import me.kvdpxne.covilo.domain.port.out.UserPasswordEncodePort;
 import me.kvdpxne.covilo.domain.port.out.UserPasswordMatchesPort;
 import me.kvdpxne.covilo.domain.port.out.UserServicePort;
@@ -15,7 +16,6 @@ import me.kvdpxne.covilo.domain.service.UserService;
 import me.kvdpxne.covilo.domain.service.UserValidator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 
 @Configuration
 public class BeanConfiguration {
@@ -28,17 +28,17 @@ public class BeanConfiguration {
   }
 
   @Bean
-  public UserAuthenticationService userAuthenticationService2(
-    final UserServicePort userLifecycleUseCase,
-    final ITokenService tokenLifecycleUserCase,
-    final TokenRepository tokenRepository,
-    final AuthenticationManager authenticationManager
-  ) {
+  public UserAuthenticationService getUserAuthenticationService(
+    final UserServicePort userService,
+    final UserPasswordAuthenticationTokenPort userPasswordAuthenticationToken,
+    final ITokenService tokenService,
+    final TokenRepository tokenRepository
+    ) {
     return new UserAuthenticationService(
-      userLifecycleUseCase,
-      tokenLifecycleUserCase,
-      tokenRepository,
-      authenticationManager
+      userService,
+      userPasswordAuthenticationToken,
+      tokenService,
+      tokenRepository
     );
   }
 

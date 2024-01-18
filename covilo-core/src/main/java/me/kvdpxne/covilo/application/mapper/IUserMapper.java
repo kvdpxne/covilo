@@ -7,7 +7,7 @@ import org.mapstruct.MappingConstants;
 
 @Mapper(
   uses = {
-    ICityMapper.class
+    CityMapper.class
   },
   componentModel = MappingConstants.ComponentModel.SPRING,
   implementationName = "UserMapperImpl"

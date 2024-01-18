@@ -45,8 +45,8 @@ public final class CityEntity {
 
   @ToString.Exclude
   @ManyToOne(optional = false)
-  @JoinColumn(name = "province", nullable = false)
-  private ProvinceEntity province;
+  @JoinColumn(name = "region_identifier", nullable = false)
+  private RegionEntity region;
 
   @Enumerated(EnumType.STRING)
   @Column(name = "capital")

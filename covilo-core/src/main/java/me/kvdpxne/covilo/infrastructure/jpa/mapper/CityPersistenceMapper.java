@@ -7,7 +7,7 @@ import org.mapstruct.MappingConstants;
 
 @Mapper(
   uses = {
-    ProvincePersistenceMapper.class
+    RegionPersistenceMapper.class
   },
   componentModel = MappingConstants.ComponentModel.SPRING,
   implementationName = "CityPersistenceMapperImpl"

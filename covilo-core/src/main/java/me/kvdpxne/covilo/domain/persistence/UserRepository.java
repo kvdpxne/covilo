@@ -9,7 +9,14 @@ public interface UserRepository {
 
   User findUserByEmailOrNull(final String email);
 
-  User insertUser(final User user);
+  User insert(final User user);
+
+  /**
+   *
+   */
+  boolean updateLastModifiedDateByIdentifier(
+    final UUID identifier
+  );
 
   /**
    * Sends a request to change the email address to the one provided for the
@@ -18,12 +25,12 @@ public interface UserRepository {
    * @param identifier A unique user identifier.
    * @param email      email address.
    */
-  boolean updateUserEmailByIdentifier(
+  boolean updateEmailByIdentifier(
     final UUID identifier,
     final String email
   );
 
-  boolean updateUserPasswordByIdentifier(
+  boolean updatePasswordByIdentifier(
     final UUID identifier,
     final String password
   );

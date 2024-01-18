@@ -7,6 +7,8 @@ import {SideNavigationBarComponent, SideNavigationComponent} from "./component";
 import {TranslateModule} from "@ngx-translate/core";
 import {SharedModule} from "../shared";
 import {NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
+import {FormsModule} from "@angular/forms";
+import {TextFieldComponent} from "../authentication/component/text-field/text-field.component";
 
 @NgModule({
   declarations: [
@@ -27,7 +29,9 @@ import {NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
 
     MeRoutingModule,
     SharedModule,
-    NgbTooltip
+    NgbTooltip,
+    FormsModule,
+    TextFieldComponent
   ]
 })
 export class MeModule {

@@ -31,7 +31,7 @@ export * from "./playload/signup-request";
 
 // All available application services
 export * from "./service/crime.service";
-export * from "./service/geographical.service";
+export * from "./service/geolocation.service";
 export * from "./service/user.service";
 export * from "./service/user-authentication.service";
 export * from "./service/user-lifecycle.service";

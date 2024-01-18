@@ -4,14 +4,16 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Consumer;
 import lombok.RequiredArgsConstructor;
-import me.kvdpxne.covilo.domain.aggregation.Book;
-import me.kvdpxne.covilo.domain.aggregation.BookAttributes;
+import me.kvdpxne.covilo.shared.Book;
+import me.kvdpxne.covilo.shared.BookAttributes;
 import me.kvdpxne.covilo.domain.model.AdministrativeDivision;
 import me.kvdpxne.covilo.domain.persistence.AdministrativeDivisionRepository;
 import me.kvdpxne.covilo.infrastructure.jpa.mapper.AdministrativeDivisionPersistenceMapper;
 import me.kvdpxne.covilo.infrastructure.jpa.repository.JpaAdministrativeDivisionRepository;
-import org.springframework.data.domain.PageRequest;
+import me.kvdpxne.covilo.shared.BookcaseRequestPage;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
@@ -34,12 +36,13 @@ public final class AdministrativeDivisionDao
   public Book<AdministrativeDivision> getAll(
     final BookAttributes attributes
   ) {
-    return Book.boxed(attributes, it ->
-      this.jpa.findAll(
-          PageRequest.of(attributes.page(), attributes.size())
-        ).map(this.mapper::toAdministrativeDivision)
-        .forEach(it::put)
-    );
+    return Book.boxed(attributes, it -> {
+      final Pageable request = BookcaseRequestPage.request(attributes);
+
+      this.jpa.findAll(request)
+        .map(this.mapper::toAdministrativeDivision)
+        .forEach(it::put);
+    });
   }
 
   @Override

@@ -23,6 +23,13 @@ public interface UserServicePort {
   User createUser(final User user) throws UserAlreadyExistsException;
 
   /**
+   *
+   */
+  void updateLastModifiedDate(
+    final User user
+  );
+
+  /**
    * Updates the email address for the specified user.
    *
    * @throws NullPointerException             If the given user or new email address
