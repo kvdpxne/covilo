@@ -13,6 +13,9 @@ public record ErrorMessage(
   String message
 ) {
 
+  /**
+   *
+   */
   public static ErrorMessage of(
     final int status,
     final String error,

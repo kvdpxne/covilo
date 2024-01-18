@@ -1,9 +1,9 @@
 package me.kvdpxne.covilo.infrastructure.configuration;
 
 import me.kvdpxne.covilo.application.ITokenService;
-import me.kvdpxne.covilo.domain.persistence.ICrimeRepository;
-import me.kvdpxne.covilo.domain.persistence.ITokenRepository;
-import me.kvdpxne.covilo.domain.persistence.IUserRepository;
+import me.kvdpxne.covilo.domain.persistence.CrimeRepository;
+import me.kvdpxne.covilo.domain.persistence.TokenRepository;
+import me.kvdpxne.covilo.domain.persistence.UserRepository;
 import me.kvdpxne.covilo.domain.port.out.UserPasswordEncodePort;
 import me.kvdpxne.covilo.domain.port.out.UserPasswordMatchesPort;
 import me.kvdpxne.covilo.domain.port.out.UserServicePort;
@@ -22,7 +22,7 @@ public class BeanConfiguration {
 
   @Bean
   public CrimeLifecycleService crimeLifecycleService(
-    final ICrimeRepository crimeRepository
+    final CrimeRepository crimeRepository
   ) {
     return new CrimeLifecycleService(crimeRepository);
   }
@@ -31,7 +31,7 @@ public class BeanConfiguration {
   public UserAuthenticationService userAuthenticationService2(
     final UserServicePort userLifecycleUseCase,
     final ITokenService tokenLifecycleUserCase,
-    final ITokenRepository tokenRepository,
+    final TokenRepository tokenRepository,
     final AuthenticationManager authenticationManager
   ) {
     return new UserAuthenticationService(
@@ -58,7 +58,7 @@ public class BeanConfiguration {
 
   @Bean
   public UserService getUserService(
-    final IUserRepository userRepository,
+    final UserRepository userRepository,
     final UserPasswordEncodePort passwordEncodingUseCase,
     final UserValidatorPort userValidatorService
   ) {

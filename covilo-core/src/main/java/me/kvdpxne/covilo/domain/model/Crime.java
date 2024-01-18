@@ -19,5 +19,4 @@ public record Crime(
   boolean confirmed,
   LocalDateTime createdDate,
   LocalDateTime lastModifiedDate
-) implements Identity<UUID>, Auditable {
-}
+) implements Identity<UUID>, Auditable {}

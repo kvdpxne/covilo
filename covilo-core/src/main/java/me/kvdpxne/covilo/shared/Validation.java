@@ -1,5 +1,7 @@
 package me.kvdpxne.covilo.shared;
 
+import java.util.Collection;
+
 public final class Validation {
 
   public static void check(final Object value, final String message) {
@@ -50,7 +52,18 @@ public final class Validation {
     }
   }
 
+  public static void empty(final Collection<?> collection) {
+    Validation.check(collection);
+
+    if (collection.isEmpty()) {
+      throw new IllegalArgumentException("");
+    }
+  }
+
+  /**
+   *
+   */
   private Validation() {
-    throw new Error("The utility object should not be initialized.");
+    throw new ObjectInitializationError();
   }
 }

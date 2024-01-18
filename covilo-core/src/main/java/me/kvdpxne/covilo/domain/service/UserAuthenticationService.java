@@ -17,7 +17,7 @@ import me.kvdpxne.covilo.domain.model.Role;
 import me.kvdpxne.covilo.domain.model.Token;
 import me.kvdpxne.covilo.domain.model.TokenType;
 import me.kvdpxne.covilo.domain.model.User;
-import me.kvdpxne.covilo.domain.persistence.ITokenRepository;
+import me.kvdpxne.covilo.domain.persistence.TokenRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
@@ -33,7 +33,7 @@ public final class UserAuthenticationService
   private final UserServicePort userLifecycleUseCase;
   private final ITokenService tokenLifecycleUserCase;
   //
-  private final ITokenRepository tokenRepository;
+  private final TokenRepository tokenRepository;
 
   private final AuthenticationManager authenticationManager;
 

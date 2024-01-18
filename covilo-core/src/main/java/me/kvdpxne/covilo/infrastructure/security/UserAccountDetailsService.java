@@ -2,7 +2,7 @@ package me.kvdpxne.covilo.infrastructure.security;
 
 import lombok.RequiredArgsConstructor;
 import me.kvdpxne.covilo.domain.model.User;
-import me.kvdpxne.covilo.domain.persistence.IUserRepository;
+import me.kvdpxne.covilo.domain.persistence.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public final class UserAccountDetailsService implements UserDetailsService {
 
-  private final IUserRepository userRepository;
+  private final UserRepository userRepository;
 
   @Override
   public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {

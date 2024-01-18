@@ -29,4 +29,9 @@ public interface UserMeServicePort {
     final String confirmedPassword,
     final String currentPassword
   );
+
+  void deleteMe(
+    final User me,
+    final String currentPassword
+  );
 }

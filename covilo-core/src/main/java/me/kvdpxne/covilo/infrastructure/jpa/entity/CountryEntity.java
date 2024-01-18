@@ -7,6 +7,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.LinkedHashSet;
@@ -17,7 +19,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import me.kvdpxne.covilo.domain.model.AdministrativeDivisionType;
 import me.kvdpxne.covilo.domain.model.Continent;
 
 @AllArgsConstructor
@@ -37,9 +38,10 @@ public final class CountryEntity {
   @Column(name = "name", nullable = false, unique = true)
   private String name;
 
-  @Enumerated(EnumType.STRING)
-  @Column(name = "administrative_division")
-  private AdministrativeDivisionType administrativeDivision;
+  @ToString.Exclude
+  @ManyToOne
+  @JoinColumn(name = "administrative_division_identifier")
+  private AdministrativeDivisionEntity administrativeDivision;
 
   @Enumerated(EnumType.STRING)
   @Column(name = "continent", nullable = false)

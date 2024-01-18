@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
+import me.kvdpxne.covilo.common.constants.Endpoints;
 import me.kvdpxne.covilo.domain.port.out.UserAuthenticationServicePort;
 import me.kvdpxne.covilo.application.dto.TokenDto;
 import me.kvdpxne.covilo.common.exceptions.UserInvalidEmailAddressException;
@@ -28,7 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-@RequestMapping(Constants.PATH)
+@RequestMapping(path = Endpoints.USER_AUTHENTICATION)
 @RestController
 public final class UserAuthenticationController {
 

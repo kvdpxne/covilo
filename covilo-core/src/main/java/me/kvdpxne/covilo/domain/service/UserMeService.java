@@ -74,4 +74,13 @@ public final class UserMeService
 
     this.userServicePort.updateUserPassword(me, newPassword);
   }
+
+  @Override
+  public void deleteMe(
+    final User me,
+    final String currentPassword
+  ) {
+    this.checkPassword(me, currentPassword);
+    this.userServicePort.deleteUser(me);
+  }
 }

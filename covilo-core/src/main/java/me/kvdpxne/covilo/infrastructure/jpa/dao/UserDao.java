@@ -6,20 +6,20 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.kvdpxne.covilo.domain.model.User;
-import me.kvdpxne.covilo.domain.persistence.IUserRepository;
+import me.kvdpxne.covilo.domain.persistence.UserRepository;
 import me.kvdpxne.covilo.infrastructure.jpa.entity.UserEntity;
-import me.kvdpxne.covilo.infrastructure.jpa.mapper.IUserPersistenceMapper;
-import me.kvdpxne.covilo.infrastructure.jpa.repository.IUserJpaRepository;
+import me.kvdpxne.covilo.infrastructure.jpa.mapper.UserPersistenceMapper;
+import me.kvdpxne.covilo.infrastructure.jpa.repository.JpaUserRepository;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @RequiredArgsConstructor
 @Component
 public final class UserDao
-  implements IUserRepository {
+  implements UserRepository {
 
-  private final IUserJpaRepository repository;
-  private final IUserPersistenceMapper mapper;
+  private final JpaUserRepository repository;
+  private final UserPersistenceMapper mapper;
 
   private User toUserOrNull(final Optional<UserEntity> source) {
     return source.map(this.mapper::toUser).orElse(null);

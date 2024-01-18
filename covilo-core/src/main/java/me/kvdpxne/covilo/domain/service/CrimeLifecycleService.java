@@ -9,13 +9,13 @@ import me.kvdpxne.covilo.application.ICrimeLifecycleService;
 import me.kvdpxne.covilo.common.exceptions.CrimeAlreadyExistsException;
 import me.kvdpxne.covilo.common.exceptions.CrimeNotFoundException;
 import me.kvdpxne.covilo.domain.model.Crime;
-import me.kvdpxne.covilo.domain.persistence.ICrimeRepository;
+import me.kvdpxne.covilo.domain.persistence.CrimeRepository;
 
 @Slf4j
 @RequiredArgsConstructor
 public class CrimeLifecycleService implements ICrimeLifecycleService {
 
-  private final ICrimeRepository crimeRepository;
+  private final CrimeRepository crimeRepository;
 
   @Override
   public Crime getCrimeByIdentifier(final UUID identifier) throws CrimeNotFoundException {

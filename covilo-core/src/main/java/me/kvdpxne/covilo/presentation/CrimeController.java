@@ -13,7 +13,7 @@ import me.kvdpxne.covilo.application.payload.ReportCrimeRequest;
 import me.kvdpxne.covilo.domain.aggregation.Book;
 import me.kvdpxne.covilo.domain.aggregation.BookAttributes;
 import me.kvdpxne.covilo.domain.model.Crime;
-import me.kvdpxne.covilo.domain.persistence.ICrimeRepository;
+import me.kvdpxne.covilo.domain.persistence.CrimeRepository;
 import org.springdoc.core.converters.models.PageableAsQueryParam;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class CrimeController {
 
-  private final ICrimeRepository crimeRepository;
+  private final CrimeRepository crimeRepository;
   private final ICrimeLifecycleService crimeLifecycleService;
   private final ICrimeMapper crimeMapper;
 

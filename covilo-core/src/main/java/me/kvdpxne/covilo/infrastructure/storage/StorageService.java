@@ -13,4 +13,6 @@ public interface StorageService {
   Resource loadAsResource(final String fileName) throws StorageFileNotFoundException;
 
   byte[] loadAsByteArray(final String fileName) throws StorageFileNotFoundException;
+
+  void deleteUserAvatar(final String identity);
 }

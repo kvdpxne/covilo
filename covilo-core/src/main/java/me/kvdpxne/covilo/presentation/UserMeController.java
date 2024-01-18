@@ -4,8 +4,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import me.kvdpxne.covilo.application.dto.UserDto;
 import me.kvdpxne.covilo.application.mapper.IUserMapper;
+import me.kvdpxne.covilo.application.payload.DeleteUserMeRequest;
 import me.kvdpxne.covilo.application.payload.UpdateUserMeEmailRequest;
 import me.kvdpxne.covilo.application.payload.UpdateUserMePasswordRequest;
+import me.kvdpxne.covilo.common.constants.Endpoints;
 import me.kvdpxne.covilo.domain.port.out.UserMeServicePort;
 import me.kvdpxne.covilo.infrastructure.image.ImageConverterService;
 import me.kvdpxne.covilo.infrastructure.image.ImageMimeTypeNotAvailableException;
@@ -29,7 +31,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-@RequestMapping(path = "api/0.1.0/user/me")
+@RequestMapping(
+  path = Endpoints.USER_ME
+)
 @RestController
 public final class UserMeController {
 
@@ -58,7 +62,7 @@ public final class UserMeController {
    * Updates the email address of the currently authenticated user.
    */
   @PutMapping("email")
-  public void updateEmail(
+  public void updateUserMeEmail(
     @AuthenticationPrincipal
     final UserAccountDetails principal,
     @RequestBody
@@ -75,7 +79,7 @@ public final class UserMeController {
    * Updates the password of the currently authenticated user.
    */
   @PutMapping("password")
-  public void updatePassword(
+  public void updateUserMePassword(
     @AuthenticationPrincipal
     final UserAccountDetails principal,
     @RequestBody
@@ -122,11 +126,28 @@ public final class UserMeController {
     }
   }
 
-  @DeleteMapping("avatar")
+  @DeleteMapping(
+    path = "avatar"
+  )
   public void deleteAvatar(
     @AuthenticationPrincipal
     final UserAccountDetails principal
   ) {
+    this.storageService.deleteUserAvatar(
+      principal.getUsername()
+    );
+  }
 
+  @DeleteMapping
+  public void deleteUserMe(
+    @AuthenticationPrincipal
+    final UserAccountDetails principal,
+    @RequestBody
+    final DeleteUserMeRequest request
+  ) {
+    this.userMeServicePort.deleteMe(
+      principal.user(),
+      request.currentPassword()
+    );
   }
 }

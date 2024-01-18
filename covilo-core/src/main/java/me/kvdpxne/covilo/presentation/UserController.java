@@ -6,8 +6,10 @@ import me.kvdpxne.covilo.application.dto.UserDto;
 import me.kvdpxne.covilo.application.mapper.IUserMapper;
 import me.kvdpxne.covilo.application.payload.UpdateUserEmailRequest;
 import me.kvdpxne.covilo.application.payload.UpdateUserPasswordRequest;
+import me.kvdpxne.covilo.common.constants.Endpoints;
 import me.kvdpxne.covilo.common.exceptions.UserNotFoundException;
 import me.kvdpxne.covilo.domain.port.out.UserServicePort;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,8 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequiredArgsConstructor
-@RequestMapping(path = "api/0.1.0/user")
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
+@RequestMapping(path = Endpoints.USER)
 @RestController
 public final class UserController {
 

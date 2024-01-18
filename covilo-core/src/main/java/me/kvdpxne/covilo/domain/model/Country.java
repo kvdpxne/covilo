@@ -7,7 +7,6 @@ import lombok.Builder;
 public record Country(
   UUID identifier,
   String name,
-  AdministrativeDivisionType administrativeDivision,
+  AdministrativeDivision administrativeDivision,
   Continent continent
-) {
-}
+) {}

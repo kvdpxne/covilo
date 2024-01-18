@@ -1,31 +1,41 @@
 package me.kvdpxne.covilo.infrastructure.jpa.dao;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import me.kvdpxne.covilo.domain.aggregation.Book;
 import me.kvdpxne.covilo.domain.aggregation.BookAttributes;
 import me.kvdpxne.covilo.domain.model.Country;
-import me.kvdpxne.covilo.domain.persistence.ICountryRepository;
+import me.kvdpxne.covilo.domain.persistence.CountryRepository;
 import me.kvdpxne.covilo.infrastructure.jpa.entity.CountryEntity;
-import me.kvdpxne.covilo.infrastructure.jpa.mapper.ICountryPersistenceMapper;
-import me.kvdpxne.covilo.infrastructure.jpa.repository.ICountryJpaRepository;
+import me.kvdpxne.covilo.infrastructure.jpa.mapper.CountryPersistenceMapper;
+import me.kvdpxne.covilo.infrastructure.jpa.repository.JpaCountryRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
-public final class CountryDao implements ICountryRepository {
+public final class CountryDao implements CountryRepository {
 
-  private final ICountryJpaRepository repository;
-  private final ICountryPersistenceMapper mapper;
+  private final JpaCountryRepository repository;
+  private final CountryPersistenceMapper mapper;
 
   private Country toCountryOrNull(final Optional<CountryEntity> source) {
     return source.map(this.mapper::toCountry).orElse(null);
   }
 
   @Override
-  public Book<Country> findCountries(final BookAttributes attributes) {
+  public List<Country> getAll() {
+    return this.repository.findAll()
+      .stream()
+      .map(this.mapper::toCountry)
+      .toList();
+  }
+
+  @Override
+  public Book<Country> getAll(final BookAttributes attributes) {
     return Book.boxed(attributes, box ->
       this.repository.findAll(
           PageRequest.of(attributes.page(), attributes.size())

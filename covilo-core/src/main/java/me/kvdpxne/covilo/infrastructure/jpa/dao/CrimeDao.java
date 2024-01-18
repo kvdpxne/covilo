@@ -5,18 +5,18 @@ import lombok.RequiredArgsConstructor;
 import me.kvdpxne.covilo.domain.aggregation.Book;
 import me.kvdpxne.covilo.domain.aggregation.BookAttributes;
 import me.kvdpxne.covilo.domain.model.Crime;
-import me.kvdpxne.covilo.domain.persistence.ICrimeRepository;
-import me.kvdpxne.covilo.infrastructure.jpa.mapper.ICrimePersistenceMapper;
-import me.kvdpxne.covilo.infrastructure.jpa.repository.ICrimeJpaRepository;
+import me.kvdpxne.covilo.domain.persistence.CrimeRepository;
+import me.kvdpxne.covilo.infrastructure.jpa.mapper.CrimePersistenceMapper;
+import me.kvdpxne.covilo.infrastructure.jpa.repository.JpaCrimeRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
-public final class CrimeDao implements ICrimeRepository {
+public final class CrimeDao implements CrimeRepository {
 
-  private final ICrimeJpaRepository repository;
-  private final ICrimePersistenceMapper mapper;
+  private final JpaCrimeRepository repository;
+  private final CrimePersistenceMapper mapper;
 
   @Override
   public Book<Crime> findCrimes(final BookAttributes attributes) {

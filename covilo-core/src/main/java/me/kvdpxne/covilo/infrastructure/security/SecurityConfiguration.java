@@ -1,6 +1,7 @@
 package me.kvdpxne.covilo.infrastructure.security;
 
 import lombok.RequiredArgsConstructor;
+import me.kvdpxne.covilo.common.constants.Endpoints;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.WebProperties;
 import org.springframework.context.annotation.Bean;
@@ -50,7 +51,11 @@ public class SecurityConfiguration {
           "/api/0.1.0/search/**",
           "/api/0.1.0/crimes/**",
           "/api/0.1.0/crime/**",
-          "/api/0.1.0/auth/**",
+
+          STR."\{Endpoints.CRIME}/**",
+
+          STR."\{Endpoints.USER}/**",
+          STR."\{Endpoints.USER_AUTHENTICATION}/**",
 
           "/v2/api-docs",
           "/v3/api-docs",
@@ -65,12 +70,12 @@ public class SecurityConfiguration {
         ).permitAll();
 
         configurer.requestMatchers(
-          "/api/0.1.0/me/**"
+          STR."\{Endpoints.USER_ME}/**"
         ).authenticated();
 
         // Denies access to all other URLs not defined above for all users
         // regardless of role or permission.
-        configurer.anyRequest().permitAll();
+        configurer.anyRequest().denyAll();
       })
       .exceptionHandling(configurer -> {
         // TODO more advanced error handling

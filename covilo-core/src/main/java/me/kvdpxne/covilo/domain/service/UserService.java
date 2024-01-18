@@ -8,7 +8,7 @@ import me.kvdpxne.covilo.domain.port.out.UserValidatorPort;
 import me.kvdpxne.covilo.common.exceptions.UserAlreadyExistsException;
 import me.kvdpxne.covilo.common.exceptions.UserNotFoundException;
 import me.kvdpxne.covilo.domain.model.User;
-import me.kvdpxne.covilo.domain.persistence.IUserRepository;
+import me.kvdpxne.covilo.domain.persistence.UserRepository;
 import me.kvdpxne.covilo.domain.port.out.UserPasswordEncodePort;
 import me.kvdpxne.covilo.shared.Validation;
 
@@ -20,7 +20,7 @@ import me.kvdpxne.covilo.shared.Validation;
 public final class UserService
   implements UserServicePort {
 
-  private final IUserRepository userRepository;
+  private final UserRepository userRepository;
   private final UserPasswordEncodePort userPasswordEncodePort;
 
   /**

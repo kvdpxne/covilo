@@ -1,7 +1,7 @@
 package me.kvdpxne.covilo.application.mapper;
 
 import me.kvdpxne.covilo.application.dto.ProvinceDto;
-import me.kvdpxne.covilo.domain.model.Province;
+import me.kvdpxne.covilo.domain.model.Region;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 
@@ -11,7 +11,7 @@ import org.mapstruct.MappingConstants;
 )
 public interface IProvinceMapper {
 
-  ProvinceDto toProvinceDto(final Province source);
+  ProvinceDto toProvinceDto(final Region source);
 
-  Province toProvince(final ProvinceDto source);
+  Region toProvince(final ProvinceDto source);
 }

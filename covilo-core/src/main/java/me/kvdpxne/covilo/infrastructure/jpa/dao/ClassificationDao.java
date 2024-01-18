@@ -4,18 +4,18 @@ import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import me.kvdpxne.covilo.domain.model.Classification;
-import me.kvdpxne.covilo.domain.persistence.IClassificationRepository;
+import me.kvdpxne.covilo.domain.persistence.ClassificationRepository;
 import me.kvdpxne.covilo.infrastructure.jpa.entity.ClassificationEntity;
-import me.kvdpxne.covilo.infrastructure.jpa.mapper.IClassificationPersistenceMapper;
-import me.kvdpxne.covilo.infrastructure.jpa.repository.IClassificationJpaRepository;
+import me.kvdpxne.covilo.infrastructure.jpa.mapper.ClassificationPersistenceMapper;
+import me.kvdpxne.covilo.infrastructure.jpa.repository.JpaClassificationRepository;
 import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
-public final class ClassificationDao implements IClassificationRepository {
+public final class ClassificationDao implements ClassificationRepository {
 
-  private final IClassificationJpaRepository classificationDao;
-  private final IClassificationPersistenceMapper classificationPersistenceMapper;
+  private final JpaClassificationRepository classificationDao;
+  private final ClassificationPersistenceMapper classificationPersistenceMapper;
 
   private Classification toClassificationOrNull(final Optional<ClassificationEntity> source) {
     return source.map(this.classificationPersistenceMapper::toClassification).orElse(null);

@@ -8,5 +8,4 @@ public record Category(
   UUID identifier,
   String name,
   Classification classification
-) {
-}
+) {}

@@ -6,21 +6,21 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import me.kvdpxne.covilo.domain.model.Token;
 import me.kvdpxne.covilo.domain.model.User;
-import me.kvdpxne.covilo.domain.persistence.ITokenRepository;
+import me.kvdpxne.covilo.domain.persistence.TokenRepository;
 import me.kvdpxne.covilo.infrastructure.jpa.entity.TokenEntity;
-import me.kvdpxne.covilo.infrastructure.jpa.mapper.ITokenPersistenceMapper;
-import me.kvdpxne.covilo.infrastructure.jpa.mapper.IUserPersistenceMapper;
-import me.kvdpxne.covilo.infrastructure.jpa.repository.ITokenJpaRepository;
+import me.kvdpxne.covilo.infrastructure.jpa.mapper.TokenPersistenceMapper;
+import me.kvdpxne.covilo.infrastructure.jpa.mapper.UserPersistenceMapper;
+import me.kvdpxne.covilo.infrastructure.jpa.repository.JpaTokenRepository;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public final class TokenDao implements ITokenRepository {
+public final class TokenDao implements TokenRepository {
 
-  private final ITokenJpaRepository repository;
-  private final ITokenPersistenceMapper mapper;
+  private final JpaTokenRepository repository;
+  private final TokenPersistenceMapper mapper;
 
-  private final IUserPersistenceMapper userMapper;
+  private final UserPersistenceMapper userMapper;
 
   /**
    *

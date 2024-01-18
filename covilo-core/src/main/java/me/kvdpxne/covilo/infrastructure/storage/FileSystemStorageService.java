@@ -181,4 +181,9 @@ public final class FileSystemStorageService
       throw new RuntimeException(e);
     }
   }
+
+  @Override
+  public void deleteUserAvatar(final String identity) {
+
+  }
 }
