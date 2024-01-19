@@ -1,5 +1,6 @@
 package me.kvdpxne.covilo.application.mapper;
 
+import me.kvdpxne.covilo.application.PresentationMapper;
 import me.kvdpxne.covilo.application.payload.ReportCrimeRequest;
 import me.kvdpxne.covilo.application.dto.CrimeDto;
 import me.kvdpxne.covilo.domain.model.Crime;
@@ -8,18 +9,17 @@ import org.mapstruct.MappingConstants;
 
 @Mapper(
   uses = {
-    ICategoryMapper.class,
+    CategoryMapper.class,
     CityMapper.class,
-    IUserMapper.class
+    UserMapper.class
   },
   componentModel = MappingConstants.ComponentModel.SPRING,
   implementationName = "CrimeMapperImpl"
 )
-public interface ICrimeMapper {
+public interface CrimeMapper
+  extends PresentationMapper<Crime, CrimeDto> {
 
-  CrimeDto toCrimeDto(final Crime source);
-
-  Crime toCrime(final CrimeDto source);
-
-  Crime toCrime(final ReportCrimeRequest request);
+  Crime toDomain(
+    final ReportCrimeRequest request
+  );
 }

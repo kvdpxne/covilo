@@ -13,7 +13,7 @@ import me.kvdpxne.covilo.common.exceptions.UserInvalidPasswordException;
 import me.kvdpxne.covilo.common.exceptions.TokenException;
 import me.kvdpxne.covilo.common.exceptions.UserAlreadyExistsException;
 import me.kvdpxne.covilo.common.exceptions.UserNotFoundException;
-import me.kvdpxne.covilo.application.mapper.ITokenMapper;
+import me.kvdpxne.covilo.application.mapper.TokenMapper;
 import me.kvdpxne.covilo.application.payload.LoginRequest;
 import me.kvdpxne.covilo.application.payload.SignupRequest;
 import me.kvdpxne.covilo.domain.model.Token;
@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 public final class UserAuthenticationController {
 
   private final UserAuthenticationServicePort userAuthenticationService;
-  private final ITokenMapper tokenMapper;
+  private final TokenMapper tokenMapper;
 
   @PostMapping("/register")
   public ResponseEntity<TokenDto> signup(

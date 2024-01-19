@@ -8,6 +8,7 @@ import me.kvdpxne.covilo.infrastructure.jpa.entity.TokenEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+@Deprecated
 @Repository
 public interface JpaTokenRepository
   extends JpaRepositoryViaIdentifier<TokenEntity> {

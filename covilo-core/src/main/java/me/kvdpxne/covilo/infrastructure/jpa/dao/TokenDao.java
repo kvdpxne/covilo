@@ -13,6 +13,7 @@ import me.kvdpxne.covilo.infrastructure.jpa.mapper.UserPersistenceMapper;
 import me.kvdpxne.covilo.infrastructure.jpa.repository.JpaTokenRepository;
 import org.springframework.stereotype.Component;
 
+@Deprecated
 @Component
 @RequiredArgsConstructor
 public final class TokenDao implements TokenRepository {
@@ -26,27 +27,27 @@ public final class TokenDao implements TokenRepository {
    *
    */
   private Token toTokenOrNull(final Optional<TokenEntity> source) {
-    return source.map(this.mapper::toToken).orElse(null);
+    return source.map(this.mapper::toDomain).orElse(null);
   }
 
   @Override
   public Collection<Token> findValidTokensByUserIdentifier(final UUID identifier) {
     return this.repository.findAllValidTokenByUser(identifier)
       .stream()
-      .map(this.mapper::toToken)
+      .map(this.mapper::toDomain)
       .toList();
   }
 
   @Override
   public Optional<Token> findTokenByUserIdentifier(final UUID identifier) {
     return this.repository.findTokenByUser_Identifier(identifier)
-      .map(this.mapper::toToken);
+      .map(this.mapper::toDomain);
   }
 
   @Override
   public User findUserByCompactTokenOrNull(final String compactToken) {
     return this.repository.findTokenByCompactToken(compactToken)
-      .map(token -> this.userMapper.toUser(token.getUser()))
+      .map(token -> this.userMapper.toDomain(token.getUser()))
       .orElse(null);
   }
 
@@ -59,14 +60,14 @@ public final class TokenDao implements TokenRepository {
   @Override
   public Optional<Token> findTokenByCompactToken(final String token) {
     return this.repository.findTokenByCompactToken(token)
-      .map(this.mapper::toToken);
+      .map(this.mapper::toDomain);
   }
 
   @Override
   public Token insertToken(final Token token) {
-    var entity = this.mapper.toTokenEntity(token);
+    var entity = this.mapper.toDao(token);
     entity = this.repository.save(entity);
-    return this.mapper.toToken(entity);
+    return this.mapper.toDomain(entity);
   }
 
   @Override

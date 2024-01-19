@@ -22,7 +22,7 @@ public final class RegionDao implements RegionRepository {
   private final RegionPersistenceMapper mapper;
 
   private Region toProvinceOrNull(final Optional<RegionEntity> source) {
-    return source.map(this.mapper::toProvince).orElse(null);
+    return source.map(this.mapper::toDomain).orElse(null);
   }
 
   @Override
@@ -33,7 +33,7 @@ public final class RegionDao implements RegionRepository {
             ? Pageable.unpaged()
             : PageRequest.of(attributes.page(), attributes.size())
         )
-        .map(this.mapper::toProvince)
+        .map(this.mapper::toDomain)
         .forEach(box::put)
     );
   }
@@ -45,7 +45,7 @@ public final class RegionDao implements RegionRepository {
           identifier,
           PageRequest.of(attributes.page(), attributes.size())
         )
-        .map(this.mapper::toProvince)
+        .map(this.mapper::toDomain)
         .forEach(box::put));
   }
 

@@ -7,6 +7,7 @@ import me.kvdpxne.covilo.infrastructure.jpa.JpaRepositoryViaIdentifier;
 import me.kvdpxne.covilo.infrastructure.jpa.entity.UserEntity;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,7 +37,7 @@ public interface JpaUserRepository
 
   @Transactional
   @Modifying
-  @Query("update UserEntity u set u.password = ?1, u.lastModifiedDate = ?2 where u.identifier = ?3")
+  @Query(" update UserEntity u set u.password = ?2, u.lastModifiedDate = ?3 where u.identifier = ?1")
   int updatePasswordByIdentifier(
     final UUID identifier,
     final String password,

@@ -2,7 +2,8 @@ import {Injectable} from "@angular/core";
 import {ApiHttpClientService} from "../../shared";
 import {Observable} from "rxjs";
 import {User} from "../model/user";
-import {ChangePasswordRequest} from "../playload/change-password-request";
+import {UserMeChangePasswordRequest} from "../playload/user-me-change-password-request";
+import {UserMeChangeEmailRequest} from "../playload/user-me-change-email-request";
 
 @Injectable({
   providedIn: "root"
@@ -22,10 +23,16 @@ export class UserService {
     return this.httpClientService.get<User>("me");
   }
 
-  public updatePassword(
-    request: ChangePasswordRequest
+  public updateEmail(
+    request: UserMeChangeEmailRequest
   ): Observable<void> {
-    return this.httpClientService.put<void>("me/password", request)
+    return this.httpClientService.put<void>("me/email", request);
+  }
+
+  public updatePassword(
+    request: UserMeChangePasswordRequest
+  ): Observable<void> {
+    return this.httpClientService.put<void>("me/password", request);
   }
 
   public uploadAvatar(file: FormData): Observable<void> {

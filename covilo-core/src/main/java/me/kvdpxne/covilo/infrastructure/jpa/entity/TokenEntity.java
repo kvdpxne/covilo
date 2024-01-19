@@ -19,6 +19,7 @@ import lombok.Setter;
 import lombok.ToString;
 import me.kvdpxne.covilo.domain.model.TokenType;
 
+@Deprecated
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

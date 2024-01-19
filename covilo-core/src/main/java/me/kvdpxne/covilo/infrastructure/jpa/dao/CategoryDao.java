@@ -24,7 +24,7 @@ public final class CategoryDao
   public List<Category> getAll() {
     return this.jpa.findAll()
       .stream()
-      .map(this.mapper::toCategory)
+      .map(this.mapper::toDomain)
       .toList();
   }
 
@@ -34,7 +34,7 @@ public final class CategoryDao
   ) {
     Validation.check(identifier);
     return this.jpa.findById(identifier)
-      .map(this.mapper::toCategory);
+      .map(this.mapper::toDomain);
   }
 
   @Override
@@ -43,7 +43,7 @@ public final class CategoryDao
   ) {
     Validation.empty(name);
     return this.jpa.findByName(name)
-      .map(this.mapper::toCategory);
+      .map(this.mapper::toDomain);
   }
 
   @Override
@@ -52,7 +52,7 @@ public final class CategoryDao
   ) {
     Validation.empty(categories);
     categories.stream()
-      .map(this.mapper::toCategoryEntity)
+      .map(this.mapper::toDao)
       .forEach(this.jpa::save);
   }
 

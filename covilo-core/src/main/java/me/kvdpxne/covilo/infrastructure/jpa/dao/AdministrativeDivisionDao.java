@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.function.Consumer;
 import lombok.RequiredArgsConstructor;
 import me.kvdpxne.covilo.shared.Book;
 import me.kvdpxne.covilo.shared.BookAttributes;
@@ -28,7 +27,7 @@ public final class AdministrativeDivisionDao
   public List<AdministrativeDivision> getAll() {
     return this.jpa.findAll()
       .stream()
-      .map(this.mapper::toAdministrativeDivision)
+      .map(this.mapper::toDomain)
       .toList();
   }
 
@@ -40,7 +39,7 @@ public final class AdministrativeDivisionDao
       final Pageable request = BookcaseRequestPage.request(attributes);
 
       this.jpa.findAll(request)
-        .map(this.mapper::toAdministrativeDivision)
+        .map(this.mapper::toDomain)
         .forEach(it::put);
     });
   }
@@ -50,7 +49,7 @@ public final class AdministrativeDivisionDao
     final UUID identifier
   ) {
     return this.jpa.findById(identifier)
-      .map(this.mapper::toAdministrativeDivision);
+      .map(this.mapper::toDomain);
   }
 
   @Override
@@ -58,7 +57,7 @@ public final class AdministrativeDivisionDao
     final String name
   ) {
     return this.jpa.findByName(name)
-      .map(this.mapper::toAdministrativeDivision);
+      .map(this.mapper::toDomain);
   }
 
   @Override
@@ -66,7 +65,7 @@ public final class AdministrativeDivisionDao
     final Collection<AdministrativeDivision> administrativeDivisions
   ) {
     administrativeDivisions.stream()
-      .map(this.mapper::toAdministrativeDivisionEntity)
+      .map(this.mapper::toDao)
       .forEach(this.jpa::save);
   }
 

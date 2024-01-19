@@ -22,14 +22,14 @@ public final class CountryDao implements CountryRepository {
   private final CountryPersistenceMapper mapper;
 
   private Country toCountryOrNull(final Optional<CountryEntity> source) {
-    return source.map(this.mapper::toCountry).orElse(null);
+    return source.map(this.mapper::toDomain).orElse(null);
   }
 
   @Override
   public List<Country> getAll() {
     return this.jpa.findAll()
       .stream()
-      .map(this.mapper::toCountry)
+      .map(this.mapper::toDomain)
       .toList();
   }
 
@@ -39,7 +39,7 @@ public final class CountryDao implements CountryRepository {
       this.jpa.findAll(
           PageRequest.of(attributes.page(), attributes.size())
         )
-        .map(this.mapper::toCountry)
+        .map(this.mapper::toDomain)
         .forEach(box::put)
     );
   }
@@ -58,9 +58,9 @@ public final class CountryDao implements CountryRepository {
 
   @Override
   public Country insertCountry(final Country country) {
-    return this.mapper.toCountry(
+    return this.mapper.toDomain(
       this.jpa.save(
-        this.mapper.toCountryEntity(country)
+        this.mapper.toDao(country)
       )
     );
   }

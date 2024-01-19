@@ -3,7 +3,7 @@ package me.kvdpxne.covilo.presentation;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import me.kvdpxne.covilo.application.dto.UserDto;
-import me.kvdpxne.covilo.application.mapper.IUserMapper;
+import me.kvdpxne.covilo.application.mapper.UserMapper;
 import me.kvdpxne.covilo.application.payload.UpdateUserEmailRequest;
 import me.kvdpxne.covilo.application.payload.UpdateUserPasswordRequest;
 import me.kvdpxne.covilo.common.constants.Endpoints;
@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 public final class UserController {
 
   private final UserServicePort userServicePort;
-  private final IUserMapper userMapper;
+  private final UserMapper userMapper;
 
   @GetMapping(
     path = "{identifier}"
@@ -35,7 +35,7 @@ public final class UserController {
     @PathVariable
     final UUID identifier
   ) {
-    return this.userMapper.toUserDto(
+    return this.userMapper.toDto(
       this.userServicePort.getUserByIdentifier(identifier)
     );
   }

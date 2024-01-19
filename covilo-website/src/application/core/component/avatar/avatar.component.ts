@@ -25,7 +25,7 @@ export class AvatarComponent
   }
 
   public logout(): void {
-    this.authenticationService.logout(true).subscribe();
+    this.authenticationService.logout(true);
   }
 
   public ngOnInit(): void {

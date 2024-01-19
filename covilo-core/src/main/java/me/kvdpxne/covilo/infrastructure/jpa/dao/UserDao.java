@@ -22,7 +22,7 @@ public final class UserDao
   private final UserPersistenceMapper mapper;
 
   private User toUserOrNull(final Optional<UserEntity> source) {
-    return source.map(this.mapper::toUser).orElse(null);
+    return source.map(this.mapper::toDomain).orElse(null);
   }
 
   @Override
@@ -39,9 +39,9 @@ public final class UserDao
 
   @Override
   public User insert(final User user) {
-    var entity = this.mapper.toUserEntity(user);
+    var entity = this.mapper.toDao(user);
     entity = this.jpa.save(entity);
-    return this.mapper.toUser(entity);
+    return this.mapper.toDomain(entity);
   }
 
   @Override

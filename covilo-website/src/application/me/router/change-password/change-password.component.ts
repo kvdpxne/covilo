@@ -1,5 +1,5 @@
 import {Component} from "@angular/core";
-import {ChangePasswordRequest, UserService} from "../../../core";
+import {UserMeChangePasswordRequest, UserService} from "../../../core";
 import {FormBuilder, FormControl, FormGroup, NonNullableFormBuilder, Validators} from "@angular/forms";
 import {ChangePasswordForm} from "./change-password-form";
 
@@ -57,7 +57,7 @@ export class ChangePasswordComponent {
       return;
     }
 
-    const request: ChangePasswordRequest = {
+    const request: UserMeChangePasswordRequest = {
       currentPassword: currentPassword,
       newPassword: newPassword,
       confirmedPassword: confirmedPassword

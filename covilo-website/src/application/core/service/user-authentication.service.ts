@@ -1,21 +1,26 @@
 import {Inject, Injectable} from "@angular/core";
-import {Observable, of, tap} from "rxjs";
+import {finalize, Observable, of, tap} from "rxjs";
 
 import {ApiHttpClientService} from "../../shared";
 
 import {LoginRequest, SignupRequest, Token, User, UserLifecycleService, UserService} from "../index";
 import {AUTHENTICATION_STRATEGY, AuthenticationStrategy, TokenAuthenticationStrategy} from "../../authentication";
 
+/**
+ *
+ */
+const ROOT_PATH: string = "authentication";
+
 @Injectable({
   providedIn: "root"
 })
 export class UserAuthenticationService {
 
-  private readonly httpClientService: ApiHttpClientService;
-  private readonly authenticationStrategy: AuthenticationStrategy<any>;
+  private readonly httpClient: ApiHttpClientService;
+  private readonly userAuthenticationStrategy: AuthenticationStrategy<any>;
 
   private readonly userService: UserService;
-  private readonly userLifecycleService: UserLifecycleService;
+  private readonly userMeService: UserLifecycleService;
 
   constructor(
     httpClientService: ApiHttpClientService,
@@ -23,10 +28,10 @@ export class UserAuthenticationService {
     userService: UserService,
     userLifecycleService: UserLifecycleService
   ) {
-    this.httpClientService = httpClientService;
-    this.authenticationStrategy = authenticationStrategy;
+    this.httpClient = httpClientService;
+    this.userAuthenticationStrategy = authenticationStrategy;
     this.userService = userService;
-    this.userLifecycleService = userLifecycleService;
+    this.userMeService = userLifecycleService;
   }
 
   /**
@@ -35,7 +40,7 @@ export class UserAuthenticationService {
    */
   public cacheMe(): void {
     this.userService.me.subscribe((user: User): void => {
-      this.userLifecycleService.addUser(user);
+      this.userMeService.addUser(user);
     });
   }
 
@@ -44,9 +49,9 @@ export class UserAuthenticationService {
    */
   public signup(request: SignupRequest): Observable<Token> {
     const path: string = "authentication/register";
-    return this.httpClientService.post<Token>(path, request).pipe(
+    return this.httpClient.post<Token>(path, request).pipe(
       tap((token: Token): void => {
-        this.authenticationStrategy.doLogin(token);
+        this.userAuthenticationStrategy.doLogin(token);
         this.cacheMe();
       })
     );
@@ -57,16 +62,16 @@ export class UserAuthenticationService {
    */
   public login(request: LoginRequest): Observable<Token> {
     const path: string = "authentication/login";
-    return this.httpClientService.post<Token>(path, request).pipe(
+    return this.httpClient.post<Token>(path, request).pipe(
       tap((token: Token): void => {
-        this.authenticationStrategy.doLogin(token);
+        this.userAuthenticationStrategy.doLogin(token);
         this.cacheMe();
       })
     );
   }
 
   public isLogged(): Observable<boolean> {
-    return of(this.authenticationStrategy.isLogged());
+    return of(this.userAuthenticationStrategy.isLogged());
   }
 
   /**
@@ -75,25 +80,30 @@ export class UserAuthenticationService {
   public refreshToken(): Observable<Token> {
     const path: string = "authentication/refresh-token";
 
-    return this.httpClientService.post<Token>(path).pipe(
+    return this.httpClient.post<Token>(path).pipe(
       tap((token: Token): void => {
-        this.authenticationStrategy.doLogin(token);
+        this.userAuthenticationStrategy.doLogin(token);
         this.cacheMe();
       })
     );
   }
 
-  public logout(refresh: boolean = false): Observable<never> {
-    const path: string = "authentication/logout";
-    return this.httpClientService.post<never>(path).pipe(
-      tap((): void => {
-        this.authenticationStrategy.doLogout();
-        this.userLifecycleService.removeUser();
+  /**
+   * @param refresh Specifies whether the page should be reloaded after a
+   *                logout request is sent, by default, the page is not
+   *                reloaded after sending the request.
+   */
+  public logout(
+    refresh: boolean = false
+  ): void {
+    // Deletes the currently authenticated user's data from the browser's
+    // temporary memory and other user-related data stored in the browser
+    // necessary for the operation of some features.
+    this.userAuthenticationStrategy.doLogout();
+    this.userMeService.removeUser();
 
-        if (refresh) {
-          location.reload();
-        }
-      })
-    );
+    if (refresh) {
+      location.reload();
+    }
   }
 }

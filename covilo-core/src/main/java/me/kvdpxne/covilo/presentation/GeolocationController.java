@@ -7,7 +7,7 @@ import me.kvdpxne.covilo.application.dto.AdministrativeDivisionDto;
 import me.kvdpxne.covilo.application.dto.BookDto;
 import me.kvdpxne.covilo.application.dto.CityDto;
 import me.kvdpxne.covilo.application.dto.CountryDto;
-import me.kvdpxne.covilo.application.dto.ProvinceDto;
+import me.kvdpxne.covilo.application.dto.RegionDto;
 import me.kvdpxne.covilo.application.mapper.AdministrativeDivisionMapper;
 import me.kvdpxne.covilo.application.mapper.CityMapper;
 import me.kvdpxne.covilo.application.mapper.CountryMapper;
@@ -62,7 +62,7 @@ public class GeolocationController {
       this.administrativeDivisionRepository.getAll(new BookAttributes(page, size))
         .getContent()
         .stream()
-        .map(this.administrativeDivisionMapper::toAdministrativeDivisionDto)
+        .map(this.administrativeDivisionMapper::toDto)
         .toArray(AdministrativeDivisionDto[]::new),
       page,
       size
@@ -84,7 +84,7 @@ public class GeolocationController {
       this.countryRepository.getAll(new BookAttributes(page, size))
         .getContent()
         .stream()
-        .map(this.countryMapper::toCountryDto)
+        .map(this.countryMapper::toDto)
         .toArray(CountryDto[]::new),
       page,
       size
@@ -93,7 +93,7 @@ public class GeolocationController {
 
   @PageableAsQueryParam
   @GetMapping("regions")
-  public BookDto<ProvinceDto> getRegions(
+  public BookDto<RegionDto> getRegions(
     @RequestParam(name = "country", required = false)
     final UUID identifier,
     @Parameter(hidden = true)
@@ -116,8 +116,8 @@ public class GeolocationController {
 
     final var content = box.getContent()
       .stream()
-      .map(this.provinceMapper::toRegionDto)
-      .toArray(ProvinceDto[]::new);
+      .map(this.provinceMapper::toDto)
+      .toArray(RegionDto[]::new);
 
     return new BookDto<>(content, page, content.length);
 
@@ -144,7 +144,7 @@ public class GeolocationController {
     return ResponseEntity.ok(new BookDto<>(
       book.getContent()
         .stream()
-        .map(this.cityMapper::toCityDto)
+        .map(this.cityMapper::toDto)
         .toArray(CityDto[]::new),
       page,
       pageSize
@@ -160,7 +160,7 @@ public class GeolocationController {
       return ResponseEntity.notFound().build();
     }
     return ResponseEntity.ok(
-      this.cityMapper.toCityDto(result)
+      this.cityMapper.toDto(result)
     );
   }
 }

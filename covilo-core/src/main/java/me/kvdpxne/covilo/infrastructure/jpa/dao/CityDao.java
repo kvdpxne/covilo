@@ -21,7 +21,7 @@ public final class CityDao implements CityRepository {
   private final CityPersistenceMapper mapper;
 
   private City toCityOrNull(final Optional<CityEntity> source) {
-    return source.map(this.mapper::toCity).orElse(null);
+    return source.map(this.mapper::toDomain).orElse(null);
   }
 
   @Override
@@ -30,7 +30,7 @@ public final class CityDao implements CityRepository {
       this.jpa.findAll(
           PageRequest.of(attributes.page(), attributes.size())
         )
-        .map(this.mapper::toCity)
+        .map(this.mapper::toDomain)
         .forEach(book::put)
     );
   }
@@ -42,7 +42,7 @@ public final class CityDao implements CityRepository {
           identifier,
           PageRequest.of(attributes.page(), attributes.size())
         )
-        .map(this.mapper::toCity)
+        .map(this.mapper::toDomain)
         .forEach(book::put)
     );
   }

@@ -3,7 +3,7 @@ package me.kvdpxne.covilo.presentation;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import me.kvdpxne.covilo.application.dto.UserDto;
-import me.kvdpxne.covilo.application.mapper.IUserMapper;
+import me.kvdpxne.covilo.application.mapper.UserMapper;
 import me.kvdpxne.covilo.application.payload.DeleteUserMeRequest;
 import me.kvdpxne.covilo.application.payload.UpdateUserMeEmailRequest;
 import me.kvdpxne.covilo.application.payload.UpdateUserMePasswordRequest;
@@ -38,7 +38,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 public final class UserMeController {
 
-  private final IUserMapper userMapper;
+  private final UserMapper userMapper;
   private final StorageService storageService;
 
   private final ImageConverterService imageConverterService;
@@ -54,7 +54,7 @@ public final class UserMeController {
     @AuthenticationPrincipal
     final UserAccountDetails principal
   ) {
-    return this.userMapper.toUserDto(
+    return this.userMapper.toDto(
       principal.user()
     );
   }

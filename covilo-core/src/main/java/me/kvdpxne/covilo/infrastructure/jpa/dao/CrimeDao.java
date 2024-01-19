@@ -24,7 +24,7 @@ public final class CrimeDao implements CrimeRepository {
       this.jpa.findAll(
           PageRequest.of(attributes.page(), attributes.size())
         )
-        .map(this.mapper::toCrime)
+        .map(this.mapper::toDomain)
         .forEach(book::put)
     );
   }
@@ -36,21 +36,21 @@ public final class CrimeDao implements CrimeRepository {
           identifier,
           PageRequest.of(attributes.page(), attributes.size())
         )
-        .map(this.mapper::toCrime)
+        .map(this.mapper::toDomain)
         .forEach(book::put)
     );
   }
 
   @Override
   public Crime findCrimeByIdentifierOrNull(final UUID identifier) {
-    return this.jpa.findById(identifier).map(this.mapper::toCrime).orElse(null);
+    return this.jpa.findById(identifier).map(this.mapper::toDomain).orElse(null);
   }
 
   @Override
   public Crime insertCrime(final Crime crime) {
-    return this.mapper.toCrime(
+    return this.mapper.toDomain(
       this.jpa.save(
-        this.mapper.toCrimeEntity(crime)
+        this.mapper.toDao(crime)
       )
     );
   }

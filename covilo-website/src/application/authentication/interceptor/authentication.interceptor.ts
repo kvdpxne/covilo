@@ -52,9 +52,8 @@ export class AuthenticationInterceptor implements HttpInterceptor {
   }
 
   private handleForbiddenError(): void {
-    this.authenticationService.logout().subscribe((): void => {
-      this.navigationService.navigateToHomePage();
-    });
+    this.authenticationService.logout();
+    this.navigationService.navigateToHomePage();
   }
 
   private handleUnauthorizedError(

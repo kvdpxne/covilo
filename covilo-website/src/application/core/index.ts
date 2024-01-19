@@ -22,7 +22,7 @@ export * from "./model/token";
 export * from "./model/user";
 
 //
-export * from "./playload/change-password-request";
+export * from "./playload/user-me-change-password-request";
 export * from "./playload/delete-account-request";
 export * from "./playload/login-request";
 export * from "./playload/report-crime-request";

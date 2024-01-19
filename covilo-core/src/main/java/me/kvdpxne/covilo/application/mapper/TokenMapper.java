@@ -5,11 +5,12 @@ import me.kvdpxne.covilo.domain.model.Token;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 
+@Deprecated
 @Mapper(
   componentModel = MappingConstants.ComponentModel.SPRING,
   implementationName = "TokenMapperImpl"
 )
-public interface ITokenMapper {
+public interface TokenMapper {
 
   TokenDto toTokenDto(final Token source);
 }

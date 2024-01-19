@@ -8,7 +8,7 @@ import me.kvdpxne.covilo.application.dto.BookDto;
 import me.kvdpxne.covilo.application.dto.CrimeDto;
 import me.kvdpxne.covilo.common.exceptions.CrimeAlreadyExistsException;
 import me.kvdpxne.covilo.common.exceptions.CrimeNotFoundException;
-import me.kvdpxne.covilo.application.mapper.ICrimeMapper;
+import me.kvdpxne.covilo.application.mapper.CrimeMapper;
 import me.kvdpxne.covilo.application.payload.ReportCrimeRequest;
 import me.kvdpxne.covilo.shared.Book;
 import me.kvdpxne.covilo.shared.BookAttributes;
@@ -32,7 +32,7 @@ public class CrimeController {
 
   private final CrimeRepository crimeRepository;
   private final ICrimeLifecycleService crimeLifecycleService;
-  private final ICrimeMapper crimeMapper;
+  private final CrimeMapper crimeMapper;
 
   @PageableAsQueryParam
   @GetMapping("crimes")
@@ -51,7 +51,7 @@ public class CrimeController {
     return ResponseEntity.ok(new BookDto<>(
       book.getContent()
         .stream()
-        .map(this.crimeMapper::toCrimeDto)
+        .map(this.crimeMapper::toDto)
         .toArray(CrimeDto[]::new),
       page,
       pageSize
@@ -71,7 +71,7 @@ public class CrimeController {
     }
 
     return ResponseEntity.ok(
-      this.crimeMapper.toCrimeDto(crime)
+      this.crimeMapper.toDto(crime)
     );
   }
 
@@ -79,7 +79,7 @@ public class CrimeController {
   public ResponseEntity<CrimeDto> reportCrime(
     @RequestBody ReportCrimeRequest request
   ) {
-    Crime crime = this.crimeMapper.toCrime(request);
+    Crime crime = this.crimeMapper.toDomain(request);
 
     try {
       crime = this.crimeLifecycleService.createCrime(crime);
@@ -88,7 +88,7 @@ public class CrimeController {
     }
 
     return ResponseEntity.ok(
-      this.crimeMapper.toCrimeDto(crime)
+      this.crimeMapper.toDto(crime)
     );
   }
 }

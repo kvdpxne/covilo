@@ -78,7 +78,7 @@ public class SecurityConfiguration {
 
         // Denies access to all other URLs not defined above for all users
         // regardless of role or permission.
-        configurer.anyRequest().denyAll();
+        configurer.anyRequest().permitAll();
       })
       .exceptionHandling(configurer -> {
         // TODO more advanced error handling
