@@ -1,13 +1,13 @@
 import {Component, Input} from "@angular/core";
-import {SideNavigationComponent} from "../side-navigation/side-navigation.component";
+import {SideNavigationListComponent} from "../side-navigation-list/side-navigation-list.component";
 import {AvatarImageComponent} from "../../../shared";
 
 @Component({
-  selector: "our-side-navigation-bar",
+  selector: "our-me-side-navigation-bar",
   templateUrl: "./side-navigation-bar.component.html",
   standalone: true,
   imports: [
-    SideNavigationComponent,
+    SideNavigationListComponent,
     AvatarImageComponent
   ]
 })

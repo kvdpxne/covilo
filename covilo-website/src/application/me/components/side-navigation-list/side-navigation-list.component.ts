@@ -1,19 +1,19 @@
 import {Component} from "@angular/core";
 import {NgFor} from "@angular/common";
 import {TranslateModule} from "@ngx-translate/core";
-import {SideNavigationItemComponent} from "../side-navigation-item/side-navigation-item.component";
+import {SideNavigationListItemComponent} from "../side-navigation-list-item/side-navigation-list-item.component";
 
 @Component({
-  selector: "our-side-navigation",
-  templateUrl: "./side-navigation.component.html",
+  selector: "our-me-side-navigation-list",
+  templateUrl: "./side-navigation-list.component.html",
   standalone: true,
   imports: [
     NgFor,
     TranslateModule,
-    SideNavigationItemComponent
+    SideNavigationListItemComponent
   ]
 })
-export class SideNavigationComponent {
+export class SideNavigationListComponent {
 
   public readonly links = [{
     reference: "/me/overview",

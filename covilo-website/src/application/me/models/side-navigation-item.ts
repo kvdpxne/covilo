@@ -1,6 +1,7 @@
-import {BootstrapIcon} from "../../shared/types/bootstrap-icon";
+import {BootstrapIcon} from "../../shared";
 
-export interface SideNavigationItem extends BootstrapIcon {
+export interface SideNavigationItem
+  extends BootstrapIcon {
 
   reference: string;
   translatableNameKey: string;

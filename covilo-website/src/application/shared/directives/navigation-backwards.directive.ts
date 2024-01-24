@@ -5,7 +5,7 @@ import {NavigationService} from "../services/navigation.service";
   selector: "[navigationBack]",
   standalone: true
 })
-export class NavigationBackDirective {
+export class NavigationBackwardsDirective {
 
   private readonly navigationService: NavigationService;
 

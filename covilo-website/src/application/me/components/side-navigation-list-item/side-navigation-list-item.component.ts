@@ -6,17 +6,17 @@ import {TranslateModule} from "@ngx-translate/core";
 import {NgIf} from "@angular/common";
 
 @Component({
-  selector: "our-side-navigation-item",
+  selector: "our-me-side-navigation-list-item",
+  templateUrl: "./side-navigation-list-item.component.html",
   standalone: true,
   imports: [
     NgIf,
     RouterLink,
     TranslateModule,
     BootstrapIconComponent
-  ],
-  templateUrl: "./side-navigation-item.component.html"
+  ]
 })
-export class SideNavigationItemComponent {
+export class SideNavigationListItemComponent {
 
   @Input()
   public item?: SideNavigationItem;

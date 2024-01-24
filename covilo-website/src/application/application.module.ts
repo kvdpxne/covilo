@@ -18,6 +18,7 @@ import {ApplicationRoutingModule} from "./application-routing.module";
 import {ApplicationComponent} from "./application.component";
 
 import {FooterComponent, NavigationComponent} from "./core";
+import {MeRoutingModule} from "./me/me-routing.module";
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import {FooterComponent, NavigationComponent} from "./core";
 
     AuthenticationModule,
 
+    MeRoutingModule,
     ApplicationRoutingModule,
     NavigationComponent,
     FooterComponent
