@@ -1,15 +1,20 @@
 import {Component, OnInit} from "@angular/core";
-import {Router} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 import {City, Country, Province} from "src/application/core";
 import {Book, GeolocationService} from "../../../core";
 import {throwError} from "rxjs";
+import {TranslateModule} from "@ngx-translate/core";
+import {InputSelectComponent} from "../../../shared";
+import {FormsModule} from "@angular/forms";
 
 @Component({
   selector: "router-home",
   templateUrl: "./home.component.html",
   styleUrls: [
     "./home.component.scss"
-  ]
+  ],
+  standalone: true,
+  imports: [RouterLink, FormsModule, InputSelectComponent, TranslateModule]
 })
 export class HomeComponent implements OnInit {
 

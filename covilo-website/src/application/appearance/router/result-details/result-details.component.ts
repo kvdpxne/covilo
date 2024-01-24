@@ -2,10 +2,15 @@ import {Component, OnInit} from "@angular/core";
 import {ActivatedRoute, UrlSegment} from "@angular/router";
 import {City, Crime, CrimeService} from "src/application/core";
 import {Category, GeolocationService} from "../../../core";
+import {TranslateModule} from "@ngx-translate/core";
+import {CardListComponent, FilterByCategoryComponent} from "../../component";
+import {NgbPagination} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: "router-result-details",
-  templateUrl: "./result-details.component.html"
+  templateUrl: "./result-details.component.html",
+  standalone: true,
+  imports: [CardListComponent, NgbPagination, FilterByCategoryComponent, TranslateModule]
 })
 export class ResultDetailsComponent implements OnInit {
 

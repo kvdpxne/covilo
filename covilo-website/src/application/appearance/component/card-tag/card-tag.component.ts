@@ -1,8 +1,11 @@
 import {Component, Input} from "@angular/core";
+import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
   selector: "card-tag",
   templateUrl: "./card-tag.component.html",
+  standalone: true,
+  imports: [TranslateModule]
 })
 export class CardTagComponent {
 

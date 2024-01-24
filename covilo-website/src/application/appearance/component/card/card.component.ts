@@ -1,9 +1,12 @@
 import {Component, Input} from "@angular/core";
 import {Category, Crime} from "../../../core";
+import {CardTagListComponent} from "../card-tag-list/card-tag-list.component";
 
 @Component({
   selector: "card",
-  templateUrl: "./card.component.html"
+  templateUrl: "./card.component.html",
+  standalone: true,
+  imports: [CardTagListComponent]
 })
 export class CardComponent {
 

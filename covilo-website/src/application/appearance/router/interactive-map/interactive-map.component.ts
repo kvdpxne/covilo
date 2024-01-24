@@ -3,7 +3,8 @@ import {NavigationService} from "../../../shared";
 
 @Component({
   selector: "router-interactive-map",
-  templateUrl: "./interactive-map.component.html"
+  templateUrl: "./interactive-map.component.html",
+  standalone: true
 })
 export class InteractiveMapComponent {
 

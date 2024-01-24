@@ -1,9 +1,13 @@
 import {Component, EventEmitter, Input, Output} from "@angular/core";
 import {Category} from "../../../core";
+import {TranslateModule} from "@ngx-translate/core";
+import {NgFor} from "@angular/common";
 
 @Component({
   selector: "filter-by-category",
-  templateUrl: "./filter-by-category.component.html"
+  templateUrl: "./filter-by-category.component.html",
+  standalone: true,
+  imports: [NgFor, TranslateModule]
 })
 export class FilterByCategoryComponent {
 

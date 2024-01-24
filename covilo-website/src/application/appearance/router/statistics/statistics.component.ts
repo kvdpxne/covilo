@@ -3,7 +3,8 @@ import {NavigationService} from "../../../shared";
 
 @Component({
   selector: "router-statistics",
-  templateUrl: "./statistics.component.html"
+  templateUrl: "./statistics.component.html",
+  standalone: true
 })
 export class StatisticsComponent {
 

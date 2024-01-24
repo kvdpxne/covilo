@@ -5,13 +5,35 @@ import {TranslateModule} from "@ngx-translate/core";
 import {NgbPagination} from "@ng-bootstrap/ng-bootstrap";
 import {NgxChartsModule} from "@swimlane/ngx-charts";
 import {SharedModule} from "../shared";
-import {CardComponent, CardListComponent, CardTagComponent, CardTagListComponent} from "./component";
-import {HomeComponent, InteractiveMapComponent, ReportComponent, ResultDetailsComponent, StatisticsComponent} from "./router";
-import { FilterByCategoryComponent } from "./component";
+import {
+  CardComponent,
+  CardListComponent,
+  CardTagComponent,
+  CardTagListComponent,
+  FilterByCategoryComponent
+} from "./component";
+import {
+  HomeComponent,
+  InteractiveMapComponent,
+  ReportComponent,
+  ResultDetailsComponent,
+  StatisticsComponent
+} from "./router";
 import {RouterLink} from "@angular/router";
 
 @NgModule({
-  declarations: [
+  exports: [
+    CardListComponent
+  ],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    TranslateModule.forChild(),
+    NgbPagination,
+    NgxChartsModule,
+    SharedModule,
+    RouterLink,
     CardComponent,
     CardListComponent,
     CardTagComponent,
@@ -22,21 +44,6 @@ import {RouterLink} from "@angular/router";
     ResultDetailsComponent,
     StatisticsComponent,
     FilterByCategoryComponent
-  ],
-  exports: [
-    CardListComponent
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-
-    TranslateModule.forChild(),
-    NgbPagination,
-    NgxChartsModule,
-
-    SharedModule,
-    RouterLink
   ]
 })
 export class AppearanceModule {

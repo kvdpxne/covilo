@@ -11,7 +11,9 @@ import {
   User
 } from "../../../core";
 import {ActivatedRoute} from "@angular/router";
-import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {TranslateModule} from "@ngx-translate/core";
+import {InputMultipleSelectComponent, InputSelectComponent} from "../../../shared";
 
 interface ReportForm {
 
@@ -28,7 +30,9 @@ interface ReportForm {
 
 @Component({
   selector: "router-reporting",
-  templateUrl: "./report.component.html"
+  templateUrl: "./report.component.html",
+  standalone: true,
+  imports: [FormsModule, InputSelectComponent, ReactiveFormsModule, InputMultipleSelectComponent, TranslateModule]
 })
 export class ReportComponent {
 
@@ -96,7 +100,7 @@ export class ReportComponent {
         //   value.classification
         // ))
 
-        this.categories = categories
+        this.categories = categories;
       }
     });
   }
