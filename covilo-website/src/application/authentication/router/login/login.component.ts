@@ -1,14 +1,17 @@
 import {Component} from "@angular/core";
-import {FormBuilder, FormGroup, NonNullableFormBuilder, Validators} from "@angular/forms";
-import {UserAuthenticationService} from "../../../core";
-import {LoginRequest} from "../../../core";
+import {FormBuilder, FormGroup, FormsModule, NonNullableFormBuilder, Validators} from "@angular/forms";
+import {LoginRequest, UserAuthenticationService} from "../../../core";
 import {NavigationService} from "../../../shared";
-import {TranslateService} from "@ngx-translate/core";
+import {TranslateModule, TranslateService} from "@ngx-translate/core";
 import {LoginForm} from "./login-form";
+import {RouterLink} from "@angular/router";
+import {TextFieldComponent} from "../../component/text-field/text-field.component";
 
 @Component({
   selector: "router-authentication-login",
-  templateUrl: "./login.component.html"
+  templateUrl: "./login.component.html",
+  standalone: true,
+  imports: [FormsModule, TextFieldComponent, RouterLink, TranslateModule]
 })
 export class LoginComponent {
 

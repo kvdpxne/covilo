@@ -1,16 +1,20 @@
 import {Component, OnInit} from "@angular/core";
-import {FormBuilder, FormGroup, NonNullableFormBuilder, Validators} from "@angular/forms";
-import {UserAuthenticationService} from "../../../core";
+import {FormBuilder, FormGroup, FormsModule, NonNullableFormBuilder, Validators} from "@angular/forms";
+import {SignupRequest, UserAuthenticationService} from "../../../core";
 import {NavigationService, StorageKey, StorageService} from "../../../shared";
 import {SignupStage} from "./signup-stage";
-import {TranslateService} from "@ngx-translate/core";
+import {TranslateModule, TranslateService} from "@ngx-translate/core";
 import {SignupFormData} from "./signup-form-data";
-import {SignupRequest} from "../../../core";
 import {AuthenticationDataFormStage, BasicDataFormStage, QualificationFormStage, SignupForm} from "./signup-form";
+import {RouterLink} from "@angular/router";
+import {TextFieldComponent} from "../../component/text-field/text-field.component";
+import {NgIf} from "@angular/common";
 
 @Component({
   selector: "router-authentication-signup",
-  templateUrl: "./signup.component.html"
+  templateUrl: "./signup.component.html",
+  standalone: true,
+  imports: [FormsModule, NgIf, TextFieldComponent, RouterLink, TranslateModule]
 })
 export class SignupComponent
   implements OnInit {

@@ -16,14 +16,6 @@ import {TextFieldComponent} from "./component/text-field/text-field.component";
     AUTHENTICATION_STRATEGY_PROVIDER,
     AUTHENTICATION_INTERCEPTOR_PROVIDER
   ],
-  declarations: [
-    NavigationBarComponent,
-    SideBarComponent,
-    LoginComponent,
-    ResetPasswordComponent,
-    SignupComponent,
-    AuthenticationComponent
-  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -31,7 +23,13 @@ import {TextFieldComponent} from "./component/text-field/text-field.component";
     TranslateModule.forChild(),
     SharedModule,
     AuthenticationRoutingModule,
-    TextFieldComponent
+    TextFieldComponent,
+    NavigationBarComponent,
+    SideBarComponent,
+    LoginComponent,
+    ResetPasswordComponent,
+    SignupComponent,
+    AuthenticationComponent
   ]
 })
 export class AuthenticationModule {
