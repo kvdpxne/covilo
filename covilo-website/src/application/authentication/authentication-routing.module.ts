@@ -1,7 +1,7 @@
 import {NgModule} from "@angular/core";
 import {RouterModule, Routes} from "@angular/router";
 import {AuthenticationComponent, ResetPasswordComponent, LoginComponent, SignupComponent} from "./";
-import {authenticationGuard} from "./guard/authentication.guard";
+import {authenticationGuard} from "./guards/authentication.guard";
 
 const routes: Routes = [{
   path: "authentication",

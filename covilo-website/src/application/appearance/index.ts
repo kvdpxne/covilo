@@ -1,3 +1,2 @@
-export * from "./component";
-export * from "./router";
-export * from "./appearance.module";
+export * from "./components";
+export * from "./routers";

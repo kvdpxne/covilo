@@ -1,7 +1,7 @@
 import {Component} from "@angular/core";
 import {NavigationStart, Router, RouterOutlet} from "@angular/router";
 import {TranslateModule} from "@ngx-translate/core";
-import {NavigationBarComponent, SideBarComponent} from "./component";
+import {NavigationBarComponent, SideBarComponent} from "./components";
 
 @Component({
   selector: "covilo-authentication",

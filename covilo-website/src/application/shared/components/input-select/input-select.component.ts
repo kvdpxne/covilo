@@ -9,7 +9,7 @@ import {
   ViewChild
 } from "@angular/core"
 import { TranslateService, TranslateModule } from "@ngx-translate/core";
-import { TextFilterPipe } from "../../pipe/text-filter.pipe";
+import { TextFilterPipe } from "../../pipes/text-filter.pipe";
 import { NgFor } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { NgbDropdown, NgbDropdownToggle, NgbDropdownMenu, NgbDropdownItem } from "@ng-bootstrap/ng-bootstrap";

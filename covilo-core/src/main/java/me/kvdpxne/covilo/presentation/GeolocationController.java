@@ -126,7 +126,7 @@ public class GeolocationController {
   @PageableAsQueryParam
   @GetMapping("cities")
   public ResponseEntity<BookDto<CityDto>> getCities(
-    @RequestParam(name = "country")
+    @RequestParam(name = "country", required = false)
     final UUID countryIdentifier,
     @RequestParam(name = "provinceIdentifier", required = false)
     final UUID identifier,

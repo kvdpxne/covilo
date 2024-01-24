@@ -5,35 +5,33 @@ export * from "./aggregation/book-attributes";
 export * from "./aggregation/identifiable";
 
 //
-export * from "./component";
+export * from "./components";
 
 // All available application models
-export * from "./model/administrative-division-type";
-export * from "./model/capital-type";
-export * from "./model/category";
-export * from "./model/city";
-export * from "./model/classification";
-export * from "./model/continent";
-export * from "./model/country";
-export * from "./model/crime";
-export * from "./model/gender";
-export * from "./model/province";
-export * from "./model/token";
-export * from "./model/user";
+export * from "./models/administrative-division-type";
+export * from "./models/capital-type";
+export * from "./models/category";
+export * from "./models/city";
+export * from "./models/classification";
+export * from "./models/continent";
+export * from "./models/country";
+export * from "./models/crime";
+export * from "./models/gender";
+export * from "./models/province";
+export * from "./models/token";
+export * from "./models/user";
 
 //
-export * from "./playload/user-me-change-password-request";
-export * from "./playload/delete-account-request";
-export * from "./playload/login-request";
-export * from "./playload/report-crime-request";
-export * from "./playload/reset-password-request";
-export * from "./playload/signup-request";
+export * from "./playloads/user-me-change-password-request";
+export * from "./playloads/delete-account-request";
+export * from "./playloads/login-request";
+export * from "./playloads/report-crime-request";
+export * from "./playloads/reset-password-request";
+export * from "./playloads/signup-request";
 
 // All available application services
-export * from "./service/crime.service";
-export * from "./service/geolocation.service";
-export * from "./service/user.service";
-export * from "./service/user-authentication.service";
-export * from "./service/user-lifecycle.service";
-
-export * from "./core.module";
+export * from "./services/crime.service";
+export * from "./services/geolocation.service";
+export * from "./services/user.service";
+export * from "./services/user-authentication.service";
+export * from "./services/user-lifecycle.service";

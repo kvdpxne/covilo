@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, Output} from "@angular/core";
 import {TranslateModule, TranslateService} from "@ngx-translate/core";
 import {FormControl, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {Nameable} from "../../../core/aggregation/nameable";
-import {TextFilterPipe} from "../../pipe/text-filter.pipe";
+import {TextFilterPipe} from "../../pipes/text-filter.pipe";
 import {NgFor, NgIf} from "@angular/common";
 import {NgbDropdown, NgbDropdownItem, NgbDropdownMenu, NgbDropdownToggle} from "@ng-bootstrap/ng-bootstrap";
 

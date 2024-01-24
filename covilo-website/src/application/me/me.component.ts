@@ -1,7 +1,7 @@
 import {Component, OnInit} from "@angular/core";
 import {User, UserLifecycleService} from "../core";
 import {RouterOutlet} from "@angular/router";
-import {SideNavigationBarComponent} from "./component";
+import {SideNavigationBarComponent} from "./components";
 
 @Component({
   selector: "app-me",

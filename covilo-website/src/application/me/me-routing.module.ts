@@ -1,10 +1,10 @@
 import {NgModule} from "@angular/core";
 import {RouterModule, Routes} from "@angular/router";
 import {MeComponent} from "./me.component";
-import {meGuard} from "./guard/me.guard";
-import {ChangeAvatarComponent, OverviewComponent, RouteName, SecurityComponent} from "./router";
+import {meGuard} from "./guards/me.guard";
+import {ChangeAvatarComponent, OverviewComponent, RouteName, SecurityComponent} from "./routers";
 import {buildLinkArrayWithChildren, Link} from "../shared";
-import {ContactComponent} from "./router/contact/contact.component";
+import {ContactComponent} from "./routers/contact/contact.component";
 
 /**
  *
