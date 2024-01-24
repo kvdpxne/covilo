@@ -1,8 +1,17 @@
 import {Component} from "@angular/core";
+import {NgFor} from "@angular/common";
+import {TranslateModule} from "@ngx-translate/core";
+import {SideNavigationItemComponent} from "../side-navigation-item/side-navigation-item.component";
 
 @Component({
-  selector: "side-navigation",
-  templateUrl: "./side-navigation.component.html"
+  selector: "our-side-navigation",
+  templateUrl: "./side-navigation.component.html",
+  standalone: true,
+  imports: [
+    NgFor,
+    TranslateModule,
+    SideNavigationItemComponent
+  ]
 })
 export class SideNavigationComponent {
 

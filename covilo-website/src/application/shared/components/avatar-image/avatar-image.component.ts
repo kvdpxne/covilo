@@ -4,7 +4,8 @@ import {environment} from "../../../../environments/environment";
 
 @Component({
   selector: "avatar-image",
-  templateUrl: "./avatar-image.component.html"
+  templateUrl: "./avatar-image.component.html",
+  standalone: true
 })
 export class AvatarImageComponent
   implements OnInit {

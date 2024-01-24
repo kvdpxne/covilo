@@ -1,11 +1,19 @@
 import {Component} from "@angular/core";
 import {UserMeChangePasswordRequest, UserService} from "../../../core";
-import {FormBuilder, FormControl, FormGroup, NonNullableFormBuilder, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, FormsModule, NonNullableFormBuilder, Validators} from "@angular/forms";
 import {ChangePasswordForm} from "../../fsf/change-password-form";
+import {TranslateModule} from "@ngx-translate/core";
+import {TextFieldComponent} from "../../../authentication/component/text-field/text-field.component";
 
 @Component({
   selector: "route-change-password",
-  templateUrl: "./security.component.html"
+  templateUrl: "./security.component.html",
+  standalone: true,
+  imports: [
+    FormsModule,
+    TextFieldComponent,
+    TranslateModule
+  ]
 })
 export class SecurityComponent {
 

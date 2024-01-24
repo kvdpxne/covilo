@@ -15,15 +15,6 @@ import {
 import {InputMultipleSelectComponent} from "./components";
 
 @NgModule({
-  declarations: [
-    AvatarImageComponent,
-    BreadcrumbComponent,
-    InputSelectComponent,
-    InputMultipleSelectComponent,
-
-    NavigationBackDirective,
-    TextFilterPipe,
-  ],
   exports: [
     AvatarImageComponent,
     BreadcrumbComponent,
@@ -36,7 +27,13 @@ import {InputMultipleSelectComponent} from "./components";
     FormsModule,
     ReactiveFormsModule,
     TranslateModule.forChild(),
-    NgbDropdownModule
+    NgbDropdownModule,
+    AvatarImageComponent,
+    BreadcrumbComponent,
+    InputSelectComponent,
+    InputMultipleSelectComponent,
+    NavigationBackDirective,
+    TextFilterPipe
   ]
 })
 export class SharedModule {

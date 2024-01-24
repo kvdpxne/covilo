@@ -11,8 +11,9 @@ import {ContactComponent} from "./router/contact/contact.component";
  */
 export const ROUTE_LINKS: Link[] = buildLinkArrayWithChildren("/me", [
   RouteName.OVERVIEW,
-  RouteName.SECURITY,
-  RouteName.APPEARANCE
+  RouteName.APPEARANCE,
+  RouteName.CONTACT,
+  RouteName.SECURITY
 ]);
 
 /**
@@ -47,5 +48,4 @@ const ROUTES: Routes = [{
   imports: [RouterModule.forChild(ROUTES)],
   exports: [RouterModule]
 })
-export class MeRoutingModule {
-}
+export class MeRoutingModule {}

@@ -5,9 +5,7 @@ import {NgIf} from "@angular/common";
 @Component({
   selector: "our-bootstrap-icon",
   standalone: true,
-  imports: [
-    NgIf
-  ],
+  imports: [],
   templateUrl: "./bootstrap-icon.component.html"
 })
 export class BootstrapIconComponent {
@@ -24,6 +22,6 @@ export class BootstrapIconComponent {
   public get name(): string {
     return "string" === typeof this.icon
       ? this.icon
-      : this.icon?.iconName!
+      : this.icon?.iconName!;
   }
 }

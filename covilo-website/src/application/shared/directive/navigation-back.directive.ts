@@ -2,7 +2,8 @@ import {Directive, HostListener} from "@angular/core";
 import {NavigationService} from "../service/navigation.service";
 
 @Directive({
-  selector: "[navigationBack]"
+  selector: "[navigationBack]",
+  standalone: true
 })
 export class NavigationBackDirective {
 

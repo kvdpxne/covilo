@@ -1,9 +1,16 @@
 import {Component} from "@angular/core";
 import {UserService} from "../../../core";
+import {TranslateModule} from "@ngx-translate/core";
+import {NgIf} from "@angular/common";
 
 @Component({
   selector: "route-change-avatar",
-  templateUrl: "./change-avatar.component.html"
+  templateUrl: "./change-avatar.component.html",
+  standalone: true,
+  imports: [
+    NgIf,
+    TranslateModule
+  ]
 })
 export class ChangeAvatarComponent {
 

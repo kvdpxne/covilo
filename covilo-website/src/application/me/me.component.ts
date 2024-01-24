@@ -1,9 +1,16 @@
 import {Component, OnInit} from "@angular/core";
 import {User, UserLifecycleService} from "../core";
+import {RouterOutlet} from "@angular/router";
+import {SideNavigationBarComponent} from "./component";
 
 @Component({
   selector: "app-me",
-  templateUrl: "./me.component.html"
+  templateUrl: "./me.component.html",
+  standalone: true,
+  imports: [
+    SideNavigationBarComponent,
+    RouterOutlet
+  ]
 })
 export class MeComponent
   implements OnInit {

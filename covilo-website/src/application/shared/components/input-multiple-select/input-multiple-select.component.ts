@@ -1,11 +1,16 @@
 import {Component, EventEmitter, Input, Output} from "@angular/core";
-import {TranslateService} from "@ngx-translate/core";
-import {FormControl} from "@angular/forms";
+import {TranslateModule, TranslateService} from "@ngx-translate/core";
+import {FormControl, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {Nameable} from "../../../core/aggregation/nameable";
+import {TextFilterPipe} from "../../pipe/text-filter.pipe";
+import {NgFor, NgIf} from "@angular/common";
+import {NgbDropdown, NgbDropdownItem, NgbDropdownMenu, NgbDropdownToggle} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: "input-multiple-select",
-  templateUrl: "./input-multiple-select.component.html"
+  templateUrl: "./input-multiple-select.component.html",
+  standalone: true,
+  imports: [NgbDropdown, NgbDropdownToggle, NgbDropdownMenu, NgIf, FormsModule, ReactiveFormsModule, NgFor, NgbDropdownItem, TranslateModule, TextFilterPipe]
 })
 export class InputMultipleSelectComponent<T extends Nameable> {
 
@@ -43,7 +48,7 @@ export class InputMultipleSelectComponent<T extends Nameable> {
   public readonly selectedOptionsEmitter: EventEmitter<T[]>;
 
   private readonly translateService: TranslateService;
-  public readonly searcher: FormControl<string | null>
+  public readonly searcher: FormControl<string | null>;
   public selectedOptions: T[];
 
   public constructor(translateService: TranslateService) {
@@ -62,7 +67,7 @@ export class InputMultipleSelectComponent<T extends Nameable> {
 
   public translateOption(option: T): string {
     if (option.translatableNameKey) {
-      return this.translateService.instant(option.translatableNameKey)
+      return this.translateService.instant(option.translatableNameKey);
     }
     throw Error("The key to translating the name is undefined.");
   }

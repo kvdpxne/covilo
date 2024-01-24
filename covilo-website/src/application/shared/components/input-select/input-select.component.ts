@@ -8,14 +8,20 @@ import {
   Output,
   ViewChild
 } from "@angular/core"
-import {TranslateService} from "@ngx-translate/core";
+import { TranslateService, TranslateModule } from "@ngx-translate/core";
+import { TextFilterPipe } from "../../pipe/text-filter.pipe";
+import { NgFor } from "@angular/common";
+import { FormsModule } from "@angular/forms";
+import { NgbDropdown, NgbDropdownToggle, NgbDropdownMenu, NgbDropdownItem } from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
-  selector: "input-select",
-  templateUrl: "./input-select.component.html",
-  styleUrls: [
-    "./input-select.component.scss"
-  ]
+    selector: "input-select",
+    templateUrl: "./input-select.component.html",
+    styleUrls: [
+        "./input-select.component.scss"
+    ],
+    standalone: true,
+    imports: [NgbDropdown, FormsModule, NgbDropdownToggle, NgbDropdownMenu, NgFor, NgbDropdownItem, TranslateModule, TextFilterPipe]
 })
 export class InputSelectComponent implements AfterViewInit, OnInit {
 
