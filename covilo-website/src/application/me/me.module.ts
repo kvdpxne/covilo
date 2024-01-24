@@ -2,13 +2,14 @@ import {NgModule} from "@angular/core";
 import {CommonModule} from "@angular/common";
 import {MeComponent} from "./me.component";
 import {MeRoutingModule} from "./me-routing.module";
-import {ChangeAvatarComponent, ChangePasswordComponent, OverviewComponent} from "./router";
+import {ChangeAvatarComponent, SecurityComponent, OverviewComponent} from "./router";
 import {SideNavigationBarComponent, SideNavigationComponent} from "./component";
 import {TranslateModule} from "@ngx-translate/core";
 import {SharedModule} from "../shared";
 import {NgbTooltip} from "@ng-bootstrap/ng-bootstrap";
 import {FormsModule} from "@angular/forms";
 import {TextFieldComponent} from "../authentication/component/text-field/text-field.component";
+import {SideNavigationItemComponent} from "./component/side-navigation-item/side-navigation-item.component";
 
 @NgModule({
   declarations: [
@@ -16,7 +17,7 @@ import {TextFieldComponent} from "../authentication/component/text-field/text-fi
     SideNavigationBarComponent,
 
     ChangeAvatarComponent,
-    ChangePasswordComponent,
+    SecurityComponent,
     OverviewComponent,
 
     MeComponent
@@ -31,7 +32,8 @@ import {TextFieldComponent} from "../authentication/component/text-field/text-fi
     SharedModule,
     NgbTooltip,
     FormsModule,
-    TextFieldComponent
+    TextFieldComponent,
+    SideNavigationItemComponent
   ]
 })
 export class MeModule {

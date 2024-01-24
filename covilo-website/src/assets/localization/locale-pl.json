@@ -143,9 +143,10 @@
   "me": {
     "side-navigation": {
       "account": "Konto",
-      "change_avatar": "Zmień avatar",
-      "change_password": "Zmień hasło",
-      "overview": "Podgląd"
+      "appearance": "Wygląd",
+      "contact": "Kontakt",
+      "security": "Hasło i uwierzytelnianie",
+      "overview": "Osobiste informacje"
     },
     "changeAvatar": {
       "uploadAvatar": "Prześlij awatar",

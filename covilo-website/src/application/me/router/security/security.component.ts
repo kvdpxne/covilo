@@ -1,13 +1,13 @@
 import {Component} from "@angular/core";
 import {UserMeChangePasswordRequest, UserService} from "../../../core";
 import {FormBuilder, FormControl, FormGroup, NonNullableFormBuilder, Validators} from "@angular/forms";
-import {ChangePasswordForm} from "./change-password-form";
+import {ChangePasswordForm} from "../../fsf/change-password-form";
 
 @Component({
   selector: "route-change-password",
-  templateUrl: "./change-password.component.html"
+  templateUrl: "./security.component.html"
 })
-export class ChangePasswordComponent {
+export class SecurityComponent {
 
   public readonly changePasswordForm: FormGroup<ChangePasswordForm>;
 

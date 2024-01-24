@@ -1,6 +1,4 @@
 import {Component} from "@angular/core";
-import {Link} from "../../../shared";
-import {ROUTE_LINKS} from "../../me-routing.module";
 
 @Component({
   selector: "side-navigation",
@@ -8,5 +6,21 @@ import {ROUTE_LINKS} from "../../me-routing.module";
 })
 export class SideNavigationComponent {
 
-  public readonly links: Link[] = ROUTE_LINKS;
+  public readonly links = [{
+    reference: "/me/overview",
+    translatableNameKey: "overview",
+    iconName: "person-vcard"
+  }, {
+    reference: "/me/appearance",
+    translatableNameKey: "appearance",
+    iconName: "brush"
+  }, {
+    reference: "/me/contact",
+    translatableNameKey: "contact",
+    iconName: "envelope-at"
+  }, {
+    reference: "/me/security",
+    translatableNameKey: "security",
+    iconName: "shield-lock"
+  }];
 }

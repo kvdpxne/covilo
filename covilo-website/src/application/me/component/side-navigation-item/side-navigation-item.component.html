@@ -1,0 +1,5 @@
+<a [routerLink]="this.item?.reference" class="nav-link">
+  <our-bootstrap-icon *ngIf="this.shouldRenderIcon" [icon]="this.item"/>
+  {{ this.translatableNameKey | translate }}
+</a>
+

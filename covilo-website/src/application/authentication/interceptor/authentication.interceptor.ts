@@ -7,7 +7,7 @@ import {
   HttpInterceptor,
   HttpRequest
 } from "@angular/common/http";
-import {catchError, Observable, of, switchMap, tap, throwError} from "rxjs";
+import {catchError, EMPTY, Observable, of, switchMap, tap, throwError} from "rxjs";
 import {Token, UserAuthenticationService} from "../../core";
 import {TokenAuthenticationStrategy} from "../service/token-authentication.strategy";
 import {AUTHENTICATION_STRATEGY} from "../service/authentication.strategy";
@@ -52,7 +52,7 @@ export class AuthenticationInterceptor implements HttpInterceptor {
   }
 
   private handleForbiddenError(): void {
-    this.authenticationService.logout();
+    this.authenticationService.logout(true);
     this.navigationService.navigateToHomePage();
   }
 
@@ -82,10 +82,11 @@ export class AuthenticationInterceptor implements HttpInterceptor {
         );
       }),
       catchError(error => {
-        if (403 === error.status) {
+        console.log(error);
+        if (undefined === error.status || 403 === error.status) {
           this.handleForbiddenError();
         }
-        return throwError(() => error);
+        return EMPTY;
       })
     );
   }

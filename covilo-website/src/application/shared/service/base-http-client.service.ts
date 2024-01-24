@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
-import {catchError, Observable, retry, throwError} from "rxjs";
+import {catchError, EMPTY, Observable, retry, throwError} from "rxjs";
 import {map} from "rxjs/operators";
 import {BaseHttpParametersBuilder} from "./base-http-parameters-builder";
 
@@ -115,7 +115,7 @@ export abstract class BaseHttpClient {
     }
     // Return an observable with a user-facing error message.
     return throwError(() =>
-      new Error("Something bad happened; please try again later.")
+      error
     );
   }
 

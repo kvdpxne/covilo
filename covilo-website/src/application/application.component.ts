@@ -29,6 +29,14 @@ export class ApplicationComponent
     authenticationService: UserAuthenticationService,
     ngbDropdownConfiguration: NgbDropdownConfig
   ) {
+    const lol = {
+      status: undefined
+    }
+
+    if (500 === lol!.status) {
+      console.log("test");
+    }
+
     this.translateService = translateService;
     this.authenticationService = authenticationService;
 
