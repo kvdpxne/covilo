@@ -19,30 +19,28 @@ import {
 } from "./component";
 
 @NgModule({
-  declarations: [
-    FooterComponent,
-    NavigationComponent,
-    NotificationComponent,
-    AvatarComponent,
-    LanguageSwitchComponent
-  ],
-  imports: [
-    CommonModule,
-    BrowserModule,
-    RouterModule,
-    FormsModule,
-    NgbCollapseModule,
-    TranslateModule.forChild(),
-    SharedModule,
-    NgbAlertModule,
-    NgbDropdownModule,
-    NgbPopover
-  ],
-  exports: [
-    FooterComponent,
-    NavigationComponent,
-    NotificationComponent
-  ]
+    imports: [
+        CommonModule,
+        BrowserModule,
+        RouterModule,
+        FormsModule,
+        NgbCollapseModule,
+        TranslateModule.forChild(),
+        SharedModule,
+        NgbAlertModule,
+        NgbDropdownModule,
+        NgbPopover,
+        FooterComponent,
+        NavigationComponent,
+        NotificationComponent,
+        AvatarComponent,
+        LanguageSwitchComponent
+    ],
+    exports: [
+        FooterComponent,
+        NavigationComponent,
+        NotificationComponent
+    ]
 })
 export class CoreModule {
 }

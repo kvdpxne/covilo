@@ -1,10 +1,13 @@
 import {Component} from "@angular/core";
 import {NgbPopover} from "@ng-bootstrap/ng-bootstrap";
-import {TranslateService} from "@ngx-translate/core";
+import { TranslateService, TranslateModule } from "@ngx-translate/core";
+import { NgFor } from "@angular/common";
 
 @Component({
-  selector: "language-switch",
-  templateUrl: "./language-switch.component.html"
+    selector: "language-switch",
+    templateUrl: "./language-switch.component.html",
+    standalone: true,
+    imports: [NgFor, NgbPopover, TranslateModule]
 })
 export class LanguageSwitchComponent {
 

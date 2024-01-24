@@ -1,12 +1,17 @@
 import {Component, Input, OnInit} from "@angular/core";
 import {Icon, Link, Section} from "../../../shared";
+import { TranslateModule } from "@ngx-translate/core";
+import { LanguageSwitchComponent } from "../language-switch/language-switch.component";
+import { NgFor } from "@angular/common";
 
 @Component({
-  selector: "app-footer",
-  templateUrl: "./footer.component.html",
-  styleUrls: [
-    "./footer.component.scss"
-  ]
+    selector: "app-footer",
+    templateUrl: "./footer.component.html",
+    styleUrls: [
+        "./footer.component.scss"
+    ],
+    standalone: true,
+    imports: [NgFor, LanguageSwitchComponent, TranslateModule]
 })
 export class FooterComponent implements OnInit {
 

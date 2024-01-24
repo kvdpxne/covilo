@@ -3,10 +3,17 @@ import {User} from "../../model/user";
 import {UserLifecycleService} from "../../service/user-lifecycle.service";
 import {ROUTE_LINKS} from "../../../me/me-routing.module";
 import {UserAuthenticationService} from "../../service/user-authentication.service";
+import { TranslateModule } from "@ngx-translate/core";
+import { RouterLink } from "@angular/router";
+import { NgFor } from "@angular/common";
+import { AvatarImageComponent } from "../../../shared/components/avatar-image/avatar-image.component";
+import { NgbDropdown, NgbDropdownToggle, NgbDropdownMenu, NgbDropdownItem, NgbDropdownButtonItem } from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
-  selector: "covilo-avatar",
-  templateUrl: "./avatar.component.html"
+    selector: "covilo-avatar",
+    templateUrl: "./avatar.component.html",
+    standalone: true,
+    imports: [NgbDropdown, NgbDropdownToggle, AvatarImageComponent, NgbDropdownMenu, NgFor, NgbDropdownItem, RouterLink, NgbDropdownButtonItem, TranslateModule]
 })
 export class AvatarComponent
   implements OnInit {

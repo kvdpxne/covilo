@@ -1,10 +1,13 @@
 import {Component, Input, OnInit} from "@angular/core";
-import {NgbAlertConfig} from "@ng-bootstrap/ng-bootstrap";
+import { NgbAlertConfig, NgbAlert } from "@ng-bootstrap/ng-bootstrap";
+import { NgIf } from "@angular/common";
 
 @Component({
-  selector: "a-notification",
-  templateUrl: "./notification.component.html",
-  styleUrls: ["./notification.component.scss"]
+    selector: "a-notification",
+    templateUrl: "./notification.component.html",
+    styleUrls: ["./notification.component.scss"],
+    standalone: true,
+    imports: [NgIf, NgbAlert]
 })
 export class NotificationComponent implements OnInit {
 

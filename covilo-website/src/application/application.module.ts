@@ -45,21 +45,13 @@ import {ComingSoonComponent, PageNotFoundComponent} from "./communication";
       }
     }),
 
-    /*
-     *
-     * IMPORTANT: Imports in the wrong order may cause the application to work
-     * incorrectly or cause other undesirable errors.
-     */
     SharedModule.forRoot(),
     CoreModule,
 
     AppearanceModule,
     AuthenticationModule,
     MeModule,
-    ApplicationRoutingModule,
-
-    NgbModule,
-    LineChartModule
+    ApplicationRoutingModule
   ],
   exports: [
     ApplicationComponent
