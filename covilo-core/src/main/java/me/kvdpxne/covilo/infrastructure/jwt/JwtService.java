@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
-import me.kvdpxne.covilo.application.ITokenService;
+import me.kvdpxne.covilo.domain.port.out.ITokenService;
 import me.kvdpxne.covilo.common.exceptions.TokenExpiredException;
 import me.kvdpxne.covilo.common.exceptions.TokenSignatureException;
 import me.kvdpxne.covilo.domain.model.User;

@@ -2,11 +2,11 @@ package me.kvdpxne.covilo.presentation;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import me.kvdpxne.covilo.application.dto.UserDto;
-import me.kvdpxne.covilo.application.mapper.UserMapper;
-import me.kvdpxne.covilo.application.payload.DeleteUserMeRequest;
-import me.kvdpxne.covilo.application.payload.UpdateUserMeEmailRequest;
-import me.kvdpxne.covilo.application.payload.UpdateUserMePasswordRequest;
+import me.kvdpxne.covilo.presentation.dto.UserDto;
+import me.kvdpxne.covilo.presentation.mappers.UserMapper;
+import me.kvdpxne.covilo.presentation.payloads.DeleteUserMeRequest;
+import me.kvdpxne.covilo.presentation.payloads.UpdateUserMeEmailRequest;
+import me.kvdpxne.covilo.presentation.payloads.UpdateUserMePasswordRequest;
 import me.kvdpxne.covilo.common.constants.Endpoints;
 import me.kvdpxne.covilo.domain.model.User;
 import me.kvdpxne.covilo.domain.port.out.UserMeServicePort;

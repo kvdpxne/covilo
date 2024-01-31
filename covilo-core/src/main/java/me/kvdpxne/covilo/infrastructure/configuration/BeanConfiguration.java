@@ -1,6 +1,6 @@
 package me.kvdpxne.covilo.infrastructure.configuration;
 
-import me.kvdpxne.covilo.application.ITokenService;
+import me.kvdpxne.covilo.domain.port.out.ITokenService;
 import me.kvdpxne.covilo.domain.persistence.CrimeRepository;
 import me.kvdpxne.covilo.domain.persistence.TokenRepository;
 import me.kvdpxne.covilo.domain.persistence.UserRepository;

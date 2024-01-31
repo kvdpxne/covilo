@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import me.kvdpxne.covilo.application.ITokenService;
+import me.kvdpxne.covilo.domain.port.out.ITokenService;
 import me.kvdpxne.covilo.common.constants.Endpoints;
 import me.kvdpxne.covilo.common.exceptions.TokenException;
 import org.springframework.beans.factory.annotation.Autowired;

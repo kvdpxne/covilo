@@ -2,10 +2,10 @@ package me.kvdpxne.covilo.presentation;
 
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import me.kvdpxne.covilo.application.dto.UserDto;
-import me.kvdpxne.covilo.application.mapper.UserMapper;
-import me.kvdpxne.covilo.application.payload.UpdateUserEmailRequest;
-import me.kvdpxne.covilo.application.payload.UpdateUserPasswordRequest;
+import me.kvdpxne.covilo.presentation.dto.UserDto;
+import me.kvdpxne.covilo.presentation.mappers.UserMapper;
+import me.kvdpxne.covilo.presentation.payloads.UpdateUserEmailRequest;
+import me.kvdpxne.covilo.presentation.payloads.UpdateUserPasswordRequest;
 import me.kvdpxne.covilo.common.constants.Endpoints;
 import me.kvdpxne.covilo.common.exceptions.UserNotFoundException;
 import me.kvdpxne.covilo.domain.port.out.UserServicePort;
