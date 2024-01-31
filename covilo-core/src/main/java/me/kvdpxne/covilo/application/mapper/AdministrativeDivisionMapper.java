@@ -1,6 +1,6 @@
 package me.kvdpxne.covilo.application.mapper;
 
-import me.kvdpxne.covilo.application.PresentationMapper;
+import me.kvdpxne.covilo.shared.MapStructPresentationMapper;
 import me.kvdpxne.covilo.application.dto.AdministrativeDivisionDto;
 import me.kvdpxne.covilo.domain.model.AdministrativeDivision;
 import org.mapstruct.Mapper;
@@ -10,4 +10,4 @@ import org.mapstruct.MappingConstants;
   componentModel = MappingConstants.ComponentModel.SPRING
 )
 public interface AdministrativeDivisionMapper
-  extends PresentationMapper<AdministrativeDivision, AdministrativeDivisionDto> {}
+  extends MapStructPresentationMapper<AdministrativeDivision, AdministrativeDivisionDto> {}

@@ -7,8 +7,8 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import me.kvdpxne.covilo.domain.model.Category;
 import me.kvdpxne.covilo.domain.persistence.CategoryRepository;
-import me.kvdpxne.covilo.infrastructure.jpa.mapper.CategoryPersistenceMapper;
-import me.kvdpxne.covilo.infrastructure.jpa.repository.JpaCategoryRepository;
+import me.kvdpxne.covilo.infrastructure.jpa.mappers.CategoryPersistenceMapper;
+import me.kvdpxne.covilo.infrastructure.jpa.repositories.JpaCategoryRepository;
 import me.kvdpxne.covilo.shared.Validation;
 import org.springframework.stereotype.Component;
 

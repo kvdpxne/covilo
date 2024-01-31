@@ -7,9 +7,9 @@ import me.kvdpxne.covilo.shared.Book;
 import me.kvdpxne.covilo.shared.BookAttributes;
 import me.kvdpxne.covilo.domain.model.City;
 import me.kvdpxne.covilo.domain.persistence.CityRepository;
-import me.kvdpxne.covilo.infrastructure.jpa.entity.CityEntity;
-import me.kvdpxne.covilo.infrastructure.jpa.mapper.CityPersistenceMapper;
-import me.kvdpxne.covilo.infrastructure.jpa.repository.JpaCityRepository;
+import me.kvdpxne.covilo.infrastructure.jpa.entities.CityEntity;
+import me.kvdpxne.covilo.infrastructure.jpa.mappers.CityPersistenceMapper;
+import me.kvdpxne.covilo.infrastructure.jpa.repositories.JpaCityRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 

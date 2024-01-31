@@ -7,10 +7,10 @@ import lombok.RequiredArgsConstructor;
 import me.kvdpxne.covilo.domain.model.Token;
 import me.kvdpxne.covilo.domain.model.User;
 import me.kvdpxne.covilo.domain.persistence.TokenRepository;
-import me.kvdpxne.covilo.infrastructure.jpa.entity.TokenEntity;
-import me.kvdpxne.covilo.infrastructure.jpa.mapper.TokenPersistenceMapper;
-import me.kvdpxne.covilo.infrastructure.jpa.mapper.UserPersistenceMapper;
-import me.kvdpxne.covilo.infrastructure.jpa.repository.JpaTokenRepository;
+import me.kvdpxne.covilo.infrastructure.jpa.entities.TokenEntity;
+import me.kvdpxne.covilo.infrastructure.jpa.mappers.TokenPersistenceMapper;
+import me.kvdpxne.covilo.infrastructure.jpa.mappers.UserPersistenceMapper;
+import me.kvdpxne.covilo.infrastructure.jpa.repositories.JpaTokenRepository;
 import org.springframework.stereotype.Component;
 
 @Deprecated

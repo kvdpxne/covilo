@@ -7,9 +7,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.kvdpxne.covilo.domain.model.User;
 import me.kvdpxne.covilo.domain.persistence.UserRepository;
-import me.kvdpxne.covilo.infrastructure.jpa.entity.UserEntity;
-import me.kvdpxne.covilo.infrastructure.jpa.mapper.UserPersistenceMapper;
-import me.kvdpxne.covilo.infrastructure.jpa.repository.JpaUserRepository;
+import me.kvdpxne.covilo.infrastructure.jpa.entities.UserEntity;
+import me.kvdpxne.covilo.infrastructure.jpa.mappers.UserPersistenceMapper;
+import me.kvdpxne.covilo.infrastructure.jpa.repositories.JpaUserRepository;
 import org.springframework.stereotype.Component;
 
 @Slf4j

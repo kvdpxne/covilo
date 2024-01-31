@@ -6,8 +6,8 @@ import me.kvdpxne.covilo.shared.Book;
 import me.kvdpxne.covilo.shared.BookAttributes;
 import me.kvdpxne.covilo.domain.model.Crime;
 import me.kvdpxne.covilo.domain.persistence.CrimeRepository;
-import me.kvdpxne.covilo.infrastructure.jpa.mapper.CrimePersistenceMapper;
-import me.kvdpxne.covilo.infrastructure.jpa.repository.JpaCrimeRepository;
+import me.kvdpxne.covilo.infrastructure.jpa.mappers.CrimePersistenceMapper;
+import me.kvdpxne.covilo.infrastructure.jpa.repositories.JpaCrimeRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 

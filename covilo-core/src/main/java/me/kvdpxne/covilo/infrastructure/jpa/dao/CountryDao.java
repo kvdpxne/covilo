@@ -8,9 +8,9 @@ import me.kvdpxne.covilo.shared.Book;
 import me.kvdpxne.covilo.shared.BookAttributes;
 import me.kvdpxne.covilo.domain.model.Country;
 import me.kvdpxne.covilo.domain.persistence.CountryRepository;
-import me.kvdpxne.covilo.infrastructure.jpa.entity.CountryEntity;
-import me.kvdpxne.covilo.infrastructure.jpa.mapper.CountryPersistenceMapper;
-import me.kvdpxne.covilo.infrastructure.jpa.repository.JpaCountryRepository;
+import me.kvdpxne.covilo.infrastructure.jpa.entities.CountryEntity;
+import me.kvdpxne.covilo.infrastructure.jpa.mappers.CountryPersistenceMapper;
+import me.kvdpxne.covilo.infrastructure.jpa.repositories.JpaCountryRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
