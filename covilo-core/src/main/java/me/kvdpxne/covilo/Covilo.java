@@ -9,6 +9,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class Covilo {
 
+  public Covilo() {
+    super();
+  }
+
   public static void main(final String[] arguments) {
     /*
      *
