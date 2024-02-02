@@ -38,6 +38,10 @@ dependencies {
 
   implementation(libraries.openapi)
 
+  // Uncomment if using SQLite instead of PostgresSQL.
+  implementation(libraries.sqlite)
+
+
   // https://github.com/mapstruct/mapstruct
   implementation(libraries.mapstruct.core)
   annotationProcessor(libraries.mapstruct.processor)
