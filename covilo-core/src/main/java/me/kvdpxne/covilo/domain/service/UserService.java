@@ -21,11 +21,18 @@ import me.kvdpxne.covilo.shared.Validation;
 public final class UserService
   implements UserServicePort {
 
+  /**
+   * Repository for accessing user data.
+   */
   private final UserRepository userRepository;
-  private final UserPasswordEncodePort userPasswordEncode;
 
   /**
-   *
+   * Port for encoding user passwords.
+   */
+  private final UserPasswordEncodePort userPasswordEncoder;
+
+  /**
+   * Port for validating user data.
    */
   private final UserValidatorPort userValidator;
 
@@ -127,7 +134,7 @@ public final class UserService
     this.checkExistsUserByEmail(source);
 
     // Encode the password before storing it.
-    final var encodedPassword = this.userPasswordEncode.encode(
+    final var encodedPassword = this.userPasswordEncoder.encode(
       source.password()
     );
 
@@ -236,7 +243,7 @@ public final class UserService
     if (password.equals(newPassword)) {
       return;
     }
-    final var encodedPassword = this.userPasswordEncode.encode(newPassword);
+    final var encodedPassword = this.userPasswordEncoder.encode(newPassword);
     this.userRepository.updatePasswordByIdentifier(user.identifier(), encodedPassword);
   }
 

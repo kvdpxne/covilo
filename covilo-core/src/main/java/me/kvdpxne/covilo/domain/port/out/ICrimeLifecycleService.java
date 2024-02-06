@@ -4,16 +4,23 @@ import java.util.UUID;
 import me.kvdpxne.covilo.common.exceptions.CrimeAlreadyExistsException;
 import me.kvdpxne.covilo.common.exceptions.CrimeNotFoundException;
 import me.kvdpxne.covilo.domain.model.Crime;
+import me.kvdpxne.covilo.domain.persistence.paging.PageRange;
 
 public interface ICrimeLifecycleService {
 
-  /**
-   * @throws CrimeNotFoundException
-   */
-  Crime getCrimeByIdentifier(final UUID identifier) throws CrimeNotFoundException;
+  Iterable<Crime> getCrimes(final PageRange range);
 
   /**
-   *
+   * @throws NullPointerException
+   * @throws CrimeNotFoundException
    */
-  Crime createCrime(final Crime crime) throws CrimeAlreadyExistsException;
+  Crime getCrimeByIdentifier(final UUID identifier);
+
+  /**
+   * @throws NullPointerException
+   * @throws CrimeAlreadyExistsException
+   */
+  Crime createCrime(final Crime crime);
+
+  long countCrimes();
 }

@@ -12,6 +12,7 @@ import me.kvdpxne.covilo.common.exceptions.TokenExpiredException;
 import me.kvdpxne.covilo.common.exceptions.TokenSignatureException;
 import me.kvdpxne.covilo.common.exceptions.UserAlreadyExistsException;
 import me.kvdpxne.covilo.common.exceptions.UserNotFoundException;
+import me.kvdpxne.covilo.presentation.mappers.UserMapper;
 import me.kvdpxne.covilo.presentation.payloads.LoginRequest;
 import me.kvdpxne.covilo.presentation.payloads.SignupRequest;
 import me.kvdpxne.covilo.domain.model.Role;
@@ -54,7 +55,7 @@ public final class UserAuthenticationService
     }
 
     //
-    User user = new User.Builder()
+    User user = User.builder()
       .email(email)
       .password(password)
       .role(Role.USER)

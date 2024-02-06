@@ -4,20 +4,67 @@ import java.util.Collection;
 
 public final class Validation {
 
-  public static void check(final Object value, final String message) {
+  public static <T> T check(final T value, final String message) {
     if (null == value) {
       throw new NullPointerException();
     }
+    return value;
   }
 
-  public static void check(final Object value) {
-    Validation.check(value, "The given parameter cannot be null.");
+  public static <T> T check(final T value) {
+    return Validation.check(value, "The given parameter cannot be null.");
   }
 
-  public static void check(final boolean condition, final String message) {
+  /**
+   * Checks a condition and throws an IllegalArgumentException if the condition
+   * is true.
+   *
+   * @param condition The condition to check.
+   * @param message   The message to include in the exception if the condition
+   *                  is true.
+   */
+  public static void check(
+    final boolean condition,
+    final String message
+  ) {
     if (condition) {
       throw new IllegalArgumentException(message);
     }
+  }
+
+  /**
+   * Checks if a number is negative and throws an IllegalArgumentException if
+   * it is.
+   *
+   * @param number  The number to check.
+   * @param message The message to include in the exception if the number is
+   *                negative.
+   * @param <T>     The type of the number (extends Number).
+   */
+  public static <T extends Number> void negative(
+    final T number,
+    final String message
+  ) {
+    Validation.check(
+      0d > number.doubleValue(),
+      message
+    );
+  }
+
+  /**
+   * Checks if a number is negative and throws an IllegalArgumentException if
+   * it is, using a default error message.
+   *
+   * @param number The number to check.
+   * @param <T>    The type of the number (extends Number).
+   */
+  public static <T extends Number> void negative(
+    final T number
+  ) {
+    Validation.negative(
+      number,
+      "The given number cannot be negative"
+    );
   }
 
   /**

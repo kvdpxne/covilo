@@ -2,12 +2,14 @@ package me.kvdpxne.covilo.presentation;
 
 import io.swagger.v3.oas.annotations.Parameter;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import me.kvdpxne.covilo.common.constants.Endpoints;
 import me.kvdpxne.covilo.common.exceptions.CrimeAlreadyExistsException;
 import me.kvdpxne.covilo.common.exceptions.CrimeNotFoundException;
 import me.kvdpxne.covilo.domain.model.Crime;
 import me.kvdpxne.covilo.domain.persistence.CrimeRepository;
+import me.kvdpxne.covilo.domain.persistence.paging.PageRange;
 import me.kvdpxne.covilo.domain.port.out.ICrimeLifecycleService;
 import me.kvdpxne.covilo.presentation.dto.BookDto;
 import me.kvdpxne.covilo.presentation.dto.CrimeDto;
@@ -16,6 +18,7 @@ import me.kvdpxne.covilo.presentation.payloads.ReportCrimeRequest;
 import me.kvdpxne.covilo.shared.Book;
 import me.kvdpxne.covilo.shared.BookAttributes;
 import org.springdoc.core.converters.models.PageableAsQueryParam;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,28 +38,24 @@ public class CrimeController {
   private final ICrimeLifecycleService crimeLifecycleService;
   private final CrimeMapper crimeMapper;
 
-  @PageableAsQueryParam
-  @GetMapping("all")
-  public BookDto<CrimeDto> getCrimes(
-    @RequestParam(required = false) final UUID city,
-    @Parameter(hidden = true) final Pageable pageable
+  @GetMapping(
+    path = {
+      "all",
+      "everything"
+    }
+  )
+  public Page<CrimeDto> getCrimes2(
+    @RequestParam(required = false)
+    final UUID cityIdentifier,
+    @Parameter(hidden = true)
+    final Pageable pageable
   ) {
-    final int page = pageable.getPageNumber();
-    final int pageSize = pageable.getPageSize();
-
-    final BookAttributes attributes = new BookAttributes(page, pageSize);
-    final Book<Crime> book = null == city
-      ? this.crimeRepository.findCrimes(attributes)
-      : this.crimeRepository.findCrimesByCityIdentifier(city, attributes);
-
-    return new BookDto<>(
-      book.getContent()
-        .stream()
-        .map(this.crimeMapper::toDto)
-        .toArray(CrimeDto[]::new),
-      page,
-      pageSize
-    );
+    return ((Page<Crime>) this.crimeLifecycleService.getCrimes(
+      PageRange.of(
+        pageable.getPageNumber(),
+        pageable.getPageSize()
+      )
+    )).map(this.crimeMapper::toDto);
   }
 
   @GetMapping("crime")
@@ -91,5 +90,10 @@ public class CrimeController {
     return ResponseEntity.ok(
       this.crimeMapper.toDto(crime)
     );
+  }
+
+  @GetMapping("count")
+  public long countCrimes() {
+    return this.crimeLifecycleService.countCrimes();
   }
 }

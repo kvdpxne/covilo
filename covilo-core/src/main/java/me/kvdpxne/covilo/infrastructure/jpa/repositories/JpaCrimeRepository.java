@@ -11,7 +11,11 @@ import org.springframework.stereotype.Repository;
 public interface JpaCrimeRepository
   extends JpaIdentifiableRepository<CrimeEntity> {
 
-  Page<CrimeEntity> findCrimeEntityByPlace_Identifier(final UUID identifier, final Pageable pageable);
-
   Page<CrimeEntity> findByPlace_Identifier(UUID identifier, Pageable pageable);
+
+  Page<CrimeEntity> findByClassification_Identifier(UUID identifier, Pageable pageable);
+
+  Page<CrimeEntity> findByReporter_Identifier(UUID identifier, Pageable pageable);
+
+
 }

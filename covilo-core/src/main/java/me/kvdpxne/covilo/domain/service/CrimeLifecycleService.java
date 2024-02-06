@@ -5,11 +5,13 @@ import java.util.Objects;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import me.kvdpxne.covilo.domain.persistence.paging.PageRange;
 import me.kvdpxne.covilo.domain.port.out.ICrimeLifecycleService;
 import me.kvdpxne.covilo.common.exceptions.CrimeAlreadyExistsException;
 import me.kvdpxne.covilo.common.exceptions.CrimeNotFoundException;
 import me.kvdpxne.covilo.domain.model.Crime;
 import me.kvdpxne.covilo.domain.persistence.CrimeRepository;
+import me.kvdpxne.covilo.shared.Validation;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -18,15 +20,21 @@ public class CrimeLifecycleService implements ICrimeLifecycleService {
   private final CrimeRepository crimeRepository;
 
   @Override
+  public Iterable<Crime> getCrimes(
+    final PageRange range
+  ) {
+    return this.crimeRepository.getCrimes(
+      Validation.check(
+        range,
+        "The given PageRange cannot be null."
+      )
+    );
+  }
+
+  @Override
   public Crime getCrimeByIdentifier(final UUID identifier) throws CrimeNotFoundException {
-    final Crime crime = this.crimeRepository.findCrimeByIdentifierOrNull(identifier);
-    if (null == crime) {
-      throw new CrimeNotFoundException(
-        "",
-        identifier
-      );
-    }
-    return crime;
+    return this.crimeRepository.getCrimeByIdentifier(identifier)
+      .orElseThrow(() -> new CrimeNotFoundException("", identifier));
   }
 
   @Override
@@ -62,5 +70,10 @@ public class CrimeLifecycleService implements ICrimeLifecycleService {
       .addArgument(rebuilt)
       .log();
     return rebuilt;
+  }
+
+  @Override
+  public long countCrimes() {
+    return this.crimeRepository.countCrimes();
   }
 }

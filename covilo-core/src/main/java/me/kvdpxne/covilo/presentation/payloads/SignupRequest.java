@@ -12,6 +12,4 @@ public record SignupRequest(
   String password,
   String confirmPassword,
   boolean privacyPolicy
-) {
-
-}
+) {}
