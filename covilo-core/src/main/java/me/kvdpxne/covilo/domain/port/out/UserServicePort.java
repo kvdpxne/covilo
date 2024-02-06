@@ -9,9 +9,37 @@ import me.kvdpxne.covilo.domain.model.User;
 
 public interface UserServicePort {
 
-  User getUserByIdentifier(final UUID identifier) throws UserNotFoundException;
+  /**
+   * Retrieves a user by their unique identifier.
+   *
+   * @param identifier The unique identifier of the user.
+   * @return The user with the specified identifier.
+   * @throws NullPointerException  If the identifier is null.
+   * @throws UserNotFoundException If no user is found with the specified
+   *                               identifier.
+   */
+  User getUserByIdentifier(final UUID identifier);
 
-  User getUserByEmail(final String email) throws UserNotFoundException;
+  /**
+   * Retrieves a user by their email address.
+   *
+   * <p>
+   * Note: Using the {@link #getUserByIdentifier(UUID)} method with the user's
+   * unique identifier will always be more efficient than using this method,
+   * as it directly accesses the user's record based on the identifier.
+   * </p>
+   *
+   * @param email The email address of the user.
+   * @return The user with the specified email address.
+   * @throws NullPointerException             If the email address is null.
+   * @throws IllegalArgumentException         If the email address is empty or
+   *                                          consists only of whitespace.
+   * @throws UserInvalidEmailAddressException If the email address provided is
+   *                                          not valid.
+   * @throws UserNotFoundException            If no user is found with the
+   *                                          specified email address.
+   */
+  User getUserByEmail(final String email);
 
   /**
    * Creates a new user from the given user data if the unique identifier

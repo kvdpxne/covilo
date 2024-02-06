@@ -9,14 +9,34 @@ public final class UserValidator
   implements UserValidatorPort {
 
   /**
+   * Regular expression pattern for validating Google Gmail email addresses.
    *
+   * <p>
+   * The pattern ensures that the email address conforms to standard Gmail
+   * email format.
+   * </p>
+   *
+   * <p>
+   * Note: This pattern is specifically designed for validating Google Gmail
+   * email addresses.
+   * </p>
    */
   public static final String EMAIL_PATTERN = "^(?=.{1,64}@)[A-Za-z0-9+_-]+" +
     "(\\.[A-Za-z0-9+_-]+)*@[^-][A-Za-z0-9+-]+(\\.[A-Za-z0-9+-]+)*" +
     "(\\.[A-Za-z]{2,})$";
 
   /**
+   * Regular expression pattern for validating passwords.
    *
+   * <p>
+   * The pattern ensures that the password meets the following criteria:
+   * </p>
+   * <ul>
+   *   <li>Contains at least one digit</li>
+   *   <li>Contains at least one lowercase letter</li>
+   *   <li>Contains at least one uppercase letter</li>
+   *   <li>Consists of at least 8 characters</li>
+   * </ul>
    */
   public static final String PASSWORD_PATTERN = "^(?=.*\\d)(?=.*[a-z])(?=.*" +
     "[A-Z])(?=.*[a-zA-Z]).{8,}$";

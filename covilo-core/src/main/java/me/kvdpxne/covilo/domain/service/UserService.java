@@ -1,15 +1,16 @@
 package me.kvdpxne.covilo.domain.service;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import me.kvdpxne.covilo.domain.port.out.UserServicePort;
-import me.kvdpxne.covilo.domain.port.out.UserValidatorPort;
 import me.kvdpxne.covilo.common.exceptions.UserAlreadyExistsException;
 import me.kvdpxne.covilo.common.exceptions.UserNotFoundException;
 import me.kvdpxne.covilo.domain.model.User;
 import me.kvdpxne.covilo.domain.persistence.UserRepository;
 import me.kvdpxne.covilo.domain.port.out.UserPasswordEncodePort;
+import me.kvdpxne.covilo.domain.port.out.UserServicePort;
+import me.kvdpxne.covilo.domain.port.out.UserValidatorPort;
 import me.kvdpxne.covilo.shared.Validation;
 
 /**
@@ -21,36 +22,45 @@ public final class UserService
   implements UserServicePort {
 
   private final UserRepository userRepository;
-  private final UserPasswordEncodePort userPasswordEncodePort;
+  private final UserPasswordEncodePort userPasswordEncode;
 
   /**
    *
    */
-  private final UserValidatorPort userValidatorPort;
+  private final UserValidatorPort userValidator;
 
   /**
-   * @throws UserNotFoundException If the user with the given identifier could
-   *                               not be found.
+   * For full method documentation, refer to the
+   * {@link UserServicePort#getUserByIdentifier(UUID)} method.
    */
   @Override
   public User getUserByIdentifier(
     final UUID identifier
-  ) throws UserNotFoundException {
+  ) {
+    // Validate the provided identifier.
+    Validation.check(identifier);
+
+    // Retrieve the user from the repository.
     final var user = this.userRepository.findUserByIdentifierOrNull(identifier);
+
+    // Throw UserNotFoundException if no user is found.
     if (null == user) {
-      UserNotFoundException.byIdentifier(identifier);
+      throw UserNotFoundException.byIdentifier(identifier);
     }
+
+    // Return the user.
     return user;
   }
 
   /**
-   * @throws UserNotFoundException If the user with the given email address
-   *                               could not be found.
+   * For full method documentation, refer to the
+   * {@link UserServicePort#getUserByEmail(String)}} method.
    */
   @Override
   public User getUserByEmail(
     final String email
   ) throws UserNotFoundException {
+    this.userValidator.checkEmail(email);
     final var user = this.userRepository.findUserByEmailOrNull(email);
     if (null == user) {
       UserNotFoundException.byEmail(email);
@@ -59,69 +69,105 @@ public final class UserService
   }
 
   /**
-   * @throws UserAlreadyExistsException If the specified user has an identifier
-   *                                    that is already assigned to another
-   *                                    user.
+   * Checks if a user with the same identifier already exists.
+   *
+   * @param user The user object to check the identifier for.
+   * @throws UserAlreadyExistsException If a user with the same identifier
+   *                                    already exists.
    */
   private void checkExistsUserByIdentifier(
     final User user
   ) throws UserAlreadyExistsException {
+    // Extract the identifier from the provided user object.
     final var identifier = user.identifier();
+
+    // Check if a user with the same identifier exists in the repository and
+    // throw a UserAlreadyExistsException if a user with the same identifier
+    // already exists.
     if (this.userRepository.existsUserByIdentifier(identifier)) {
       UserAlreadyExistsException.byIdentifier(identifier);
     }
   }
 
   /**
-   * @throws UserAlreadyExistsException If the specified user has an email
-   *                                    address that is already assigned to
-   *                                    another user.
+   * Checks if a user with the same email already exists.
+   *
+   * @param user The user object to check the email for.
+   * @throws UserAlreadyExistsException If a user with the same email already
+   *                                    exists.
    */
   private void checkExistsUserByEmail(
     final User user
   ) throws UserAlreadyExistsException {
+    // Extract the email from the provided user object.
     final var email = user.email();
-    // Checks whether the email address is correct and whether another user has
-    // already been assigned this email address.
+
+    // Check if a user with the same email exists in the repository and throw
+    // a UserAlreadyExistsException if a user with the same email already
+    // exists.
     if (this.checkUserExistsByEmail(email)) {
       throw UserAlreadyExistsException.byEmail(email);
     }
   }
 
   /**
-   * @throws UserAlreadyExistsException If the user's identifier or email
-   *                                    address is already assigned to another
-   *                                    user.
+   * Creates a new user based on the provided user data.
+   *
+   * @param source The user data to create the user from.
+   * @return The newly created user.
+   * @throws UserAlreadyExistsException If a user with the same identifier
+   *                                    or email already exists.
    */
   @Override
   public User createUser(
     final User source
   ) throws UserAlreadyExistsException {
-    // Checks whether the identifier and email address of the given user are
-    // not already assigned to another user because the identifier and email
-    // address should be unique.
+    // Check if a user with the same identifier or email already exists.
     this.checkExistsUserByIdentifier(source);
     this.checkExistsUserByEmail(source);
 
-    // Encodes the raw currentPassword according to the given rules defined in the
-    // application infrastructure.
-    final var encodedPassword = this.userPasswordEncodePort.encode(
+    // Encode the password before storing it.
+    final var encodedPassword = this.userPasswordEncode.encode(
       source.password()
     );
 
-    var user = source.toBuilder()
+    // Create a builder based on the provided user data.
+    var userBuilder = source.toBuilder();
+
+    // Assign a new UUID as the identifier if the user is new.
+    if (source.isNew()) {
+      userBuilder.identifier(UUID.randomUUID());
+    }
+
+    // Set the creation date to the current date and time if it was not
+    // previously set.
+    if (!source.wasCreated()) {
+      if (!source.wasModified()) {
+        throw new IllegalArgumentException(
+          "Invalid user state: Neither created nor modified."
+        );
+      }
+      userBuilder.createdDate(LocalDateTime.now());
+    }
+
+    // Build the user object with the updated builder, including the
+    // encoded password.
+    var user = userBuilder
       .password(encodedPassword)
       .build();
 
     try {
+      // Insert the new user into the repository.
       user = this.userRepository.insert(user);
     } catch (final Throwable throwable) {
+      // Wrap and rethrow any exceptions occurred during user insertion.
       throw new RuntimeException(
         "An unhandled exception occurred while inserting a user.",
         throwable
       );
     }
 
+    // Log the creation of the user.
     logger.atDebug()
       .setMessage("Created user: {}")
       .addArgument(user)
@@ -151,7 +197,7 @@ public final class UserService
     final String newEmail
   ) {
     Validation.check(user);
-    this.userValidatorPort.checkEmail(newEmail);
+    this.userValidator.checkEmail(newEmail);
 
     //
     final var email = user.email();
@@ -185,12 +231,12 @@ public final class UserService
     final String newPassword
   ) {
     Validation.check(user);
-    this.userValidatorPort.checkPassword(newPassword);
+    this.userValidator.checkPassword(newPassword);
     final var password = user.password();
     if (password.equals(newPassword)) {
       return;
     }
-    final var encodedPassword = this.userPasswordEncodePort.encode(newPassword);
+    final var encodedPassword = this.userPasswordEncode.encode(newPassword);
     this.userRepository.updatePasswordByIdentifier(user.identifier(), encodedPassword);
   }
 
@@ -221,7 +267,7 @@ public final class UserService
 
   @Override
   public boolean checkUserExistsByEmail(final String email) {
-    this.userValidatorPort.checkEmail(email);
+    this.userValidator.checkEmail(email);
     return this.userRepository.existsUserByEmail(email);
   }
 }

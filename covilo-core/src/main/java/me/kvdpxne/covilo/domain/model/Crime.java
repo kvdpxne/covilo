@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.UUID;
 import lombok.Builder;
 import me.kvdpxne.covilo.domain.aggregation.Auditable;
-import me.kvdpxne.covilo.domain.aggregation.Identity;
+import me.kvdpxne.covilo.domain.aggregation.Identifiable;
 
 @Builder(toBuilder = true)
 public record Crime(
@@ -19,4 +19,4 @@ public record Crime(
   boolean confirmed,
   LocalDateTime createdDate,
   LocalDateTime lastModifiedDate
-) implements Identity<UUID>, Auditable {}
+) implements Identifiable<UUID>, Auditable {}

@@ -5,8 +5,22 @@ import me.kvdpxne.covilo.domain.model.User;
 
 public interface UserRepository {
 
+  /**
+   * Retrieves a user by their unique identifier.
+   *
+   * @param identifier The unique identifier of the user.
+   * @return The user with the specified identifier, or null if no user i
+   * found.
+   */
   User findUserByIdentifierOrNull(final UUID identifier);
 
+  /**
+   * Retrieves a user by their email address.
+   *
+   * @param email The email address of the user.
+   * @return The user with the specified email address, or null if no user is
+   * found.
+   */
   User findUserByEmailOrNull(final String email);
 
   User insert(final User user);

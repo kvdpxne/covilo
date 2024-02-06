@@ -8,7 +8,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -19,19 +18,18 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * Represents a category entity.
+ * Represents detailed information associated with a crime.
  */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-@Entity
-@Table(name = "category")
-public final class CategoryEntity {
+@Entity(name = "crime_details")
+public class CrimeDetailsEntity {
 
   /**
-   * The unique identifier for the category entity.
+   * The unique identifier for the crime details.
    */
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
@@ -39,24 +37,25 @@ public final class CategoryEntity {
   private UUID identifier;
 
   /**
-   * The name of the category.
+   * A description of the crime details.
    */
-  @Column(name = "name", nullable = false, unique = true)
-  private String name;
+  @Column(name = "description", length = 256)
+  private String description;
 
   /**
-   * The set of classifications associated with this category.
+   * The comments associated with the crime details.
    */
   @ToString.Exclude
   @ManyToMany
   @JoinTable(
-    name = "category_classifications",
+    name = "crime_details_comments",
     joinColumns = @JoinColumn(
-      name = "category_identifier"
+      name = "crime_details_identifier"
     ),
     inverseJoinColumns = @JoinColumn(
-      name = "classification_identifier"
+      name = "comment_identifier"
     )
   )
-  private Set<ClassificationEntity> classifications = new LinkedHashSet<>();
+  private Set<CommentEntity> comments = new LinkedHashSet<>();
+
 }

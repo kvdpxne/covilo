@@ -18,6 +18,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Represents a comment entity.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -26,18 +29,30 @@ import lombok.Setter;
 @Table(name = "comment")
 public class CommentEntity {
 
+  /**
+   * The unique identifier for the comment.
+   */
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
   @Column(name = "identifier", nullable = false)
   private UUID identifier;
 
+  /**
+   * The content of the comment.
+   */
   @Column(name = "content")
   private String content;
 
+  /**
+   * The author of the comment.
+   */
   @OneToOne(orphanRemoval = true)
   @JoinColumn(name = "author_identifier")
   private UserEntity author;
 
+  /**
+   * The replies to the comment.
+   */
   @ManyToMany
   @JoinTable(
     name = "comment_replies",
@@ -49,5 +64,4 @@ public class CommentEntity {
     )
   )
   private Collection<CommentEntity> replies = new LinkedHashSet<>();
-
 }
