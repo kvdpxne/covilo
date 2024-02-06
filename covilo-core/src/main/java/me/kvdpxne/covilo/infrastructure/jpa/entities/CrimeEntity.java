@@ -54,12 +54,12 @@ public final class CrimeEntity {
 
   @ToString.Exclude
   @ManyToOne
-  @JoinColumn(name = "reporter")
+  @JoinColumn(name = "reporter_identifier")
   private UserEntity reporter;
 
   @ToString.Exclude
   @ManyToOne(optional = false)
-  @JoinColumn(name = "place", nullable = false)
+  @JoinColumn(name = "place_identifier", nullable = false)
   private CityEntity place;
 
   @Column(name = "confirmed", nullable = false)

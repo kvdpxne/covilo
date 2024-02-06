@@ -33,7 +33,7 @@ export class CrimeService {
   }
 
   public getCrimes(city: string): Observable<Book<Crime>> {
-    return this.api.get<Book<Crime>>("crimes", {
+    return this.api.get<Book<Crime>>("crime/all", {
       city: city
     }).pipe(
       map(value => {

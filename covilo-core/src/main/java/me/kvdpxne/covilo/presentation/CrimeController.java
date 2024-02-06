@@ -3,17 +3,18 @@ package me.kvdpxne.covilo.presentation;
 import io.swagger.v3.oas.annotations.Parameter;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import me.kvdpxne.covilo.common.constants.Endpoints;
+import me.kvdpxne.covilo.common.exceptions.CrimeAlreadyExistsException;
+import me.kvdpxne.covilo.common.exceptions.CrimeNotFoundException;
+import me.kvdpxne.covilo.domain.model.Crime;
+import me.kvdpxne.covilo.domain.persistence.CrimeRepository;
 import me.kvdpxne.covilo.domain.port.out.ICrimeLifecycleService;
 import me.kvdpxne.covilo.presentation.dto.BookDto;
 import me.kvdpxne.covilo.presentation.dto.CrimeDto;
-import me.kvdpxne.covilo.common.exceptions.CrimeAlreadyExistsException;
-import me.kvdpxne.covilo.common.exceptions.CrimeNotFoundException;
 import me.kvdpxne.covilo.presentation.mappers.CrimeMapper;
 import me.kvdpxne.covilo.presentation.payloads.ReportCrimeRequest;
 import me.kvdpxne.covilo.shared.Book;
 import me.kvdpxne.covilo.shared.BookAttributes;
-import me.kvdpxne.covilo.domain.model.Crime;
-import me.kvdpxne.covilo.domain.persistence.CrimeRepository;
 import org.springdoc.core.converters.models.PageableAsQueryParam;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/0.1.0")
+@RequestMapping(path = Endpoints.CRIME)
 @RequiredArgsConstructor
 public class CrimeController {
 
@@ -35,8 +36,8 @@ public class CrimeController {
   private final CrimeMapper crimeMapper;
 
   @PageableAsQueryParam
-  @GetMapping("crimes")
-  public ResponseEntity<BookDto<CrimeDto>> getCrimes(
+  @GetMapping("all")
+  public BookDto<CrimeDto> getCrimes(
     @RequestParam(required = false) final UUID city,
     @Parameter(hidden = true) final Pageable pageable
   ) {
@@ -48,14 +49,14 @@ public class CrimeController {
       ? this.crimeRepository.findCrimes(attributes)
       : this.crimeRepository.findCrimesByCityIdentifier(city, attributes);
 
-    return ResponseEntity.ok(new BookDto<>(
+    return new BookDto<>(
       book.getContent()
         .stream()
         .map(this.crimeMapper::toDto)
         .toArray(CrimeDto[]::new),
       page,
       pageSize
-    ));
+    );
   }
 
   @GetMapping("crime")
