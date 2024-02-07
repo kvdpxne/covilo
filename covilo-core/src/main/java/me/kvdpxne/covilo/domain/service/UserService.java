@@ -273,6 +273,13 @@ public final class UserService
   }
 
   @Override
+  public boolean checkUserExistsByIdentifier(
+    final UUID identifier
+  ) {
+    return false;
+  }
+
+  @Override
   public boolean checkUserExistsByEmail(final String email) {
     this.userValidator.checkEmail(email);
     return this.userRepository.existsUserByEmail(email);

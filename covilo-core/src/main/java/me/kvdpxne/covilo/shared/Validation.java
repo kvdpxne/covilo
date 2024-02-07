@@ -1,7 +1,5 @@
 package me.kvdpxne.covilo.shared;
 
-import java.util.Collection;
-
 public final class Validation {
 
   public static <T> T check(final T value, final String message) {
@@ -68,14 +66,17 @@ public final class Validation {
   }
 
   /**
-   * Checks whether the given sequence of characters is empty.
+   * Checks whether the provided character sequence is empty or consists only
+   * of whitespace characters.
    *
-   * @throws NullPointerException     If the given sequence of characters is
-   *                                  null.
-   * @throws IllegalArgumentException If the given character sequence is empty
-   *                                  or consists only of whitespace.
+   * @param sequence The character sequence to check.
+   * @throws NullPointerException     If the provided sequence is null.
+   * @throws IllegalArgumentException If the sequence is empty or consists only
+   *                                  of whitespace characters.
    */
-  public static void empty(final String sequence) {
+  public static void empty(
+    final CharSequence sequence
+  ) {
     Validation.check(sequence);
 
     final int length = sequence.length();
@@ -99,10 +100,19 @@ public final class Validation {
     }
   }
 
-  public static void empty(final Collection<?> collection) {
-    Validation.check(collection);
+  /**
+   * Checks whether the provided iterable is empty.
+   *
+   * @param iterable The iterable to check.
+   * @throws NullPointerException     If the provided iterable is null.
+   * @throws IllegalArgumentException If the iterable is empty.
+   */
+  public static void empty(
+    final Iterable<?> iterable
+  ) {
+    Validation.check(iterable);
 
-    if (collection.isEmpty()) {
+    if (!iterable.iterator().hasNext()) {
       throw new IllegalArgumentException("");
     }
   }

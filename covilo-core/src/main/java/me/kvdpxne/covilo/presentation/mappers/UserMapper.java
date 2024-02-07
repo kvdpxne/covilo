@@ -1,7 +1,7 @@
 package me.kvdpxne.covilo.presentation.mappers;
 
 import me.kvdpxne.covilo.domain.model.User;
-import me.kvdpxne.covilo.presentation.CreateNewUserRequest;
+import me.kvdpxne.covilo.presentation.payloads.CreateNewUserRequest;
 import me.kvdpxne.covilo.presentation.dto.UserDto;
 import me.kvdpxne.covilo.presentation.payloads.SignupRequest;
 import me.kvdpxne.covilo.shared.MapStructPresentationMapper;

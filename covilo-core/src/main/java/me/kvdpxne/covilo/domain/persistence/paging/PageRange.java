@@ -20,6 +20,12 @@ public record PageRange(
 ) {
 
   /**
+   * Represents the default page range used for pagination.
+   * The default page range starts from page 0 and has a size of 20.
+   */
+  public static final PageRange DEFAULT_PAGE_RANGE = new PageRange(0, 20);
+
+  /**
    * Creates a new PageRange instance with the specified page number and size.
    *
    * @param page The page number.
@@ -37,9 +43,10 @@ public record PageRange(
   /**
    * Creates a new PageRange instance representing the entire range of pages.
    *
+   * @param size The number of items per page.
    * @return A new PageRange instance representing the entire range of pages.
    */
-  public static PageRange of() {
-    return new PageRange(0, Integer.MAX_VALUE);
+  public static PageRange of(final int size) {
+    return PageRange.of(0, size);
   }
 }

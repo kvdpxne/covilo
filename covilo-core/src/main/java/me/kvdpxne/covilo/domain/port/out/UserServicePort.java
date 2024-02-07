@@ -94,6 +94,8 @@ public interface UserServicePort {
 
   void deleteUser(final User user);
 
+  boolean checkUserExistsByIdentifier(final UUID identifier);
+
   /**
    * @throws NullPointerException     If the given email address is null.
    * @throws IllegalArgumentException
