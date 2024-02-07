@@ -7,9 +7,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.kvdpxne.covilo.domain.model.User;
 import me.kvdpxne.covilo.domain.persistence.UserRepository;
+import me.kvdpxne.covilo.domain.persistence.paging.PageRange;
 import me.kvdpxne.covilo.infrastructure.jpa.entities.UserEntity;
 import me.kvdpxne.covilo.infrastructure.jpa.mappers.UserPersistenceMapper;
 import me.kvdpxne.covilo.infrastructure.jpa.repositories.JpaUserRepository;
+import me.kvdpxne.covilo.shared.SpringPageRequestMapper;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -18,37 +20,46 @@ import org.springframework.stereotype.Component;
 public final class UserDao
   implements UserRepository {
 
-  private final JpaUserRepository jpa;
-  private final UserPersistenceMapper mapper;
+  private final JpaUserRepository userRepository;
+  private final UserPersistenceMapper userPersistenceMapper;
+
+  private final SpringPageRequestMapper pageRequestMapper;
 
   private User toUserOrNull(final Optional<UserEntity> source) {
-    return source.map(this.mapper::toDomain).orElse(null);
+    return source.map(this.userPersistenceMapper::toDomain).orElse(null);
+  }
+
+  @Override
+  public Iterable<User> findUsers(final PageRange range) {
+    return this.userRepository.findAll(
+      this.pageRequestMapper.toPageRequest(range)
+    ).map(this.userPersistenceMapper::toDomain);
   }
 
   @Override
   public User findUserByIdentifierOrNull(final UUID identifier) {
-    final var entity = this.jpa.findById(identifier);
+    final var entity = this.userRepository.findById(identifier);
     return this.toUserOrNull(entity);
   }
 
   @Override
   public User findUserByEmailOrNull(final String email) {
-    final var entity = this.jpa.findByEmail(email);
+    final var entity = this.userRepository.findByEmail(email);
     return this.toUserOrNull(entity);
   }
 
   @Override
   public User insert(final User user) {
-    var entity = this.mapper.toDao(user);
-    entity = this.jpa.save(entity);
-    return this.mapper.toDomain(entity);
+    var entity = this.userPersistenceMapper.toDao(user);
+    entity = this.userRepository.save(entity);
+    return this.userPersistenceMapper.toDomain(entity);
   }
 
   @Override
   public boolean updateLastModifiedDateByIdentifier(
     final UUID identifier
   ) {
-    return 0 != this.jpa.updateLastModifiedDateByIdentifier(
+    return 0 != this.userRepository.updateLastModifiedDateByIdentifier(
       LocalDateTime.now(),
       identifier
     );
@@ -63,7 +74,7 @@ public final class UserDao
     int rows = 0;
 
     try {
-      rows = this.jpa.updateEmailByIdentifier(
+      rows = this.userRepository.updateEmailByIdentifier(
         identifier,
         email,
         LocalDateTime.now()
@@ -87,7 +98,7 @@ public final class UserDao
     int rows = 0;
 
     try {
-      rows = this.jpa.updatePasswordByIdentifier(
+      rows = this.userRepository.updatePasswordByIdentifier(
         identifier,
         password,
         LocalDateTime.now()
@@ -106,16 +117,16 @@ public final class UserDao
 
   @Override
   public void deleteUserByIdentifier(final UUID identifier) {
-    this.jpa.deleteById(identifier);
+    this.userRepository.deleteById(identifier);
   }
 
   @Override
   public boolean existsUserByIdentifier(final UUID identifier) {
-    return this.jpa.existsById(identifier);
+    return this.userRepository.existsById(identifier);
   }
 
   @Override
   public boolean existsUserByEmail(final String email) {
-    return this.jpa.existsByEmail(email);
+    return this.userRepository.existsByEmail(email);
   }
 }

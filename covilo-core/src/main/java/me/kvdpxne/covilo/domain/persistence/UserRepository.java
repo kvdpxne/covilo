@@ -2,8 +2,11 @@ package me.kvdpxne.covilo.domain.persistence;
 
 import java.util.UUID;
 import me.kvdpxne.covilo.domain.model.User;
+import me.kvdpxne.covilo.domain.persistence.paging.PageRange;
 
 public interface UserRepository {
+
+  Iterable<User> findUsers(final PageRange range);
 
   /**
    * Retrieves a user by their unique identifier.

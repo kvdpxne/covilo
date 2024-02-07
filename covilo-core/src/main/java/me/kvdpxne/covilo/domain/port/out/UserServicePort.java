@@ -6,8 +6,11 @@ import me.kvdpxne.covilo.common.exceptions.UserInvalidPasswordException;
 import me.kvdpxne.covilo.common.exceptions.UserAlreadyExistsException;
 import me.kvdpxne.covilo.common.exceptions.UserNotFoundException;
 import me.kvdpxne.covilo.domain.model.User;
+import me.kvdpxne.covilo.domain.persistence.paging.PageRange;
 
 public interface UserServicePort {
+
+  Iterable<User> getUsers(final PageRange page);
 
   /**
    * Retrieves a user by their unique identifier.

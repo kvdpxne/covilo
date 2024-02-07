@@ -8,6 +8,7 @@ import me.kvdpxne.covilo.common.exceptions.UserAlreadyExistsException;
 import me.kvdpxne.covilo.common.exceptions.UserNotFoundException;
 import me.kvdpxne.covilo.domain.model.User;
 import me.kvdpxne.covilo.domain.persistence.UserRepository;
+import me.kvdpxne.covilo.domain.persistence.paging.PageRange;
 import me.kvdpxne.covilo.domain.port.out.UserPasswordEncodePort;
 import me.kvdpxne.covilo.domain.port.out.UserServicePort;
 import me.kvdpxne.covilo.domain.port.out.UserValidatorPort;
@@ -35,6 +36,11 @@ public final class UserService
    * Port for validating user data.
    */
   private final UserValidatorPort userValidator;
+
+  @Override
+  public Iterable<User> getUsers(final PageRange page) {
+    return this.userRepository.findUsers(page);
+  }
 
   /**
    * For full method documentation, refer to the

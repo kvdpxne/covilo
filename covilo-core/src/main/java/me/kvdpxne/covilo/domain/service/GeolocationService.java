@@ -1,6 +1,7 @@
 package me.kvdpxne.covilo.domain.service;
 
 import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.kvdpxne.covilo.domain.model.AdministrativeDivision;
@@ -41,5 +42,10 @@ public final class GeolocationService
   @Override
   public List<City> getCities() {
     return null;
+  }
+
+  @Override
+  public City getCityByIdentifier(final UUID identifier) {
+    return this.cityRepository.findByIdentifierOrNull(identifier);
   }
 }

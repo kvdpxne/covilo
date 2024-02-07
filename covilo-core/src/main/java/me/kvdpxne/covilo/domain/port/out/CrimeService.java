@@ -31,6 +31,14 @@ public interface CrimeService {
    */
   Crime createCrime(final Crime crime);
 
+
+  /**
+   *
+   */
+  void deleteCrimeByIdentifier(
+    final UUID identifier
+  );
+
   /**
    * @throws NullPointerException
    */

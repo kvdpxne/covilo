@@ -1,6 +1,7 @@
 package me.kvdpxne.covilo.domain.port.out;
 
 import java.util.List;
+import java.util.UUID;
 import me.kvdpxne.covilo.domain.model.AdministrativeDivision;
 import me.kvdpxne.covilo.domain.model.City;
 import me.kvdpxne.covilo.domain.model.Country;
@@ -32,4 +33,8 @@ public interface GeolocationServicePort {
    */
   @TestOnly
   List<City> getCities();
+
+  City getCityByIdentifier(
+    final UUID identifier
+  );
 }

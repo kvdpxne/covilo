@@ -30,6 +30,14 @@ public final class ClassificationDao implements ClassificationRepository {
   }
 
   @Override
+  public Optional<Classification> findClassificationByIdentifier(
+    final UUID identifier
+  ) {
+    return this.jpa.findById(identifier)
+      .map(this.mapper::toDomain);
+  }
+
+  @Override
   public Classification findClassificationByIdentifierOrNull(final UUID identifier) {
     final var entity = this.jpa.findById(identifier);
     return this.toClassificationOrNull(entity);

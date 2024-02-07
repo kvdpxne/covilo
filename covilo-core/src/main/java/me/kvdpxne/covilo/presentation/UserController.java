@@ -1,7 +1,10 @@
 package me.kvdpxne.covilo.presentation;
 
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import me.kvdpxne.covilo.domain.model.User;
+import me.kvdpxne.covilo.domain.persistence.paging.PageRange;
 import me.kvdpxne.covilo.presentation.dto.UserDto;
 import me.kvdpxne.covilo.presentation.mappers.UserMapper;
 import me.kvdpxne.covilo.presentation.payloads.CreateNewUserRequest;
@@ -11,6 +14,7 @@ import me.kvdpxne.covilo.common.constants.Endpoints;
 import me.kvdpxne.covilo.common.exceptions.UserNotFoundException;
 import me.kvdpxne.covilo.domain.port.out.UserServicePort;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,6 +41,15 @@ public final class UserController {
    * Mapper for converting between user entities and DTOs.
    */
   private final UserMapper userMapper;
+
+  @GetMapping("all")
+  public Page<UserDto> getUsers(
+    final PageRange page
+  ) {
+    final var users = (Page<User>) this.userService.getUsers(page);
+
+    return users.map(this.userMapper::toDto);
+  }
 
   /**
    * Retrieves information about a user identified by the given identifier.

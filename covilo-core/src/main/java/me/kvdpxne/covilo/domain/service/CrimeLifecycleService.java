@@ -11,12 +11,18 @@ import me.kvdpxne.covilo.domain.persistence.CrimeRepository;
 import me.kvdpxne.covilo.domain.persistence.paging.PageRange;
 import me.kvdpxne.covilo.domain.persistence.specifications.CrimeSearchCriteria;
 import me.kvdpxne.covilo.domain.port.out.CrimeService;
+import me.kvdpxne.covilo.domain.port.out.GeolocationServicePort;
+import me.kvdpxne.covilo.domain.port.out.UserServicePort;
 import me.kvdpxne.covilo.shared.Validation;
 
 @Slf4j
 @RequiredArgsConstructor
 public final class CrimeLifecycleService
   implements CrimeService {
+
+  private final UserServicePort userService;
+  private final SystematizationService2 systematizationService;
+  private final GeolocationServicePort geolocationService;
 
   private final CrimeRepository crimeRepository;
 
@@ -82,6 +88,11 @@ public final class CrimeLifecycleService
       .log();
 
     return result;
+  }
+
+  @Override
+  public void deleteCrimeByIdentifier(final UUID identifier) {
+    this.crimeRepository.deleteCrimeByIdentifier(identifier);
   }
 
   @Override
