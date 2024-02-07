@@ -9,8 +9,7 @@ import org.mapstruct.MappingConstants;
 @Mapper(
   uses = {
     UserPersistenceMapper.class
-  },
-  componentModel = MappingConstants.ComponentModel.SPRING
+  }
 )
 public interface TokenPersistenceMapper {
 

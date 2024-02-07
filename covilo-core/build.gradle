@@ -66,7 +66,25 @@ java {
 }
 
 compileJava {
-  options.compilerArgs += ['--enable-preview']
+
+  options.compilerArgs += [
+    // Enable preview features for the Java compiler.
+    "--enable-preview",
+
+    // Set the default component model for MapStruct to Spring, indicating
+    // that Spring annotations will be used for dependency injection.
+    "-Amapstruct.defaultComponentModel=spring",
+
+    // Suppress generation of timestamp in MapStruct-generated classes.
+    "-Amapstruct.suppressGeneratorTimestamp=true",
+
+    // Suppress generation of version in MapStruct-generated classes.
+    "-Amapstruct.suppressGeneratorVersionInfoComment=true",
+
+    // Enable verbose mode for MapStruct, providing more detailed output
+    // during code generation.
+    "-Amapstruct.verbose=true",
+  ]
 }
 
 processResources {

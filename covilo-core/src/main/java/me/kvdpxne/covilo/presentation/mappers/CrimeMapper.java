@@ -7,16 +7,14 @@ import me.kvdpxne.covilo.presentation.dto.CrimeDto;
 import me.kvdpxne.covilo.presentation.payloads.ReportCrimeRequest;
 import me.kvdpxne.covilo.shared.MapStructPresentationMapper;
 import org.mapstruct.Mapper;
-import org.mapstruct.MappingConstants;
 
 @Mapper(
   uses = {
     CategoryMapper.class,
     CityMapper.class,
+    ClassificationMapper.class,
     UserMapper.class
-  },
-  componentModel = MappingConstants.ComponentModel.SPRING,
-  implementationName = "CrimeMapperImpl"
+  }
 )
 public interface CrimeMapper
   extends MapStructPresentationMapper<Crime, CrimeDto> {
