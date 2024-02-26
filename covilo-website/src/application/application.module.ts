@@ -9,11 +9,6 @@ import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 
-//
-import {CoreModule} from "./core";
-
-//
-import {SharedModule} from "./shared";
 
 //
 import {AuthenticationModule} from "./authentication";
@@ -22,16 +17,12 @@ import {ApplicationRoutingModule} from "./application-routing.module";
 
 import {ApplicationComponent} from "./application.component";
 
-import {AppearanceModule} from "./appearance";
-import {MeModule} from "./me";
-import {LineChartModule} from "@swimlane/ngx-charts";
-import {ComingSoonComponent, PageNotFoundComponent} from "./communication";
+import {FooterComponent, NavigationComponent} from "./core";
+import {MeRoutingModule} from "./me/me-routing.module";
 
 @NgModule({
   declarations: [
-    ApplicationComponent,
-    PageNotFoundComponent,
-    ComingSoonComponent
+    ApplicationComponent
   ],
   imports: [
     BrowserModule,
@@ -47,21 +38,12 @@ import {ComingSoonComponent, PageNotFoundComponent} from "./communication";
       }
     }),
 
-    /*
-     *
-     * IMPORTANT: Imports in the wrong order may cause the application to work
-     * incorrectly or cause other undesirable errors.
-     */
-    SharedModule.forRoot(),
-    CoreModule,
-
-    AppearanceModule,
     AuthenticationModule,
-    MeModule,
-    ApplicationRoutingModule,
 
-    NgbModule,
-    LineChartModule
+    MeRoutingModule,
+    ApplicationRoutingModule,
+    NavigationComponent,
+    FooterComponent
   ],
   exports: [
     ApplicationComponent

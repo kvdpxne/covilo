@@ -1,62 +1,154 @@
 package me.kvdpxne.covilo.infrastructure.jpa.dao;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import me.kvdpxne.covilo.domain.aggregation.Book;
-import me.kvdpxne.covilo.domain.aggregation.BookAttributes;
+import me.kvdpxne.covilo.domain.persistence.paging.PageRange;
+import me.kvdpxne.covilo.domain.persistence.specifications.CrimeSearchCriteria;
 import me.kvdpxne.covilo.domain.model.Crime;
-import me.kvdpxne.covilo.domain.persistence.ICrimeRepository;
-import me.kvdpxne.covilo.infrastructure.jpa.mapper.ICrimePersistenceMapper;
-import me.kvdpxne.covilo.infrastructure.jpa.repository.ICrimeJpaRepository;
-import org.springframework.data.domain.PageRequest;
+import me.kvdpxne.covilo.domain.persistence.CrimeRepository;
+import me.kvdpxne.covilo.infrastructure.jpa.mappers.CrimePersistenceMapper;
+import me.kvdpxne.covilo.infrastructure.jpa.repositories.JpaCrimeRepository;
+import me.kvdpxne.covilo.shared.SpringPageRequestMapper;
 import org.springframework.stereotype.Component;
 
+/**
+ * Data Access Object (DAO) for accessing Crime entities.
+ */
 @RequiredArgsConstructor
 @Component
-public final class CrimeDao implements ICrimeRepository {
+public final class CrimeDao
+  implements CrimeRepository {
 
-  private final ICrimeJpaRepository repository;
-  private final ICrimePersistenceMapper mapper;
+  /**
+   * Repository for accessing Crime entities from the database.
+   */
+  private final JpaCrimeRepository crimeRepository;
+
+  /**
+   * Mapper for converting between CrimeEntity and Crime domain objects.
+   */
+  private final CrimePersistenceMapper crimeMapper;
+
+  /**
+   * Mapper for converting PageRange objects to Spring PageRequest objects.
+   */
+  private final SpringPageRequestMapper pageRequestMapper;
 
   @Override
-  public Book<Crime> findCrimes(final BookAttributes attributes) {
-    return Book.boxed(attributes, book ->
-      this.repository.findAll(
-          PageRequest.of(attributes.page(), attributes.size())
-        )
-        .map(this.mapper::toCrime)
-        .forEach(book::put)
-    );
+  public List<Crime> getCrimes() {
+    return this.crimeRepository.findAll()
+      .stream()
+      .map(this.crimeMapper::toDomain)
+      .toList();
   }
 
   @Override
-  public Book<Crime> findCrimesByCityIdentifier(final UUID identifier, final BookAttributes attributes) {
-    return Book.boxed(attributes, book ->
-      this.repository.findCrimeEntityByPlace_Identifier(
-          identifier,
-          PageRequest.of(attributes.page(), attributes.size())
-        )
-        .map(this.mapper::toCrime)
-        .forEach(book::put)
-    );
+  public Iterable<Crime> getCrimes(
+    final PageRange range
+  ) {
+    return this.crimeRepository.findAll(
+      this.pageRequestMapper.toPageRequest(range)
+    ).map(this.crimeMapper::toDomain);
   }
 
   @Override
-  public Crime findCrimeByIdentifierOrNull(final UUID identifier) {
-    return this.repository.findById(identifier).map(this.mapper::toCrime).orElse(null);
+  public Iterable<Crime> getCrimesByCriteria(
+    final CrimeSearchCriteria criteria
+  ) {
+    return null;
   }
 
   @Override
-  public Crime insertCrime(final Crime crime) {
-    return this.mapper.toCrime(
-      this.repository.save(
-        this.mapper.toCrimeEntity(crime)
+  public Iterable<Crime> getCrimesByPlaceIdentifier(
+    final UUID identifier,
+    final PageRange range
+  ) {
+    return this.crimeRepository.findByPlace_Identifier(
+      identifier,
+      this.pageRequestMapper.toPageRequest(range)
+    ).map(this.crimeMapper::toDomain);
+  }
+
+  @Override
+  public Iterable<Crime> getCrimesByClassificationIdentifier(
+    final UUID identifier,
+    final PageRange range
+  ) {
+    return this.crimeRepository.findByClassification_Identifier(
+      identifier,
+      this.pageRequestMapper.toPageRequest(range)
+    ).map(this.crimeMapper::toDomain);
+  }
+
+  @Override
+  public Iterable<Crime> getCrimesByReporterIdentifier(
+    final UUID identifier,
+    final PageRange range
+  ) {
+    return this.crimeRepository.findByReporter_Identifier(
+      identifier,
+      this.pageRequestMapper.toPageRequest(range)
+    ).map(this.crimeMapper::toDomain);
+  }
+
+  @Override
+  public Optional<Crime> getCrimeByIdentifier(
+    final UUID identifier
+  ) {
+    return this.crimeRepository.findById(identifier)
+      .map(this.crimeMapper::toDomain);
+  }
+
+  @Override
+  public Crime insertCrime(
+    final Crime crime
+  ) {
+    return this.crimeMapper.toDomain(
+      this.crimeRepository.save(
+        this.crimeMapper.toDao(crime)
       )
     );
   }
 
   @Override
-  public boolean existsCrimeByIdentifier(final UUID identifier) {
-    return this.repository.existsById(identifier);
+  public Crime updateCrime(
+    final Crime crime
+  ) {
+    return this.crimeMapper.toDomain(
+      this.crimeRepository.save(
+        this.crimeMapper.partialUpdate(
+          this.crimeRepository.getReferenceById(crime.identifier()),
+          crime
+        )
+      )
+    );
+  }
+
+  @Override
+  public void deleteCrimeByIdentifier(
+    final UUID identifier
+  ) {
+    this.crimeRepository.deleteById(identifier);
+  }
+
+  @Override
+  public void deleteCrime(
+    final Crime crime
+  ) {
+    this.deleteCrimeByIdentifier(crime.identifier());
+  }
+
+  @Override
+  public boolean existsCrimeByIdentifier(
+    final UUID identifier
+  ) {
+    return this.crimeRepository.existsById(identifier);
+  }
+
+  @Override
+  public long countCrimes() {
+    return this.crimeRepository.count();
   }
 }

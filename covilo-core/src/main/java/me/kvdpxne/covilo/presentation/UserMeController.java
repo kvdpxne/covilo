@@ -1,23 +1,26 @@
 package me.kvdpxne.covilo.presentation;
 
-import jakarta.servlet.http.HttpServletRequest;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import me.kvdpxne.covilo.application.dto.UserDto;
-import me.kvdpxne.covilo.application.exception.UserNotFoundException;
-import me.kvdpxne.covilo.application.mapper.IUserMapper;
-import me.kvdpxne.covilo.application.payload.UpdateEmailRequest;
-import me.kvdpxne.covilo.application.payload.UpdatePasswordRequest;
+import me.kvdpxne.covilo.presentation.dto.UserDto;
+import me.kvdpxne.covilo.presentation.mappers.UserMapper;
+import me.kvdpxne.covilo.presentation.payloads.DeleteUserMeRequest;
+import me.kvdpxne.covilo.presentation.payloads.UpdateUserMeEmailRequest;
+import me.kvdpxne.covilo.presentation.payloads.UpdateUserMePasswordRequest;
+import me.kvdpxne.covilo.common.constants.Endpoints;
 import me.kvdpxne.covilo.domain.model.User;
-import me.kvdpxne.covilo.domain.persistence.ITokenRepository;
-import me.kvdpxne.covilo.domain.service.UserLifecycleService;
+import me.kvdpxne.covilo.domain.port.out.UserMeServicePort;
+import me.kvdpxne.covilo.infrastructure.image.ImageConverterService;
+import me.kvdpxne.covilo.infrastructure.image.ImageMimeTypeNotAvailableException;
 import me.kvdpxne.covilo.infrastructure.image.ImageMimeTypeNotSupportedException;
 import me.kvdpxne.covilo.infrastructure.image.ImageType;
-import me.kvdpxne.covilo.infrastructure.security.TokenAuthenticationRequestFilter;
+import me.kvdpxne.covilo.infrastructure.security.UserAccountDetails;
+import me.kvdpxne.covilo.infrastructure.storage.FileSystemStorageService;
+import me.kvdpxne.covilo.infrastructure.storage.StorageLocationType;
 import me.kvdpxne.covilo.infrastructure.storage.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,106 +32,126 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-@RequestMapping(path = "api/0.1.0/me")
+@RequestMapping(
+  path = Endpoints.USER_ME
+)
 @RestController
 public final class UserMeController {
 
-  private final ITokenRepository tokenRepository;
-  private final IUserMapper userMapper;
+  private final UserMapper userMapper;
   private final StorageService storageService;
-  private final UserLifecycleService userLifecycleService;
 
-  private User getUserByCompactToken(
-    final HttpServletRequest request
-  ) throws UserNotFoundException {
-    final String compactToken = request.getHeader(HttpHeaders.AUTHORIZATION)
-      .substring(TokenAuthenticationRequestFilter.PREFIX.length());
+  private final ImageConverterService imageConverterService;
 
-    final User user = this.tokenRepository.findUserByCompactTokenOrNull(
-      compactToken
-    );
+  private final UserMeServicePort userMeService;
 
-    if (null == user) {
-      throw new UserNotFoundException("");
-    }
-
-    return user;
-  }
-
+  /**
+   *
+   */
+  @Operation
   @GetMapping
-  public ResponseEntity<UserDto> me(
-    final HttpServletRequest request
-  ) throws UserNotFoundException {
-    final User user = this.getUserByCompactToken(request);
-
-    return ResponseEntity.ok(
-      this.userMapper.toUserDto(user)
+  public UserDto getMe(
+    @AuthenticationPrincipal
+    final UserAccountDetails principal
+  ) {
+    return this.userMapper.toDto(
+      principal.user()
     );
   }
 
+  /**
+   * Updates the email address of the currently authenticated user.
+   */
   @PutMapping("email")
-  public ResponseEntity<?> updateEmail(
-    final HttpServletRequest httpServletRequest,
-    @RequestBody final UpdateEmailRequest request
-  ) throws UserNotFoundException {
-    final User user = this.getUserByCompactToken(httpServletRequest);
-    this.userLifecycleService.updateUserEmail(user, request.newEmail());
-
-    return ResponseEntity.ok().build();
+  public void updateUserMeEmail(
+    @AuthenticationPrincipal
+    final UserAccountDetails principal,
+    @RequestBody
+    final UpdateUserMeEmailRequest request
+  ) {
+    this.userMeService.updateMeEmail(
+      principal.user(),
+      request.newEmail(),
+      request.currentPassword()
+    );
   }
 
+  /**
+   * Updates the password of the currently authenticated user.
+   */
   @PutMapping("password")
-  public ResponseEntity<?> updatePassword(
-    final HttpServletRequest httpServletRequest,
-    @RequestBody final UpdatePasswordRequest request
-  ) throws UserNotFoundException {
-    final User user = this.getUserByCompactToken(httpServletRequest);
-    this.userLifecycleService.updateUserEmail(user, request.newPassword());
-
-    return ResponseEntity.ok().build();
+  public void updateUserMePassword(
+    @AuthenticationPrincipal
+    final UserAccountDetails principal,
+    @RequestBody
+    final UpdateUserMePasswordRequest request
+  ) {
+    this.userMeService.updateMePassword(
+      principal.user(),
+      request.newPassword(),
+      request.confirmedPassword(),
+      request.currentPassword()
+    );
   }
 
   @PostMapping(
     path = "avatar",
     consumes = MediaType.MULTIPART_FORM_DATA_VALUE
   )
-  public ResponseEntity<?> uploadAvatar(
-    final HttpServletRequest request,
-    @RequestParam("file") final MultipartFile multipartFile
+  public void uploadAvatar(
+    @AuthenticationPrincipal
+    final UserAccountDetails principal,
+    @RequestParam("file")
+    final MultipartFile multipartFile
   ) {
-    final String compactToken = request.getHeader(HttpHeaders.AUTHORIZATION)
-      .substring(TokenAuthenticationRequestFilter.PREFIX.length());
-
-    final User user = this.tokenRepository.findUserByCompactTokenOrNull(compactToken);
-    if (null == user) {
-      return ResponseEntity.notFound().build();
-    }
-
     final String mimeType = multipartFile.getContentType();
-    final ImageType imageType = ImageType.getImageTypeBy(
-      //
-      //
-      type -> type.getMimeType().equals(mimeType)
-    );
-
-    if (null == imageType) {
-      throw new ImageMimeTypeNotSupportedException(
-        String.format("Mime type \"%s\" is not supported.", mimeType)
-      );
+    if (null == mimeType || mimeType.isBlank()) {
+      throw new ImageMimeTypeNotAvailableException();
     }
 
-    this.storageService.storeUserAvatar(
-      user.identifier().toString(),
-      multipartFile
-    );
+    ImageType.getImageTypeBy(
+      imageType -> imageType.getMimeType().equals(mimeType)
+    ).orElseThrow(() -> new ImageMimeTypeNotSupportedException(mimeType));
 
-    return ResponseEntity.ok().build();
+    if (this.storageService instanceof FileSystemStorageService storage) {
+      final User me = principal.user();
+      // Closing the input and output streams is unnecessary because the method
+      // closes the streams when converting an image when they are no longer
+      // needed for its proper execution.
+      this.imageConverterService.convertImage(
+        storage.openInputStream(multipartFile),
+        storage.openOutputStream(
+          me.getAvatarFileName(),
+          StorageLocationType.AVATAR
+        )
+      );
+      this.userMeService.updateLastModifiedDate(me);
+    }
   }
 
-  @DeleteMapping(path = "avatar")
-  public ResponseEntity<?> deleteAvatar(
-    final HttpServletRequest request
+  @DeleteMapping(
+    path = "avatar"
+  )
+  public void deleteAvatar(
+    @AuthenticationPrincipal
+    final UserAccountDetails principal
   ) {
-    return ResponseEntity.ok().build();
+    this.storageService.deleteUserAvatar(
+      principal.getUsername()
+    );
+    this.userMeService.updateLastModifiedDate(principal.user());
+  }
+
+  @DeleteMapping
+  public void deleteUserMe(
+    @AuthenticationPrincipal
+    final UserAccountDetails principal,
+    @RequestBody
+    final DeleteUserMeRequest request
+  ) {
+    this.userMeService.deleteMe(
+      principal.user(),
+      request.currentPassword()
+    );
   }
 }

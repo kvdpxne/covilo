@@ -1,0 +1,42 @@
+<form #form="ngForm"
+      (ngSubmit)="submit()">
+  <text-field [group]="formGroup"
+              [sent]="form.submitted"
+              [autocomplete]="true"
+              [text]="translate('email')"
+              [feedback]="translate('invalidEmail')"
+              type="email"
+              name="email"
+              placeholder="sergio.diaz@gmail.com"/>
+  <text-field [group]="formGroup"
+              [sent]="form.submitted"
+              [autocomplete]="true"
+              [text]="translate('password')"
+              [feedback]="translate('invalidPassword')"
+              type="password"
+              name="password"
+              placeholder="{{ 'authentication.validation.passwordRequirements' | translate }}">
+    <a outside
+       routerLink="/authentication/reset-password"
+       class="form-label-link">
+      {{ translate("forgotPassword") }}
+    </a>
+  </text-field>
+  <text-field [group]="formGroup"
+              [sent]="form.submitted"
+              [text]="translate('rememberMe')"
+              type="checkbox"
+              name="rememberMe"/>
+  <div class="d-grid mb-3">
+    <button class="btn btn-primary btn-lg"
+            type="submit">
+      {{ translate("login") }}
+    </button>
+  </div>
+  <div class="text-center">
+    {{ translate("signup.question") }}
+    <a routerLink="/authentication/signup">
+      {{ translate("signup.link") }}
+    </a>
+  </div>
+</form>

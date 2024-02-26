@@ -5,18 +5,19 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
-import me.kvdpxne.covilo.application.IUserAuthenticationService;
-import me.kvdpxne.covilo.application.dto.TokenDto;
-import me.kvdpxne.covilo.application.exception.InvalidPasswordException;
-import me.kvdpxne.covilo.application.exception.TokenException;
-import me.kvdpxne.covilo.application.exception.UserAlreadyExistsException;
-import me.kvdpxne.covilo.application.exception.UserNotFoundException;
-import me.kvdpxne.covilo.application.mapper.ITokenMapper;
-import me.kvdpxne.covilo.application.payload.LoginRequest;
-import me.kvdpxne.covilo.application.payload.SignupRequest;
+import me.kvdpxne.covilo.common.constants.Endpoints;
+import me.kvdpxne.covilo.domain.port.out.UserAuthenticationServicePort;
+import me.kvdpxne.covilo.presentation.dto.TokenDto;
+import me.kvdpxne.covilo.common.exceptions.UserInvalidEmailAddressException;
+import me.kvdpxne.covilo.common.exceptions.UserInvalidPasswordException;
+import me.kvdpxne.covilo.common.exceptions.TokenException;
+import me.kvdpxne.covilo.common.exceptions.UserAlreadyExistsException;
+import me.kvdpxne.covilo.common.exceptions.UserNotFoundException;
+import me.kvdpxne.covilo.presentation.mappers.TokenMapper;
+import me.kvdpxne.covilo.presentation.payloads.LoginRequest;
+import me.kvdpxne.covilo.presentation.payloads.SignupRequest;
 import me.kvdpxne.covilo.domain.model.Token;
-import me.kvdpxne.covilo.infrastructure.security.TokenAuthenticationRequestFilter;
-import me.kvdpxne.covilo.shared.EmailValidationFailedException;
+import me.kvdpxne.covilo.infrastructure.security.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -28,12 +29,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-@RequestMapping(path = TokenAuthenticationRequestFilter.PATH)
+@RequestMapping(path = Endpoints.USER_AUTHENTICATION)
 @RestController
 public final class UserAuthenticationController {
 
-  private final IUserAuthenticationService userAuthenticationService;
-  private final ITokenMapper tokenMapper;
+  private final UserAuthenticationServicePort userAuthenticationService;
+  private final TokenMapper tokenMapper;
 
   @PostMapping("/register")
   public ResponseEntity<TokenDto> signup(
@@ -42,7 +43,7 @@ public final class UserAuthenticationController {
     final Token token;
     try {
       token = this.userAuthenticationService.createAuthentication(request);
-    } catch (final InvalidPasswordException | EmailValidationFailedException exception) {
+    } catch (final UserInvalidPasswordException | UserInvalidEmailAddressException exception) {
       return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
     }
     return ResponseEntity.ok(
@@ -54,16 +55,8 @@ public final class UserAuthenticationController {
   public ResponseEntity<TokenDto> login(
     @Validated @RequestBody final LoginRequest request
   ) {
-    final Token token;
-    try {
-      token = this.userAuthenticationService.authenticate(request);
-    } catch (final EmailValidationFailedException exception) {
-      return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
-    } catch (final UserNotFoundException exception) {
-      return ResponseEntity.notFound().build();
-    }
     return ResponseEntity.ok(
-      this.tokenMapper.toTokenDto(token)
+      this.userAuthenticationService.authenticate(request)
     );
   }
 
@@ -74,20 +67,21 @@ public final class UserAuthenticationController {
   ) throws UserNotFoundException, IOException {
 
     final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-    final String prefix = TokenAuthenticationRequestFilter.PREFIX;
+    final String prefix = Constants.PREFIX;
 
     if (null == header || !header.startsWith(prefix)) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
     final String compactToken = header.substring(prefix.length());
+
+    System.out.printf("TOKEN: %s%nCOMPACT TOKEN: %s%n", header, compactToken);
     final Token token;
+
     try {
       token = this.userAuthenticationService.refreshAuthentication(compactToken);
-    } catch (final TokenException exception) {
-      //
-      //
-      return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    } catch (final TokenException cause) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
     if (null == token || token.revoked()) {
@@ -96,7 +90,7 @@ public final class UserAuthenticationController {
 
     new ObjectMapper().writeValue(
       response.getOutputStream(),
-      this.tokenMapper.toTokenDto(token)
+      new TokenDto(token.compactToken(), compactToken)
     );
 
     return ResponseEntity.ok().build();

@@ -6,41 +6,48 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import me.kvdpxne.covilo.domain.model.Token;
 import me.kvdpxne.covilo.domain.model.User;
-import me.kvdpxne.covilo.domain.persistence.ITokenRepository;
-import me.kvdpxne.covilo.infrastructure.jpa.entity.TokenEntity;
-import me.kvdpxne.covilo.infrastructure.jpa.mapper.ITokenPersistenceMapper;
-import me.kvdpxne.covilo.infrastructure.jpa.mapper.IUserPersistenceMapper;
-import me.kvdpxne.covilo.infrastructure.jpa.repository.ITokenJpaRepository;
+import me.kvdpxne.covilo.domain.persistence.TokenRepository;
+import me.kvdpxne.covilo.infrastructure.jpa.entities.TokenEntity;
+import me.kvdpxne.covilo.infrastructure.jpa.mappers.TokenPersistenceMapper;
+import me.kvdpxne.covilo.infrastructure.jpa.mappers.UserPersistenceMapper;
+import me.kvdpxne.covilo.infrastructure.jpa.repositories.JpaTokenRepository;
 import org.springframework.stereotype.Component;
 
+@Deprecated
 @Component
 @RequiredArgsConstructor
-public final class TokenDao implements ITokenRepository {
+public final class TokenDao implements TokenRepository {
 
-  private final ITokenJpaRepository repository;
-  private final ITokenPersistenceMapper mapper;
+  private final JpaTokenRepository repository;
+  private final TokenPersistenceMapper mapper;
 
-  private final IUserPersistenceMapper userMapper;
+  private final UserPersistenceMapper userMapper;
 
   /**
    *
    */
   private Token toTokenOrNull(final Optional<TokenEntity> source) {
-    return source.map(this.mapper::toToken).orElse(null);
+    return source.map(this.mapper::toDomain).orElse(null);
   }
 
   @Override
   public Collection<Token> findValidTokensByUserIdentifier(final UUID identifier) {
     return this.repository.findAllValidTokenByUser(identifier)
       .stream()
-      .map(this.mapper::toToken)
+      .map(this.mapper::toDomain)
       .toList();
   }
 
   @Override
+  public Optional<Token> findTokenByUserIdentifier(final UUID identifier) {
+    return this.repository.findTokenByUser_Identifier(identifier)
+      .map(this.mapper::toDomain);
+  }
+
+  @Override
   public User findUserByCompactTokenOrNull(final String compactToken) {
-    return this.repository.findByCompactToken(compactToken)
-      .map(token -> this.userMapper.toUser(token.getUser()))
+    return this.repository.findTokenByCompactToken(compactToken)
+      .map(token -> this.userMapper.toDomain(token.getUser()))
       .orElse(null);
   }
 
@@ -51,16 +58,16 @@ public final class TokenDao implements ITokenRepository {
   }
 
   @Override
-  public Token findTokenByTokenOrNull(final String token) {
-    final var entity = this.repository.findByCompactToken(token);
-    return this.toTokenOrNull(entity);
+  public Optional<Token> findTokenByCompactToken(final String token) {
+    return this.repository.findTokenByCompactToken(token)
+      .map(this.mapper::toDomain);
   }
 
   @Override
   public Token insertToken(final Token token) {
-    var entity = this.mapper.toTokenEntity(token);
+    var entity = this.mapper.toDao(token);
     entity = this.repository.save(entity);
-    return this.mapper.toToken(entity);
+    return this.mapper.toDomain(entity);
   }
 
   @Override

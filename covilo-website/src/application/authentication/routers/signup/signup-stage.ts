@@ -1,0 +1,10 @@
+export enum SignupStage {
+
+  QUALIFICATION,
+
+  BASIC_DATA,
+
+  AUTHENTICATION_DATA,
+
+  INTIMATION
+}

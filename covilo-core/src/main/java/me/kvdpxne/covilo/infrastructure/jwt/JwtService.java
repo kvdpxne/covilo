@@ -14,10 +14,11 @@ import io.jsonwebtoken.security.SignatureException;
 import java.security.Key;
 import java.util.Date;
 import java.util.Map;
+import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
-import me.kvdpxne.covilo.application.ITokenService;
-import me.kvdpxne.covilo.application.exception.TokenExpiredException;
-import me.kvdpxne.covilo.application.exception.TokenSignatureException;
+import me.kvdpxne.covilo.domain.port.out.ITokenService;
+import me.kvdpxne.covilo.common.exceptions.TokenExpiredException;
+import me.kvdpxne.covilo.common.exceptions.TokenSignatureException;
 import me.kvdpxne.covilo.domain.model.User;
 import me.kvdpxne.covilo.infrastructure.configuration.ApplicationConfiguration;
 import me.kvdpxne.covilo.shared.Validation;
@@ -79,6 +80,7 @@ public final class JwtService
     final Claims claims = Jwts.claims()
       .setIssuer(this.applicationConfiguration.getName())
       .setSubject(user.email())
+      .setAudience(user.identifier().toString())
       .setIssuedAt(currentDate)
       .setExpiration(new Date(current + expiration))
       .setNotBefore(currentDate);
@@ -158,17 +160,24 @@ public final class JwtService
     }
   }
 
+  private <T> T extractClaims(
+    final String compactToken,
+    final Function<Claims, T> function
+  ) {
+    return function.apply(this.extractClaims(compactToken));
+  }
+
   @Override
   public String extractAudience(
     final String compactToken
   ) throws TokenSignatureException, TokenExpiredException {
-    return this.extractClaims(compactToken).getAudience();
+    return this.extractClaims(compactToken, Claims::getAudience);
   }
 
   @Override
   public String extractSubject(
     final String compactToken
   ) throws TokenSignatureException, TokenExpiredException {
-    return this.extractClaims(compactToken).getSubject();
+    return this.extractClaims(compactToken, Claims::getSubject);
   }
 }

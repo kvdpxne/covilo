@@ -55,6 +55,7 @@
       "password": "Your password",
       "forgotPassword": "Forgot password?",
       "invalidPassword": "Please enter a valid password.",
+      "rememberMe": "Remember me",
       "login": "Log in",
       "signup": {
         "question": "Don't have an account yet?",
@@ -73,6 +74,9 @@
     "signup": {
       "title": "Welcome to Covilo",
       "description": "Fill out the form to get started.",
+      "birthDate": "Birth date",
+      "firstName": "First name",
+      "lastName": "Last name",
       "email": "Your email",
       "invalidEmail": "Please enter a valid email address.",
       "password": "Password",

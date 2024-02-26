@@ -2,11 +2,13 @@ package me.kvdpxne.covilo.infrastructure.storage;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import me.kvdpxne.covilo.shared.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -58,7 +60,63 @@ public final class FileSystemStorageService
     return result.normalize().toAbsolutePath();
   }
 
-  private void store(
+  private String getFileExtension(final MultipartFile file) {
+    final String fileName = file.getOriginalFilename();
+    if (null == fileName) {
+      throw new FileNameNotAvailableException();
+    }
+    return fileName.substring(fileName.lastIndexOf('.'));
+  }
+
+  /**
+   * @throws IllegalArgumentException If the given name is null or empty.
+   * @throws NullPointerException     If the given storage location is null.
+   * @throws StorageException         If any problems occurred while trying to
+   *                                  open the output stream.
+   */
+  public OutputStream openOutputStream(
+    final String name,
+    final StorageLocationType storageLocationType
+  ) {
+    Validation.check(
+      null == name || name.isBlank(),
+      "The given name cannot be empty."
+    );
+    Validation.check(
+      storageLocationType,
+      "The given storage location cannot be null."
+    );
+    final Path path = Path.of(switch (storageLocationType) {
+      case AVATAR -> this.storageConfiguration.getAvatars();
+    });
+    final Path destination = this.resolve(path, name);
+    final OutputStream output;
+    try {
+      output = Files.newOutputStream(destination);
+    } catch (final IOException exception) {
+      throw new StorageException(
+        "Failed to open the output stream.",
+        exception
+      );
+    }
+    return output;
+  }
+
+  public InputStream openInputStream(
+    final MultipartFile multipartFile
+  ) {
+    Validation.check(multipartFile);
+    try {
+      return multipartFile.getInputStream();
+    } catch (final IOException exception) {
+      throw new StorageException(
+        "Failed to open the input stream",
+        exception
+      );
+    }
+  }
+
+  public void store(
     final Path path,
     final String name,
     final MultipartFile file
@@ -67,8 +125,7 @@ public final class FileSystemStorageService
       throw new StorageException("Failed to store empty file.");
     }
 
-    final String fileName = file.getOriginalFilename();
-    final String fileExtension = fileName.substring(fileName.indexOf('.'));
+    final String fileExtension = this.getFileExtension(file);
 
     try {
       //
@@ -106,14 +163,12 @@ public final class FileSystemStorageService
       Resource resource = new UrlResource(file.toUri());
       if (resource.exists() || resource.isReadable()) {
         return resource;
-      }
-      else {
+      } else {
         throw new StorageFileNotFoundException(
           "Could not read file: " + fileName);
 
       }
-    }
-    catch (MalformedURLException e) {
+    } catch (MalformedURLException e) {
       throw new StorageFileNotFoundException("Could not read file: " + fileName, e);
     }
   }
@@ -125,5 +180,10 @@ public final class FileSystemStorageService
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  @Override
+  public void deleteUserAvatar(final String identity) {
+
   }
 }

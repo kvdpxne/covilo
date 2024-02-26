@@ -15,6 +15,10 @@ configurations {
 }
 
 dependencies {
+  // https://mvnrepository.com/artifact/org.jetbrains/annotations
+  implementation 'org.jetbrains:annotations:24.1.0'
+
+
   implementation("org.springframework.boot:spring-boot-starter")
   testImplementation("org.springframework.boot:spring-boot-starter-test")
 
@@ -34,16 +38,22 @@ dependencies {
 
   implementation(libraries.openapi)
 
-  annotationProcessor(libraries.mapstruct.processor)
+  // Uncomment if using SQLite instead of PostgresSQL.
+  implementation(libraries.sqlite)
+
+
+  // https://github.com/mapstruct/mapstruct
   implementation(libraries.mapstruct.core)
+  annotationProcessor(libraries.mapstruct.processor)
 
-  implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
-  runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
-  runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+  implementation(libraries.imageio.webp)
 
+  // https://github.com/jwtk/jjwt
+  implementation(libraries.jjwt.api)
+  runtimeOnly(libraries.bundles.jjwt.runtime)
 }
 
-def targetJavaVersion = 17
+def targetJavaVersion = 21
 java {
   def javaVersion = JavaVersion.toVersion(targetJavaVersion)
 
@@ -53,6 +63,28 @@ java {
   if (JavaVersion.current() < javaVersion) {
     toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
   }
+}
+
+compileJava {
+
+  options.compilerArgs += [
+    // Enable preview features for the Java compiler.
+    "--enable-preview",
+
+    // Set the default component model for MapStruct to Spring, indicating
+    // that Spring annotations will be used for dependency injection.
+    "-Amapstruct.defaultComponentModel=spring",
+
+    // Suppress generation of timestamp in MapStruct-generated classes.
+    "-Amapstruct.suppressGeneratorTimestamp=true",
+
+    // Suppress generation of version in MapStruct-generated classes.
+    "-Amapstruct.suppressGeneratorVersionInfoComment=true",
+
+    // Enable verbose mode for MapStruct, providing more detailed output
+    // during code generation.
+    "-Amapstruct.verbose=true",
+  ]
 }
 
 processResources {

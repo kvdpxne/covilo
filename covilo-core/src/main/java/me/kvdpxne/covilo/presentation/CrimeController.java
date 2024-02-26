@@ -1,94 +1,179 @@
 package me.kvdpxne.covilo.presentation;
 
-import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import me.kvdpxne.covilo.application.ICrimeLifecycleService;
-import me.kvdpxne.covilo.application.dto.BookDto;
-import me.kvdpxne.covilo.application.dto.CrimeDto;
-import me.kvdpxne.covilo.application.exception.CrimeAlreadyExistsException;
-import me.kvdpxne.covilo.application.exception.CrimeNotFoundException;
-import me.kvdpxne.covilo.application.mapper.ICrimeMapper;
-import me.kvdpxne.covilo.application.payload.ReportCrimeRequest;
-import me.kvdpxne.covilo.domain.aggregation.Book;
-import me.kvdpxne.covilo.domain.aggregation.BookAttributes;
+import me.kvdpxne.covilo.common.constants.Endpoints;
 import me.kvdpxne.covilo.domain.model.Crime;
-import me.kvdpxne.covilo.domain.persistence.ICrimeRepository;
-import org.springdoc.core.converters.models.PageableAsQueryParam;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import me.kvdpxne.covilo.domain.persistence.paging.PageRange;
+import me.kvdpxne.covilo.domain.port.out.CrimeService;
+import me.kvdpxne.covilo.domain.port.out.GeolocationServicePort;
+import me.kvdpxne.covilo.domain.port.out.UserServicePort;
+import me.kvdpxne.covilo.domain.service.SystematizationService2;
+import me.kvdpxne.covilo.infrastructure.swagger.HiddenParameter;
+import me.kvdpxne.covilo.infrastructure.swagger.PagingAsQueryParameter;
+import me.kvdpxne.covilo.presentation.dto.CrimeDto;
+import me.kvdpxne.covilo.presentation.mappers.CrimeMapper;
+import me.kvdpxne.covilo.presentation.payloads.CrimeCreateRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
+@RequestMapping(path = Endpoints.CRIME)
 @RestController
-@RequestMapping("/api/0.1.0")
-@RequiredArgsConstructor
 public class CrimeController {
 
-  private final ICrimeRepository crimeRepository;
-  private final ICrimeLifecycleService crimeLifecycleService;
-  private final ICrimeMapper crimeMapper;
+  /**
+   *
+   */
+  private final CrimeService crimeService;
 
-  @PageableAsQueryParam
-  @GetMapping("crimes")
-  public ResponseEntity<BookDto<CrimeDto>> getCrimes(
-    @RequestParam(required = false) final UUID city,
-    @Parameter(hidden = true) final Pageable pageable
+  private final GeolocationServicePort geolocationService;
+
+  private final SystematizationService2 systematizationService;
+
+  private final UserServicePort userService;
+
+  /**
+   *
+   */
+  private final CrimeMapper crimeMapper;
+
+  @Operation(
+    summary = "Retrieve Crimes",
+    description = "Retrieve a page of crimes based on provided search criteria with paging."
+  )
+  @PagingAsQueryParameter
+  @GetMapping("all")
+  public Page<CrimeDto> getCrimes(
+    @HiddenParameter
+    final CrimeSearchQuery query,
+    @HiddenParameter
+    final PageRange page
   ) {
-    final int page = pageable.getPageNumber();
-    final int pageSize = pageable.getPageSize();
+    final var criteria = this.crimeMapper.toCrimeSearchCriteria(query);
 
-    final BookAttributes attributes = new BookAttributes(page, pageSize);
-    final Book<Crime> book = null == city
-      ? this.crimeRepository.findCrimes(attributes)
-      : this.crimeRepository.findCrimesByCityIdentifier(city, attributes);
+    // Retrieves crimes based on provided search criteria and paging
+    // information.
+    final var crimes = (Page<Crime>) this.crimeService.getCrimes(criteria, page);
 
-    return ResponseEntity.ok(new BookDto<>(
-      book.getContent()
-        .stream()
-        .map(this.crimeMapper::toCrimeDto)
-        .toArray(CrimeDto[]::new),
-      page,
-      pageSize
-    ));
+    // Maps Crime objects to CrimeDto objects for presentation.
+    return crimes.map(this.crimeMapper::toDto);
   }
 
-  @GetMapping("crime")
-  public ResponseEntity<CrimeDto> getCrimeByIdentifier(
-    @RequestParam final UUID identifier
+  @Operation(summary = "Retrieve Crime by identifier.")
+  @ApiResponse(
+    responseCode = "200",
+    description = "Found the crime.",
+    content = @Content(
+      mediaType = "application/json",
+      schema = @Schema(
+        implementation = CrimeDto.class
+      )
+    )
+  )
+  @GetMapping("{identifier}")
+  public CrimeDto getCrime(
+    @PathVariable
+    final UUID identifier
   ) {
-    final Crime crime;
+    // Retrieves a Crime object from the service layer based on provided
+    // identifier.
+    final var crime = this.crimeService.getCrimeByIdentifier(identifier);
 
-    try {
-      crime = this.crimeLifecycleService.getCrimeByIdentifier(identifier);
-    } catch (final CrimeNotFoundException exception) {
-      return ResponseEntity.notFound().build();
-    }
-
-    return ResponseEntity.ok(
-      this.crimeMapper.toCrimeDto(crime)
-    );
+    // Maps the Crime object to CrimeDto for presentation.
+    return this.crimeMapper.toDto(crime);
   }
 
-  @PostMapping("crime/report")
-  public ResponseEntity<CrimeDto> reportCrime(
-    @RequestBody ReportCrimeRequest request
+  /**
+   * Endpoint to create a new crime based on the provided request data.
+   *
+   * @param request The request containing data for creating the crime.
+   */
+  @Operation(
+    summary = "Create Crime",
+    description = "Create a new crime based on the provided request data."
+  )
+  @PostMapping
+  public void createCrime(
+    @RequestBody
+    final CrimeCreateRequest request
   ) {
-    Crime crime = this.crimeMapper.toCrime(request);
+    // Retrieve the city information based on the provided city identifier.
+    final var place = this.geolocationService
+      .getCityByIdentifier(request.cityIdentifier());
 
-    try {
-      crime = this.crimeLifecycleService.createCrime(crime);
-    } catch (final CrimeAlreadyExistsException exception) {
-      return ResponseEntity.status(HttpStatus.CONFLICT).build();
-    }
+    // Retrieve the classification information based on the provided
+    // classification identifier.
+    final var classification = this.systematizationService
+      .getClassificationByIdentifier(request.classificationIdentifier());
 
-    return ResponseEntity.ok(
-      this.crimeMapper.toCrimeDto(crime)
-    );
+    // Retrieve the categories based on the provided category identifiers.
+    final var categories = request.categoryIdentifiers()
+      .stream()
+      .map(this.systematizationService::getCategoryByIdentifier)
+      .collect(Collectors.toSet());
+
+    // Retrieve the reporter information based on the provided
+    // reporter identifier.
+    final var reporter = this.userService
+      .getUserByIdentifier(request.reporterIdentifier());
+
+    // Build the Crime object using the retrieved information.
+    final var crime = Crime.builder()
+      .time(request.time())
+      .confirmed(request.confirmed())
+      .place(place)
+      .classification(classification)
+      .categories(categories)
+      .reporter(reporter)
+      .build();
+
+    // Call the crime service to create the crime.
+    this.crimeService.createCrime(crime);
+  }
+
+  @Operation(
+    summary = "Delete Crime",
+    description = "Delete a crime based on its identifier."
+  )
+  @DeleteMapping("{identifier}")
+  public void deleteCrime(
+    @PathVariable
+    final UUID identifier
+  ) {
+    this.crimeService.deleteCrimeByIdentifier(identifier);
+  }
+
+  @Operation(
+    summary = "Count crimes",
+    description = "Returns the total number of crimes stored in the system."
+  )
+  @ApiResponse(
+    responseCode = "200",
+    description = "Successfully retrieved the count of crimes.",
+    content = @Content(
+      mediaType = "application/json",
+      schema = @Schema(
+        type = "integer",
+        description = "The total count of crimes."
+      )
+    )
+  )
+  @GetMapping("count")
+  public long countCrimes() {
+    // Retrieves the total count of crimes.
+    return this.crimeService.countCrimes();
   }
 }

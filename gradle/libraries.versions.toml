@@ -3,6 +3,9 @@ spring-boot = "3.1.4"
 spring-management = "1.1.3"
 openapi = "2.2.0"
 mapstruct = "1.5.5.Final"
+jjwt = "0.11.5"
+imageio-webp = "dev-SNAPSHOT"
+sqlite = "3.45.0.0"
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
@@ -10,5 +13,13 @@ spring-management = { id = "io.spring.dependency-management", version.ref = "spr
 
 [libraries]
 openapi = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "openapi" }
-mapstruct-core = { module = "org.mapstruct:mapstruct", version.ref = "mapstruct"}
-mapstruct-processor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstruct"}
+mapstruct-core = { module = "org.mapstruct:mapstruct", version.ref = "mapstruct" }
+mapstruct-processor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstruct" }
+imageio-webp = { module = "com.github.gotson:webp-imageio", version.ref = "imageio-webp" }
+jjwt-api = { module = "io.jsonwebtoken:jjwt-api", version.ref = "jjwt" }
+jjwt-implementation = { module = "io.jsonwebtoken:jjwt-impl", version.ref = "jjwt" }
+jjwt-jackson = { module = "io.jsonwebtoken:jjwt-jackson", version.ref = "jjwt" }
+sqlite = { module = "org.xerial:sqlite-jdbc", version.ref = "sqlite" }
+
+[bundles]
+jjwt-runtime = ["jjwt-implementation", "jjwt-jackson"]

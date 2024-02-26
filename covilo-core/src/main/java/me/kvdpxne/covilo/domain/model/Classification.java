@@ -7,4 +7,4 @@ import lombok.Builder;
 public record Classification(
   UUID identifier,
   String name
-) { }
+) {}

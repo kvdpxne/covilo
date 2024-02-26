@@ -72,10 +72,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "covilo:build:production"
+              "buildTarget": "covilo:build:production"
             },
             "development": {
-              "browserTarget": "covilo:build:development"
+              "buildTarget": "covilo:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -83,7 +83,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "covilo:build"
+            "buildTarget": "covilo:build"
           }
         },
         "test": {

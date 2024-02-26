@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    generate-unique-name: false
+    name: sqlite-local
+    driver-class-name: org.sqlite.JDBC
+    url: jdbc:sqlite:memory:covilo?cache=shared
+    username: sa
+    password: sa

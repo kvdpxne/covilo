@@ -4,7 +4,8 @@ import {environment} from "../../../../environments/environment";
 
 @Component({
   selector: "avatar-image",
-  templateUrl: "./avatar-image.component.html"
+  templateUrl: "./avatar-image.component.html",
+  standalone: true
 })
 export class AvatarImageComponent
   implements OnInit {
@@ -20,7 +21,7 @@ export class AvatarImageComponent
   }
 
   private getUrlToUserAvatar(user: User): string {
-    return `${environment.resourceUrl}/avatars/${user.identifier}.png`;
+    return `${environment.resourceUrl}/avatars/${user.identifier}.webp`;
   }
 
   private getUrlToUserDefaultAvatar(): string {

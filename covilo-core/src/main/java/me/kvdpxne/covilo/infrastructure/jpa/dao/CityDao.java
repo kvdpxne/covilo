@@ -3,34 +3,34 @@ package me.kvdpxne.covilo.infrastructure.jpa.dao;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import me.kvdpxne.covilo.domain.aggregation.Book;
-import me.kvdpxne.covilo.domain.aggregation.BookAttributes;
+import me.kvdpxne.covilo.shared.Book;
+import me.kvdpxne.covilo.shared.BookAttributes;
 import me.kvdpxne.covilo.domain.model.City;
-import me.kvdpxne.covilo.domain.persistence.ICityRepository;
-import me.kvdpxne.covilo.infrastructure.jpa.entity.CityEntity;
-import me.kvdpxne.covilo.infrastructure.jpa.mapper.ICityPersistenceMapper;
-import me.kvdpxne.covilo.infrastructure.jpa.repository.ICityJpaRepository;
+import me.kvdpxne.covilo.domain.persistence.CityRepository;
+import me.kvdpxne.covilo.infrastructure.jpa.entities.CityEntity;
+import me.kvdpxne.covilo.infrastructure.jpa.mappers.CityPersistenceMapper;
+import me.kvdpxne.covilo.infrastructure.jpa.repositories.JpaCityRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
-public final class CityDao implements ICityRepository {
+public final class CityDao implements CityRepository {
 
-  private final ICityJpaRepository repository;
-  private final ICityPersistenceMapper mapper;
+  private final JpaCityRepository jpa;
+  private final CityPersistenceMapper mapper;
 
   private City toCityOrNull(final Optional<CityEntity> source) {
-    return source.map(this.mapper::toCity).orElse(null);
+    return source.map(this.mapper::toDomain).orElse(null);
   }
 
   @Override
   public Book<City> findCities(final BookAttributes attributes) {
     return Book.boxed(attributes, book ->
-      this.repository.findAll(
+      this.jpa.findAll(
           PageRequest.of(attributes.page(), attributes.size())
         )
-        .map(this.mapper::toCity)
+        .map(this.mapper::toDomain)
         .forEach(book::put)
     );
   }
@@ -38,18 +38,18 @@ public final class CityDao implements ICityRepository {
   @Override
   public Book<City> findCitiesByProvinceIdentifier(final UUID identifier, final BookAttributes attributes) {
     return Book.boxed(attributes, book ->
-      this.repository.findCityEntitiesByProvince_Identifier(
+      this.jpa.findCityEntitiesByRegion_Identifier(
           identifier,
           PageRequest.of(attributes.page(), attributes.size())
         )
-        .map(this.mapper::toCity)
+        .map(this.mapper::toDomain)
         .forEach(book::put)
     );
   }
 
   @Override
   public City findByIdentifierOrNull(final UUID identifier) {
-    final var entity = this.repository.findById(identifier);
+    final var entity = this.jpa.findById(identifier);
     return this.toCityOrNull(entity);
   }
 }

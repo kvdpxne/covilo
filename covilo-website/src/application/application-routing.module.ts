@@ -8,7 +8,7 @@ import {
   ResultDetailsComponent,
   StatisticsComponent
 } from "./appearance";
-import {ComingSoonComponent, PageNotFoundComponent} from "./communication";
+import {ComingSoonComponent, PageNotFoundComponent} from "./common";
 
 const routes: Routes = [
   {

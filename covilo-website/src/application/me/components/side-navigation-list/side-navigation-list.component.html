@@ -1,0 +1,13 @@
+<div class="d-flex flex-column flex-shrink-0 p-3" style="width: 280px;">
+  <div>
+    {{ "me.side-navigation.account" | translate }}
+  </div>
+  <hr>
+
+  <ul class="nav nav-pills flex-column mb-auto">
+    <li *ngFor="let item of links">
+      <our-me-side-navigation-list-item [item]="this.item"/>
+    </li>
+  </ul>
+
+</div>
