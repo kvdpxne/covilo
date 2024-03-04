@@ -1,0 +1,73 @@
+<mat-card class="login-card">
+
+  <mat-card-header style="display: flex; justify-content: center;
+  align-items: center; text-align: center; padding-bottom: 20px;">
+    <mat-card-title>
+      Welcome back
+    </mat-card-title>
+
+    <mat-card-subtitle>
+      Login to manage your account and service.
+    </mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <!-- Form for user login -->
+    <form [formGroup]="loginForm" (ngSubmit)="submit()" class="form2">
+
+      <!-- Username input field -->
+      <mat-form-field class="example-full-width">
+        <mat-label>
+          Username
+        </mat-label>
+
+        <input matInput
+               formControlName="username"
+               type="email"
+               placeholder="Username">
+
+        <!-- Display error message if username is invalid and has been touched -->
+        @if (whetherUsernameIsInvalid) {
+          <mat-error>
+            Username is required
+          </mat-error>
+        }
+      </mat-form-field>
+
+      <div style="display: flex; justify-content: flex-end; align-items:
+      center; padding-bottom: 0.5rem;">
+        <a routerLink="/authentication/forgot-password">
+          Forgot password?
+        </a>
+      </div>
+
+      <!-- Password input field -->
+      <mat-form-field class="example-full-width">
+
+        <mat-label>
+          Password
+        </mat-label>
+
+        <input matInput
+               formControlName="password"
+               type="password"
+               placeholder="Password">
+
+        <!-- Display error message if password is invalid and has been touched -->
+        @if (whetherPasswordIsInvalid) {
+          <mat-error>
+            Password is required
+          </mat-error>
+        }
+
+      </mat-form-field>
+
+      <!-- Login button -->
+      <button mat-raised-button color="primary" type="submit" class="example-full-width">
+        Login
+      </button>
+    </form>
+  </mat-card-content>
+
+
+</mat-card>
