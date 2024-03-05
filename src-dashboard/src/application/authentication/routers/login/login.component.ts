@@ -6,7 +6,6 @@ import {
   FormsModule, ReactiveFormsModule,
   Validators
 } from "@angular/forms";
-import {NgIf} from "@angular/common";
 import {MatInput} from "@angular/material/input";
 import {MatButton} from "@angular/material/button";
 import {MatCheckbox} from "@angular/material/checkbox";
@@ -17,6 +16,8 @@ import {
   MatCardTitle
 } from "@angular/material/card";
 import {RouterLink} from "@angular/router";
+import {AuthenticationService} from "../../services/authentication.service";
+import {LoginRequest} from "../../../core";
 
 @Component({
   selector: "app-login",
@@ -46,8 +47,6 @@ import {RouterLink} from "@angular/router";
 export class LoginComponent
   implements OnInit {
 
-  private readonly loginFormBuilder: FormBuilder;
-
   private _loginForm?: FormGroup;
 
   /**
@@ -59,9 +58,12 @@ export class LoginComponent
    *
    * @param formBuilder The FormBuilder instance used to create the login form.
    *                    It should not be null or undefined.
+   * @param authenticationService
    */
-  public constructor(formBuilder: FormBuilder) {
-    this.loginFormBuilder = formBuilder;
+  public constructor(
+    private readonly formBuilder: FormBuilder,
+    private readonly authenticationService: AuthenticationService
+  ) {
   }
 
   /**
@@ -81,7 +83,7 @@ export class LoginComponent
    * the {@link LoginComponent}.
    */
   private createLoginForm(): void {
-    const builder = this.loginFormBuilder.nonNullable;
+    const builder = this.formBuilder.nonNullable;
 
     this._loginForm = builder.group({
       username: ["", Validators.required],
@@ -155,19 +157,20 @@ export class LoginComponent
   }
 
   public submit(): void {
-    if (this.loginForm.valid) {
-      // Implement your login logic here
-      const username = this.loginForm.value.username;
-      const password = this.loginForm.value.password;
-      const rememberMe = this.loginForm.value.rememberMe;
-
-      console.log('Username:', username);
-      console.log('Password:', password);
-      console.log('Remember Me:', rememberMe);
-    } else {
-      // Handle form validation errors,
-      // For example, you can mark fields as touched to display error messages
-      this.loginForm.markAllAsTouched();
+    if (!this._loginForm?.valid) {
+      this._loginForm?.markAllAsTouched()
+      return;
     }
+
+    const username = this.loginForm.value.username;
+    const password = this.loginForm.value.password;
+
+    const request: LoginRequest = {
+      email: username,
+      password: password,
+      rememberMe: false
+    };
+
+    this.authenticationService.login(request).subscribe()
   }
 }

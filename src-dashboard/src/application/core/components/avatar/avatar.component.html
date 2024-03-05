@@ -1,0 +1,25 @@
+<div ngbDropdown class="nav-item">
+  <div ngbDropdownToggle>
+    <avatar-image [size]="24"/>
+    <span>
+      {{ me?.email }}
+    </span>
+  </div>
+  <div ngbDropdownMenu>
+    <ng-container *ngFor="let item of ROUTE_LINKS">
+      <a ngbDropdownItem
+         [routerLink]="item.reference">
+        {{ "me.side-navigation." + item.name | translate }}
+      </a>
+    </ng-container>
+
+    <div class="dropdown-divider"></div>
+
+    <button ngbDropdownItem
+            (click)="logout()"
+            class="text-danger">
+      {{ "core.avatar.logout" | translate }}
+    </button>
+
+  </div>
+</div>
