@@ -4,9 +4,6 @@ export * from "./aggregation/book";
 export * from "./aggregation/book-attributes";
 export * from "./aggregation/identifiable";
 
-//
-export * from "./components";
-
 // All available application models
 export * from "./models/administrative-division-type";
 export * from "./models/capital-type";
