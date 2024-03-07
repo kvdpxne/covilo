@@ -22,10 +22,9 @@ export class AuthenticationTokenStrategy
   public isLogged(): boolean {
     const key = "token";
     if (this.browserStorageService.hasInLocalStorage(key)) {
-      console.log("siema");
       return true;
     }
-    console.log("siema2");
+
     this.browserStorageService.deleteFromLocalStorage(key);
     return false;
   }
