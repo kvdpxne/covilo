@@ -1,24 +1,101 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from "@angular/core";
 import {environment} from "../../../environments/environment";
+import {LoggingMessageProvider} from "./logging-message-provider";
 
+/**
+ * Service for logging messages to the console with various log levels.
+ *
+ * This service is provided at the root level to ensure it's available
+ * throughout the application.
+ */
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class LoggingService {
 
-  public isLoggable(): boolean {
+  /**
+   * Checks whether logging is enabled based on the environment.
+   *
+   * @returns True if logging is enabled in the current environment,
+   * otherwise false.
+   */
+  public isEnabled(): boolean {
+    // Logging is enabled in non-production environments
     return !environment.production;
   }
 
-  public trace(message: () => string): void {
-    if (this.isLoggable()) {
-      console.trace(message())
+  /**
+   * Logs an error message to the console.
+   *
+   * @param message A function that provides the error message to log.
+   * @remarks If logging is enabled, the error message is logged to the
+   * console using `console.error()`.
+   */
+  public error(
+    message: LoggingMessageProvider
+  ): void {
+    if (this.isEnabled()) {
+      console.error(message());
     }
   }
 
-  public debug(message: () => string): void {
-    if (this.isLoggable()) {
+  /**
+   * Logs a warning message to the console.
+   *
+   * @param message A function that provides the warning message to log.
+   * @remarks If logging is enabled, the warning message is logged to the
+   * console using `console.warn()`.
+   */
+  public warn(
+    message: LoggingMessageProvider
+  ): void {
+    if (this.isEnabled()) {
+      console.warn(message());
+    }
+  }
+
+  /**
+   * Logs an informational message to the console.
+   *
+   * @param message A function that provides the information message to log.
+   * @remarks If logging is enabled, the information message is logged to
+   * the console using `console.info()`.
+   */
+  public info(
+    message: LoggingMessageProvider
+  ): void {
+    if (this.isEnabled()) {
+      console.info(message());
+    }
+  }
+
+  /**
+   * Logs a debug message to the console.
+   *
+   * @param message A function that provides the debug message to log.
+   * @remarks If logging is enabled, the debug message is logged to the
+   * console using `console.debug()`.
+   */
+  public debug(
+    message: LoggingMessageProvider
+  ): void {
+    if (this.isEnabled()) {
       console.debug(message());
+    }
+  }
+
+  /**
+   * Logs a trace message to the console.
+   *
+   * @param message A function that provides the trace message to log.
+   * @remarks If logging is enabled, the trace message is logged to the
+   * console using `console.trace()`.
+   */
+  public trace(
+    message: LoggingMessageProvider
+  ): void {
+    if (this.isEnabled()) {
+      console.trace(message());
     }
   }
 }
