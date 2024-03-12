@@ -1,6 +1,7 @@
 import {Injectable} from "@angular/core";
 import {StorageKey} from "./storage-key";
 import {Storage} from "./storage";
+import {LoggingService} from "./logging.service";
 
 /**
  * Injectable service for interacting with browser storage.
@@ -14,7 +15,33 @@ import {Storage} from "./storage";
 export class BrowserStorageService
   implements Storage {
 
-  public get<T>(key: StorageKey): T | null {
+  /**
+   * The logging service used for logging messages related to storage
+   * operations.
+   */
+  private readonly loggingService: LoggingService;
+
+  /**
+   * Constructs a new BrowserStorageService.
+   *
+   * @param loggingService The logging service to use for logging messages
+   * related to storage operations.
+   */
+  public constructor(
+    loggingService: LoggingService
+  ) {
+    this.loggingService = loggingService;
+  }
+
+  /**
+   * Retrieves the value associated with the provided key from the storage.
+   *
+   * @param key The key of the value to retrieve.
+   * @returns The value associated with the provided key.
+   */
+  public get<T>(
+    key: StorageKey
+  ): T | null {
     // Retrieve the string value associated with the key from storage
     const textValue = window.localStorage.getItem(key);
 
@@ -33,18 +60,41 @@ export class BrowserStorageService
     }
   }
 
-  public has(key: StorageKey): boolean {
+  /**
+   * Checks if the storage contains a value associated with the specified key.
+   *
+   * @param key The key to check for existence.
+   * @returns True if the storage contains the key, otherwise false.
+   */
+  public has(
+    key: StorageKey
+  ): boolean {
     return null != window.localStorage.getItem(key);
   }
 
-  public store<T>(key: StorageKey, value: T, force: boolean = true): boolean {
+  /**
+   * Saves the provided value under the given key in the storage.
+   *
+   * @param key The key under which the value will be saved.
+   * @param value The value to be saved.
+   * @param force If true, overwrites any existing value associated with the
+   * key.
+   * @returns True if the value was successfully stored, otherwise false.
+   * @throws Error if the value passed is null or undefined.
+   */
+  public store<T>(
+    key: StorageKey,
+    value: T,
+    force: boolean = true
+  ): boolean {
     // Ensure value is not null or undefined
     if (!value) {
       throw Error("The value passed to storage cannot be null or undefined.");
     }
 
+    const present = this.has(key);
     // Check if the key already exists unless force overwrite is requested
-    if (!force && this.has(key)) {
+    if (!force && present) {
       return false;
     }
 
@@ -72,13 +122,30 @@ export class BrowserStorageService
 
     // Store the string representation of the value in storage
     window.localStorage.setItem(key, textValue);
+    this.loggingService.debug(() => present
+      ? `A new value was assigned to the ${key} key in the browser store.`
+      : `The ${key} key value was overwritten in the browser store.`
+    );
     return true;
   }
 
-  public remove(key: StorageKey): void {
+  /**
+   * Removes the value associated with the provided key from the storage.
+   *
+   * @param key The key of the value to remove.
+   */
+  public remove(
+    key: StorageKey
+  ): void {
     window.localStorage.removeItem(key);
+    this.loggingService.debug(() =>
+      `The value assigned to the ${key} key has been deleted.`
+    );
   }
 
+  /**
+   * Clears all stored key-value pairs from the storage.
+   */
   public clear(): void {
     window.localStorage.clear();
   }
