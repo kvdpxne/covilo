@@ -1,6 +1,7 @@
 import {Injectable} from "@angular/core";
 import {Storage} from "./storage";
 import {StorageKey} from "./storage-key";
+import {LoggingService} from "./logging.service";
 
 /**
  * This service provides in-memory storage functionality for storing,
@@ -12,6 +13,8 @@ import {StorageKey} from "./storage-key";
 export class InMemoryStorageService
   implements Storage {
 
+  private readonly loggingService: LoggingService;
+
   /**
    * Internal storage object to hold key-value pairs.
    */
@@ -20,7 +23,10 @@ export class InMemoryStorageService
   /**
    * Constructs a new InMemoryStorageService with an empty storage object.
    */
-  public constructor() {
+  public constructor(
+    loggingService: LoggingService
+  ) {
+    this.loggingService = loggingService;
     this.storage = {};
   }
 
@@ -42,12 +48,20 @@ export class InMemoryStorageService
    * @param key The key under which the value will be saved.
    * @param value The value to be saved.
    */
-  public store<T>(key: StorageKey, value: T, force: boolean = true): boolean {
-    if (!force && this.has(key)) {
+  public store<T>(
+    key: StorageKey,
+    value: T,
+    force: boolean = false
+  ): boolean {
+    const present = this.has(key);
+    if (!force && present) {
       return false;
     }
-
     this.storage[key] = value;
+    this.loggingService.debug(() => present
+      ? `A new value was assigned to the ${key} key in the memory store.`
+      : `The ${key} key value was overwritten in the memory store.`
+    );
     return true;
   }
 

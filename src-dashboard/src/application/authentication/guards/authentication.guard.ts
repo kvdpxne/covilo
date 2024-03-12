@@ -1,30 +1,66 @@
-import {CanActivateFn, Router} from "@angular/router";
+import {
+  ActivatedRouteSnapshot,
+  CanActivateFn,
+  Router,
+  RouterStateSnapshot
+} from "@angular/router";
 import {inject} from "@angular/core";
-import {AuthenticationTokenStrategy} from "../services/authentication-token-strategy";
+import {
+  TokenAuthenticationStrategy
+} from "../services/token-authentication-strategy";
 
 /**
- * Authentication guard function for protecting routes based on user authentication status.
+ * Guards routes based on user authentication status.
  *
- * This guard function checks if the user is authenticated using an authentication token
- * strategy. If the user is authenticated, the function allows navigation to the requested
- * route; otherwise, it redirects the user to the login page.
+ * This guard function checks whether the user is authenticated using a
+ * token-based authentication strategy. If the user is authenticated, it
+ * permits navigation to the requested route; otherwise, it redirects the
+ * user to the login page. If the user is already logged in, it prevents
+ * navigation to authentication-related pages and redirects them to their
+ * current page.
  *
- * @returns True if the user is authenticated and can access the route; otherwise, false.
+ * @param _ The activated route snapshot (not used)
+ * @param state The router state snapshot
+ * @returns True if the user is authenticated and can access the route;
+ * otherwise, false.
  */
-export const authenticationGuard: CanActivateFn = (): boolean => {
+export const authenticationGuard: CanActivateFn = (
+  _: ActivatedRouteSnapshot,
+  state: RouterStateSnapshot
+): boolean => {
   // Inject the token authentication strategy service
-  const tokenAuthenticationStrategy = inject(AuthenticationTokenStrategy)
+  const tokenAuthenticationStrategy = inject(TokenAuthenticationStrategy);
+
+  // Inject the router service
+  const router = inject(Router);
 
   // Check if the user is logged in
-  const isLogged: boolean = tokenAuthenticationStrategy.isLogged();
+  const isLogged = tokenAuthenticationStrategy.isLogged();
 
-  // If the user is logged in, allow access to the route
+  // Check if the current route is related to authentication
+  const isAuthenticationPage = state.url.includes("authentication");
+
+  // If the user is logged in,
+  // prevent navigation to authentication-related pages
   if (isLogged) {
+
+    // If attempting to access an authentication-related page,
+    // redirect to the current page
+    if (isAuthenticationPage) {
+      router.navigateByUrl(state.url);
+      return false;
+    }
+
+    // Permit navigation
+    return true;
+  }
+
+  // Allow access to authentication-related pages for non-authenticated users
+  if (isAuthenticationPage) {
     return true;
   }
 
   // If the user is not logged in, redirect to the login page
-  const router = inject(Router);
   router.navigateByUrl("/authentication/login");
 
   // Return false to prevent navigation

@@ -47,9 +47,9 @@ export class UserMeService {
    * @returns An Observable that emits a {@link User} object when the request
    *          is successful.
    */
-  public requestMe(): Observable<User> {
+  public me(): Observable<User> {
     // Constructs the API endpoint for fetching user data
-    const path = `${DEFAULT_PATH}/me`;
+    const path = `${DEFAULT_PATH}`;
 
     return this.httpClientService.get(path);
   }

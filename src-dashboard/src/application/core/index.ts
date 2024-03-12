@@ -30,5 +30,4 @@ export * from "./playloads/signup-request";
 export * from "./services/crime.service";
 export * from "./services/geolocation.service";
 export * from "./services/user.service";
-export * from "../authentication/services/authentication.service";
-export * from "./services/user-lifecycle.service";
+export * from "./services/user-me.service";

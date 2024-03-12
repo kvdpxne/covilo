@@ -5,10 +5,12 @@ import {routes} from "./app.routes";
 import {
   provideAnimationsAsync
 } from "@angular/platform-browser/animations/async";
-import {AuthenticationModule} from "./authentication/authentication.module";
+import {
+  AuthenticationModule
+} from "./authentication";
 import {PAGE_TITLE_STRATEGY_PROVIDER} from "./shared";
 import {DashboardModule} from "./dashboard/dashboard.module";
-import {provideHttpClient} from "@angular/common/http";
+import {HttpClientModule, provideHttpClient} from "@angular/common/http";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -19,8 +21,12 @@ export const appConfig: ApplicationConfig = {
     PAGE_TITLE_STRATEGY_PROVIDER,
 
     importProvidersFrom(
+      HttpClientModule,
+
       AuthenticationModule,
       DashboardModule
-    )
+    ),
+
+
   ]
 };

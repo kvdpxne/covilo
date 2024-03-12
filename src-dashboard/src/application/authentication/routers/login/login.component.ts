@@ -1,4 +1,4 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, inject, OnInit} from "@angular/core";
 import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
 import {
   FormBuilder,
@@ -15,9 +15,10 @@ import {
   MatCardHeader, MatCardSubtitle,
   MatCardTitle
 } from "@angular/material/card";
-import {RouterLink} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 import {AuthenticationService} from "../../services/authentication.service";
 import {LoginRequest} from "../../../core";
+import {finalize} from "rxjs";
 
 @Component({
   selector: "app-login",
@@ -62,7 +63,8 @@ export class LoginComponent
    */
   public constructor(
     private readonly formBuilder: FormBuilder,
-    private readonly authenticationService: AuthenticationService
+    private readonly authenticationService: AuthenticationService,
+    private readonly router: Router
   ) {
   }
 
@@ -171,6 +173,8 @@ export class LoginComponent
       rememberMe: false
     };
 
-    this.authenticationService.login(request).subscribe()
+    this.authenticationService.login(request).subscribe(() => {
+      this.router.navigateByUrl("/dashboard/welcome")
+    })
   }
 }
