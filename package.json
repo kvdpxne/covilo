@@ -1,0 +1,21 @@
+{
+  "name": "covilo",
+  "description": "",
+  "private": true,
+  "scripts": {
+
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kvdpxne/covilo"
+  },
+  "keywords": [
+    ""
+  ],
+  "author": "kvdpxne",
+  "license": "MIT",
+  "workspaces": [
+    "src-dashboard",
+    "src-website"
+  ]
+}
