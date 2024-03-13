@@ -41,7 +41,11 @@ build/
 # Build output
 dist/
 
-# Node
+# Next.js
+# Build output
+.next/
+
+# Node.js
 # Project packages
 node_modules/
 
