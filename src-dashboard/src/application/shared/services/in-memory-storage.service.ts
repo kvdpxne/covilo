@@ -10,7 +10,7 @@ import {Logger} from "./logger.service";
 @Injectable({
   providedIn: "root"
 })
-export class InMemoryStorageService
+export class InMemoryStorage
   implements Storage {
 
   /**

@@ -3,7 +3,7 @@ import {Observable, tap} from "rxjs";
 
 import {
   ApiHttpClientService,
-  InMemoryStorageService,
+  InMemoryStorage,
   StorageKey
 } from "../../shared";
 
@@ -43,18 +43,18 @@ export class AuthenticationService {
 
   private readonly userMeService: UserMeService;
 
-  private readonly inMemoryStorageService: InMemoryStorageService;
+  private readonly inMemoryStorage: InMemoryStorage;
 
   public constructor(
     apiHttpClientService: ApiHttpClientService,
     authenticationTokenStrategy: TokenAuthenticationStrategy,
     userMeService: UserMeService,
-    inMemoryStorageService: InMemoryStorageService
+    inMemoryStorage: InMemoryStorage
   ) {
     this.apiHttpClientService = apiHttpClientService;
     this.authenticationStrategy = authenticationTokenStrategy;
     this.userMeService = userMeService;
-    this.inMemoryStorageService = inMemoryStorageService;
+    this.inMemoryStorage = inMemoryStorage;
   }
 
   /**
@@ -63,7 +63,7 @@ export class AuthenticationService {
    */
   public cacheMe(): void {
     this.userMeService.me().subscribe(user => {
-      this.inMemoryStorageService.store(StorageKey.AUTHENTICATED_USER, user);
+      this.inMemoryStorage.store(StorageKey.AUTHENTICATED_USER, user);
     });
   }
 
@@ -108,7 +108,7 @@ export class AuthenticationService {
     // temporary memory and other user-related data stored in the browser
     // necessary for the operation of some features.
     this.authenticationStrategy.doLogout();
-    this.inMemoryStorageService.remove(StorageKey.TOKEN);
+    this.inMemoryStorage.remove(StorageKey.TOKEN);
 
     if (refresh) {
       location.reload();

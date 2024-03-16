@@ -12,7 +12,7 @@ import {Logger} from "./logger.service";
 @Injectable({
   providedIn: "root"
 })
-export class BrowserStorageService
+export class BrowserStorage
   implements Storage {
 
   /**
