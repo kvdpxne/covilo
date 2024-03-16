@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {environment} from "../../../environments/environment";
-import {LoggingMessageProvider} from "./logging-message-provider";
+import {LoggerMessageProvider} from "./logger-message-provider";
 
 /**
  * Service for logging messages to the console with various log levels.
@@ -11,7 +11,7 @@ import {LoggingMessageProvider} from "./logging-message-provider";
 @Injectable({
   providedIn: "root"
 })
-export class LoggingService {
+export class Logger {
 
   /**
    * Checks whether logging is enabled based on the environment.
@@ -32,7 +32,7 @@ export class LoggingService {
    * console using `console.error()`.
    */
   public error(
-    message: LoggingMessageProvider
+    message: LoggerMessageProvider
   ): void {
     if (this.isEnabled()) {
       console.error(message());
@@ -47,7 +47,7 @@ export class LoggingService {
    * console using `console.warn()`.
    */
   public warn(
-    message: LoggingMessageProvider
+    message: LoggerMessageProvider
   ): void {
     if (this.isEnabled()) {
       console.warn(message());
@@ -62,7 +62,7 @@ export class LoggingService {
    * the console using `console.info()`.
    */
   public info(
-    message: LoggingMessageProvider
+    message: LoggerMessageProvider
   ): void {
     if (this.isEnabled()) {
       console.info(message());
@@ -77,7 +77,7 @@ export class LoggingService {
    * console using `console.debug()`.
    */
   public debug(
-    message: LoggingMessageProvider
+    message: LoggerMessageProvider
   ): void {
     if (this.isEnabled()) {
       console.debug(message());
@@ -92,7 +92,7 @@ export class LoggingService {
    * console using `console.trace()`.
    */
   public trace(
-    message: LoggingMessageProvider
+    message: LoggerMessageProvider
   ): void {
     if (this.isEnabled()) {
       console.trace(message());

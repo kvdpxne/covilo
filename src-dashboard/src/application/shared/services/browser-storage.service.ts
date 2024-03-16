@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {StorageKey} from "./storage-key";
 import {Storage} from "./storage";
-import {LoggingService} from "./logging.service";
+import {Logger} from "./logger.service";
 
 /**
  * Injectable service for interacting with browser storage.
@@ -19,18 +19,18 @@ export class BrowserStorageService
    * The logging service used for logging messages related to storage
    * operations.
    */
-  private readonly loggingService: LoggingService;
+  private readonly logger: Logger;
 
   /**
    * Constructs a new BrowserStorageService.
    *
-   * @param loggingService The logging service to use for logging messages
+   * @param logger The logging service to use for logging messages
    * related to storage operations.
    */
   public constructor(
-    loggingService: LoggingService
+    logger: Logger
   ) {
-    this.loggingService = loggingService;
+    this.logger = logger;
   }
 
   /**
@@ -122,7 +122,7 @@ export class BrowserStorageService
 
     // Store the string representation of the value in storage
     window.localStorage.setItem(key, textValue);
-    this.loggingService.debug(() => present
+    this.logger.debug(() => present
       ? `A new value was assigned to the ${key} key in the browser store.`
       : `The ${key} key value was overwritten in the browser store.`
     );
@@ -138,7 +138,7 @@ export class BrowserStorageService
     key: StorageKey
   ): void {
     window.localStorage.removeItem(key);
-    this.loggingService.debug(() =>
+    this.logger.debug(() =>
       `The value assigned to the ${key} key has been deleted.`
     );
   }

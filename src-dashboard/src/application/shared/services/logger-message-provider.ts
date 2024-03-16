@@ -3,4 +3,4 @@
  *
  * @returns A string representing the logging message.
  */
-export type LoggingMessageProvider = () => string;
+export type LoggerMessageProvider = () => string;

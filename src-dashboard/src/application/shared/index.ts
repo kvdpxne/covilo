@@ -2,8 +2,8 @@ export * from "./services/api-http-client.service";
 export * from "./services/base-http-client.service";
 export * from "./services/base-http-parameters-builder";
 
-export * from "./services/logging.service"
-export * from "./services/logging-message-provider"
+export * from "./services/logger.service"
+export * from "./services/logger-message-provider"
 
 export * from "./services/browser-storage.service";
 export * from "./services/in-memory-storage.service";
