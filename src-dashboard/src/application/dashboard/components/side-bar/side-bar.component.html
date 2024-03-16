@@ -1,0 +1,20 @@
+<mat-sidenav-container class="example-container">
+
+  <mat-sidenav mode="side" opened>
+    <mat-nav-list>
+      @for (item of items; track item) {
+        <a mat-list-item href=".">
+          {{item}}
+        </a>
+      }
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+
+    <app-header-bar/>
+    <ng-content/>
+
+  </mat-sidenav-content>
+
+</mat-sidenav-container>

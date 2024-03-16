@@ -34,6 +34,13 @@ $src-dashboard-theme: mat.define-light-theme((
 @include mat.all-component-themes($src-dashboard-theme);
 
 /* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #f0f0f0;
+}
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
