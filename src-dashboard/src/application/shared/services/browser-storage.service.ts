@@ -33,6 +33,10 @@ export class BrowserStorage
     this.logger = logger;
   }
 
+  public all(): Map<StorageKey | string, any> {
+    return new Map(Object.entries(window.localStorage))
+  }
+
   /**
    * Retrieves the value associated with the provided key from the storage.
    *
@@ -67,7 +71,7 @@ export class BrowserStorage
    * @returns True if the storage contains the key, otherwise false.
    */
   public has(
-    key: StorageKey
+    key: StorageKey | string
   ): boolean {
     return null != window.localStorage.getItem(key);
   }
@@ -83,7 +87,7 @@ export class BrowserStorage
    * @throws Error if the value passed is null or undefined.
    */
   public store<T>(
-    key: StorageKey,
+    key: StorageKey | string,
     value: T,
     force: boolean = true
   ): boolean {

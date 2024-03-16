@@ -5,6 +5,8 @@ import {StorageKey} from "./storage-key";
  */
 export interface Storage {
 
+  all(): Map<StorageKey | string, any>
+
   /**
    * Retrieves the value associated with the specified key from the storage.
    *

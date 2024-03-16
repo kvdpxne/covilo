@@ -108,7 +108,7 @@ export class AuthenticationService {
     // temporary memory and other user-related data stored in the browser
     // necessary for the operation of some features.
     this.authenticationStrategy.doLogout();
-    this.inMemoryStorage.remove(StorageKey.TOKEN);
+    this.inMemoryStorage.remove(StorageKey.USER_TOKEN);
 
     if (refresh) {
       location.reload();

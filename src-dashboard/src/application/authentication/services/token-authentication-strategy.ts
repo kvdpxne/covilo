@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {AuthenticationStrategy} from "./authentication-strategy";
-import {InMemoryStorage, Storage, StorageKey} from "../../shared";
+import {BrowserStorage, InMemoryStorage, StorageKey} from "../../shared";
 import {Token} from "../../core";
 
 @Injectable({
@@ -9,27 +9,32 @@ import {Token} from "../../core";
 export class TokenAuthenticationStrategy
   implements AuthenticationStrategy<Token> {
 
-  private readonly storage: Storage;
+  private readonly browserStorage: BrowserStorage;
+
+  private readonly inMemoryStorage: InMemoryStorage;
 
   public constructor(
+    browserStorage: BrowserStorage,
     inMemoryStorage: InMemoryStorage
   ) {
-    this.storage = inMemoryStorage;
+    this.browserStorage = browserStorage;
+    this.inMemoryStorage = inMemoryStorage;
   }
 
   public getToken(): Token | null {
-    return this.storage.get<Token>(StorageKey.TOKEN);
+    return this.inMemoryStorage.get<Token>(StorageKey.USER_TOKEN);
   }
 
   public isLogged(): boolean {
-    return this.storage.has(StorageKey.TOKEN);
+    return this.browserStorage.get<boolean>(StorageKey.USER_IS_AUTHENTICATED)
+      || this.inMemoryStorage.has(StorageKey.USER_TOKEN);
   }
 
   public doLogin(token: Token): void {
-    this.storage.store(StorageKey.TOKEN, token, true);
+    this.inMemoryStorage.store(StorageKey.USER_TOKEN, token, true);
   }
 
   public doLogout(): void {
-    this.storage.remove(StorageKey.TOKEN);
+    this.inMemoryStorage.remove(StorageKey.USER_TOKEN);
   }
 }

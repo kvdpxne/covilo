@@ -38,6 +38,10 @@ export class InMemoryStorage
     this.storage = {};
   }
 
+  public all(): Map<StorageKey | string, any> {
+    return new Map(Object.entries(this.storage))
+  }
+
   /**
    * Retrieves the value associated with the provided key from the storage.
    *
