@@ -44,7 +44,7 @@ export class BrowserStorage
    * @returns The value associated with the provided key.
    */
   public get<T>(
-    key: StorageKey
+    key: StorageKey | string
   ): T | null {
     // Retrieve the string value associated with the key from storage
     const textValue = window.localStorage.getItem(key);
@@ -139,7 +139,7 @@ export class BrowserStorage
    * @param key The key of the value to remove.
    */
   public remove(
-    key: StorageKey
+    key: StorageKey | string
   ): void {
     window.localStorage.removeItem(key);
     this.logger.debug(() =>
@@ -151,6 +151,24 @@ export class BrowserStorage
     to: Storage,
     ...keys: StorageKey[] | string[]
   ): void {
+    if (!to) {
+      throw Error("")
+    }
+
+    if (0 === keys.length) {
+      this.all().forEach((value, key) => {
+        to.store(key, value, true);
+      });
+      return;
+    }
+
+    for (const key of keys) {
+      const value = this.get<any>(key);
+      if (!value) {
+        continue;
+      }
+      to.store(key, value, true);
+    }
   }
 
   /**
