@@ -147,6 +147,12 @@ export class BrowserStorage
     );
   }
 
+  public transfer(
+    to: Storage,
+    ...keys: StorageKey[] | string[]
+  ): void {
+  }
+
   /**
    * Clears all stored key-value pairs from the storage.
    */

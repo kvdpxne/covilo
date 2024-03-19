@@ -39,7 +39,7 @@ export class InMemoryStorage
   }
 
   public all(): Map<StorageKey | string, any> {
-    return new Map(Object.entries(this.storage))
+    return new Map(Object.entries(this.storage));
   }
 
   /**
@@ -49,7 +49,7 @@ export class InMemoryStorage
    * @returns The value associated with the provided key.
    */
   public get<T>(
-    key: StorageKey
+    key: StorageKey | string
   ): T {
     return this.storage[key];
   }
@@ -61,7 +61,7 @@ export class InMemoryStorage
    * @returns True if the storage contains the key, otherwise false.
    */
   public has(
-    key: StorageKey
+    key: StorageKey | string
   ): boolean {
     return null != this.get(key);
   }
@@ -77,7 +77,7 @@ export class InMemoryStorage
    * @throws Error if the value passed is null or undefined.
    */
   public store<T>(
-    key: StorageKey,
+    key: StorageKey | string,
     value: T,
     force: boolean = false
   ): boolean {
@@ -111,6 +111,31 @@ export class InMemoryStorage
       `The value assigned to the ${key} key has been deleted.`
     );
   }
+
+  transfer(
+    to: Storage,
+    ...keys: StorageKey[] | string[]
+  ): void {
+    if (!to) {
+      throw Error("");
+    }
+
+    if (0 === keys.length) {
+      this.all().forEach((value, key) => {
+        to.store(key, value, true);
+      });
+      return;
+    }
+
+    for (const key of keys) {
+      const value = this.get<any>(key);
+      if (!value) {
+        continue;
+      }
+      to.store(key, value, true);
+    }
+  }
+
 
   /**
    * Clears all stored key-value pairs from the storage.

@@ -45,6 +45,8 @@ export class AppComponent
       + " loss or disruption for users."
     );
 
+    // this.inMemoryStorage.transfer(this.browserStorage)
+
     //
     this.inMemoryStorage.all().forEach((value, key) => {
       this.browserStorage.store(key, value);

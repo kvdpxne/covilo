@@ -15,7 +15,7 @@ export interface Storage {
    * exist.
    */
   get<T>(
-    key: StorageKey
+    key: StorageKey | string
   ): T | null;
 
   /**
@@ -25,7 +25,7 @@ export interface Storage {
    * @returns True if the storage contains the key, otherwise false.
    */
   has(
-    key: StorageKey
+    key: StorageKey | string
   ): boolean;
 
   /**
@@ -38,7 +38,7 @@ export interface Storage {
    * @returns True if the value was successfully stored, otherwise false.
    */
   store<T>(
-    key: StorageKey,
+    key: StorageKey | string,
     value: T,
     force: boolean
   ): boolean;
@@ -49,8 +49,13 @@ export interface Storage {
    * @param key The key of the value to remove.
    */
   remove(
-    key: StorageKey
+    key: StorageKey | string
   ): void;
+
+  transfer(
+    to: Storage,
+    ...keys: StorageKey[] | string[]
+  ): void
 
   /**
    * Clears all values from the storage.
