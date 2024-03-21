@@ -1,11 +1,17 @@
 import {Component, OnInit} from "@angular/core";
 import {InMemoryStorage, StorageKey} from "../../../shared";
 import {User} from "../../../core";
+import {MatCard, MatCardContent} from "@angular/material/card";
+import {TitleCasePipe} from "@angular/common";
 
 @Component({
   selector: "app-welcome",
   standalone: true,
-  imports: [],
+  imports: [
+    MatCard,
+    MatCardContent,
+    TitleCasePipe
+  ],
   templateUrl: "./welcome.component.html",
   styleUrl: "./welcome.component.scss"
 })
@@ -22,7 +28,7 @@ export class WelcomeComponent
     this.inMemoryStorage = inMemoryStorage;
   }
 
-  public get user(): User {
+  public get user(): User | undefined {
     if (this._user) {
       return this._user;
     }

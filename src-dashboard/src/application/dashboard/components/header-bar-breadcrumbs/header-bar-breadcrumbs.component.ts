@@ -6,6 +6,8 @@ import {
   RouterLink
 } from "@angular/router";
 import {distinctUntilChanged, filter} from "rxjs";
+import {TitleCasePipe} from "@angular/common";
+import {MatIcon} from "@angular/material/icon";
 
 export interface Breadcrumb {
 
@@ -17,7 +19,9 @@ export interface Breadcrumb {
   selector: "app-header-bar-breadcrumbs",
   standalone: true,
   imports: [
-    RouterLink
+    RouterLink,
+    TitleCasePipe,
+    MatIcon
   ],
   templateUrl: "./header-bar-breadcrumbs.component.html"
 })

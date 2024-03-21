@@ -1,8 +1,8 @@
 import {NgModule} from "@angular/core";
 import {RouterModule, RouterOutlet} from "@angular/router";
 import {DashboardComponent} from "./dashboard.component";
-import {WelcomeComponent} from "./routes";
 import {authenticationGuard} from "../authentication";
+import {CHILDREN_ROUTES} from "./routes/routes-tree";
 
 @NgModule({
   imports: [
@@ -12,14 +12,9 @@ import {authenticationGuard} from "../authentication";
       canActivate: [
         authenticationGuard
       ],
-      children: [{
-        path: "",
-        redirectTo: "welcome",
-        pathMatch: "full"
-      }, {
-        path: "welcome",
-        component: WelcomeComponent
-      }]
+      children: [
+        ...CHILDREN_ROUTES
+      ]
     }])
   ],
   exports: [

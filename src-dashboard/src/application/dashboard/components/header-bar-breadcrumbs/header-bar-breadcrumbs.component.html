@@ -1,7 +1,12 @@
-<div>
-  @for (item of breadcrumbs; track item) {
+<div class="flex flex-row items-center">
+  @for (item of breadcrumbs; track item; let isFirst = $first) {
+    @if (!isFirst) {
+      <mat-icon>
+        chevron_right
+      </mat-icon>
+    }
     <a [routerLink]="item.url">
-      {{item.label}}
+      {{ item.label | titlecase }}
     </a>
   }
 </div>

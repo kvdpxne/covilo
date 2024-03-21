@@ -1,23 +1,43 @@
+<div class="grid">
+  <div class="col-span-2">
+    <mat-card>
+      <mat-card-content>
+        <div class="text-wrap">
+          Welcome back,
+          <div>
+            {{ user?.firstName! | titlecase }}!
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div class="col-span-4">
+
+  </div>
+
+</div>
+
+
 <div>
-  {{user?.identifier}}
+  {{ user?.identifier }}
 </div>
 <div>
-  {{user?.email}}
+  {{ user?.email }}
 </div>
 
 <div>
-  {{user?.firstName}}
+  {{ user?.firstName }}
 </div>
 
 <div>
-  {{user?.lastName}}
+  {{ user?.lastName }}
 </div>
 
 <div>
-  {{user?.createdDate}}
+  {{ user?.createdDate }}
 </div>
 
 <div>
-  {{user?.lastModifiedDate}}
+  {{ user?.lastModifiedDate }}
 </div>
 

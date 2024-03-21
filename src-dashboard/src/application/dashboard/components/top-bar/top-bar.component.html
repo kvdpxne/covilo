@@ -1,21 +1,27 @@
-<div class="pl-4 pr-6 py-6 flex">
-  <a>
-
-  </a>
+<div class="pl-4 pr-6 py-6 bg-neutral-50 flex items-center">
+  <div class="cursor-pointer">
+    <mat-icon>
+      menu_open
+    </mat-icon>
+  </div>
 
   <app-top-bar-search/>
 
   <div class="ml-auto">
-    <a class="flex items-center cursor-pointer" [matMenuTriggerFor]="menu">
+    <div class="flex items-center cursor-pointer" [matMenuTriggerFor]="menu">
       <div class="pr-1.5">
-        Typical Username
+        {{ fullName | titlecase }}
       </div>
       <img src="favicon.ico">
-    </a>
+    </div>
 
     <mat-menu #menu="matMenu" xPosition="before">
-      <button mat-menu-item>Settings & Privacy</button>
-      <button mat-menu-item>Help</button>
+      <button mat-menu-item>
+        Settings & Privacy
+      </button>
+      <button mat-menu-item>
+        Help
+      </button>
       <button mat-menu-item (click)="handleLogout()">
         <mat-icon>
           logout
