@@ -54,7 +54,7 @@ export interface Storage {
 
   transfer(
     to: Storage,
-    ...keys: StorageKey[] | string[]
+    keys: StorageKey[] | string[]
   ): void
 
   /**

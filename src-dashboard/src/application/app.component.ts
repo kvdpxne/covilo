@@ -45,12 +45,7 @@ export class AppComponent
       + " loss or disruption for users."
     );
 
-    // this.inMemoryStorage.transfer(this.browserStorage)
-
-    //
-    this.inMemoryStorage.all().forEach((value, key) => {
-      this.browserStorage.store(key, value);
-    });
+    this.inMemoryStorage.transfer(this.browserStorage);
   }
 
   @HostListener("window:load")
@@ -61,10 +56,7 @@ export class AppComponent
       StorageKey.AUTHENTICATED_USER
     ];
 
-    keys.forEach(key => {
-      this.inMemoryStorage.store(key, this.browserStorage.get(key));
-      this.browserStorage.remove(key);
-    });
+    this.browserStorage.transfer(this.inMemoryStorage, keys)
   }
 
   ngOnInit(): void {

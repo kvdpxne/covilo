@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
-import {Storage} from "./storage";
 import {StorageKey} from "./storage-key";
 import {Logger} from "./logger.service";
+import {BaseStorage} from "./base-storage";
 
 /**
  * This service provides in-memory storage functionality for storing,
@@ -11,7 +11,7 @@ import {Logger} from "./logger.service";
   providedIn: "root"
 })
 export class InMemoryStorage
-  implements Storage {
+  extends BaseStorage {
 
   /**
    * The logging service used for logging messages related to storage
@@ -34,11 +34,12 @@ export class InMemoryStorage
   public constructor(
     logger: Logger
   ) {
+    super();
     this.logger = logger;
     this.storage = {};
   }
 
-  public all(): Map<StorageKey | string, any> {
+  public override all(): Map<StorageKey | string, any> {
     return new Map(Object.entries(this.storage));
   }
 
@@ -48,7 +49,7 @@ export class InMemoryStorage
    * @param key The key of the value to retrieve.
    * @returns The value associated with the provided key.
    */
-  public get<T>(
+  public override get<T>(
     key: StorageKey | string
   ): T {
     return this.storage[key];
@@ -60,7 +61,7 @@ export class InMemoryStorage
    * @param key The key to check for existence.
    * @returns True if the storage contains the key, otherwise false.
    */
-  public has(
+  public override has(
     key: StorageKey | string
   ): boolean {
     return null != this.get(key);
@@ -76,7 +77,7 @@ export class InMemoryStorage
    * @returns True if the value was successfully stored, otherwise false.
    * @throws Error if the value passed is null or undefined.
    */
-  public store<T>(
+  public override store<T>(
     key: StorageKey | string,
     value: T,
     force: boolean = false
@@ -103,7 +104,7 @@ export class InMemoryStorage
    *
    * @param key The key of the value to remove.
    */
-  public remove(
+  public override remove(
     key: StorageKey | string
   ): void {
     delete this.storage[key];
@@ -112,35 +113,10 @@ export class InMemoryStorage
     );
   }
 
-  transfer(
-    to: Storage,
-    ...keys: StorageKey[] | string[]
-  ): void {
-    if (!to) {
-      throw Error("");
-    }
-
-    if (0 === keys.length) {
-      this.all().forEach((value, key) => {
-        to.store(key, value, true);
-      });
-      return;
-    }
-
-    for (const key of keys) {
-      const value = this.get<any>(key);
-      if (!value) {
-        continue;
-      }
-      to.store(key, value, true);
-    }
-  }
-
-
   /**
    * Clears all stored key-value pairs from the storage.
    */
-  public clear(): void {
+  public override clear(): void {
     this.storage = {};
   }
 }
