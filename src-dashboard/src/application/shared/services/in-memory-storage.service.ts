@@ -14,12 +14,6 @@ export class InMemoryStorage
   extends BaseStorage {
 
   /**
-   * The logging service used for logging messages related to storage
-   * operations.
-   */
-  private readonly logger: Logger;
-
-  /**
    * Internal storage object to hold key-value pairs.
    */
   private storage: {
@@ -34,8 +28,7 @@ export class InMemoryStorage
   public constructor(
     logger: Logger
   ) {
-    super();
-    this.logger = logger;
+    super(logger);
     this.storage = {};
   }
 
@@ -93,8 +86,8 @@ export class InMemoryStorage
     }
     this.storage[key] = value;
     this.logger.debug(() => present
-      ? `A new value was assigned to the ${key} key in the memory store.`
-      : `The ${key} key value was overwritten in the memory store.`
+      ? `The ${key} key value was overwritten in the memory store.`
+      : `A new value was assigned to the ${key} key in the memory store.`
     );
     return true;
   }

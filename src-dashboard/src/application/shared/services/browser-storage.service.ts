@@ -16,12 +16,6 @@ export class BrowserStorage
   extends BaseStorage {
 
   /**
-   * The logging service used for logging messages related to storage
-   * operations.
-   */
-  private readonly logger: Logger;
-
-  /**
    * Constructs a new BrowserStorageService.
    *
    * @param logger The logging service to use for logging messages
@@ -30,8 +24,7 @@ export class BrowserStorage
   public constructor(
     logger: Logger
   ) {
-    super();
-    this.logger = logger;
+    super(logger);
   }
 
   public override all(): Map<StorageKey | string, any> {
@@ -128,8 +121,8 @@ export class BrowserStorage
     // Store the string representation of the value in storage
     window.localStorage.setItem(key, textValue);
     this.logger.debug(() => present
-      ? `A new value was assigned to the ${key} key in the browser store.`
-      : `The ${key} key value was overwritten in the browser store.`
+      ? `The ${key} key value was overwritten in the browser store.`
+      : `A new value was assigned to the ${key} key in the browser store.`
     );
     return true;
   }
