@@ -5,7 +5,12 @@ import {StorageKey} from "./storage-key";
  */
 export interface Storage {
 
-  all(): Map<StorageKey | string, any>
+  /**
+   * Retrieves all key-value pairs from the storage.
+   *
+   * @returns A Map containing all key-value pairs stored in the storage.
+   */
+  all(): Map<StorageKey | string, any>;
 
   /**
    * Retrieves the value associated with the specified key from the storage.
@@ -52,10 +57,23 @@ export interface Storage {
     key: StorageKey | string
   ): void;
 
+  /**
+   * Transfers specified keys along with their values from this storage to
+   * another storage.
+   *
+   * If `keys` is an empty array, transfer all values from this storage to
+   * another storage.
+   *
+   * @param to The storage to transfer the keys and values to.
+   * @param keys An array of keys or StorageKey objects to be transferred.
+   * If not provided or an empty array, all values from this storage will be
+   * transferred.
+   * @throws Error if the destination storage (`to`) is not provided.
+   */
   transfer(
     to: Storage,
     keys: StorageKey[] | string[]
-  ): void
+  ): void;
 
   /**
    * Clears all values from the storage.
