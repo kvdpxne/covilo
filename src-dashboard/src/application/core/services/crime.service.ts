@@ -6,53 +6,23 @@ import {Category} from "../models/category";
 import {ReportCrimeRequest} from "../playloads/report-crime-request";
 import {Book} from "../aggregation/book";
 import {map} from "rxjs/operators";
+import {HttpBridge} from "../../shared/services/http/http-bridge";
+import {ApiHttpBridge} from "../../shared/services/http/api-http-bridge";
 
 @Injectable({
   providedIn: "root"
 })
 export class CrimeService {
 
-  private readonly api: ApiHttpClientService;
+  private readonly httpBridge: HttpBridge;
 
-  public constructor(api: ApiHttpClientService) {
-    this.api = api;
+  public constructor(
+    apiHttpBridge: ApiHttpBridge
+  ) {
+    this.httpBridge = apiHttpBridge;
   }
 
-  private buildCategory(category: Category): Category {
-    return new Category(
-      category.identifier,
-      category.name,
-      category.classification
-    );
-  }
-
-  public getCategories(): Observable<Category[]> {
-    return this.api.get<Category[]>("search/categories").pipe(
-      map(arr => arr.map(it => this.buildCategory(it)))
-    );
-  }
-
-  public getCrimes(city: string): Observable<Book<Crime>> {
-    return this.api.get<Book<Crime>>("crime/all", {
-      city: city
-    }).pipe(
-      map(value => {
-        value.content = value.content.map(it => new Crime(
-          it.identifier,
-          it.title,
-          it.description,
-          it.categories.map(category => this.buildCategory(category)),
-          it.time,
-          it.place,
-          it.reporter,
-          it.confirmed
-        ));
-        return value;
-      })
-    )
-  }
-
-  public report(request: ReportCrimeRequest): Observable<Crime> {
-    return this.api.post<Crime>("crime/report", request);
+  public get crimesCount(): Observable<number> {
+    return this.httpBridge.get<number>("api/v1/crime/count");
   }
 }

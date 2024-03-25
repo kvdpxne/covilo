@@ -2,6 +2,8 @@ import {Injectable} from "@angular/core";
 import {ApiHttpClientService} from "../../shared";
 import {Observable} from "rxjs";
 import {User} from "../models/user";
+import {HttpBridge} from "../../shared/services/http/http-bridge";
+import {ApiHttpBridge} from "../../shared/services/http/api-http-bridge";
 
 /**
  * Default path for user-related API endpoints.
@@ -25,6 +27,8 @@ const DEFAULT_PATH: string = "api/v1/me";
 })
 export class UserMeService {
 
+  private readonly httpBridge: HttpBridge
+
   /**
    * Constructor to initialize the UserMeService.
    *
@@ -32,9 +36,9 @@ export class UserMeService {
    *                          making API requests.
    */
   public constructor(
-    private readonly httpClientService: ApiHttpClientService
+    apiHttpBridge: ApiHttpBridge
   ) {
-
+    this.httpBridge = apiHttpBridge;
   }
 
   /**
@@ -51,6 +55,16 @@ export class UserMeService {
     // Constructs the API endpoint for fetching user data
     const path = `${DEFAULT_PATH}`;
 
-    return this.httpClientService.get(path);
+    return this.httpBridge.get(path);
   }
+
+  // public uploadAvatar(
+  //   file: FormData
+  // ): Observable<void> {
+  //   return this.httpBridge.post<void>(
+  //     "api/v1/me/avatar",
+  //     file,
+  //       current => current.headers?.set("Content-Type", "multipart/form-data")
+  // )
+  // }
 }
