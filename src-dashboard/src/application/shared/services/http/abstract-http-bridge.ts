@@ -1,18 +1,33 @@
 import {HttpBridge} from "./http-bridge";
-import {
-  HttpClient, HttpErrorResponse,
-  HttpHeaders
-} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
 import {catchError, Observable, throwError} from "rxjs";
 import {HttpRequestOptions} from "./http-request-options";
 import {HttpRequestOptionsFunction} from "./http-request-options-function";
+import {Injectable} from "@angular/core";
 
+/**
+ * Abstract class representing a bridge for making HTTP requests using
+ * various HTTP methods.
+ *
+ * Provides a base implementation for common HTTP request operations.
+ */
+@Injectable()
 export abstract class AbstractHttpBridge
   implements HttpBridge {
 
+  /**
+   * The instance of HttpClient used for making HTTP requests.
+   */
   private readonly httpClient: HttpClient;
 
-  protected constructor(httpClient: HttpClient) {
+  /**
+   * Constructs a new instance of the AbstractHttpBridge.
+   *
+   * @param httpClient The HttpClient service for making HTTP requests.
+   */
+  protected constructor(
+    httpClient: HttpClient
+  ) {
     this.httpClient = httpClient;
   }
 
@@ -26,15 +41,13 @@ export abstract class AbstractHttpBridge
       .append("Expires", "Sat, 01 Jan 2000 00:00:00 GMT");
   }
 
-  public get defaultUrl(): string {
-    return "";
-  }
+  public abstract get defaultUrl(): string
 
   public get defaultRequestOptions(): HttpRequestOptions {
     return {
       headers: this.defaultHttpHeaders,
       responseType: "json"
-    }
+    };
   }
 
   /**
@@ -69,14 +82,69 @@ export abstract class AbstractHttpBridge
   }
 
   /**
+   * Constructs the final URL by appending the provided path to the default
+   * URL if necessary.
    *
+   * If the provided path starts with a "/", it is appended directly to the
+   * default URL; otherwise, it is appended after the default URL with a "/"
+   * separator.
+   *
+   * @param path The path to be appended or used as is.
+   * @returns The constructed URL.
+   * @throws Error if the provided path is empty, undefined, or not valid.
+   */
+  private constructUrl(
+    path: string
+  ): string {
+    // Check if the path is provided
+    if (!path) {
+      throw new Error("Path must be provided.");
+    }
+
+    // Get the default destination URL
+    const destination: string = this.defaultUrl;
+
+    // Check if the destination URL ends with "/"
+    const isDestinationEndsWithSlash: boolean = destination.endsWith("/");
+
+    // Check if the provided path starts with "/"
+    const isPathStartsWithSlash: boolean = path.startsWith("/");
+
+    if (isPathStartsWithSlash || isDestinationEndsWithSlash) {
+      // If either the provided path is absolute or the destination URL ends
+      // with "/", concatenate the URLs without adding an extra "/"
+      return `${destination}${path}`;
+    }
+
+    if (isPathStartsWithSlash && isDestinationEndsWithSlash) {
+      // If both the provided path and the destination URL end with "/",
+      // remove the redundant "/" from the provided path
+      return `${destination}${path.substring(1)}`;
+    }
+
+    // If none of the above conditions are met, concatenate the URLs with a
+    // "/" separator
+    return `${destination}/${path}`;
+  }
+
+  /**
+   * Configures the HTTP request options by applying the provided options
+   * function to the default request options.
+   *
+   * If an options function is provided, it is used to transform or augment
+   * the default request options; otherwise, the default request options are
+   * returned unchanged.
+   *
+   * @param optionsFunction Optional function to transform or augment the
+   * default request options.
+   * @returns The configured HTTP request options.
    */
   private configureHttpRequestOptions(
     optionsFunction?: HttpRequestOptionsFunction
-  ): HttpRequestOptions  {
+  ): HttpRequestOptions {
     return optionsFunction
       ? optionsFunction(this.defaultRequestOptions)
-      : this.defaultRequestOptions
+      : this.defaultRequestOptions;
   }
 
   public delete<T>(
@@ -85,7 +153,7 @@ export abstract class AbstractHttpBridge
   ): Observable<T> {
     return this.handleResponse<T>(
       this.httpClient.delete<T>(
-        `${this.defaultUrl}/${url}`,
+        this.constructUrl(url),
         this.configureHttpRequestOptions(optionsFunction)
       )
     );
@@ -97,7 +165,7 @@ export abstract class AbstractHttpBridge
   ): Observable<T> {
     return this.handleResponse<T>(
       this.httpClient.get<T>(
-        `${this.defaultUrl}/${url}`,
+        this.constructUrl(url),
         this.configureHttpRequestOptions(optionsFunction)
       )
     );
@@ -109,7 +177,7 @@ export abstract class AbstractHttpBridge
   ): Observable<T> {
     return this.handleResponse<T>(
       this.httpClient.get<T>(
-        `${this.defaultUrl}/${url}`,
+        this.constructUrl(url),
         this.configureHttpRequestOptions(optionsFunction)
       )
     );
@@ -122,7 +190,7 @@ export abstract class AbstractHttpBridge
   ): Observable<T> {
     return this.handleResponse<T>(
       this.httpClient.post<T>(
-        `${this.defaultUrl}/${url}`,
+        this.constructUrl(url),
         body,
         this.configureHttpRequestOptions(optionsFunction)
       )
@@ -136,7 +204,7 @@ export abstract class AbstractHttpBridge
   ): Observable<T> {
     return this.handleResponse<T>(
       this.httpClient.put<T>(
-        `${this.defaultUrl}/${url}`,
+        this.constructUrl(url),
         body,
         this.configureHttpRequestOptions(optionsFunction)
       )
