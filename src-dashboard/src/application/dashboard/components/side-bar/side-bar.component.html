@@ -3,9 +3,7 @@
   <mat-sidenav mode="side" opened class="example-container-2">
     <mat-nav-list>
       @for (item of items; track item) {
-        <a mat-list-item [routerLink]="item.href">
-          {{ item.name | titlecase }}
-        </a>
+        <app-side-bar-navigation-item [item]="item"/>
       }
     </mat-nav-list>
   </mat-sidenav>

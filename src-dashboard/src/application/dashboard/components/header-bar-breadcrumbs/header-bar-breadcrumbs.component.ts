@@ -109,12 +109,14 @@ export class HeaderBarBreadcrumbsComponent
       path = path.replace(lastRoutePart, route.snapshot.params[paramName]);
     }
 
+    const label = path.replace("-", " ");
+
     // Build the next URL by appending the current path to the existing URL.
     const nextUrl = path ? `${url}/${path}` : url;
 
     // Construct the breadcrumb item for the current route segment.
     const breadcrumb: Breadcrumb = {
-      label: path,
+      label: label,
       url: nextUrl
     };
 

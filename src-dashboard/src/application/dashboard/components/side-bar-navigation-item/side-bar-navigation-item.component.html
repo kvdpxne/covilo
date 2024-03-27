@@ -1,0 +1,13 @@
+<a mat-list-item [routerLink]="item.href">
+  <div class="flex flex-row items-center">
+    @if (item.icon) {
+      <mat-icon>
+        {{ item.icon }}
+      </mat-icon>
+    }
+    <div class="ml-1.5">
+      {{ item.name }}
+    </div>
+  </div>
+
+</a>

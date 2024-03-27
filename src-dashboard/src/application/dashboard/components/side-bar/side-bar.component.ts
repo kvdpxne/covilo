@@ -9,12 +9,15 @@ import {RouterLink} from "@angular/router";
 import {HeaderBarComponent} from "../header-bar/header-bar.component";
 import {TopBarComponent} from "../top-bar/top-bar.component";
 import {TitleCasePipe} from "@angular/common";
+import {
+  SideBarNavigationItemComponent
+} from "../side-bar-navigation-item/side-bar-navigation-item.component";
 
 @Component({
   selector: "app-side-bar",
   standalone: true,
   imports: [
-    MatToolbarModule, MatButtonModule, MatIconModule, MatSidenavModule, MatListModule, RouterLink, HeaderBarComponent, TopBarComponent, TitleCasePipe
+    MatToolbarModule, MatButtonModule, MatIconModule, MatSidenavModule, MatListModule, RouterLink, HeaderBarComponent, TopBarComponent, TitleCasePipe, SideBarNavigationItemComponent
   ],
   templateUrl: "./side-bar.component.html",
   styleUrl: "./side-bar.component.scss"
@@ -25,10 +28,44 @@ export class SideBarComponent {
 
   items = [{
     name: "Dashboard",
-    href: "/dashboard/welcome"
+    href: "/dashboard/welcome",
+    icon: "space_dashboard"
   }, {
     name: "User Management",
-    href: "/dashboard/user-management"
+    href: "/dashboard/user-management",
+    icon: "manage_accounts"
+  }, {
+    name: "View Reports",
+    href: "",
+    icon: "report"
+  }, {
+    name: "Incident Management",
+    href: "",
+    icon: ""
+  }, {
+    name: "Statistics & Reporting",
+    href: "",
+    icon: "bar_chart"
+  }, {
+    name: "System Settings",
+    href: "",
+    icon: "room_preferences"
+  }, {
+    name: "Notifications Handling",
+    href: "",
+    icon: "notifications_active"
+  }, {
+    name: "Comment Management",
+    href: "",
+    icon: "forum"
+  }, {
+    name: "Action Audit",
+    href: "",
+    icon: ""
+  }, {
+    name: "Support",
+    href: "",
+    icon: "help"
   }]
 
 
