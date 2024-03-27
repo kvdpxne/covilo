@@ -3,6 +3,8 @@ export * from "./aggregation/auditable";
 export * from "./aggregation/book";
 export * from "./aggregation/book-attributes";
 export * from "./aggregation/identifiable";
+export * from "./aggregation/page";
+export * from "./aggregation/page-request";
 
 // All available application models
 export * from "./models/administrative-division-type";

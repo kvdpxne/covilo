@@ -5,6 +5,8 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import me.kvdpxne.covilo.domain.model.User;
 import me.kvdpxne.covilo.domain.persistence.paging.PageRange;
+import me.kvdpxne.covilo.infrastructure.swagger.HiddenParameter;
+import me.kvdpxne.covilo.infrastructure.swagger.PagingAsQueryParameter;
 import me.kvdpxne.covilo.presentation.dto.UserDto;
 import me.kvdpxne.covilo.presentation.mappers.UserMapper;
 import me.kvdpxne.covilo.presentation.payloads.CreateNewUserRequest;
@@ -42,8 +44,10 @@ public final class UserController {
    */
   private final UserMapper userMapper;
 
+  @PagingAsQueryParameter
   @GetMapping("all")
   public Page<UserDto> getUsers(
+    @HiddenParameter
     final PageRange page
   ) {
     final var users = (Page<User>) this.userService.getUsers(page);
