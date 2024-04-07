@@ -1,8 +1,12 @@
+import nu.studer.gradle.jooq.JooqEdition
+
 plugins {
   id("java")
 
   alias(libraries.plugins.spring.boot)
   alias(libraries.plugins.spring.management)
+
+  id("nu.studer.jooq") version "9.0"
 }
 
 description = ""
@@ -15,9 +19,7 @@ configurations {
 }
 
 dependencies {
-  // https://mvnrepository.com/artifact/org.jetbrains/annotations
-  implementation 'org.jetbrains:annotations:24.1.0'
-
+  implementation("org.springframework.boot:spring-boot-starter-jooq")
 
   implementation("org.springframework.boot:spring-boot-starter")
   testImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -37,10 +39,11 @@ dependencies {
   annotationProcessor("org.projectlombok:lombok")
 
   implementation(libraries.openapi)
+  jooqGenerator(project(":src-jooq-generator"))
 
   // Uncomment if using SQLite instead of PostgresSQL.
-  implementation(libraries.sqlite)
-
+//  implementation(libraries.sqlite)
+  jooqGenerator("org.postgresql:postgresql")
 
   // https://github.com/mapstruct/mapstruct
   implementation(libraries.mapstruct.core)
@@ -98,10 +101,50 @@ processResources {
   }
 }
 
+jooq {
+  version = dependencyManagement.importedProperties["jooq.version"]
+  edition = JooqEdition.OSS
+
+  configurations {
+    main {
+      generationTool {
+        logging = org.jooq.meta.jaxb.Logging.INFO
+        jdbc {
+          driver = "org.postgresql.Driver"
+          url = "jdbc:postgresql://localhost:5432/covilo"
+          user = "postgres"
+          password = "postgres"
+        }
+        generator {
+          def packageName = "me.kvdpxne.covilo.jooq"
+
+          name = "org.jooq.codegen.DefaultGenerator"
+          strategy {
+            name = "${packageName}.DefaultGeneratorStrategyWithTableSuffix"
+          }
+          database {
+            name = "org.jooq.meta.postgres.PostgresDatabase"
+            inputSchema = "public"
+          }
+          target {
+            packageName = "${packageName}.primary"
+          }
+        }
+      }
+    }
+  }
+}
+
 tasks.withType(JavaCompile).configureEach {
   if (10 <= targetJavaVersion || JavaVersion.current().isJava10Compatible()) {
     options.release.set(targetJavaVersion)
   }
+}
+
+tasks.named("generateJooq").configure {
+  // make jOOQ task participate in incremental builds (which is also a
+  // prerequisite for build caching)
+  allInputsDeclared = true
 }
 
 tasks.withType(Test).configureEach {

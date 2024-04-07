@@ -33,3 +33,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "covilo"
 include("covilo-core")
+include("src-jooq-generator")
