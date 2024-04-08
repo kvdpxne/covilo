@@ -1,3 +1,5 @@
+import org.gradle.api.initialization.resolve.RepositoriesMode
+
 pluginManagement {
 
   repositories {
@@ -29,6 +31,8 @@ dependencyResolutionManagement {
       }
     }
   }
+
+  repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
 }
 
 rootProject.name = "covilo"
