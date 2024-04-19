@@ -1,12 +1,10 @@
 package me.kvdpxne.covilo.domain.service;
 
-import me.kvdpxne.covilo.domain.port.out.UserValidatorPort;
 import me.kvdpxne.covilo.common.exceptions.UserInvalidEmailAddressException;
 import me.kvdpxne.covilo.common.exceptions.UserInvalidPasswordException;
 import me.kvdpxne.covilo.shared.Validation;
 
-public final class UserValidator
-  implements UserValidatorPort {
+public final class UserValidator {
 
   /**
    * Regular expression pattern for validating Google Gmail email addresses.
