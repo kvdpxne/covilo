@@ -15,7 +15,7 @@ public interface Identifiable<T extends Serializable> {
    *
    * @return The identifier of the object.
    */
-  T identifier();
+  T getIdentifier();
 
   /**
    * Checks if the object is new, i.e., if it has not been assigned an
@@ -24,6 +24,6 @@ public interface Identifiable<T extends Serializable> {
    * @return {@code true} if the object is new, otherwise {@code false}.
    */
   default boolean isNew() {
-    return null == this.identifier();
+    return null == this.getIdentifier();
   }
 }
