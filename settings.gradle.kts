@@ -1,5 +1,3 @@
-import org.gradle.api.initialization.resolve.RepositoriesMode
-
 pluginManagement {
 
   repositories {
@@ -7,15 +5,19 @@ pluginManagement {
 
     mavenCentral()
     mavenLocal()
+
+    maven("https://repo.spring.io/milestone")
+    maven("https://repo.spring.io/snapshot")
   }
 }
 
+@Suppress("UnstableApiUsage")
 dependencyResolutionManagement {
 
   versionCatalogs {
-    def fileName = "libraries"
+    val fileName = "libraries"
     create(fileName) {
-      from(files("gradle/${fileName}.versions.toml"))
+      from(files("gradle/$fileName.versions.toml"))
     }
   }
 
@@ -24,17 +26,25 @@ dependencyResolutionManagement {
     mavenLocal()
 
     maven {
-      url = "https://jitpack.io"
+      url = uri("https://jitpack.io")
       content {
         includeGroupAndSubgroups("com.github.kvdpxne")
         includeGroup("com.github.gotson")
       }
     }
+
+    maven("https://repo.spring.io/milestone")
+    maven("https://repo.spring.io/snapshot")
   }
 
   repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
 }
 
+sequenceOf(
+  "covilo-core",
+  "src-jooq-generator"
+).forEach {
+  include(it)
+}
+
 rootProject.name = "covilo"
-include("covilo-core")
-include("src-jooq-generator")
