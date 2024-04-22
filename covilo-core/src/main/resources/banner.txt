@@ -1,0 +1,7 @@
+ dP""b8  dP"Yb  Yb    dP 88 88      dP"Yb
+dP   `" dP   Yb  Yb  dP  88 88     dP   Yb
+Yb      Yb   dP   YbdP   88 88  .o Yb   dP
+ YboodP  YbodP     YP    88 88ood8  YbodP
+
+Application: ${application.name} v${application.version}
+Powered by Spring Boot v${spring-boot.version}
