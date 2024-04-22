@@ -7,7 +7,7 @@ package me.kvdpxne.covilo.domain.exceptions;
  * requires a password, but the provided password does not meet the required
  * criteria or is otherwise invalid.
  */
-public final class InvalidPasswordException
+public class InvalidPasswordException
   extends UserException {
 
   /**
