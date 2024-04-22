@@ -1,4 +1,4 @@
-package me.kvdpxne.covilo.common.exceptions;
+package me.kvdpxne.covilo.domain.exceptions;
 
 public class TokenSignatureException extends TokenException {
 
@@ -7,10 +7,6 @@ public class TokenSignatureException extends TokenException {
 
   public TokenSignatureException(final String message) {
     super(message);
-  }
-
-  public TokenSignatureException(final String message, final Object... arguments) {
-    super(message, arguments);
   }
 
   public TokenSignatureException(final String message, final Throwable cause) {

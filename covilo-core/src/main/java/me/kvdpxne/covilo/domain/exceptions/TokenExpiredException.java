@@ -1,4 +1,4 @@
-package me.kvdpxne.covilo.common.exceptions;
+package me.kvdpxne.covilo.domain.exceptions;
 
 public class TokenExpiredException extends TokenException {
 
@@ -7,10 +7,6 @@ public class TokenExpiredException extends TokenException {
 
   public TokenExpiredException(final String message) {
     super(message);
-  }
-
-  public TokenExpiredException(final String message, final Object... arguments) {
-    super(message, arguments);
   }
 
   public TokenExpiredException(final String message, final Throwable cause) {

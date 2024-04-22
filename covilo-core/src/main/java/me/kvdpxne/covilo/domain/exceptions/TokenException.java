@@ -1,16 +1,12 @@
-package me.kvdpxne.covilo.common.exceptions;
+package me.kvdpxne.covilo.domain.exceptions;
 
-public class TokenException extends ApplicationException {
+public class TokenException extends RuntimeException {
 
   public TokenException() {
   }
 
   public TokenException(final String message) {
     super(message);
-  }
-
-  public TokenException(final String message, final Object... arguments) {
-    super(message, arguments);
   }
 
   public TokenException(final String message, final Throwable cause) {

@@ -1,4 +1,4 @@
-package me.kvdpxne.covilo.common.exceptions;
+package me.kvdpxne.covilo.domain.exceptions;
 
 public class UserPasswordsNotMatchException extends RuntimeException {
 
