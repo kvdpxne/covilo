@@ -9,9 +9,9 @@ import LogotypeIcon from "@/app/_components/_icons/LogotypeIcon";
 
 const navigation = [
   {name: 'Home page', href: '/'},
-  {name: 'Report', href: '#'},
-  {name: 'Interactive map', href: '#'},
-  {name: 'Search', href: '#'},
+  {name: 'Report', href: '/report'},
+  {name: 'Interactive map', href: '/interactive-map'},
+  {name: 'Search', href: '/search'},
 ]
 
 const buttons = [
