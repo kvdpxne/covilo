@@ -7,8 +7,8 @@ export default function FooterSection({title, items}) {
     <div className="px-10 mx-10">
       <p className="text-xl">{title}</p>
       <ul className="flex flex-col pt-4 pb-6">
-        {items.map(({name, href}) => (
-          <li className="py-1" key={name}>
+        {items.map(({name, href}, index) => (
+          <li className="py-1" key={index}>
             <Link href={href}>
               {name}
             </Link>

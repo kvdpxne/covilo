@@ -5,7 +5,7 @@ import {Bars3Icon} from "@heroicons/react/24/outline";
 import {Dialog} from "@headlessui/react";
 import {XMarkIcon} from "@heroicons/react/16/solid";
 import Link from "next/link";
-import LogotypeIcon from "@/app/_components/_icons/LogotypeIcon";
+import LogotypeIcon from "./_icons/LogotypeIcon";
 
 const navigation = [
   {name: 'Home page', href: '/'},
@@ -15,16 +15,29 @@ const navigation = [
 ]
 
 const buttons = [
-  {name: "Sign up", href: "authentication/signup"},
-  {name: "Log in", href: "authentication/login"}
+  {name: "Sign up", href: "/authentication/signup"},
+  {name: "Log in", href: "/authentication/login"}
 ]
 
 /**
  * Represents the logo of the application.
  */
 const Logotype = () => (
-  <Link className="-m-1.5 p-1.5" href="/">
-    <LogotypeIcon width="92pt" fill="black"/>
+  <Link href="/"
+        className="-m-1.5 p-1.5">
+    <LogotypeIcon width="92pt"
+                  className="fill-gray-900 dark:fill-white"/>
+  </Link>
+)
+
+/**
+ *
+ */
+const NavigationListItem = ({name, href}) => (
+  <Link href={href}
+        key={name.toLowerCase()}
+        className="text-sm font-semibold leading-6 text-gray-900 dark:text-white">
+    {name}
   </Link>
 )
 
@@ -34,11 +47,7 @@ const Logotype = () => (
 const NavigationList = () => (
   <div className="hidden lg:flex lg:gap-x-12">
     {navigation.map(({name, href}) => (
-      <Link key={name}
-            href={href}
-            className="text-sm font-semibold leading-6 text-gray-900">
-        {name}
-      </Link>
+      <NavigationListItem name={name} href={href}/>
     ))}
   </div>
 )
@@ -64,8 +73,8 @@ const Header = () => {
   }
 
   return (
-    <header className="container mx-auto lg:px-32 px-0 pt-6 pb-8">
-      <nav className="flex items-center justify-between">
+    <header className="absolute inset-x-0 top-0 z-50">
+      <nav className="flex items-center justify-between container mx-auto lg:px-32 px-0 pt-6 pb-8">
 
         {/* Brand logotype */}
         <div className="flex lg:flex-1">
@@ -88,7 +97,7 @@ const Header = () => {
           {buttons.map(({name, href}) => (
             <Link href={href}
                   key={href}
-                  className="text-sm font-semibold leading-6 text-gray-900">
+                  className="text-sm font-semibold leading-6 text-gray-900 dark:text-white">
               {name}
             </Link>
           ))}
@@ -127,7 +136,7 @@ const Header = () => {
                 {buttons.map(({name, href}) => (
                   <Link href={href}
                         key={href}
-                        className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
+                        className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 dark:text-white hover:bg-gray-50">
                     {name}
                   </Link>
                 ))}
