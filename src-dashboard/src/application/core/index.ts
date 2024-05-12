@@ -17,7 +17,7 @@ export * from "./models/country";
 export * from "./models/crime";
 export * from "./models/gender";
 export * from "./models/province";
-export * from "./models/token";
+export * from "./models/token-pair";
 export * from "./models/user";
 
 //

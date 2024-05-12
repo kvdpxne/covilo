@@ -12,7 +12,6 @@ import org.mapstruct.Mapper;
  */
 @Mapper(
   uses = {
-    CityMapper.class
   }
 )
 public interface UserMapper

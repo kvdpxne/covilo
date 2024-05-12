@@ -22,4 +22,14 @@ public record Comment(
   public boolean hasReplies() {
     return null != this.replies && !this.replies.isEmpty();
   }
+
+  @Override
+  public LocalDateTime getCreatedDate() {
+    return null;
+  }
+
+  @Override
+  public LocalDateTime getLastModifiedDate() {
+    return null;
+  }
 }

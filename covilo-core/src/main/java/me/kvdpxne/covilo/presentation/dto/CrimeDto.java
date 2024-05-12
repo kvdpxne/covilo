@@ -11,7 +11,6 @@ public record CrimeDto(
   Collection<CategoryDto> categories,
   LocalDateTime time,
   UserDto reporter,
-  CityDto place,
   boolean confirmed
 ) {
 }

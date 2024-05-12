@@ -1,36 +1,36 @@
 package me.kvdpxne.covilo.infrastructure.security;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
+import java.util.List;
 import me.kvdpxne.covilo.domain.model.User;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public record UserAccountDetails(User user) implements UserDetails  {
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    var role = this.user.role();
-
-    var authorities = role
-      .getPermissions()
-      .stream()
-      .map(permission -> new SimpleGrantedAuthority(permission.name()))
-      .collect(Collectors.toList());
-
-    authorities.add(new SimpleGrantedAuthority("ROLE_" + role.name()));
-    return authorities;
+//    var role = this.user.role();
+//
+//    var authorities = role
+//      .getPermissions()
+//      .stream()
+//      .map(permission -> new SimpleGrantedAuthority(permission.name()))
+//      .collect(Collectors.toList());
+//
+//    authorities.add(new SimpleGrantedAuthority("ROLE_" + role.name()));
+//    return authorities;
+    return List.of();
   }
 
   @Override
   public String getPassword() {
-    return this.user.password();
+    return this.user.getPassword();
   }
 
   @Override
   public String getUsername() {
-    return this.user.email();
+    return this.user.getName();
   }
 
   @Override

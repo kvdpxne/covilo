@@ -32,7 +32,6 @@ dependencies {
   testImplementation("org.springframework.security:spring-security-test")
 
   implementation("org.springframework.boot:spring-boot-starter-jdbc")
-  implementation("org.springframework.boot:spring-boot-starter-data-jpa")
   runtimeOnly("org.postgresql:postgresql")
 
   compileOnly("org.projectlombok:lombok")
@@ -54,6 +53,7 @@ dependencies {
   // https://github.com/jwtk/jjwt
   implementation(libraries.jjwt.api)
   runtimeOnly(libraries.bundles.jjwt.runtime)
+  testRuntimeOnly("com.h2database:h2")
 }
 
 def targetJavaVersion = 22
@@ -64,7 +64,10 @@ java {
   targetCompatibility = javaVersion
 
   if (JavaVersion.current() < javaVersion) {
-    toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+    toolchain {
+      languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+      vendor = JvmVendorSpec.ADOPTIUM
+    }
   }
 }
 
@@ -91,7 +94,7 @@ compileJava {
 }
 
 processResources {
-  def properties = ["version": rootProject.version]
+  def properties = ["version": version]
 
   inputs.properties(properties)
   filteringCharset("UTF-8")
@@ -139,6 +142,8 @@ tasks.withType(JavaCompile).configureEach {
   if (10 <= targetJavaVersion || JavaVersion.current().isJava10Compatible()) {
     options.release.set(targetJavaVersion)
   }
+
+  options.compilerArgs += ["--enable-preview"]
 }
 
 tasks.named("generateJooq").configure {
@@ -149,4 +154,10 @@ tasks.named("generateJooq").configure {
 
 tasks.withType(Test).configureEach {
   useJUnitPlatform()
+  systemProperty("spring.profiles.active", "testing")
+  jvmArgs += "--enable-preview"
+}
+
+tasks.withType(JavaExec).configureEach {
+  jvmArgs += '--enable-preview'
 }

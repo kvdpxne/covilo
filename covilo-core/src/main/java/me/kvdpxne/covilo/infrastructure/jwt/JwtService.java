@@ -16,9 +16,8 @@ import java.util.Date;
 import java.util.Map;
 import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
-import me.kvdpxne.covilo.domain.port.out.ITokenService;
-import me.kvdpxne.covilo.common.exceptions.TokenExpiredException;
-import me.kvdpxne.covilo.common.exceptions.TokenSignatureException;
+import me.kvdpxne.covilo.domain.exceptions.TokenExpiredException;
+import me.kvdpxne.covilo.domain.exceptions.TokenSignatureException;
 import me.kvdpxne.covilo.domain.model.User;
 import me.kvdpxne.covilo.infrastructure.configuration.ApplicationConfiguration;
 import me.kvdpxne.covilo.shared.Validation;
@@ -27,8 +26,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public final class JwtService
-  implements ITokenService {
+public final class JwtService {
 
   /**
    * General configuration for the entire application.
@@ -46,6 +44,12 @@ public final class JwtService
     ));
   }
 
+  private Key getSecondKey() {
+    return Keys.hmacShaKeyFor(Decoders.BASE64.decode(
+      this.tokenConfiguration.getSecondSecretKey()
+    ));
+  }
+
   /**
    * @throws NullPointerException     If the given user is null.
    * @throws IllegalArgumentException If the given compact token expiration
@@ -53,15 +57,16 @@ public final class JwtService
    */
   private String createCompactToken(
     final User user,
-    final long expiration
+    final long expiration,
+    final Key key
   ) {
     Validation.check(
       user,
-      "The given user cannot be null."
+      () -> "The given user cannot be null."
     );
     Validation.check(
-      0 >= expiration,
-      "The expiry time cannot be equal to or less than zero."
+      0 < expiration,
+      () -> "The expiry time cannot be equal to or less than zero."
     );
 
     // The algorithm signature that will be signed for each compact token
@@ -79,8 +84,8 @@ public final class JwtService
 
     final Claims claims = Jwts.claims()
       .setIssuer(this.applicationConfiguration.getName())
-      .setSubject(user.email())
-      .setAudience(user.identifier().toString())
+      .setSubject(user.getName())
+      .setAudience(user.getIdentifier().toString())
       .setIssuedAt(currentDate)
       .setExpiration(new Date(current + expiration))
       .setNotBefore(currentDate);
@@ -98,21 +103,21 @@ public final class JwtService
     return builder.compact();
   }
 
-  @Override
   public String createCompactAccessToken(final User user) {
     // Creates a compact access token with a defined expiration time.
     return this.createCompactToken(
       user,
-      this.tokenConfiguration.getAccessTokenExpiration()
+      this.tokenConfiguration.getAccessTokenExpiration(),
+      this.getKey()
     );
   }
 
-  @Override
   public String createCompactRefreshToken(final User user) {
     // Creates a compact refresh token with a defined expiration time.
     return this.createCompactToken(
       user,
-      this.tokenConfiguration.getRefreshTokenExpiration()
+      this.tokenConfiguration.getRefreshTokenExpiration(),
+      this.getSecondKey()
     );
   }
 
@@ -131,17 +136,18 @@ public final class JwtService
   ) throws TokenSignatureException, TokenExpiredException {
     Validation.check(
       compactToken,
-      "The given compact token cannot be null."
+      () -> "The given compact token cannot be null."
     );
     Validation.check(
-      compactToken.isBlank(),
-      "The given compact token cannot be empty or contains only space."
+      !compactToken.isBlank(),
+      () -> "The given compact token cannot be empty or contains only space."
     );
 
     final JwtParser parser = Jwts.parserBuilder()
       .setSigningKey(this.getKey())
       .build();
 
+    System.out.println(compactToken);
     try {
       return parser.parseClaimsJws(compactToken).getBody();
     } catch (final SignatureException exception) {
@@ -167,14 +173,14 @@ public final class JwtService
     return function.apply(this.extractClaims(compactToken));
   }
 
-  @Override
+
   public String extractAudience(
     final String compactToken
   ) throws TokenSignatureException, TokenExpiredException {
     return this.extractClaims(compactToken, Claims::getAudience);
   }
 
-  @Override
+
   public String extractSubject(
     final String compactToken
   ) throws TokenSignatureException, TokenExpiredException {

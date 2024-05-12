@@ -1,44 +1,43 @@
 import {Injectable} from "@angular/core";
-import {ApiHttpClientService} from "../../shared";
-import {Continent} from "../models/continent";
+import {HttpBridge} from "../../shared/services/http/http-bridge";
+import {ApiHttpBridge} from "../../shared/services/http/api-http-bridge";
 import {Observable} from "rxjs";
-import {Country} from "../models/country";
-import {Province} from "../models/province";
-import {City} from "../models/city";
-import {Book} from "../aggregation/book";
+import {Page} from "../aggregation/page";
+import {PageRequest} from "../aggregation/page-request";
+import {HttpParams} from "@angular/common/http";
 
-const GEOLOCATION_PORT = "geolocation"
+export type RESPONSE<T> = Observable<Page<T> | Array<T>>
 
 @Injectable({
   providedIn: "root"
 })
 export class GeolocationService {
 
-  private readonly api: ApiHttpClientService;
+  private readonly httpBridge: HttpBridge;
 
-  constructor(api: ApiHttpClientService) {
-    this.api = api;
+  public constructor(
+    apiHttpBridge: ApiHttpBridge
+  ) {
+    this.httpBridge = apiHttpBridge;
   }
 
-  public getCountries(): Observable<Book<Country>> {
-    return this.api.get(`${GEOLOCATION_PORT}/countries`);
-  }
+  public getCities(
+    pageRequest?: PageRequest
+  ): Observable<any> {
+    return this.httpBridge.get(
+      "api/v1/geolocation/city",
+      options => {
+        const parameters = new HttpParams();
 
-  public getProvincesByCountry(country: Country): Observable<Book<Province>> {
-    return this.api.get(`${GEOLOCATION_PORT}/regions`, {
-      country: country.identifier
-    });
-  }
+        if (pageRequest) {
+          const {pageSize, pageNumber} = pageRequest;
+          parameters.set("page", pageSize).set("size", pageNumber);
+        }
 
-  public getCitiesByProvince(province: Province): Observable<Book<City>> {
-    return this.api.get(`${GEOLOCATION_PORT}/cities`, {
-      provinceIdentifier: province.identifier
-    });
-  }
+        options.params = parameters;
 
-  public getCity(identifier: string): Observable<City> {
-    return this.api.get<City>(`${GEOLOCATION_PORT}/city`, {
-      identifier: identifier
-    });
+        return options;
+      }
+    )
   }
 }

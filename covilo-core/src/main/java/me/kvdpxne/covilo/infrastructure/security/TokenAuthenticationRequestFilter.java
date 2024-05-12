@@ -7,9 +7,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import me.kvdpxne.covilo.domain.port.out.ITokenService;
 import me.kvdpxne.covilo.common.constants.Endpoints;
-import me.kvdpxne.covilo.common.exceptions.TokenException;
+import me.kvdpxne.covilo.domain.exceptions.TokenException;
+import me.kvdpxne.covilo.infrastructure.jwt.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.lang.NonNull;
@@ -24,7 +24,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public final class TokenAuthenticationRequestFilter
   extends OncePerRequestFilter {
 
-  private final ITokenService tokenService;
+  private final JwtService tokenService;
   private final UserAccountDetailsService userDetailsService;
 
   /**
@@ -83,7 +83,7 @@ public final class TokenAuthenticationRequestFilter
     final UserAccountDetails principal = (UserAccountDetails)
       this.userDetailsService.loadUserByUsername(subject);
 
-    if (principal.user().identifier().equals(audience)) {
+    if (principal.user().getIdentifier().equals(audience)) {
       var authToken = new UsernamePasswordAuthenticationToken(
         principal,
         null,

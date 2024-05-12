@@ -11,6 +11,9 @@ public class JwtConfiguration {
   @Value("${application.security.jwt.secret-key}")
   private String secretKey;
 
+  @Value("${application.security.jwt.second-secret-key}")
+  private String secondSecretKey;
+
   /**
    * The time, in milliseconds, until the access token expires.
    */

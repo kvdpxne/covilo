@@ -1,6 +1,4 @@
 spring:
-  main:
-    banner-mode: off
   jpa:
     properties:
       hibernate:
@@ -8,16 +6,22 @@ spring:
 
 application:
   name: Covilo
-  version: ${version}
+  version: "${version}"
 
   security:
     jwt:
       secret-key: 06pp4fYygg2rayGB1Z47HdjEfTf2qa8A7H7DDZfW0nQnG4nvrE0EVfgP3Jf9aDWa
-      # 20 minutes
-      expiration: 1200000
+      second-secret-key: K1qUbyhYBi7GOs62oDjqIQzhlXYcd0sFYmhZcHJN9H6Krqp1KN2z6mHPU6StjSvh
+      # 40 minutes
+      expiration: 2400000
       refresh-token:
-        # 6 hours
-        expiration: 21600000
+        # 22 days
+        expiration: 1900800000
+
+  pagination:
+    size:
+      default: 20
+      maximum: 100
 
   storage:
     avatars: avatars

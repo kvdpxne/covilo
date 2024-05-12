@@ -1,42 +1,171 @@
 package me.kvdpxne.covilo.domain.model;
 
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.Collection;
 import java.util.UUID;
-import lombok.Builder;
 import me.kvdpxne.covilo.domain.aggregation.Auditable;
+import me.kvdpxne.covilo.domain.aggregation.Buildable;
 import me.kvdpxne.covilo.domain.aggregation.Identifiable;
 
-/**
- * Represents a crime record.
- *
- * <p>
- * This record contains information about a specific crime, including its
- * identifier, time, location, classification, categories, reporter, crime
- * details, confirmation status, and creation/modification timestamps.
- * </p>
- *
- * @param identifier       The unique identifier of the crime.
- * @param time             The time at which the crime occurred.
- * @param place            The city where the crime occurred.
- * @param classification   The classification of the crime.
- * @param categories       The categories associated with the crime.
- * @param reporter         The user who reported the crime.
- * @param crimeDetails     Details about the crime.
- * @param confirmed        Indicates whether the crime has been confirmed.
- * @param createdDate      The timestamp when the crime record was created.
- * @param lastModifiedDate The timestamp when the crime record was last modified.
- */
-@Builder(toBuilder = true)
-public record Crime(
-  UUID identifier,
-  LocalDateTime time,
-  City place,
-  Classification classification,
-  Set<Category> categories,
-  User reporter,
-  CrimeDetails crimeDetails,
-  boolean confirmed,
-  LocalDateTime createdDate,
-  LocalDateTime lastModifiedDate
-) implements Identifiable<UUID>, Auditable {}
+public final class Crime
+  implements Identifiable<UUID>, Auditable {
+
+  private final UUID identifier;
+  private final LocalDateTime time;
+  private final Collection<UUID> categoryIdentifiers;
+  private final UUID reporterIdentifier;
+  private final boolean confirmed;
+  private final LocalDateTime createdDate;
+  private final LocalDateTime lastModifiedDate;
+
+  public Crime(
+    final UUID identifier,
+    final LocalDateTime time,
+    final Collection<UUID> categoryIdentifiers,
+    final UUID reporterIdentifier,
+    final boolean confirmed,
+    final LocalDateTime createdDate,
+    final LocalDateTime lastModifiedDate
+  ) {
+    this.identifier = identifier;
+    this.time = time;
+    this.categoryIdentifiers = categoryIdentifiers;
+    this.reporterIdentifier = reporterIdentifier;
+    this.confirmed = confirmed;
+    this.createdDate = createdDate;
+    this.lastModifiedDate = lastModifiedDate;
+  }
+
+  public static CrimeBuilder builder() {
+    return new CrimeBuilder();
+  }
+
+  public CrimeBuilder toBuilder() {
+    return new CrimeBuilder(
+      this.identifier,
+      this.time,
+      this.categoryIdentifiers,
+      this.reporterIdentifier,
+      this.confirmed,
+      this.createdDate,
+      this.lastModifiedDate
+    );
+  }
+
+  @Override
+  public UUID getIdentifier() {
+    return this.identifier;
+  }
+
+  public LocalDateTime getTime() {
+    return this.time;
+  }
+
+  public Collection<UUID> getCategoryIdentifiers() {
+    return this.categoryIdentifiers;
+  }
+
+  public UUID getReporterIdentifier() {
+    return this.reporterIdentifier;
+  }
+
+  public boolean isConfirmed() {
+    return this.confirmed;
+  }
+
+  @Override
+  public LocalDateTime getCreatedDate() {
+    return this.createdDate;
+  }
+
+  @Override
+  public LocalDateTime getLastModifiedDate() {
+    return this.lastModifiedDate;
+  }
+
+  public static final class CrimeBuilder
+    implements Buildable<Crime> {
+
+    private UUID identifier;
+    private LocalDateTime time;
+    private Collection<UUID> categoryIdentifiers;
+    private UUID reporterIdentifier;
+    private boolean confirmed;
+    private LocalDateTime createdDate;
+    private LocalDateTime lastModifiedDate;
+
+    public CrimeBuilder(
+      final UUID identifier,
+      final LocalDateTime time,
+      final Collection<UUID> categoryIdentifiers,
+      final UUID reporterIdentifier,
+      final boolean confirmed,
+      final LocalDateTime createdDate,
+      final LocalDateTime lastModifiedDate
+    ) {
+      this.identifier = identifier;
+      this.time = time;
+      this.categoryIdentifiers = categoryIdentifiers;
+      this.reporterIdentifier = reporterIdentifier;
+      this.confirmed = confirmed;
+      this.createdDate = createdDate;
+      this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public CrimeBuilder() {
+      // ..
+    }
+
+    public CrimeBuilder withIdentifier(final UUID identifier) {
+      this.identifier = identifier;
+      return this;
+    }
+
+    public CrimeBuilder withRandomIdentifier() {
+      return withIdentifier(UUID.randomUUID());
+    }
+
+    public CrimeBuilder withTime(final LocalDateTime time) {
+      this.time = time;
+      return this;
+    }
+
+    public CrimeBuilder withCategoryIdentifiers(final Collection<UUID> categoryIdentifiers) {
+      this.categoryIdentifiers = categoryIdentifiers;
+      return this;
+    }
+
+    public CrimeBuilder withReporterIdentifier(final UUID reporterIdentifier) {
+      this.reporterIdentifier = reporterIdentifier;
+      return this;
+    }
+
+    public CrimeBuilder withConfirmed(final boolean confirmed) {
+      this.confirmed = confirmed;
+      return this;
+    }
+
+    public CrimeBuilder withCreatedDate(final LocalDateTime createdDate) {
+      this.createdDate = createdDate;
+      return this;
+    }
+
+    public CrimeBuilder withLastModifiedDate(final LocalDateTime lastModifiedDate) {
+      this.lastModifiedDate = lastModifiedDate;
+      return this;
+    }
+
+    @Override
+    public Crime build() {
+      return new Crime(
+        this.identifier,
+        this.time,
+        this.categoryIdentifiers,
+        this.reporterIdentifier,
+        this.confirmed,
+        this.createdDate,
+        this.lastModifiedDate
+      );
+    }
+  }
+}

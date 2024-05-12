@@ -5,8 +5,8 @@ import java.util.function.LongSupplier;
 import java.util.function.Supplier;
 import lombok.RequiredArgsConstructor;
 import me.kvdpxne.covilo.domain.exceptions.PageUnAllowedSizeException;
-import me.kvdpxne.covilo.domain.model.pagination.BasePage;
 import me.kvdpxne.covilo.domain.model.pagination.EmptyPage;
+import me.kvdpxne.covilo.domain.model.pagination.BasePage;
 import me.kvdpxne.covilo.domain.model.pagination.Page;
 import me.kvdpxne.covilo.domain.model.pagination.Pageable;
 

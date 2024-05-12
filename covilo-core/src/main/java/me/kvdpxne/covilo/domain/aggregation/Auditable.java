@@ -18,14 +18,14 @@ public interface Auditable {
    *
    * @return The creation timestamp.
    */
-  LocalDateTime createdDate();
+  LocalDateTime getCreatedDate();
 
   /**
    * Retrieves the date and time when the entity was last modified.
    *
    * @return The last modification timestamp.
    */
-  LocalDateTime lastModifiedDate();
+  LocalDateTime getLastModifiedDate();
 
   /**
    * Checks if the entity was created.
@@ -34,7 +34,7 @@ public interface Auditable {
    * otherwise {@code false}.
    */
   default boolean wasCreated() {
-    return null != this.createdDate();
+    return null != this.getCreatedDate();
   }
 
   /**
@@ -44,6 +44,6 @@ public interface Auditable {
    * otherwise {@code false}.
    */
   default boolean wasModified() {
-    return null != this.lastModifiedDate();
+    return null != this.getLastModifiedDate();
   }
 }

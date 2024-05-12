@@ -2,12 +2,12 @@ package me.kvdpxne.covilo.domain.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import me.kvdpxne.covilo.common.exceptions.UserAlreadyExistsException;
-import me.kvdpxne.covilo.common.exceptions.UserInvalidEmailAddressException;
-import me.kvdpxne.covilo.common.exceptions.UserInvalidPasswordException;
-import me.kvdpxne.covilo.common.exceptions.UserNotFoundException;
-import me.kvdpxne.covilo.domain.model.TokenPair;
+import me.kvdpxne.covilo.domain.exceptions.InvalidEmailAddressException;
+import me.kvdpxne.covilo.domain.exceptions.InvalidPasswordException;
+import me.kvdpxne.covilo.domain.exceptions.UserNotFoundException;
 import me.kvdpxne.covilo.domain.model.User;
+import me.kvdpxne.covilo.domain.exceptions.UserAlreadyExistsException;
+import me.kvdpxne.covilo.domain.model.TokenPair;
 import me.kvdpxne.covilo.infrastructure.jwt.JwtService;
 import me.kvdpxne.covilo.shared.Validation;
 
@@ -40,17 +40,15 @@ public final class AuthenticationService {
    *
    * @param user The user information to be registered.
    * @return A pair of access and refresh tokens for the newly registered user.
-   * @throws NullPointerException             If the provided user object is
-   *                                          null.
-   * @throws IllegalArgumentException         If the provided user object is
-   *                                          invalid or incomplete.
-   * @throws UserInvalidEmailAddressException If the provided email address does
-   *                                          not meet the required format
-   * @throws UserInvalidPasswordException     If the provided password does not
-   *                                          meet the required security
-   *                                          standards.
-   * @throws UserAlreadyExistsException       If a user with the same email or
-   *                                          identifier already exists.
+   * @throws NullPointerException         If the provided user object is null.
+   * @throws IllegalArgumentException     If the provided user object is invalid
+   *                                      or incomplete.
+   * @throws InvalidEmailAddressException If the provided email address does not
+   *                                      meet the required format
+   * @throws InvalidPasswordException     If the provided password does not meet
+   *                                      the required security standards.
+   * @throws UserAlreadyExistsException   If a user with the same email or
+   *                                      identifier already exists.
    */
   public TokenPair signup(
     final User user
@@ -59,10 +57,10 @@ public final class AuthenticationService {
     final var createdUser = this.userService.createUser(user);
 
     // Generate access and refresh tokens for the newly created user
-    final var tokenPair = new TokenPair(
-      this.tokenService.createCompactAccessToken(createdUser),
-      this.tokenService.createCompactRefreshToken(createdUser)
-    );
+    final var tokenPair = TokenPair.builder()
+      .withAccessToken(this.tokenService.createCompactAccessToken(createdUser))
+      .withRefreshToken(this.tokenService.createCompactRefreshToken(createdUser))
+      .build();
 
     // Log user creation and token generation
     logger.atDebug()
@@ -100,10 +98,10 @@ public final class AuthenticationService {
 
     // Generate and return a pair of access and refresh tokens
     // for the logged-in user
-    return new TokenPair(
-      this.tokenService.createCompactAccessToken(user),
-      this.tokenService.createCompactRefreshToken(user)
-    );
+    return TokenPair.builder()
+      .withAccessToken(this.tokenService.createCompactAccessToken(user))
+      .withRefreshToken(this.tokenService.createCompactRefreshToken(user))
+      .build();
   }
 
   /**
@@ -121,17 +119,19 @@ public final class AuthenticationService {
   public TokenPair refreshAccessToken(
     final String refreshToken
   ) {
-    return new TokenPair(
-      this.tokenService.createCompactAccessToken(
-        this.userService.getUserByEmail(
-          Validation.check(
-            this.tokenService.extractSubject(refreshToken),
-            () -> "the token does not contain information that can be used to" +
-              " identify the user."
+    return TokenPair.builder()
+      .withAccessToken(
+        this.tokenService.createCompactAccessToken(
+          this.userService.getUserByEmail(
+            Validation.check(
+              this.tokenService.extractSubject(refreshToken),
+              () -> "The token does not contain information that can be " +
+                "used to identify the user."
+            )
           )
         )
-      ),
-      refreshToken
-    );
+      )
+      .withRefreshToken(refreshToken)
+      .build();
   }
 }

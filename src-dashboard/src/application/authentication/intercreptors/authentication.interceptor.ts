@@ -14,7 +14,7 @@ import {
   tap,
   throwError
 } from "rxjs";
-import {Token} from "../../core";
+import {TokenPair} from "../../core";
 import {
   TokenAuthenticationStrategy
 } from "../services/token-authentication-strategy";
@@ -27,7 +27,7 @@ export class AuthenticationInterceptor
   implements HttpInterceptor {
 
   private readonly authenticationService: AuthenticationService;
-  private readonly authenticationStrategy: AuthenticationStrategy<Token>;
+  private readonly authenticationStrategy: AuthenticationStrategy<TokenPair>;
 
   private readonly router: Router;
 
@@ -87,9 +87,9 @@ export class AuthenticationInterceptor
       tap((): void => {
         this.isRefreshed = false;
       }),
-      switchMap((token: Token): Observable<HttpEvent<any>> => {
+      switchMap((token: TokenPair): Observable<HttpEvent<any>> => {
         return next.handle(
-          this.authenticateRequest(request, token.compactAccessToken)
+          this.authenticateRequest(request, token.accessToken)
         );
       }),
       catchError(error => {
@@ -121,7 +121,7 @@ export class AuthenticationInterceptor
 
     let authenticatedRequest = this.authenticateRequest(
       request,
-      token.compactAccessToken
+      token.accessToken
     );
 
     return next.handle(authenticatedRequest).pipe(
@@ -129,7 +129,7 @@ export class AuthenticationInterceptor
         if (401 === error.status) {
           authenticatedRequest = this.authenticateRequest(
             request,
-            token.compactRefreshToken
+            token.refreshToken
           );
           return this.handleUnauthorizedError(authenticatedRequest, next);
         }

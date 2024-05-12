@@ -1,60 +1,117 @@
 package me.kvdpxne.covilo.domain.persistence;
 
+import java.util.Collection;
+import java.util.Optional;
 import java.util.UUID;
 import me.kvdpxne.covilo.domain.model.User;
-import me.kvdpxne.covilo.domain.persistence.paging.PageRange;
+import me.kvdpxne.covilo.domain.model.pagination.Page;
+import me.kvdpxne.covilo.domain.model.pagination.Pageable;
 
+/**
+ * Repository interface for managing users.
+ */
 public interface UserRepository {
 
-  Iterable<User> findUsers(final PageRange range);
+  /**
+   * Retrieves the total count of users.
+   *
+   * @return The total count of users.
+   */
+  long countUsers();
 
   /**
-   * Retrieves a user by their unique identifier.
+   * Checks if a user with the specified identifier exists.
    *
-   * @param identifier The unique identifier of the user.
-   * @return The user with the specified identifier, or null if no user i
-   * found.
+   * @param identifier The identifier of the user.
+   * @return true if the user exists, false otherwise.
    */
-  User findUserByIdentifierOrNull(final UUID identifier);
-
-  /**
-   * Retrieves a user by their email address.
-   *
-   * @param email The email address of the user.
-   * @return The user with the specified email address, or null if no user is
-   * found.
-   */
-  User findUserByEmailOrNull(final String email);
-
-  User insert(final User user);
-
-  /**
-   *
-   */
-  boolean updateLastModifiedDateByIdentifier(
+  boolean existsUserByIdentifier(
     final UUID identifier
   );
 
   /**
-   * Sends a request to change the email address to the one provided for the
-   * provided user identifier.
+   * Checks if a user with the specified email exists.
    *
-   * @param identifier A unique user identifier.
-   * @param email      email address.
+   * @param email The email of the user.
+   * @return true if the user exists, false otherwise.
    */
-  boolean updateEmailByIdentifier(
-    final UUID identifier,
+  boolean existsUserByEmail(
     final String email
   );
 
-  boolean updatePasswordByIdentifier(
-    final UUID identifier,
-    final String password
+  /**
+   * Retrieves a page of users.
+   *
+   * @param pageable The pagination information.
+   * @return A page containing users.
+   */
+  Page<User> findUsers(
+    final Pageable pageable
   );
 
-  void deleteUserByIdentifier(final UUID identifier);
+  /**
+   * Retrieves a user by their identifier.
+   *
+   * @param identifier The identifier of the user.
+   * @return An optional containing the user, or empty if not found.
+   */
+  Optional<User> findUserByIdentifier(
+    final UUID identifier
+  );
 
-  boolean existsUserByIdentifier(final UUID identifier);
+  /**
+   * Retrieves a user by their email.
+   *
+   * @param email The email of the user.
+   * @return An optional containing the user, or empty if not found.
+   */
+  Optional<User> findUserByEmail(
+    final String email
+  );
 
-  boolean existsUserByEmail(final String email);
+  /**
+   * Inserts a collection of users into the repository.
+   *
+   * @param users The collection of users to insert.
+   */
+  void insertUsers(
+    final Collection<User> users
+  );
+
+  /**
+   * Inserts a new user into the repository.
+   *
+   * @param user The user to insert.
+   */
+  void insertUser(
+    final User user
+  );
+
+  /**
+   * Inserts a single user into the repository.
+   *
+   * @param user The user to insert.
+   */
+  User insertUserAndReturn(
+    final User user
+  );
+
+  /**
+   * Updates an existing user in the repository.
+   *
+   * @param user The user to update.
+   */
+  void updateUser(
+    final User user
+  );
+
+  /**
+   * Deletes a user by their identifier.
+   *
+   * @param identifier The identifier of the user to delete.
+   * @return true if the user was deleted successfully, false otherwise.
+   */
+  boolean deleteUserByIdentifier(
+    final UUID identifier
+  );
 }

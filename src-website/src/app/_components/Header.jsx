@@ -35,7 +35,6 @@ const Logotype = () => (
  */
 const NavigationListItem = ({name, href}) => (
   <Link href={href}
-        key={name.toLowerCase()}
         className="text-sm font-semibold leading-6 text-gray-900 dark:text-white">
     {name}
   </Link>
@@ -47,7 +46,7 @@ const NavigationListItem = ({name, href}) => (
 const NavigationList = () => (
   <div className="hidden lg:flex lg:gap-x-12">
     {navigation.map(({name, href}) => (
-      <NavigationListItem name={name} href={href}/>
+      <NavigationListItem key={name} name={name} href={href}/>
     ))}
   </div>
 )

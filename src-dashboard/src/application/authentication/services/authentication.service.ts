@@ -7,7 +7,7 @@ import {
   StorageKey
 } from "../../shared";
 
-import {LoginRequest, Token, UserMeService} from "../../core";
+import {LoginRequest, TokenPair, UserMeService} from "../../core";
 import {TokenAuthenticationStrategy} from "./token-authentication-strategy";
 import {AuthenticationStrategy} from "./authentication-strategy";
 
@@ -39,7 +39,7 @@ export class AuthenticationService {
 
   private readonly apiHttpClientService: ApiHttpClientService;
 
-  private readonly authenticationStrategy: AuthenticationStrategy<Token>;
+  private readonly authenticationStrategy: AuthenticationStrategy<TokenPair>;
 
   private readonly userMeService: UserMeService;
 
@@ -72,9 +72,9 @@ export class AuthenticationService {
    */
   public login(
     request: LoginRequest
-  ): Observable<Token> {
+  ): Observable<TokenPair> {
     const path: string = `${DEFAULT_PATH}/login`;
-    return this.apiHttpClientService.post<Token>(path, request).pipe(
+    return this.apiHttpClientService.post<TokenPair>(path, request).pipe(
       tap(token => {
         this.authenticationStrategy.doLogin(token);
         this.cacheMe();
@@ -85,11 +85,11 @@ export class AuthenticationService {
   /**
    * Sends a request to refresh the user's authentication token.
    */
-  public refreshToken(): Observable<Token> {
+  public refreshToken(): Observable<TokenPair> {
     const path: string = `${DEFAULT_PATH}/refresh-token`;
 
-    return this.apiHttpClientService.post<Token>(path).pipe(
-      tap((token: Token): void => {
+    return this.apiHttpClientService.post<TokenPair>(path).pipe(
+      tap((token: TokenPair): void => {
         this.authenticationStrategy.doLogin(token);
         this.cacheMe();
       })

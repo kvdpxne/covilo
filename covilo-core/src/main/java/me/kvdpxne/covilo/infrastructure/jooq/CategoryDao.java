@@ -6,10 +6,10 @@ import java.util.UUID;
 import java.util.stream.Gatherers;
 import lombok.RequiredArgsConstructor;
 import me.kvdpxne.covilo.domain.model.Category;
-import me.kvdpxne.covilo.domain.model.pagination.BasePage;
 import me.kvdpxne.covilo.domain.model.pagination.Page;
 import me.kvdpxne.covilo.domain.model.pagination.Pageable;
 import me.kvdpxne.covilo.domain.persistence.CategoryRepository;
+import me.kvdpxne.covilo.domain.service.ConfiguredPageFactory;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.generated.tables.records.CategoryRecord;
@@ -27,6 +27,11 @@ import static org.jooq.generated.Tables.CATEGORY;
 @Component
 public final class CategoryDao
   implements CategoryRepository {
+
+  /**
+   * The factory for creating configured pages.
+   */
+  private final ConfiguredPageFactory configuredPageFactory;
 
   /**
    * The DSL context for jOOQ queries.
@@ -72,15 +77,15 @@ public final class CategoryDao
   public Page<Category> findCategories(
     final Pageable pageable
   ) {
-    return new BasePage<>(
-      this.ctx.select(CATEGORY.fields())
+    return this.configuredPageFactory.createPage(
+      pageable,
+      () -> this.ctx.select(CATEGORY.fields())
         .from(CATEGORY)
         .limit(pageable.getSize())
         .offset(pageable.getOffset())
         .fetchInto(CATEGORY)
         .map(CategoryDao::toCategory),
-      pageable,
-      this.countCategories()
+      this::countCategories
     );
   }
 
@@ -134,9 +139,9 @@ public final class CategoryDao
         );
         for (final var category : listableCategories) {
           insert = insert.values(
-            category.identifier(),
-            category.name(),
-            category.classificationIdentifier()
+            category.getIdentifier(),
+            category.getName(),
+            category.getClassificationIdentifier()
           );
         }
         insert.execute();
@@ -148,8 +153,8 @@ public final class CategoryDao
     final Category category
   ) {
     this.ctx.insertInto(CATEGORY)
-      .set(CATEGORY.IDENTIFIER, category.identifier())
-      .set(CATEGORY.NAME, category.name())
+      .set(CATEGORY.IDENTIFIER, category.getIdentifier())
+      .set(CATEGORY.NAME, category.getName())
       .execute();
   }
 
@@ -159,9 +164,9 @@ public final class CategoryDao
   ) {
     return CategoryDao.toCategory(
       this.ctx.insertInto(CATEGORY)
-        .set(CATEGORY.IDENTIFIER, category.identifier())
-        .set(CATEGORY.NAME, category.name())
-        .set(CATEGORY.CLASSIFICATION_IDENTIFIER, category.classificationIdentifier())
+        .set(CATEGORY.IDENTIFIER, category.getIdentifier())
+        .set(CATEGORY.NAME, category.getName())
+        .set(CATEGORY.CLASSIFICATION_IDENTIFIER, category.getClassificationIdentifier())
         .returning(CATEGORY.fields())
         .fetchOneInto(CATEGORY)
     );
@@ -172,8 +177,8 @@ public final class CategoryDao
     final Category category
   ) {
     this.ctx.update(CATEGORY)
-      .set(CATEGORY.NAME, category.name())
-      .set(CATEGORY.CLASSIFICATION_IDENTIFIER, category.classificationIdentifier())
+      .set(CATEGORY.NAME, category.getName())
+      .set(CATEGORY.CLASSIFICATION_IDENTIFIER, category.getClassificationIdentifier())
       .execute();
   }
 
@@ -183,8 +188,8 @@ public final class CategoryDao
   ) {
     return CategoryDao.toCategory(
       this.ctx.update(CATEGORY)
-        .set(CATEGORY.NAME, category.name())
-        .set(CATEGORY.CLASSIFICATION_IDENTIFIER, category.classificationIdentifier())
+        .set(CATEGORY.NAME, category.getName())
+        .set(CATEGORY.CLASSIFICATION_IDENTIFIER, category.getClassificationIdentifier())
         .returning(CATEGORY.fields())
         .fetchOneInto(CATEGORY)
     );

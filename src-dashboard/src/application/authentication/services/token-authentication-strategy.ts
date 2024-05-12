@@ -1,13 +1,13 @@
 import {Injectable} from "@angular/core";
 import {AuthenticationStrategy} from "./authentication-strategy";
 import {BrowserStorage, InMemoryStorage, StorageKey} from "../../shared";
-import {Token} from "../../core";
+import {TokenPair} from "../../core";
 
 @Injectable({
   providedIn: "root"
 })
 export class TokenAuthenticationStrategy
-  implements AuthenticationStrategy<Token> {
+  implements AuthenticationStrategy<TokenPair> {
 
   private readonly browserStorage: BrowserStorage;
 
@@ -21,8 +21,8 @@ export class TokenAuthenticationStrategy
     this.inMemoryStorage = inMemoryStorage;
   }
 
-  public getToken(): Token | null {
-    return this.inMemoryStorage.get<Token>(StorageKey.USER_TOKEN);
+  public getToken(): TokenPair | null {
+    return this.inMemoryStorage.get<TokenPair>(StorageKey.USER_TOKEN);
   }
 
   public isLogged(): boolean {
@@ -30,7 +30,7 @@ export class TokenAuthenticationStrategy
       || this.inMemoryStorage.has(StorageKey.USER_TOKEN);
   }
 
-  public doLogin(token: Token): void {
+  public doLogin(token: TokenPair): void {
     this.inMemoryStorage.store(StorageKey.USER_TOKEN, token, true);
   }
 

@@ -1,12 +1,14 @@
 [versions]
-spring-boot = "3.2.4"
+spring-boot = "3.3.0-SNAPSHOT"
 spring-management = "1.1.4"
 openapi = "2.2.0"
 mapstruct = "1.5.5.Final"
 jjwt = "0.11.5"
 jooq = "3.19.7"
 imageio-webp = "dev-SNAPSHOT"
-sqlite = "3.45.0.0"
+
+# Google
+googleMaps = "2.2.0"
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
@@ -20,7 +22,7 @@ imageio-webp = { module = "com.github.gotson:webp-imageio", version.ref = "image
 jjwt-api = { module = "io.jsonwebtoken:jjwt-api", version.ref = "jjwt" }
 jjwt-implementation = { module = "io.jsonwebtoken:jjwt-impl", version.ref = "jjwt" }
 jjwt-jackson = { module = "io.jsonwebtoken:jjwt-jackson", version.ref = "jjwt" }
-sqlite = { module = "org.xerial:sqlite-jdbc", version.ref = "sqlite" }
+#sqlite = { module = "org.xerial:sqlite-jdbc", version.ref = "sqlite" }
 
 [bundles]
 jjwt-runtime = ["jjwt-implementation", "jjwt-jackson"]

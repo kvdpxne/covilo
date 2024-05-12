@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Parameter(
   in = ParameterIn.QUERY,
   description = "Zero-based page index (0..N)",
-  name = "page",
+  name = "index",
   schema = @Schema(
     type = "integer",
     defaultValue = "0"

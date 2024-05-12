@@ -3,7 +3,6 @@ package me.kvdpxne.covilo.infrastructure.security;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import me.kvdpxne.covilo.domain.persistence.TokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
@@ -15,8 +14,6 @@ import org.springframework.stereotype.Component;
 @Component
 public final class TokenLogoutHandler
   implements LogoutHandler {
-
-  private final TokenRepository tokenRepository;
 
   /**
    * Causes a logout to be completed.
@@ -33,9 +30,6 @@ public final class TokenLogoutHandler
       return;
     }
     final String compactToken = header.substring(prefix.length());
-    this.tokenRepository.findTokenByCompactToken(compactToken).ifPresent(it -> {
-      this.tokenRepository.deleteToken(it);
-      SecurityContextHolder.clearContext();
-    });
+    SecurityContextHolder.clearContext();
   }
 }

@@ -5,3 +5,5 @@ const NarrowedHeader = () => (
     </nav>
   </header>
 )
+
+export default NarrowedHeader;

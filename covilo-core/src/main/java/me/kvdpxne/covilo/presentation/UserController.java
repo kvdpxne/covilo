@@ -1,22 +1,20 @@
 package me.kvdpxne.covilo.presentation;
 
 import java.util.UUID;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import me.kvdpxne.covilo.domain.model.User;
-import me.kvdpxne.covilo.domain.persistence.paging.PageRange;
+import me.kvdpxne.covilo.domain.service.UserService;
 import me.kvdpxne.covilo.infrastructure.swagger.HiddenParameter;
 import me.kvdpxne.covilo.infrastructure.swagger.PagingAsQueryParameter;
 import me.kvdpxne.covilo.presentation.dto.UserDto;
-import me.kvdpxne.covilo.presentation.mappers.UserMapper;
+import me.kvdpxne.covilo.presentation.paging.PageDto;
+import me.kvdpxne.covilo.presentation.paging.PageRequest;
 import me.kvdpxne.covilo.presentation.payloads.CreateNewUserRequest;
 import me.kvdpxne.covilo.presentation.payloads.UpdateUserEmailRequest;
 import me.kvdpxne.covilo.presentation.payloads.UpdateUserPasswordRequest;
 import me.kvdpxne.covilo.common.constants.Endpoints;
-import me.kvdpxne.covilo.common.exceptions.UserNotFoundException;
-import me.kvdpxne.covilo.domain.port.out.UserServicePort;
+import me.kvdpxne.covilo.domain.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,22 +35,18 @@ public final class UserController {
   /**
    * Service responsible for user-related operations.
    */
-  private final UserServicePort userService;
-
-  /**
-   * Mapper for converting between user entities and DTOs.
-   */
-  private final UserMapper userMapper;
+  private final UserService userService;
 
   @PagingAsQueryParameter
   @GetMapping("all")
-  public Page<UserDto> getUsers(
+  public PageDto<UserDto> getUsers(
     @HiddenParameter
-    final PageRange page
+    final PageRequest pageRequest
   ) {
-    final var users = (Page<User>) this.userService.getUsers(page);
-
-    return users.map(this.userMapper::toDto);
+    return PageDto.of(
+      this.userService.getUsers(pageRequest.getPage()),
+      UserDto::from
+    );
   }
 
   /**
@@ -70,7 +64,7 @@ public final class UserController {
   ) {
     // Retrieves the user information by identifier from the userService
     // and maps it to a DTO using the userMapper.
-    return this.userMapper.toDto(
+    return UserDto.from(
       this.userService.getUserByIdentifier(identifier)
     );
   }
@@ -137,7 +131,13 @@ public final class UserController {
     // Delegates user creation to the userService using the userMapper to
     // convert the request to user entity.
     this.userService.createUser(
-      this.userMapper.fromRequest(request)
+      User.builder()
+        .withEmail(request.email())
+        .withPassword(request.password())
+        .withFirstName(request.firstName())
+        .withLastName(request.lastName())
+        .withBrithDate(request.birthDate())
+        .build()
     );
   }
 
@@ -154,7 +154,7 @@ public final class UserController {
   public void deleteUser(
     @PathVariable
     final UUID identifier
-  ) throws UserNotFoundException {
+  ) {
     // Deletes the user identified by the given identifier using the
     // userService.
     this.userService.deleteUserByIdentifier(identifier);

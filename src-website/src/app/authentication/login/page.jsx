@@ -3,8 +3,7 @@
 import Link from "next/link";
 import LogotypeIcon from "../../_components/_icons/LogotypeIcon";
 import {useState} from "react";
-import AuthenticationLayout from "../layout";
-// import {post} from "@/app/_services/fsf";
+import {login} from "../_services/authentication-service";
 
 const Login = () => {
   const [wasSent, sent] = useState(false)
@@ -19,11 +18,13 @@ const Login = () => {
 
     try {
       const formData = new FormData(event.currentTarget)
-      // await post("/api/v1/authentication/login", formData)
-
+      await login({
+        email: formData.get("email"),
+        password: formData.get("password")
+      })
 
     } catch (error) {
-
+      console.log(error)
     } finally {
       sent(false)
     }
@@ -94,11 +95,5 @@ const Login = () => {
     </div>
   )
 }
-
-Login.getLayout = (page) => (
-  <AuthenticationLayout>
-    {page}
-  </AuthenticationLayout>
-)
 
 export default Login;

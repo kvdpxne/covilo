@@ -1,14 +1,4 @@
-"use client";
-
-import Footer from "../_components/Footer";
-
-/**
- * Metadata for the authentication layout.
- */
-const metadata = {
-  title: "Authentication | Covilo",
-  description: ""
-}
+import NarrowedHeader from "./_components/NarrowedHeader";
 
 /**
  * Layout component for authentication pages.
@@ -18,11 +8,10 @@ const metadata = {
  */
 const AuthenticationLayout = ({children}) => (
   <>
+    <NarrowedHeader/>
     {children}
   </>
 )
-
-// export {metadata}
 
 /**
  * Object containing metadata and the authentication layout component.

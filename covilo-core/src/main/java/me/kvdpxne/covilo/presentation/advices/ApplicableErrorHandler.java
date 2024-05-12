@@ -1,6 +1,6 @@
 package me.kvdpxne.covilo.presentation.advices;
 
-import me.kvdpxne.covilo.common.exceptions.UserAlreadyExistsException;
+import me.kvdpxne.covilo.domain.exceptions.UserAlreadyExistsException;
 import me.kvdpxne.covilo.infrastructure.storage.StorageException;
 import me.kvdpxne.covilo.infrastructure.storage.StorageFileNotFoundException;
 import org.springframework.http.HttpStatus;
