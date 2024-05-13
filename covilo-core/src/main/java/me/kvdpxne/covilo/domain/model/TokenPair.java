@@ -1,5 +1,6 @@
 package me.kvdpxne.covilo.domain.model;
 
+import java.time.Instant;
 import me.kvdpxne.covilo.domain.aggregation.Buildable;
 
 /**
@@ -9,7 +10,7 @@ public final class TokenPair {
 
   private final String accessToken;
   private final String refreshToken;
-  private final long expiry;
+  private final Instant expiry;
   private final TokenType tokenType;
 
   /**
@@ -21,11 +22,13 @@ public final class TokenPair {
    *
    * @param accessToken  The access token.
    * @param refreshToken The refresh token.
+   * @param expiry       The expiration time of the access token.
+   * @param tokenType    The type of token pair.
    */
   public TokenPair(
     final String accessToken,
     final String refreshToken,
-    final long expiry,
+    final Instant expiry,
     final TokenType tokenType
   ) {
     this.accessToken = accessToken;
@@ -42,7 +45,7 @@ public final class TokenPair {
 
     private String accessToken;
     private String refreshToken;
-    private long expiry;
+    private Instant expiry;
     private TokenType tokenType;
 
     /**
@@ -51,13 +54,19 @@ public final class TokenPair {
      *
      * @param accessToken  The access token.
      * @param refreshToken The refresh token.
+     * @param expiry       The expiration time of the access token.
+     * @param tokenType    The type of token pair.
      */
     private TokenPairBuilder(
       final String accessToken,
-      final String refreshToken
+      final String refreshToken,
+      final Instant expiry,
+      final TokenType tokenType
     ) {
       this.accessToken = accessToken;
       this.refreshToken = refreshToken;
+      this.expiry = expiry;
+      this.tokenType = tokenType;
     }
 
     /**
@@ -91,13 +100,19 @@ public final class TokenPair {
       return this;
     }
 
+    /**
+     *
+     */
     public TokenPairBuilder withExpiry(
-      final long expiry
+      final Instant expiry
     ) {
       this.expiry = expiry;
       return this;
     }
 
+    /**
+     *
+     */
     public TokenPairBuilder withTokenType(
       final TokenType tokenType
     ) {
@@ -140,7 +155,9 @@ public final class TokenPair {
   public TokenPairBuilder toBuilder() {
     return new TokenPairBuilder(
       this.accessToken,
-      this.refreshToken
+      this.refreshToken,
+      this.expiry,
+      this.tokenType
     );
   }
 
@@ -162,10 +179,23 @@ public final class TokenPair {
     return this.refreshToken;
   }
 
-  public long getExpiry() {
+  /**
+   *
+   */
+  public Instant getExpiry() {
     return this.expiry;
   }
 
+  /**
+   *
+   */
+  public boolean isExpired() {
+    return Instant.now().isBefore(this.expiry);
+  }
+
+  /**
+   *
+   */
   public TokenType getTokenType() {
     return this.tokenType;
   }
@@ -214,7 +244,9 @@ public final class TokenPair {
     return STR."""
       TokenPair{
         accessToken="\{accessToken}",
-        refreshToken="\{refreshToken}"
+        refreshToken="\{refreshToken}",
+        expiry="\{expiry}",
+        tokenType="\{tokenType}"
       }""";
   }
 }
