@@ -9,9 +9,11 @@ application:
   version: "${version}"
 
   security:
+    key:
+      file: covilo.key
+      algorithm: Ed25519
+
     jwt:
-      secret-key: 06pp4fYygg2rayGB1Z47HdjEfTf2qa8A7H7DDZfW0nQnG4nvrE0EVfgP3Jf9aDWa
-      second-secret-key: K1qUbyhYBi7GOs62oDjqIQzhlXYcd0sFYmhZcHJN9H6Krqp1KN2z6mHPU6StjSvh
       # 40 minutes
       expiration: 2400000
       refresh-token:

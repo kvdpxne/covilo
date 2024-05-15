@@ -5,16 +5,17 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.UUID;
+import java.time.Instant;
+import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import me.kvdpxne.covilo.common.constants.Endpoints;
-import me.kvdpxne.covilo.domain.exceptions.TokenException;
-import me.kvdpxne.covilo.infrastructure.jwt.JwtService;
+import me.kvdpxne.covilo.infrastructure.security.jwt.JwtServiceExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -24,7 +25,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public final class TokenAuthenticationRequestFilter
   extends OncePerRequestFilter {
 
-  private final JwtService tokenService;
+  private final JwtServiceExtension jwtService;
   private final UserAccountDetailsService userDetailsService;
 
   /**
@@ -59,41 +60,39 @@ public final class TokenAuthenticationRequestFilter
 
     final String compactToken = header.substring(prefix.length());
 
-    // Subject of the JWT (the user).
-    final String subject;
+    var claims = this.jwtService.readJws(compactToken);
 
-    // Recipient for which the JWT is intended.
-    final UUID audience;
-
-    try {
-      subject = this.tokenService.extractSubject(compactToken);
-      audience = UUID.fromString(
-        this.tokenService.extractAudience(compactToken)
-      );
-    } catch (final TokenException exception) {
+    final Date expiryAt = claims.getExpiration();
+    if (null != expiryAt && expiryAt.toInstant().isAfter(Instant.now())) {
       filterChain.doFilter(request, response);
       return;
     }
+
+    // Subject of the JWT (the user).
+    final String subject = claims.getSubject();
 
     if (null == subject) {
       filterChain.doFilter(request, response);
       return;
     }
 
-    final UserAccountDetails principal = (UserAccountDetails)
-      this.userDetailsService.loadUserByUsername(subject);
-
-    if (principal.user().getIdentifier().equals(audience)) {
-      var authToken = new UsernamePasswordAuthenticationToken(
-        principal,
-        null,
-        principal.getAuthorities()
-      );
-      authToken.setDetails(
-        new WebAuthenticationDetailsSource().buildDetails(request)
-      );
-      SecurityContextHolder.getContext().setAuthentication(authToken);
+    final UserAccountDetails principal;
+    try {
+      principal = (UserAccountDetails) this.userDetailsService.loadUserByUsername(subject);
+    } catch (final UsernameNotFoundException exception) {
+      filterChain.doFilter(request, response);
+      return;
     }
+
+    var authToken = new UsernamePasswordAuthenticationToken(
+      principal,
+      null,
+      principal.getAuthorities()
+    );
+    authToken.setDetails(
+      new WebAuthenticationDetailsSource().buildDetails(request)
+    );
+    SecurityContextHolder.getContext().setAuthentication(authToken);
     filterChain.doFilter(request, response);
   }
 }

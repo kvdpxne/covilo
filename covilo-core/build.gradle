@@ -52,6 +52,8 @@ dependencies {
 
   // https://github.com/jwtk/jjwt
   implementation(libraries.jjwt.api)
+  implementation(libraries.jjwt.jackson)
+
   runtimeOnly(libraries.bundles.jjwt.runtime)
   testRuntimeOnly("com.h2database:h2")
 }

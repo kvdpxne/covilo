@@ -5,10 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import me.kvdpxne.covilo.domain.exceptions.InvalidEmailAddressException;
 import me.kvdpxne.covilo.domain.exceptions.InvalidPasswordException;
 import me.kvdpxne.covilo.domain.exceptions.UserNotFoundException;
+import me.kvdpxne.covilo.domain.model.TokenType;
 import me.kvdpxne.covilo.domain.model.User;
 import me.kvdpxne.covilo.domain.exceptions.UserAlreadyExistsException;
 import me.kvdpxne.covilo.domain.model.TokenPair;
-import me.kvdpxne.covilo.infrastructure.jwt.JwtService;
+import me.kvdpxne.covilo.infrastructure.security.jwt.JwtServiceExtension;
 import me.kvdpxne.covilo.shared.Validation;
 
 /**
@@ -31,9 +32,9 @@ public final class AuthenticationService {
   private final PasswordAuthenticator passwordAuthenticator;
 
   /**
-   * The {@link JwtService} instance used for generating JWT tokens.
+   * The {@link JwtServiceExtension} instance used for generating JWT tokens.
    */
-  private final JwtService tokenService;
+  private final JwtServiceExtension jwtService;
 
   /**
    * Signs up a new user and returns a pair of access and refresh tokens.
@@ -57,10 +58,7 @@ public final class AuthenticationService {
     final var createdUser = this.userService.createUser(user);
 
     // Generate access and refresh tokens for the newly created user
-    final var tokenPair = TokenPair.builder()
-      .withAccessToken(this.tokenService.createCompactAccessToken(createdUser))
-      .withRefreshToken(this.tokenService.createCompactRefreshToken(createdUser))
-      .build();
+    final var tokenPair = this.jwtService.buildTokenPair(createdUser);
 
     // Log user creation and token generation
     logger.atDebug()
@@ -98,10 +96,7 @@ public final class AuthenticationService {
 
     // Generate and return a pair of access and refresh tokens
     // for the logged-in user
-    return TokenPair.builder()
-      .withAccessToken(this.tokenService.createCompactAccessToken(user))
-      .withRefreshToken(this.tokenService.createCompactRefreshToken(user))
-      .build();
+    return this.jwtService.buildTokenPair(user);
   }
 
   /**
@@ -121,10 +116,10 @@ public final class AuthenticationService {
   ) {
     return TokenPair.builder()
       .withAccessToken(
-        this.tokenService.createCompactAccessToken(
+        this.jwtService.createAccessJws(
           this.userService.getUserByEmail(
             Validation.check(
-              this.tokenService.extractSubject(refreshToken),
+              this.jwtService.readJws(refreshToken).getSubject(),
               () -> "The token does not contain information that can be " +
                 "used to identify the user."
             )
@@ -132,6 +127,30 @@ public final class AuthenticationService {
         )
       )
       .withRefreshToken(refreshToken)
+      .withExpiry(this.jwtService.getAccessTokenExpiryMoment())
+      .withTokenType(TokenType.BEARER)
+      .build();
+  }
+
+  /**
+   *
+   */
+  public TokenPair refreshAccessToken(
+    final TokenPair tokenPair
+  ) {
+    return tokenPair.toBuilder()
+      .withAccessToken(
+        this.jwtService.createAccessJws(
+          this.userService.getUserByEmail(
+            Validation.check(
+              this.jwtService.readJws(tokenPair.getRefreshToken()).getSubject(),
+              () -> "The token does not contain information that can be " +
+                "used to identify the user."
+            )
+          )
+        )
+      )
+      .withExpiry(this.jwtService.getAccessTokenExpiryMoment())
       .build();
   }
 }
