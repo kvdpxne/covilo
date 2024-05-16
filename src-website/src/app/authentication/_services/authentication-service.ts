@@ -14,7 +14,7 @@ interface LoginRequest {
 /**
  *
  */
-const endpoint: string = "api/v1/authentication/login"
+const endpoint: string = "api/v1/authentication"
 
 const cacheMe = async () => {
   const currentUser: User = await me();

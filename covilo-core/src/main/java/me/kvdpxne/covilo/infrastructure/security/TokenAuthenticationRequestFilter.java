@@ -7,15 +7,16 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.Date;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import me.kvdpxne.covilo.common.constants.Endpoints;
+import me.kvdpxne.covilo.domain.persistence.UserRepository;
 import me.kvdpxne.covilo.infrastructure.security.jwt.JjwtServiceExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -26,7 +27,8 @@ public final class TokenAuthenticationRequestFilter
   extends OncePerRequestFilter {
 
   private final JjwtServiceExtension jwtService;
-  private final UserAccountDetailsService userDetailsService;
+
+  private final UserRepository userRepository;
 
   /**
    * Same contract as for doFilter, but guaranteed to be just invoked once per
@@ -63,7 +65,7 @@ public final class TokenAuthenticationRequestFilter
     var claims = this.jwtService.readJws(compactToken);
 
     final Date expiryAt = claims.getExpiration();
-    if (null != expiryAt && expiryAt.toInstant().isAfter(Instant.now())) {
+    if (null == expiryAt || Instant.now().isAfter(expiryAt.toInstant())) {
       filterChain.doFilter(request, response);
       return;
     }
@@ -76,10 +78,12 @@ public final class TokenAuthenticationRequestFilter
       return;
     }
 
-    final UserAccountDetails principal;
-    try {
-      principal = (UserAccountDetails) this.userDetailsService.loadUserByUsername(subject);
-    } catch (final UsernameNotFoundException exception) {
+    final UserAccountDetails principal= this.userRepository
+      .findUserByIdentifier(UUID.fromString(subject))
+      .map(UserAccountDetails::new)
+      .orElse(null);
+
+    if (null == principal) {
       filterChain.doFilter(request, response);
       return;
     }
