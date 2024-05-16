@@ -9,7 +9,7 @@ import me.kvdpxne.covilo.domain.model.TokenType;
 import me.kvdpxne.covilo.domain.model.User;
 import me.kvdpxne.covilo.domain.exceptions.UserAlreadyExistsException;
 import me.kvdpxne.covilo.domain.model.TokenPair;
-import me.kvdpxne.covilo.infrastructure.security.jwt.JwtServiceExtension;
+import me.kvdpxne.covilo.infrastructure.security.jwt.JjwtServiceExtension;
 import me.kvdpxne.covilo.shared.Validation;
 
 /**
@@ -32,9 +32,9 @@ public final class AuthenticationService {
   private final PasswordAuthenticator passwordAuthenticator;
 
   /**
-   * The {@link JwtServiceExtension} instance used for generating JWT tokens.
+   * The {@link JjwtServiceExtension} instance used for generating JWT tokens.
    */
-  private final JwtServiceExtension jwtService;
+  private final JjwtServiceExtension jwtService;
 
   /**
    * Signs up a new user and returns a pair of access and refresh tokens.
@@ -117,7 +117,7 @@ public final class AuthenticationService {
     return TokenPair.builder()
       .withAccessToken(
         this.jwtService.createAccessJws(
-          this.userService.getUserByEmail(
+          this.userService.getUserByEmail( // TODO error
             Validation.check(
               this.jwtService.readJws(refreshToken).getSubject(),
               () -> "The token does not contain information that can be " +

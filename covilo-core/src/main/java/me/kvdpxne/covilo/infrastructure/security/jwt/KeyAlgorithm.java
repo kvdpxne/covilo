@@ -25,8 +25,18 @@ public enum KeyAlgorithm {
    */
   Ed448("Ed448"),
 
+  /**
+   * X25519 key factory algorithm for generating and processing X25519 keys.
+   * X25519 is a Diffie-Hellman key exchange algorithm using Curve25519,
+   * providing strong security with relatively small key sizes.
+   */
   X25519("X25519"),
 
+  /**
+   * X448 key factory algorithm for generating and processing X448 keys.
+   * X448 is a Diffie-Hellman key exchange algorithm using Curve448,
+   * providing high security with larger key sizes.
+   */
   X448("X448");
 
   /**
@@ -66,10 +76,5 @@ public enum KeyAlgorithm {
     } catch (NoSuchAlgorithmException e) {
       throw new RuntimeException(e);
     }
-  }
-
-  @Override
-  public String toString() {
-    return STR."KeyFactoryAlgorithm{algorithm='\{algorithm}\{'\''}\{'}'}";
   }
 }

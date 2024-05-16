@@ -13,7 +13,7 @@ import me.kvdpxne.covilo.domain.service.PasswordAuthenticator;
 import me.kvdpxne.covilo.domain.service.PasswordEncodingService;
 import me.kvdpxne.covilo.domain.service.SystematizationService;
 import me.kvdpxne.covilo.domain.service.UserService;
-import me.kvdpxne.covilo.infrastructure.security.jwt.JwtServiceExtension;
+import me.kvdpxne.covilo.infrastructure.security.jwt.JjwtServiceExtension;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -89,7 +89,7 @@ public class BeanConfiguration {
    *                              user-related operations.
    * @param passwordAuthenticator The {@link PasswordAuthenticator} instance for
    *                              authenticating users.
-   * @param tokenService          The {@link JwtServiceExtension} instance for
+   * @param tokenService          The {@link JjwtServiceExtension} instance for
    *                              managing JWT tokens.
    * @return An instance of the {@link AuthenticationService} class configured
    * with the provided dependencies.
@@ -98,7 +98,7 @@ public class BeanConfiguration {
   public AuthenticationService getUserAuthenticationService(
     final UserService userService,
     final PasswordAuthenticator passwordAuthenticator,
-    final JwtServiceExtension tokenService
+    final JjwtServiceExtension tokenService
   ) {
     return new AuthenticationService(
       userService,

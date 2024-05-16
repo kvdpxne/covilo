@@ -12,13 +12,18 @@ application:
   version: 1.0.0
 
   security:
-    jwt:
-      secret-key: 06pp4fYygg2rayGB1Z47HdjEfTf2qa8A7H7DDZfW0nQnG4nvrE0EVfgP3Jf9aDWa
+    jjwt:
+      keys:
+        covilo_dashboard:
+          - "x25519_05_2024.key"
+          - "x448_05_2024_refresh.key"
+        covilo_website:
+          - "ed25519_05_2024.key"
+          - "ed448_05_2024_refresh.key"
       # 40 minutes
       expiration: 2400000
-      refresh-token:
-        # 22 days
-        expiration: 1900800000
+      # 22 days
+      refresh-token-expiration: 1900800000
 
   pagination:
     size:

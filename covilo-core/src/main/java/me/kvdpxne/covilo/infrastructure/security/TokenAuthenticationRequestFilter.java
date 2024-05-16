@@ -9,7 +9,7 @@ import java.time.Instant;
 import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import me.kvdpxne.covilo.common.constants.Endpoints;
-import me.kvdpxne.covilo.infrastructure.security.jwt.JwtServiceExtension;
+import me.kvdpxne.covilo.infrastructure.security.jwt.JjwtServiceExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.lang.NonNull;
@@ -25,7 +25,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public final class TokenAuthenticationRequestFilter
   extends OncePerRequestFilter {
 
-  private final JwtServiceExtension jwtService;
+  private final JjwtServiceExtension jwtService;
   private final UserAccountDetailsService userDetailsService;
 
   /**

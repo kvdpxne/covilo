@@ -1,20 +1,18 @@
 package me.kvdpxne.covilo.infrastructure.security.jwt;
 
-import io.jsonwebtoken.security.Curve;
 import io.jsonwebtoken.security.Jwks;
 import io.jsonwebtoken.security.OctetPrivateJwk;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.Key;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 /**
@@ -28,39 +26,27 @@ import org.springframework.stereotype.Service;
 public class KeyService {
 
   /**
-   * The name of the file containing the private key.
+   *
    */
-  @Value("${application.security.key.file}")
-  private String fileName;
-
-  /**
-   * The algorithm used for the key pair.
-   */
-  @Value("${application.security.key.algorithm}")
-  private KeyAlgorithm usedAlgorithm;
-
   public OctetPrivateJwk<PrivateKey, PublicKey> _buildPrivateJwk(
-    final PrivateKey privateKey
+    final Key privateKey
   ) {
     return Jwks.builder()
-      .octetKey(privateKey)
+      .octetKey((PrivateKey) privateKey)
       .idFromThumbprint()
       .build();
   }
 
-  /**
-   * Loads the key pair from the specified file.
-   *
-   * @return The loaded key pair.
-   */
-  @Cacheable("key_pair")
-  public OctetPrivateJwk<PrivateKey, PublicKey> loadPrivateJwk() {
-    final Path path = Path.of(this.fileName);
-    if (Files.notExists(path)) {
-      throw new KeyFileAccessException(
-        STR."Key file does not exist: \{this.fileName}."
-      );
-    }
+  public Path toPath(
+    final String keyIdentifier
+  ) {
+    return Path.of(STR."\{keyIdentifier}.key");
+  }
+
+  public Key loadKey(
+    final Path path,
+    final KeyAlgorithm keyAlgorithm
+  ) {
     final byte[] bytes;
     try (final InputStream input = Files.newInputStream(path)) {
       final int size = input.available();
@@ -69,6 +55,7 @@ public class KeyService {
           ""
         );
       }
+
       bytes = new byte[size];
       if (-1 == input.read(bytes, 0, bytes.length)) {
         // TODO handling needed
@@ -81,12 +68,10 @@ public class KeyService {
     }
 
     final PKCS8EncodedKeySpec keySpecification = new PKCS8EncodedKeySpec(bytes);
-    final KeyFactory keyFactory = this.usedAlgorithm.getKeyFactory();
+    final KeyFactory keyFactory = keyAlgorithm.getKeyFactory();
 
     try {
-      return this._buildPrivateJwk(
-        keyFactory.generatePrivate(keySpecification)
-      );
+      return keyFactory.generatePrivate(keySpecification);
     } catch (final InvalidKeySpecException exception) {
       throw new KeyException(
         "",
@@ -96,65 +81,27 @@ public class KeyService {
   }
 
   /**
-   * Stores the private key to the specified file.
    *
-   * @param bytes The byte array representing the private key.
    */
-  public void storePrivateKey(
-    final byte[] bytes
+//  @Caching(
+//    evict = {
+//      @CacheEvict(
+//        cacheNames = "jjwt_key",
+//        key = "keyIdentifier"
+//      )
+//    }
+//  )
+  public Key loadKey(
+    final String keyIdentifier,
+    final KeyAlgorithm algorithm
   ) {
-    final Path path = Path.of(this.fileName);
-
-    try {
-      Files.write(path, bytes);
-    } catch (final IOException exception) {
-      throw new KeyFileException(
-        "",
-        exception
+    final Path path = this.toPath(keyIdentifier);
+    if (!Files.exists(path)) {
+      throw new KeyFileAccessException(
+        STR."Key file does not exist: \{path}."
       );
     }
-  }
 
-  /**
-   * Stores the private key to the specified file.
-   *
-   * @param privateKey The private key to store.
-   */
-  public void storePrivateKey(
-    final PrivateKey privateKey
-  ) {
-    this.storePrivateKey(privateKey.getEncoded());
-  }
-
-  /**
-   * Generates a new private key based on the configured algorithm.
-   *
-   * @return The generated private key.
-   */
-  public PrivateKey generatePrivateKey() {
-    //
-    final Curve curve = switch (this.usedAlgorithm) {
-      case Ed25519 -> Jwks.CRV.Ed25519;
-      case Ed448 -> Jwks.CRV.Ed448;
-      case X25519 -> Jwks.CRV.X25519;
-      case X448 -> Jwks.CRV.X448;
-      case null -> throw new IllegalStateException(
-        "Unsupported key algorithm."
-      );
-    };
-
-    //
-    return curve.keyPair()
-      .build()
-      .getPrivate();
-  }
-
-  /**
-   * Generates a new private key based on the configured algorithm and stores it.
-   */
-  public PrivateKey generatePrivateKeyAndStore() {
-    final PrivateKey privateKey = this.generatePrivateKey();
-    this.storePrivateKey(privateKey);
-    return privateKey;
+    return this.loadKey(path, algorithm);
   }
 }

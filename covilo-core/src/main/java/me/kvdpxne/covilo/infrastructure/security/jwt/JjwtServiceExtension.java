@@ -8,25 +8,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * Extension of JwtService providing additional functionality.
+ * Extension of {@link JjwtService} providing additional functionality.
  *
  * @since 0.1.0
  */
 @Service
-public final class JwtServiceExtension
-  extends JwtService {
+public class JjwtServiceExtension
+  extends JjwtService {
 
   /**
-   * Constructs a {@link JwtServiceExtension} with the provided
-   * {@link KeyService}.
+   * Constructs a {@link JjwtServiceExtension} with the provided
+   * {@link KeyService} and {@link JjwtKeyLocatorAdapter}.
    *
-   * @param keyService The KeyService instance.
+   * @param keyService            The {@link KeyService} instance.
+   * @param jjwtKeyLocatorAdapter The {@link JjwtKeyLocatorAdapter} instance.
    */
   @Autowired
-  public JwtServiceExtension(
-    final KeyService keyService
+  public JjwtServiceExtension(
+    final KeyService keyService,
+    final JjwtKeyLocatorAdapter jjwtKeyLocatorAdapter
   ) {
-    super(keyService);
+    super(keyService, jjwtKeyLocatorAdapter);
   }
 
   /**
@@ -35,6 +37,7 @@ public final class JwtServiceExtension
    *
    * @param user The user for whom the tokens are created.
    * @return The {@link TokenPair} containing access and refresh tokens.
+   * @throws NullPointerException If the user is null.
    */
   public TokenPair buildTokenPair(
     final User user
@@ -43,15 +46,11 @@ public final class JwtServiceExtension
       user,
       () -> "User must not be null."
     );
-    var f = TokenPair.builder()
+    return TokenPair.builder()
       .withAccessToken(this.createAccessJws(user))
-      .withRefreshToken(this.createRefreshJws(user))
+      .withRefreshToken(this.createRefreshJwe(user))
       .withExpiry(this.getAccessTokenExpiryMoment())
       .withTokenType(TokenType.BEARER)
       .build();
-
-    System.out.println(f);
-
-    return f;
   }
 }

@@ -9,14 +9,26 @@ application:
   version: "${version}"
 
   security:
-    key:
-      file: covilo.key
-      algorithm: Ed25519
+
+    jjwt:
+      keys:
+        covilo_dashboard:
+          - "x25519_05_2024.key"
+          - "x448_05_2024_refresh.key"
+        covilo_website:
+          - "ed25519_05_2024.key"
+          - "ed448_05_2024_refresh.key"
+      # 40 minutes
+      expiration: 2400000
+      # 22 days
+      refresh-token-expiration: 1900800000
 
     jwt:
+      file: "ed25519_05_2024.key"
       # 40 minutes
       expiration: 2400000
       refresh-token:
+        file: "ed448_05_2024_refresh.key"
         # 22 days
         expiration: 1900800000
 
