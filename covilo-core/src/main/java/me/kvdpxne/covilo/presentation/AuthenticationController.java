@@ -1,6 +1,6 @@
 package me.kvdpxne.covilo.presentation;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -71,12 +71,15 @@ public final class AuthenticationController {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
-    new ObjectMapper().writeValue(
-      response.getOutputStream(),
-      this.authenticationService.refreshAccessToken(
-        header.substring(prefix.length())
-      )
-    );
+    JsonMapper.builder()
+      .findAndAddModules()
+      .build()
+      .writeValue(
+        response.getOutputStream(),
+        this.authenticationService.refreshAccessToken(
+          header.substring(prefix.length())
+        )
+      );
 
     return ResponseEntity.ok().build();
   }

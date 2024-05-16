@@ -1,5 +1,6 @@
 package me.kvdpxne.covilo.domain.service;
 
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.kvdpxne.covilo.domain.exceptions.InvalidEmailAddressException;
@@ -117,11 +118,13 @@ public final class AuthenticationService {
     return TokenPair.builder()
       .withAccessToken(
         this.jwtService.createAccessJws(
-          this.userService.getUserByEmail( // TODO error
-            Validation.check(
-              this.jwtService.readJws(refreshToken).getSubject(),
-              () -> "The token does not contain information that can be " +
-                "used to identify the user."
+          this.userService.getUserByIdentifier(
+            UUID.fromString(
+              Validation.check(
+                this.jwtService.readJws(refreshToken).getSubject(),
+                () -> "The token does not contain information that can be " +
+                  "used to identify the user."
+              )
             )
           )
         )
@@ -141,11 +144,13 @@ public final class AuthenticationService {
     return tokenPair.toBuilder()
       .withAccessToken(
         this.jwtService.createAccessJws(
-          this.userService.getUserByEmail(
-            Validation.check(
-              this.jwtService.readJws(tokenPair.getRefreshToken()).getSubject(),
-              () -> "The token does not contain information that can be " +
-                "used to identify the user."
+          this.userService.getUserByIdentifier(
+            UUID.fromString(
+              Validation.check(
+                this.jwtService.readJws(tokenPair.getRefreshToken()).getSubject(),
+                () -> "The token does not contain information that can be " +
+                  "used to identify the user."
+              )
             )
           )
         )
