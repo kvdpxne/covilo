@@ -6,10 +6,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import me.kvdpxne.covilo.common.constants.Endpoints;
-import me.kvdpxne.covilo.domain.model.TokenPair;
 import me.kvdpxne.covilo.domain.model.User;
 import me.kvdpxne.covilo.domain.service.AuthenticationService;
 import me.kvdpxne.covilo.domain.exceptions.UserNotFoundException;
+import me.kvdpxne.covilo.presentation.dto.TokenPairDto;
 import me.kvdpxne.covilo.presentation.payloads.LoginRequest;
 import me.kvdpxne.covilo.presentation.payloads.SignupRequest;
 import me.kvdpxne.covilo.infrastructure.security.Constants;
@@ -30,7 +30,7 @@ public final class AuthenticationController {
   private final AuthenticationService authenticationService;
 
   @PostMapping("/register")
-  public TokenPair signup(
+  public TokenPairDto signup(
     @RequestBody
     final SignupRequest request
   ) {
@@ -44,17 +44,21 @@ public final class AuthenticationController {
       .withBrithDate(request.birthDate())
       .build();
 
-    return this.authenticationService.signup(user);
+    return TokenPairDto.fromTokenPair(
+      this.authenticationService.signup(user)
+    );
   }
 
   @PostMapping("/login")
-  public TokenPair login(
+  public TokenPairDto login(
     @RequestBody
     final LoginRequest request
   ) {
-    return this.authenticationService.login(
-      request.email(),
-      request.password()
+    return TokenPairDto.fromTokenPair(
+      this.authenticationService.login(
+        request.email(),
+        request.password()
+      )
     );
   }
 
