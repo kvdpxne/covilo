@@ -1,19 +1,19 @@
 package me.kvdpxne.covilo.domain.model;
 
 import java.util.HashMap;
-import java.util.UUID;
 import me.kvdpxne.covilo.domain.aggregation.Buildable;
 import me.kvdpxne.covilo.domain.aggregation.Identifiable;
 import me.kvdpxne.covilo.domain.aggregation.Nameable;
+import me.kvdpxne.covilo.infrastructure.uid.Uid;
 
 /**
  * Represents a classification entity.
  */
 @SuppressWarnings({"ClassCanBeRecord"})
 public final class Classification
-  implements Identifiable<UUID>, Nameable {
+  implements Identifiable<String>, Nameable {
 
-  private final UUID identifier;
+  private final String identifier;
   private final String name;
 
   /**
@@ -27,7 +27,7 @@ public final class Classification
    * @param name       The name of the classification.
    */
   public Classification(
-    final UUID identifier,
+    final String identifier,
     final String name
   ) {
     this.identifier = identifier;
@@ -63,7 +63,7 @@ public final class Classification
    * @return The identifier.
    */
   @Override
-  public UUID getIdentifier() {
+  public String getIdentifier() {
     return this.identifier;
   }
 
@@ -138,7 +138,7 @@ public final class Classification
   public static final class ClassificationBuilder
     implements Buildable<Classification> {
 
-    private UUID identifier;
+    private String identifier;
     private String name;
 
     /**
@@ -149,7 +149,7 @@ public final class Classification
      * @param name       The name of the classification.
      */
     private ClassificationBuilder(
-      final UUID identifier,
+      final String identifier,
       final String name
     ) {
       this.identifier = identifier;
@@ -170,7 +170,7 @@ public final class Classification
      * @return This {@link ClassificationBuilder} instance.
      */
     public ClassificationBuilder withIdentifier(
-      final UUID identifier
+      final String identifier
     ) {
       this.identifier = identifier;
       return this;
@@ -182,7 +182,7 @@ public final class Classification
      * @return This {@link ClassificationBuilder} instance.
      */
     public ClassificationBuilder withRandomIdentifier() {
-      this.identifier = UUID.randomUUID();
+      this.identifier = Uid.next();
       return this;
     }
 

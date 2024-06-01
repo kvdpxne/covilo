@@ -27,7 +27,7 @@ public interface CategoryRepository {
    * {@code false} otherwise.
    */
   boolean existsCategoryByIdentifier(
-    final UUID identifier
+    final String identifier
   );
 
   /**
@@ -47,7 +47,7 @@ public interface CategoryRepository {
    * @return An optional containing the category if found, otherwise empty.
    */
   Optional<Category> findCategoryByIdentifier(
-    final UUID identifier
+    final String identifier
   );
 
   /**
@@ -115,6 +115,6 @@ public interface CategoryRepository {
    * @return True if the category was deleted successfully, otherwise false.
    */
   boolean deleteCategoryByIdentifier(
-    final UUID identifier
+    final String identifier
   );
 }

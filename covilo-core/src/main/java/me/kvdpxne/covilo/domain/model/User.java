@@ -2,20 +2,20 @@ package me.kvdpxne.covilo.domain.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.UUID;
 import me.kvdpxne.covilo.domain.aggregation.Auditable;
 import me.kvdpxne.covilo.domain.aggregation.Buildable;
 import me.kvdpxne.covilo.domain.aggregation.Identifiable;
 import me.kvdpxne.covilo.domain.aggregation.Nameable;
+import me.kvdpxne.covilo.infrastructure.uid.Uid;
 
 /**
  * Represents a user entity.
  */
 @SuppressWarnings("LombokGetterMayBeUsed")
 public final class User
-  implements Identifiable<UUID>, Auditable, Nameable {
+  implements Identifiable<String>, Auditable, Nameable {
 
-  private final UUID identifier;
+  private final String identifier;
   private final String email;
   private final String encryptedPassword;
   private final String firstName;
@@ -39,7 +39,7 @@ public final class User
    * @param lastModifiedDate The date and time when the user was last modified.
    */
   public User(
-    final UUID identifier,
+    final String identifier,
     final String email,
     final String encryptedPassword,
     final String firstName,
@@ -94,7 +94,7 @@ public final class User
    */
 
   @Override
-  public UUID getIdentifier() {
+  public String getIdentifier() {
     return this.identifier;
   }
 
@@ -151,7 +151,7 @@ public final class User
   public static final class UserBuilder
     implements Buildable<User> {
 
-    private UUID identifier;
+    private String identifier;
     private String email;
     private String password;
     private String firstName;
@@ -178,7 +178,7 @@ public final class User
      *                          modified.
      */
     private UserBuilder(
-      final UUID identifier,
+      final String identifier,
       final String email,
       final String password,
       final String firstName,
@@ -207,14 +207,15 @@ public final class User
     }
 
     public UserBuilder withIdentifier(
-      final UUID identifier
+      final String identifier
     ) {
       this.identifier = identifier;
       return this;
     }
 
-    public UserBuilder withIdentifier() {
-      return this.withIdentifier(UUID.randomUUID());
+    public UserBuilder withRandomIdentifier() {
+      this.identifier = Uid.next();
+      return this;
     }
 
     public UserBuilder withEmail(

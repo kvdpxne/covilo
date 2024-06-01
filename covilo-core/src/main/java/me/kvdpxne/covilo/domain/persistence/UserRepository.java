@@ -26,7 +26,7 @@ public interface UserRepository {
    * @return true if the user exists, false otherwise.
    */
   boolean existsUserByIdentifier(
-    final UUID identifier
+    final String identifier
   );
 
   /**
@@ -56,7 +56,7 @@ public interface UserRepository {
    * @return An optional containing the user, or empty if not found.
    */
   Optional<User> findUserByIdentifier(
-    final UUID identifier
+    final String identifier
   );
 
   /**
@@ -112,6 +112,6 @@ public interface UserRepository {
    * @return true if the user was deleted successfully, false otherwise.
    */
   boolean deleteUserByIdentifier(
-    final UUID identifier
+    final String identifier
   );
 }

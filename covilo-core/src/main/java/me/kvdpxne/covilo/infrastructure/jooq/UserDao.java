@@ -81,7 +81,7 @@ public final class UserDao
 
   @Override
   public boolean existsUserByIdentifier(
-    final UUID identifier
+    final String identifier
   ) {
     return this.ctx.fetchExists(
       USER,
@@ -132,7 +132,7 @@ public final class UserDao
 
   @Override
   public Optional<User> findUserByIdentifier(
-    final UUID identifier
+    final String identifier
   ) {
     return this.findUserBy(
       USER.IDENTIFIER.eq(identifier)
@@ -228,7 +228,7 @@ public final class UserDao
 
   @Override
   public boolean deleteUserByIdentifier(
-    final UUID identifier
+    final String identifier
   ) {
     return 0 < this.ctx.deleteFrom(USER)
       .where(USER.IDENTIFIER.eq(identifier))

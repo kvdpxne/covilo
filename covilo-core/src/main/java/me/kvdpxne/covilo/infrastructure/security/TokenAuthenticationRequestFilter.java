@@ -79,7 +79,7 @@ public final class TokenAuthenticationRequestFilter
     }
 
     final UserAccountDetails principal= this.userRepository
-      .findUserByIdentifier(UUID.fromString(subject))
+      .findUserByIdentifier(subject)
       .map(UserAccountDetails::new)
       .orElse(null);
 

@@ -6,23 +6,24 @@ import java.util.UUID;
 import me.kvdpxne.covilo.domain.aggregation.Auditable;
 import me.kvdpxne.covilo.domain.aggregation.Buildable;
 import me.kvdpxne.covilo.domain.aggregation.Identifiable;
+import me.kvdpxne.covilo.infrastructure.uid.Uid;
 
 public final class Crime
-  implements Identifiable<UUID>, Auditable {
+  implements Identifiable<String>, Auditable {
 
-  private final UUID identifier;
+  private final String identifier;
   private final LocalDateTime time;
-  private final Collection<UUID> categoryIdentifiers;
-  private final UUID reporterIdentifier;
+  private final Collection<String> categoryIdentifiers;
+  private final String reporterIdentifier;
   private final boolean confirmed;
   private final LocalDateTime createdDate;
   private final LocalDateTime lastModifiedDate;
 
   public Crime(
-    final UUID identifier,
+    final String identifier,
     final LocalDateTime time,
-    final Collection<UUID> categoryIdentifiers,
-    final UUID reporterIdentifier,
+    final Collection<String> categoryIdentifiers,
+    final String reporterIdentifier,
     final boolean confirmed,
     final LocalDateTime createdDate,
     final LocalDateTime lastModifiedDate
@@ -53,7 +54,7 @@ public final class Crime
   }
 
   @Override
-  public UUID getIdentifier() {
+  public String getIdentifier() {
     return this.identifier;
   }
 
@@ -61,11 +62,11 @@ public final class Crime
     return this.time;
   }
 
-  public Collection<UUID> getCategoryIdentifiers() {
+  public Collection<String> getCategoryIdentifiers() {
     return this.categoryIdentifiers;
   }
 
-  public UUID getReporterIdentifier() {
+  public String getReporterIdentifier() {
     return this.reporterIdentifier;
   }
 
@@ -86,19 +87,19 @@ public final class Crime
   public static final class CrimeBuilder
     implements Buildable<Crime> {
 
-    private UUID identifier;
+    private String identifier;
     private LocalDateTime time;
-    private Collection<UUID> categoryIdentifiers;
-    private UUID reporterIdentifier;
+    private Collection<String> categoryIdentifiers;
+    private String reporterIdentifier;
     private boolean confirmed;
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
 
     public CrimeBuilder(
-      final UUID identifier,
+      final String identifier,
       final LocalDateTime time,
-      final Collection<UUID> categoryIdentifiers,
-      final UUID reporterIdentifier,
+      final Collection<String> categoryIdentifiers,
+      final String reporterIdentifier,
       final boolean confirmed,
       final LocalDateTime createdDate,
       final LocalDateTime lastModifiedDate
@@ -116,13 +117,14 @@ public final class Crime
       // ..
     }
 
-    public CrimeBuilder withIdentifier(final UUID identifier) {
+    public CrimeBuilder withIdentifier(final String identifier) {
       this.identifier = identifier;
       return this;
     }
 
     public CrimeBuilder withRandomIdentifier() {
-      return withIdentifier(UUID.randomUUID());
+      this.identifier = Uid.next();
+      return this;
     }
 
     public CrimeBuilder withTime(final LocalDateTime time) {
@@ -130,12 +132,12 @@ public final class Crime
       return this;
     }
 
-    public CrimeBuilder withCategoryIdentifiers(final Collection<UUID> categoryIdentifiers) {
+    public CrimeBuilder withCategoryIdentifiers(final Collection<String> categoryIdentifiers) {
       this.categoryIdentifiers = categoryIdentifiers;
       return this;
     }
 
-    public CrimeBuilder withReporterIdentifier(final UUID reporterIdentifier) {
+    public CrimeBuilder withReporterIdentifier(final String reporterIdentifier) {
       this.reporterIdentifier = reporterIdentifier;
       return this;
     }

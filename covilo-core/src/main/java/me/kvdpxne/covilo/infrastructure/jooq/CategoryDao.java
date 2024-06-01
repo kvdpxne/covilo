@@ -65,7 +65,7 @@ public final class CategoryDao
 
   @Override
   public boolean existsCategoryByIdentifier(
-    final UUID identifier
+    final String identifier
   ) {
     return this.ctx.fetchExists(
       CATEGORY,
@@ -107,7 +107,7 @@ public final class CategoryDao
 
   @Override
   public Optional<Category> findCategoryByIdentifier(
-    final UUID identifier
+    final String identifier
   ) {
     return this.findCategoryBy(
       CATEGORY.IDENTIFIER.eq(identifier)
@@ -197,7 +197,7 @@ public final class CategoryDao
 
   @Override
   public boolean deleteCategoryByIdentifier(
-    final UUID identifier
+    final String identifier
   ) {
     return 0 < this.ctx.deleteFrom(CATEGORY)
       .where(CATEGORY.IDENTIFIER.eq(identifier))

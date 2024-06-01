@@ -2,7 +2,6 @@ package me.kvdpxne.covilo.presentation.dto;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.UUID;
 import me.kvdpxne.covilo.domain.model.Gender;
 import me.kvdpxne.covilo.domain.model.User;
 
@@ -10,7 +9,7 @@ import me.kvdpxne.covilo.domain.model.User;
  *
  */
 public record UserDto(
-  UUID identifier,
+  String identifier,
   String email,
   String firstName,
   String lastName,

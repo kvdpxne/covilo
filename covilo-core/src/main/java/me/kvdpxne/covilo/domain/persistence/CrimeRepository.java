@@ -24,7 +24,7 @@ public interface CrimeRepository {
    * {@code false} otherwise.
    */
   boolean existsCrimeByIdentifier(
-    final UUID identifier
+    final String identifier
   );
 
   /**
@@ -44,7 +44,7 @@ public interface CrimeRepository {
    * @return An optional containing the found crime, or empty if not found.
    */
   Optional<Crime> findCrimeByIdentifier(
-    final UUID identifier
+    final String identifier
   );
 
   /**
@@ -89,6 +89,6 @@ public interface CrimeRepository {
    * {@code false}.
    */
   boolean deleteCrimeByIdentifier(
-    final UUID identifier
+    final String identifier
   );
 }

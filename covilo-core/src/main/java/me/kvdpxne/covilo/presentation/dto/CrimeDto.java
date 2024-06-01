@@ -2,10 +2,9 @@ package me.kvdpxne.covilo.presentation.dto;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.UUID;
 
 public record CrimeDto(
-  UUID identifier,
+  String identifier,
   String title,
   String description,
   Collection<CategoryDto> categories,

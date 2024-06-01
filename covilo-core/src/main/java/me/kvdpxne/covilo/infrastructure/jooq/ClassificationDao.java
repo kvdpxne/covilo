@@ -3,7 +3,6 @@ package me.kvdpxne.covilo.infrastructure.jooq;
 import java.util.Collection;
 import java.util.Locale;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Gatherers;
 import lombok.RequiredArgsConstructor;
 import me.kvdpxne.covilo.domain.model.Classification;
@@ -64,7 +63,7 @@ public final class ClassificationDao
 
   @Override
   public boolean existsClassificationByIdentifier(
-    final UUID identifier
+    final String identifier
   ) {
     return this.ctx.fetchExists(
       CLASSIFICATION,
@@ -104,7 +103,7 @@ public final class ClassificationDao
 
   @Override
   public Optional<Classification> findClassificationByIdentifier(
-    final UUID identifier
+    final String identifier
   ) {
     return this.findClassificationBy(
       CLASSIFICATION.IDENTIFIER.eq(identifier)
@@ -191,7 +190,7 @@ public final class ClassificationDao
 
   @Override
   public boolean deleteClassificationByIdentifier(
-    final UUID identifier
+    final String identifier
   ) {
     return 0 < this.ctx.deleteFrom(CLASSIFICATION)
       .where(CLASSIFICATION.IDENTIFIER.eq(identifier))

@@ -6,17 +6,18 @@ import java.util.UUID;
 import me.kvdpxne.covilo.domain.aggregation.Buildable;
 import me.kvdpxne.covilo.domain.aggregation.Identifiable;
 import me.kvdpxne.covilo.domain.aggregation.Nameable;
+import me.kvdpxne.covilo.infrastructure.uid.Uid;
 
 /**
  * Represents a category entity.
  */
 @SuppressWarnings({"ClassCanBeRecord", "LombokGetterMayBeUsed"})
 public final class Category
-  implements Identifiable<UUID>, Nameable {
+  implements Identifiable<String>, Nameable {
 
-  private final UUID identifier;
+  private final String identifier;
   private final String name;
-  private final UUID classificationIdentifier;
+  private final String classificationIdentifier;
 
   /**
    * Constructs a new {@link Category} instance with the specified identifier,
@@ -31,9 +32,9 @@ public final class Category
    *                                 classification.
    */
   public Category(
-    final UUID identifier,
+    final String identifier,
     final String name,
-    final UUID classificationIdentifier
+    final String classificationIdentifier
   ) {
     this.identifier = identifier;
     this.name = name;
@@ -70,7 +71,7 @@ public final class Category
    * @return The identifier.
    */
   @Override
-  public UUID getIdentifier() {
+  public String getIdentifier() {
     return this.identifier;
   }
 
@@ -89,7 +90,7 @@ public final class Category
    *
    * @return The classification identifier.
    */
-  public UUID getClassificationIdentifier() {
+  public String getClassificationIdentifier() {
     return this.classificationIdentifier;
   }
 
@@ -159,9 +160,9 @@ public final class Category
   public static final class CategoryBuilder
     implements Buildable<Category> {
 
-    private UUID identifier;
+    private String identifier;
     private String name;
-    private UUID classificationIdentifier;
+    private String classificationIdentifier;
 
     /**
      * Constructs a new instance of {@link CategoryBuilder} with the specified
@@ -172,9 +173,9 @@ public final class Category
      * @param classificationIdentifier The classification identifier.
      */
     private CategoryBuilder(
-      final UUID identifier,
+      final String identifier,
       final String name,
-      final UUID classificationIdentifier
+      final String classificationIdentifier
     ) {
       this.identifier = identifier;
       this.name = name;
@@ -195,7 +196,7 @@ public final class Category
      * @return This {@link CategoryBuilder} instance.
      */
     public CategoryBuilder withIdentifier(
-      final UUID identifier
+      final String identifier
     ) {
       this.identifier = identifier;
       return this;
@@ -207,7 +208,8 @@ public final class Category
      * @return This {@link CategoryBuilder} instance.
      */
     public CategoryBuilder withRandomIdentifier() {
-      return this.withIdentifier(UUID.randomUUID());
+      this.identifier = Uid.next();
+      return this;
     }
 
     /**
@@ -230,7 +232,7 @@ public final class Category
      * @return This {@link CategoryBuilder} instance.
      */
     public CategoryBuilder withClassificationIdentifier(
-      final UUID classificationIdentifier
+      final String classificationIdentifier
     ) {
       this.classificationIdentifier = classificationIdentifier;
       return this;

@@ -29,7 +29,7 @@ public interface ClassificationRepository {
    * exists, otherwise {@code false}.
    */
   boolean existsClassificationByIdentifier(
-    final UUID identifier
+    final String identifier
   );
 
   /**
@@ -50,7 +50,7 @@ public interface ClassificationRepository {
    * found.
    */
   Optional<Classification> findClassificationByIdentifier(
-    final UUID identifier
+    final String identifier
   );
 
   /**
@@ -122,6 +122,6 @@ public interface ClassificationRepository {
    * false}.
    */
   boolean deleteClassificationByIdentifier(
-    final UUID identifier
+    final String identifier
   );
 }

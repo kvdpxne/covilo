@@ -51,7 +51,7 @@ public final class CrimeDao
 
   @Override
   public boolean existsCrimeByIdentifier(
-    final UUID identifier
+    final String identifier
   ) {
     return this.ctx.fetchExists(
       CRIME,
@@ -90,7 +90,7 @@ public final class CrimeDao
 
   @Override
   public Optional<Crime> findCrimeByIdentifier(
-    final UUID identifier
+    final String identifier
   ) {
     return Optional.empty();
   }
@@ -139,7 +139,7 @@ public final class CrimeDao
 
   @Override
   public boolean deleteCrimeByIdentifier(
-    final UUID identifier
+    final String identifier
   ) {
     return 0 < this.ctx.deleteFrom(CRIME)
       .where(CRIME.IDENTIFIER.eq(identifier))
