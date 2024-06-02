@@ -1,6 +1,5 @@
 package me.kvdpxne.covilo.presentation;
 
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import me.kvdpxne.covilo.domain.model.User;
 import me.kvdpxne.covilo.domain.service.UserService;
@@ -60,7 +59,7 @@ public final class UserController {
   )
   public UserDto getUser(
     @PathVariable
-    final UUID identifier
+    final String identifier
   ) {
     // Retrieves the user information by identifier from the userService
     // and maps it to a DTO using the userMapper.
@@ -81,7 +80,7 @@ public final class UserController {
   )
   public void updateUserEmail(
     @PathVariable
-    final UUID identifier,
+    final String identifier,
     @RequestBody
     final UpdateUserEmailRequest request
   ) {
@@ -105,7 +104,7 @@ public final class UserController {
   )
   public void updateUserPassword(
     @PathVariable
-    final UUID identifier,
+    final String identifier,
     @RequestBody
     final UpdateUserPasswordRequest request
   ) {
@@ -153,7 +152,7 @@ public final class UserController {
   )
   public void deleteUser(
     @PathVariable
-    final UUID identifier
+    final String identifier
   ) {
     // Deletes the user identified by the given identifier using the
     // userService.

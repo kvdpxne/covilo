@@ -119,12 +119,10 @@ public final class AuthenticationService {
       .withAccessToken(
         this.jwtService.createAccessJws(
           this.userService.getUserByIdentifier(
-            UUID.fromString(
-              Validation.check(
-                this.jwtService.readJws(refreshToken).getSubject(),
-                () -> "The token does not contain information that can be " +
-                  "used to identify the user."
-              )
+            Validation.check(
+              this.jwtService.readJws(refreshToken).getSubject(),
+              () -> "The token does not contain information that can be " +
+                "used to identify the user."
             )
           )
         )
@@ -145,12 +143,10 @@ public final class AuthenticationService {
       .withAccessToken(
         this.jwtService.createAccessJws(
           this.userService.getUserByIdentifier(
-            UUID.fromString(
-              Validation.check(
-                this.jwtService.readJws(tokenPair.getRefreshToken()).getSubject(),
-                () -> "The token does not contain information that can be " +
-                  "used to identify the user."
-              )
+            Validation.check(
+              this.jwtService.readJws(tokenPair.getRefreshToken()).getSubject(),
+              () -> "The token does not contain information that can be " +
+                "used to identify the user."
             )
           )
         )

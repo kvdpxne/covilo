@@ -1,6 +1,8 @@
 package me.kvdpxne.covilo.domain.service;
 
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.kvdpxne.covilo.domain.exceptions.CrimeAlreadyExistsException;
@@ -9,6 +11,7 @@ import me.kvdpxne.covilo.domain.model.Crime;
 import me.kvdpxne.covilo.domain.model.pagination.Page;
 import me.kvdpxne.covilo.domain.model.pagination.Pageable;
 import me.kvdpxne.covilo.domain.persistence.CrimeRepository;
+import me.kvdpxne.covilo.infrastructure.uid.Uid;
 import me.kvdpxne.covilo.shared.Validation;
 
 /**
@@ -45,13 +48,13 @@ public final class CrimeService {
   }
 
   public boolean _checkCrimeExistsByIdentifier(
-    final UUID identifier
+    final String identifier
   ) {
     return this.crimeRepository.existsCrimeByIdentifier(identifier);
   }
 
-  private UUID validCrimeIdentifier(
-    final UUID identifier
+  private String validCrimeIdentifier(
+    final String identifier
   ) {
     return Validation.check(
       identifier,
@@ -69,7 +72,7 @@ public final class CrimeService {
   }
 
   public boolean checkCrimeExistsByIdentifier(
-    final UUID identifier
+    final String identifier
   ) {
     return this._checkCrimeExistsByIdentifier(
       this.validCrimeIdentifier(identifier)
@@ -91,7 +94,7 @@ public final class CrimeService {
   }
 
   public Crime _getCrimeByIdentifier(
-    final UUID identifier
+    final String identifier
   ) {
     return this.crimeRepository
       .findCrimeByIdentifier(identifier)
@@ -101,7 +104,7 @@ public final class CrimeService {
   }
 
   public Crime getCrimeByIdentifier(
-    final UUID identifier
+    final String identifier
   ) {
     return this._getCrimeByIdentifier(
       this.validCrimeIdentifier(identifier)
@@ -114,25 +117,19 @@ public final class CrimeService {
   ) throws CrimeAlreadyExistsException {
     Validation.check(crime);
 
-    final var builder = Crime.builder();
+    var result = this.crimeRepository.insertCrimeAndReturn(
+      Crime.builder()
+        .withIdentifier(Uid.next(crime, it -> {
+          //
+          if (this._checkCrimeExistsByIdentifier(it)) {
+            throw new CrimeAlreadyExistsException(
+              STR."The crime model with the identifier \{it} already exists."
+            );
+          }
+        }))
+        .build()
+    );
 
-    if (crime.isNew()) {
-      builder.withRandomIdentifier();
-    } else {
-
-      final var identifier = crime.getIdentifier();
-
-      if (this._checkCrimeExistsByIdentifier(identifier)) {
-        throw new CrimeAlreadyExistsException(
-          STR."The crime model with the identifier \{identifier} already exists."
-        );
-      }
-
-      builder.withIdentifier(identifier);
-    }
-
-    var result = builder.build();
-    result = this.crimeRepository.insertCrimeAndReturn(result);
 
     logger.atDebug()
       .setMessage("Created crime: {}")
@@ -143,7 +140,7 @@ public final class CrimeService {
   }
 
 
-  public void deleteCrimeByIdentifier(final UUID identifier) {
+  public void deleteCrimeByIdentifier(final String identifier) {
     this.crimeRepository.deleteCrimeByIdentifier(identifier);
   }
 }

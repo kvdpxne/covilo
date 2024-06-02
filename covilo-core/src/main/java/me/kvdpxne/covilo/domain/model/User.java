@@ -253,6 +253,13 @@ public final class User
       return this;
     }
 
+    public UserBuilder withGender(
+      final String gender
+    ) {
+      this.gender = Gender.valueOf(gender.toUpperCase());
+      return this;
+    }
+
     public UserBuilder withGenderValue(
       final Boolean genderValue
     ) {
@@ -265,6 +272,12 @@ public final class User
     ) {
       this.brithDate = brithDate;
       return this;
+    }
+
+    public UserBuilder withBrithDate(
+      final String birthDate
+    ) {
+      return this.withBrithDate(LocalDate.parse(birthDate));
     }
 
     public UserBuilder withCreatedDate(

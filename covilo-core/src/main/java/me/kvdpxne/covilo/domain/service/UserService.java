@@ -1,7 +1,6 @@
 package me.kvdpxne.covilo.domain.service;
 
 import java.util.Locale;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.kvdpxne.covilo.domain.model.User;
@@ -12,6 +11,7 @@ import me.kvdpxne.covilo.domain.exceptions.InvalidPasswordException;
 import me.kvdpxne.covilo.domain.exceptions.UserNotFoundException;
 import me.kvdpxne.covilo.domain.model.pagination.Pageable;
 import me.kvdpxne.covilo.domain.persistence.UserRepository;
+import me.kvdpxne.covilo.infrastructure.uid.Uid;
 import me.kvdpxne.covilo.shared.Validation;
 
 /**
@@ -51,7 +51,7 @@ public final class UserService {
    *         otherwise {@code false}.
    */
   public boolean _checkUserExistsByIdentifier(
-    final UUID identifier
+    final String identifier
   ) {
     return this.userRepository.existsUserByIdentifier(identifier);
   }
@@ -64,8 +64,8 @@ public final class UserService {
    * @return The validated user identifier.
    * @throws NullPointerException If the provided user identifier is {@code null}.
    */
-  private UUID validUserIdentifier(
-    final UUID identifier
+  private String validUserIdentifier(
+    final String identifier
   ) {
     return Validation.check(
       identifier,
@@ -98,7 +98,7 @@ public final class UserService {
    * @throws NullPointerException If the provided user identifier is {@code null}.
    */
   public boolean checkUserExistsByIdentifier(
-    final UUID identifier
+    final String identifier
   ) {
     return this._checkUserExistsByIdentifier(
       this.validUserIdentifier(identifier)
@@ -143,7 +143,7 @@ public final class UserService {
    *
    */
   private User _getUserByIdentifier(
-    final UUID identifier
+    final String identifier
   ) {
     return this.userRepository
       .findUserByIdentifier(identifier)
@@ -162,7 +162,7 @@ public final class UserService {
    *                               identifier.
    */
   public User getUserByIdentifier(
-    final UUID identifier
+    final String identifier
   ) {
     return this._getUserByIdentifier(
       this.validUserIdentifier(identifier)
@@ -242,7 +242,7 @@ public final class UserService {
    * Retrieves a user by their email address.
    *
    * <p>
-   * Note: Using the {@link #getUserByIdentifier(UUID)} method with the user's
+   * Note: Using the {@link #getUserByIdentifier(String)} method with the user's
    * unique identifier will always be more efficient than using this method,
    * as it directly accesses the user's record based on the identifier.
    * </p>
@@ -305,7 +305,7 @@ public final class UserService {
     var builder = User.builder();
 
     if (user.isNew()) {
-      final var randomIdentifier = UUID.randomUUID();
+      final var randomIdentifier = Uid.next();
 
       builder.withIdentifier(randomIdentifier);
 
@@ -416,7 +416,7 @@ public final class UserService {
   }
 
   public void deleteUserByIdentifier(
-    final UUID identifier
+    final String identifier
   ) {
 
     if (this.userRepository.existsUserByIdentifier(identifier)) {

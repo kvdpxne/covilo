@@ -14,7 +14,7 @@ public class JjwtServiceTest {
   @Test
   void test() {
     final User user = User.builder()
-      .withIdentifier()
+      .withRandomIdentifier()
       .withEmail("support@covilo.com")
       .withCreatedDate()
       .build();

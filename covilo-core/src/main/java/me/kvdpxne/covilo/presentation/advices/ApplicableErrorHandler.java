@@ -12,28 +12,28 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class ApplicableErrorHandler
   extends BasicErrorHandler {
-
-  @ExceptionHandler(StorageException.class)
-  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-  public ResponseEntity<ErrorMessage> handleStorageException(
-    final StorageException exception
-  ) {
-    return this.buildErrorMessageResponse(exception, HttpStatus.INTERNAL_SERVER_ERROR);
-  }
-
-  @ExceptionHandler(StorageFileNotFoundException.class)
-  @ResponseStatus(HttpStatus.NOT_FOUND)
-  public ResponseEntity<ErrorMessage> handleStorageFileNotFoundException(
-    final StorageFileNotFoundException exception
-  ) {
-    return this.buildErrorMessageResponse(exception, HttpStatus.NOT_FOUND);
-  }
-
-  @ExceptionHandler(UserAlreadyExistsException.class)
-  @ResponseStatus(HttpStatus.CONFLICT)
-  public ResponseEntity<ErrorMessage> handleUserAlreadyExistsException(
-    final UserAlreadyExistsException exception
-  ) {
-    return this.buildErrorMessageResponse(exception, HttpStatus.CONFLICT);
-  }
+//
+//  @ExceptionHandler(StorageException.class)
+//  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+//  public ResponseEntity<ErrorMessage> handleStorageException(
+//    final StorageException exception
+//  ) {
+//    return this.buildErrorMessageResponse(exception, HttpStatus.INTERNAL_SERVER_ERROR);
+//  }
+//
+//  @ExceptionHandler(StorageFileNotFoundException.class)
+//  @ResponseStatus(HttpStatus.NOT_FOUND)
+//  public ResponseEntity<ErrorMessage> handleStorageFileNotFoundException(
+//    final StorageFileNotFoundException exception
+//  ) {
+//    return this.buildErrorMessageResponse(exception, HttpStatus.NOT_FOUND);
+//  }
+//
+//  @ExceptionHandler(UserAlreadyExistsException.class)
+//  @ResponseStatus(HttpStatus.CONFLICT)
+//  public ResponseEntity<ErrorMessage> handleUserAlreadyExistsException(
+//    final UserAlreadyExistsException exception
+//  ) {
+//    return this.buildErrorMessageResponse(exception, HttpStatus.CONFLICT);
+//  }
 }

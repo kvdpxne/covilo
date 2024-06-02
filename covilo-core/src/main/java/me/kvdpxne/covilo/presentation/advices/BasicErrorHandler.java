@@ -1,48 +1,50 @@
 package me.kvdpxne.covilo.presentation.advices;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 public class BasicErrorHandler
   extends ResponseEntityExceptionHandler {
 
-  @SuppressWarnings("unchecked")
-  protected <T> ResponseEntity<T> buildErrorMessageResponse(
-    final Throwable exception,
-    final HttpStatus status
-    ) {
-    return (ResponseEntity<T>) ResponseEntity.status(status).body(
-      ErrorMessage.of(
-        status.value(),
-        status.getReasonPhrase(),
-        exception.getMessage()
-      )
+  @Override
+  protected ResponseEntity<Object> handleMethodArgumentNotValid(
+    final MethodArgumentNotValidException ex,
+    final HttpHeaders headers,
+    final HttpStatusCode status,
+    final WebRequest request
+  ) {
+    final var details = new HashMap<String, List<String>>();
+    final var httpStatus = (HttpStatus) status;
+
+    ex.getBindingResult()
+      .getFieldErrors()
+      .forEach(it -> details.computeIfAbsent(
+        it.getField(),
+        _ -> new ArrayList<>()
+      ).add(it.getDefaultMessage()));
+
+    final var body = ErrorResponse.from(
+      httpStatus.value(),
+      httpStatus.getReasonPhrase(),
+      ex.getBody().getDetail(),
+      details.entrySet()
+        .stream()
+        .map(it -> new ErrorDetails(
+          it.getKey(),
+          it.getValue().toArray(String[]::new)
+        )),
+      ((ServletWebRequest) request).getRequest().getRequestURI()
     );
+
+    return ResponseEntity.badRequest().body(body);
   }
-//
-//  @ExceptionHandler(Exception.class)
-//  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-//  protected ResponseEntity<ErrorMessage> handleUnhandledException(
-//    final Throwable exception
-//  ) {
-//    return this.buildErrorMessageResponse(
-//      exception,
-//      HttpStatus.INTERNAL_SERVER_ERROR
-//    );
-//  }
-//
-//  @Override
-//  protected ResponseEntity<Object> handleExceptionInternal(
-//    final Exception ex,
-//    final Object body,
-//    final HttpHeaders headers,
-//    final HttpStatusCode statusCode,
-//    final WebRequest request
-//  ) {
-//    return this.buildErrorMessageResponse(
-//      ex,
-//      HttpStatus.resolve(statusCode.value())
-//    );
-//  }
 }

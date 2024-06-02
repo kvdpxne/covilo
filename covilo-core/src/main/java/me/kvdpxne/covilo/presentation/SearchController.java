@@ -1,6 +1,5 @@
 package me.kvdpxne.covilo.presentation;
 
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import me.kvdpxne.covilo.domain.service.SystematizationService;
 import me.kvdpxne.covilo.infrastructure.swagger.HiddenParameter;
@@ -67,7 +66,7 @@ public final class SearchController {
   @DeleteMapping("classification/{identifier}")
   public boolean deleteClassificationByIdentifier(
     @PathVariable
-    final UUID identifier
+    final String identifier
   ) {
     return this.systematizationService.deleteClassificationByIdentifier(
       identifier
@@ -84,7 +83,7 @@ public final class SearchController {
   @DeleteMapping("category/{identifier}")
   public boolean deleteCategoryByIdentifier(
     @PathVariable
-    final UUID identifier
+    final String identifier
   ) {
     return this.systematizationService.deleteCategoryByIdentifier(
       identifier

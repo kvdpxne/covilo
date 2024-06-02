@@ -28,6 +28,6 @@ public final class Uid {
    * @return a new ULID in lowercase string format.
    */
   public static String next() {
-    return UlidCreator.getUlid().toLowerCase();
+    return UlidCreator.getUlid().toString();
   }
 }

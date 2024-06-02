@@ -1,6 +1,5 @@
 package me.kvdpxne.covilo.domain.service;
 
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.kvdpxne.covilo.domain.exceptions.CategoryAlreadyExistsException;
@@ -13,6 +12,7 @@ import me.kvdpxne.covilo.domain.exceptions.ClassificationNotFoundException;
 import me.kvdpxne.covilo.domain.model.pagination.Pageable;
 import me.kvdpxne.covilo.domain.persistence.CategoryRepository;
 import me.kvdpxne.covilo.domain.persistence.ClassificationRepository;
+import me.kvdpxne.covilo.infrastructure.uid.Uid;
 import me.kvdpxne.covilo.shared.Validation;
 
 /**
@@ -41,7 +41,7 @@ public final class SystematizationService {
    * @return {@code true} if the classification exists, {@code false} otherwise.
    */
   public boolean _checkClassificationExistsByIdentifier(
-    final UUID identifier
+    final String identifier
   ) {
     return this.classificationRepository.existsClassificationByIdentifier(
       identifier
@@ -60,8 +60,8 @@ public final class SystematizationService {
    * @throws NullPointerException If the provided classification identifier
    *                              is {@code null}.
    */
-  private UUID validClassificationIdentifier(
-    final UUID identifier
+  private String validClassificationIdentifier(
+    final String identifier
   ) {
     return Validation.check(
       identifier,
@@ -97,10 +97,10 @@ public final class SystematizationService {
    * @return {@code true} if the classification exists, {@code false} otherwise.
    * @throws NullPointerException If the provided classification identifier
    *                              is {@code null}.
-   * @see #_checkClassificationExistsByIdentifier(UUID)
+   * @see #_checkClassificationExistsByIdentifier(String)
    */
   public boolean checkClassificationExistsByIdentifier(
-    final UUID identifier
+    final String identifier
   ) {
     return this._checkClassificationExistsByIdentifier(
       this.validClassificationIdentifier(identifier)
@@ -115,7 +115,7 @@ public final class SystematizationService {
    * @return {@code true} if the classification exists, {@code false} otherwise.
    * @throws NullPointerException If the provided classification is {@code
    *                              null}.
-   * @see #checkClassificationExistsByIdentifier(UUID)
+   * @see #checkClassificationExistsByIdentifier(String)
    */
   public boolean checkClassificationExists(
     final Classification classification
@@ -132,7 +132,7 @@ public final class SystematizationService {
    * @return {@code true} if the category exists, {@code false} otherwise.
    */
   public boolean _checkCategoryExistsByIdentifier(
-    final UUID identifier
+    final String identifier
   ) {
     return this.categoryRepository.existsCategoryByIdentifier(
       identifier
@@ -151,8 +151,8 @@ public final class SystematizationService {
    * @throws NullPointerException If the provided category identifier is
    *                              {@code null}.
    */
-  private UUID validCategoryIdentifier(
-    final UUID identifier
+  private String validCategoryIdentifier(
+    final String identifier
   ) {
     return Validation.check(
       identifier,
@@ -187,10 +187,10 @@ public final class SystematizationService {
    * @return {@code true} if the category exists, {@code false} otherwise.
    * @throws NullPointerException If the provided category identifier is
    *                              {@code null}.
-   * @see #_checkClassificationExistsByIdentifier(UUID)
+   * @see #_checkClassificationExistsByIdentifier(String)
    */
   public boolean checkCategoryExistsByIdentifier(
-    final UUID identifier
+    final String identifier
   ) {
     return this._checkCategoryExistsByIdentifier(
       this.validCategoryIdentifier(identifier)
@@ -203,7 +203,7 @@ public final class SystematizationService {
    * @param category The category object to check.
    * @return {@code true} if the category exists, {@code false} otherwise.
    * @throws NullPointerException If the provided category is {@code null}.
-   * @see #checkCategoryExistsByIdentifier(UUID)
+   * @see #checkCategoryExistsByIdentifier(String)
    */
   public boolean checkCategoryExists(
     final Category category
@@ -259,7 +259,7 @@ public final class SystematizationService {
    *                                         the specified identifier is found.
    */
   public Classification _getClassificationByIdentifier(
-    final UUID identifier
+    final String identifier
   ) {
     // noinspection preview
     return this.classificationRepository
@@ -277,10 +277,10 @@ public final class SystematizationService {
    * @throws NullPointerException            If the provided identifier is
    *                                         {@code null}.
    * @throws ClassificationNotFoundException If the classification is not found.
-   * @see #_getClassificationByIdentifier(UUID)
+   * @see #_getClassificationByIdentifier(String)
    */
   public Classification getClassificationByIdentifier(
-    final UUID identifier
+    final String identifier
   ) {
     return this._getClassificationByIdentifier(
       this.validClassificationIdentifier(identifier)
@@ -299,7 +299,7 @@ public final class SystematizationService {
    *                                   specified identifier is found.
    */
   public Category _getCategoryByIdentifier(
-    final UUID identifier
+    final String identifier
   ) {
     // noinspection preview
     return this.categoryRepository.findCategoryByIdentifier(identifier)
@@ -316,10 +316,10 @@ public final class SystematizationService {
    * @throws NullPointerException      If the provided identifier is
    *                                   {@code null}.
    * @throws CategoryNotFoundException If the category is not found.
-   * @see #_getCategoryByIdentifier(UUID)
+   * @see #_getCategoryByIdentifier(String)
    */
   public Category getCategoryByIdentifier(
-    final UUID identifier
+    final String identifier
   ) {
     return this._getCategoryByIdentifier(
       this.validCategoryIdentifier(identifier)
@@ -398,7 +398,7 @@ public final class SystematizationService {
     // If the classification is new, generate a random identifier
     if (classification.isNew()) {
       // Generate a random UUID for the new classification
-      final var randomIdentifier = UUID.randomUUID();
+      final var randomIdentifier = Uid.next();
 
       // Set the random identifier for the new classification
       builder.withIdentifier(randomIdentifier);
@@ -503,7 +503,7 @@ public final class SystematizationService {
     // If the category is new, generate a random identifier
     if (category.isNew()) {
       // Generate a random UUID for the new category
-      final var randomIdentifier = UUID.randomUUID();
+      final var randomIdentifier = Uid.next();
 
       // Set the random identifier for the new category
       builder.withIdentifier(randomIdentifier);
@@ -670,7 +670,7 @@ public final class SystematizationService {
    *                              is {@code null}.
    */
   public boolean deleteClassificationByIdentifier(
-    final UUID identifier
+    final String identifier
   ) {
     return this.classificationRepository.deleteClassificationByIdentifier(
       this.validClassificationIdentifier(identifier)
@@ -687,7 +687,7 @@ public final class SystematizationService {
    *                              {@code null}.
    */
   public boolean deleteCategoryByIdentifier(
-    final UUID identifier
+    final String identifier
   ) {
     return this.categoryRepository.deleteCategoryByIdentifier(
       this.validCategoryIdentifier(identifier)

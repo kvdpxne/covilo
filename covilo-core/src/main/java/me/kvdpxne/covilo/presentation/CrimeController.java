@@ -70,7 +70,7 @@ public class CrimeController {
   @GetMapping("{identifier}")
   public Crime getCrime(
     @PathVariable
-    final UUID identifier
+    final String identifier
   ) {
     // Retrieves a Crime object from the service layer based on provided
     // identifier.
@@ -135,7 +135,7 @@ public class CrimeController {
   @DeleteMapping("{identifier}")
   public void deleteCrime(
     @PathVariable
-    final UUID identifier
+    final String identifier
   ) {
     this.crimeService.deleteCrimeByIdentifier(identifier);
   }

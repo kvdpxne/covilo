@@ -3,6 +3,7 @@ package me.kvdpxne.covilo.presentation;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import me.kvdpxne.covilo.common.constants.Endpoints;
@@ -31,10 +32,10 @@ public final class AuthenticationController {
 
   @PostMapping("/register")
   public TokenPairDto signup(
+    @Valid
     @RequestBody
     final SignupRequest request
   ) {
-    // TODO confirmPassword check
     final var user = User.builder()
       .withEmail(request.email())
       .withPassword(request.password())
@@ -51,6 +52,7 @@ public final class AuthenticationController {
 
   @PostMapping("/login")
   public TokenPairDto login(
+    @Valid
     @RequestBody
     final LoginRequest request
   ) {
