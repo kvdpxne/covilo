@@ -117,18 +117,25 @@ public final class CrimeService {
   ) throws CrimeAlreadyExistsException {
     Validation.check(crime);
 
-    var result = this.crimeRepository.insertCrimeAndReturn(
-      Crime.builder()
-        .withIdentifier(Uid.next(crime, it -> {
-          //
-          if (this._checkCrimeExistsByIdentifier(it)) {
-            throw new CrimeAlreadyExistsException(
-              STR."The crime model with the identifier \{it} already exists."
-            );
-          }
-        }))
-        .build()
-    );
+    final var builder = Crime.builder();
+
+    if (crime.isNew()) {
+      builder.withRandomIdentifier();
+    } else {
+
+      final var identifier = crime.getIdentifier();
+
+      if (this._checkCrimeExistsByIdentifier(identifier)) {
+        throw new CrimeAlreadyExistsException(
+          STR."The crime model with the identifier \{identifier} already exists."
+        );
+      }
+
+      builder.withIdentifier(identifier);
+    }
+
+    var result = builder.build();
+    result = this.crimeRepository.insertCrimeAndReturn(result);
 
 
     logger.atDebug()
