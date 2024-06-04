@@ -8,7 +8,7 @@ package me.kvdpxne.covilo.presentation.payloads;
  *                        user.
  * @param newEmail        A new email address.
  */
-public record UpdateUserMeEmailRequest(
+public record UpdateMeEmailRequest(
   String currentPassword,
   String newEmail
 ) {}

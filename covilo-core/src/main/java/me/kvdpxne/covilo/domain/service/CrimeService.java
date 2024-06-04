@@ -1,17 +1,17 @@
 package me.kvdpxne.covilo.domain.service;
 
-import java.util.UUID;
-import java.util.function.Function;
-import java.util.function.Supplier;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import me.kvdpxne.covilo.domain.aggregation.Buildable;
+import me.kvdpxne.covilo.domain.aggregation.Identifiable;
+import me.kvdpxne.covilo.domain.exceptions.CategoryNotFoundException;
 import me.kvdpxne.covilo.domain.exceptions.CrimeAlreadyExistsException;
 import me.kvdpxne.covilo.domain.exceptions.CrimeNotFoundException;
+import me.kvdpxne.covilo.domain.model.Category;
 import me.kvdpxne.covilo.domain.model.Crime;
 import me.kvdpxne.covilo.domain.model.pagination.Page;
 import me.kvdpxne.covilo.domain.model.pagination.Pageable;
 import me.kvdpxne.covilo.domain.persistence.CrimeRepository;
-import me.kvdpxne.covilo.infrastructure.uid.Uid;
 import me.kvdpxne.covilo.shared.Validation;
 
 /**
@@ -111,13 +111,44 @@ public final class CrimeService {
     );
   }
 
+  /**
+   *
+   */
+  public Crime _createCrime(
+    Crime crime
+  ) {
+    crime = this.crimeRepository.insertCrimeAndReturn(crime);
 
+    assert null != crime
+      : "";
+
+    logger.atInfo()
+      .setMessage("")
+      .addArgument(crime)
+      .log();
+
+    return crime;
+  }
+
+  /**
+   *
+   */
   public Crime createCrime(
     final Crime crime
   ) throws CrimeAlreadyExistsException {
     Validation.check(crime);
 
-    final var builder = Crime.builder();
+    final var reporter = this.userService._getUserByIdentifier(
+      crime.getReporter().getIdentifier()
+    );
+
+    final var categories = crime.getCategories()
+      .stream()
+      .map(it -> this.systematizationService.getCategoryByName(it.getName()))
+      .toList();
+
+    //
+    final var builder = crime.toBuilder();
 
     if (crime.isNew()) {
       builder.withRandomIdentifier();
@@ -130,22 +161,15 @@ public final class CrimeService {
           STR."The crime model with the identifier \{identifier} already exists."
         );
       }
-
-      builder.withIdentifier(identifier);
     }
 
-    var result = builder.build();
-    result = this.crimeRepository.insertCrimeAndReturn(result);
-
-
-    logger.atDebug()
-      .setMessage("Created crime: {}")
-      .addArgument(result)
-      .log();
-
-    return result;
+    return _createCrime(
+      builder.withCurrentDateAsCreatedDate()
+        .withCategories(categories)
+        .withReporter(reporter)
+        .build()
+    );
   }
-
 
   public void deleteCrimeByIdentifier(final String identifier) {
     this.crimeRepository.deleteCrimeByIdentifier(identifier);

@@ -20,6 +20,15 @@ public interface CategoryRepository {
   long countCategories();
 
   /**
+   * Deletes a category by its identifier.
+   *
+   * @param identifier The identifier of the category to delete.
+   */
+  void deleteCategoryByIdentifier(
+    final String identifier
+  );
+
+  /**
    * Checks if a category with the given identifier exists.
    *
    * @param identifier The unique identifier of the category to check.
@@ -90,6 +99,13 @@ public interface CategoryRepository {
   );
 
   /**
+   *
+   */
+  void updateCategories(
+    final Collection<Category> categories
+  );
+
+  /**
    * Updates a category.
    *
    * @param category The category to update.
@@ -106,15 +122,5 @@ public interface CategoryRepository {
    */
   Category updateCategoryAndReturn(
     final Category category
-  );
-
-  /**
-   * Deletes a category by its identifier.
-   *
-   * @param identifier The identifier of the category to delete.
-   * @return True if the category was deleted successfully, otherwise false.
-   */
-  boolean deleteCategoryByIdentifier(
-    final String identifier
   );
 }

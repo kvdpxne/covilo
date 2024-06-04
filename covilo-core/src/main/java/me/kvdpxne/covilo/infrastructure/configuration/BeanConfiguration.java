@@ -7,6 +7,7 @@ import me.kvdpxne.covilo.domain.persistence.UserRepository;
 import me.kvdpxne.covilo.domain.service.AuthenticationService;
 import me.kvdpxne.covilo.domain.service.ConfiguredPageFactory;
 import me.kvdpxne.covilo.domain.service.CrimeService;
+import me.kvdpxne.covilo.domain.service.GeolocationService;
 import me.kvdpxne.covilo.domain.service.MeService;
 import me.kvdpxne.covilo.domain.service.PaginationConfiguration;
 import me.kvdpxne.covilo.domain.service.PasswordAuthenticator;
@@ -131,6 +132,11 @@ public class BeanConfiguration {
       classificationRepository,
       categoryRepository
     );
+  }
+
+  @Bean
+  public GeolocationService geolocationService() {
+    return new GeolocationService();
   }
 
   /**

@@ -326,6 +326,15 @@ public final class SystematizationService {
     );
   }
 
+  public Category getCategoryByName(
+    final String name
+  ) {
+    return this.categoryRepository.findCategoryByName(name)
+      .orElseThrow(() -> new CategoryNotFoundException(
+        STR."No category record with identifier \{name} found."
+      ));
+  }
+
   /**
    * Creates a new classification in the repository with the provided
    * information and returns the created classification.
@@ -686,10 +695,10 @@ public final class SystematizationService {
    * @throws NullPointerException If the provided category identifier is
    *                              {@code null}.
    */
-  public boolean deleteCategoryByIdentifier(
+  public void deleteCategoryByIdentifier(
     final String identifier
   ) {
-    return this.categoryRepository.deleteCategoryByIdentifier(
+    this.categoryRepository.deleteCategoryByIdentifier(
       this.validCategoryIdentifier(identifier)
     );
   }

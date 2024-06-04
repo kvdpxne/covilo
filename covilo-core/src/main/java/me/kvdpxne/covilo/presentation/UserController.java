@@ -8,7 +8,7 @@ import me.kvdpxne.covilo.infrastructure.swagger.PagingAsQueryParameter;
 import me.kvdpxne.covilo.presentation.dto.UserDto;
 import me.kvdpxne.covilo.presentation.paging.PageDto;
 import me.kvdpxne.covilo.presentation.paging.PageRequest;
-import me.kvdpxne.covilo.presentation.payloads.CreateNewUserRequest;
+import me.kvdpxne.covilo.presentation.payloads.CreateUserRequest;
 import me.kvdpxne.covilo.presentation.payloads.UpdateUserEmailRequest;
 import me.kvdpxne.covilo.presentation.payloads.UpdateUserPasswordRequest;
 import me.kvdpxne.covilo.common.constants.Endpoints;
@@ -125,7 +125,7 @@ public final class UserController {
   @PostMapping
   public void createUser(
     @RequestBody
-    final CreateNewUserRequest request
+    final CreateUserRequest request
   ) {
     // Delegates user creation to the userService using the userMapper to
     // convert the request to user entity.

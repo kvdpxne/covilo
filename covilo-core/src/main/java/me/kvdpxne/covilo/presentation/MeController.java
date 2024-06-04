@@ -4,9 +4,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import me.kvdpxne.covilo.domain.service.MeService;
 import me.kvdpxne.covilo.presentation.dto.UserDto;
-import me.kvdpxne.covilo.presentation.payloads.DeleteUserMeRequest;
-import me.kvdpxne.covilo.presentation.payloads.UpdateUserMeEmailRequest;
-import me.kvdpxne.covilo.presentation.payloads.UpdateUserMePasswordRequest;
+import me.kvdpxne.covilo.presentation.payloads.DeleteMeRequest;
+import me.kvdpxne.covilo.presentation.payloads.UpdateMeEmailRequest;
+import me.kvdpxne.covilo.presentation.payloads.UpdateMePasswordRequest;
 import me.kvdpxne.covilo.common.constants.Endpoints;
 import me.kvdpxne.covilo.domain.model.User;
 import me.kvdpxne.covilo.infrastructure.image.ImageConverterService;
@@ -65,7 +65,7 @@ public final class MeController {
     @AuthenticationPrincipal
     final UserAccountDetails principal,
     @RequestBody
-    final UpdateUserMeEmailRequest request
+    final UpdateMeEmailRequest request
   ) {
     this.meService.updateMeEmail(
       principal.user(),
@@ -82,7 +82,7 @@ public final class MeController {
     @AuthenticationPrincipal
     final UserAccountDetails principal,
     @RequestBody
-    final UpdateUserMePasswordRequest request
+    final UpdateMePasswordRequest request
   ) {
     this.meService.updateMePassword(
       principal.user(),
@@ -143,7 +143,7 @@ public final class MeController {
     @AuthenticationPrincipal
     final UserAccountDetails principal,
     @RequestBody
-    final DeleteUserMeRequest request
+    final DeleteMeRequest request
   ) {
     this.meService.deleteMe(
       principal.user(),

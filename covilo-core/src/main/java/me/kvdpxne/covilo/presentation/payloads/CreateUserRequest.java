@@ -3,7 +3,7 @@ package me.kvdpxne.covilo.presentation.payloads;
 import java.time.LocalDate;
 import me.kvdpxne.covilo.domain.model.Gender;
 
-public record CreateNewUserRequest(
+public record CreateUserRequest(
   String email,
   String password,
   String firstName,

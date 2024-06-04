@@ -22,6 +22,15 @@ public interface ClassificationRepository {
   long countClassifications();
 
   /**
+   * Deletes a classification by its unique identifier.
+   *
+   * @param identifier The unique identifier of the classification to delete.
+   */
+  void deleteClassificationByIdentifier(
+    final String identifier
+  );
+
+  /**
    * Checks if a classification with the specified identifier exists.
    *
    * @param identifier The unique identifier of the classification to check.
@@ -95,6 +104,13 @@ public interface ClassificationRepository {
   );
 
   /**
+   *
+   */
+  void updateClassifications(
+    final Collection<Classification> classifications
+  );
+
+  /**
    * Updates an existing classification in the repository.
    *
    * @param classification The classification to update.
@@ -112,16 +128,5 @@ public interface ClassificationRepository {
    */
   Classification updateClassificationAndReturn(
     final Classification classification
-  );
-
-  /**
-   * Deletes a classification by its unique identifier.
-   *
-   * @param identifier The unique identifier of the classification to delete.
-   * @return {@code true} if the deletion was successful, otherwise {@code
-   * false}.
-   */
-  boolean deleteClassificationByIdentifier(
-    final String identifier
   );
 }

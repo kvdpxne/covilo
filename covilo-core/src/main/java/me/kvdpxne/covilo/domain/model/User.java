@@ -35,8 +35,8 @@ public final class User
    * @param lastName          The last name of the user.
    * @param gender            The gender of the user.
    * @param birthDate         The birthdate of the user.
-   * @param createdDate       The date and time when the user was created.
-   * @param lastModifiedDate The date and time when the user was last modified.
+   * @param createdDate       The date and datetime when the user was created.
+   * @param lastModifiedDate The date and datetime when the user was last modified.
    */
   public User(
     final String identifier,
@@ -173,8 +173,8 @@ public final class User
      * @param lastName          The last name of the user.
      * @param gender            The gender of the user.
      * @param birthDate         The birthdate of the user.
-     * @param createdDate       The date and time when the user was created.
-     * @param lastModifiedDate  The date and time when the user was last
+     * @param createdDate       The date and datetime when the user was created.
+     * @param lastModifiedDate  The date and datetime when the user was last
      *                          modified.
      */
     private UserBuilder(

@@ -81,12 +81,10 @@ public final class SearchController {
    * {@code false}.
    */
   @DeleteMapping("category/{identifier}")
-  public boolean deleteCategoryByIdentifier(
+  public void deleteCategoryByIdentifier(
     @PathVariable
     final String identifier
   ) {
-    return this.systematizationService.deleteCategoryByIdentifier(
-      identifier
-    );
+    this.systematizationService.deleteCategoryByIdentifier(identifier);
   }
 }

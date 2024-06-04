@@ -22,7 +22,7 @@ public final class TokenPair {
    *
    * @param accessToken  The access token.
    * @param refreshToken The refresh token.
-   * @param expiry       The expiration time of the access token.
+   * @param expiry       The expiration datetime of the access token.
    * @param tokenType    The type of token pair.
    */
   public TokenPair(
@@ -54,7 +54,7 @@ public final class TokenPair {
      *
      * @param accessToken  The access token.
      * @param refreshToken The refresh token.
-     * @param expiry       The expiration time of the access token.
+     * @param expiry       The expiration datetime of the access token.
      * @param tokenType    The type of token pair.
      */
     private TokenPairBuilder(

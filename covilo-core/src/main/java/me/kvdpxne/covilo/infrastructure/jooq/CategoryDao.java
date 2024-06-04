@@ -2,19 +2,22 @@ package me.kvdpxne.covilo.infrastructure.jooq;
 
 import java.util.Collection;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Gatherers;
 import lombok.RequiredArgsConstructor;
 import me.kvdpxne.covilo.domain.model.Category;
+import me.kvdpxne.covilo.domain.model.Classification;
 import me.kvdpxne.covilo.domain.model.pagination.Page;
 import me.kvdpxne.covilo.domain.model.pagination.Pageable;
 import me.kvdpxne.covilo.domain.persistence.CategoryRepository;
 import me.kvdpxne.covilo.domain.service.ConfiguredPageFactory;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
+import org.jooq.InsertSetMoreStep;
+import org.jooq.UpdateConditionStep;
 import org.jooq.generated.tables.records.CategoryRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import static org.jooq.generated.Tables.CATEGORY;
 
 /**
@@ -25,7 +28,7 @@ import static org.jooq.generated.Tables.CATEGORY;
  */
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @Component
-public final class CategoryDao
+public class CategoryDao
   implements CategoryRepository {
 
   /**
@@ -41,26 +44,118 @@ public final class CategoryDao
   /**
    * Converts a {@link CategoryRecord} to a {@link Category} object.
    *
-   * @param categoryRecord The {@link CategoryRecord} to convert.
+   * @param category       The {@link CategoryRecord} to convert.
+   * @param classification The associated {@link Classification} object.
    * @return The corresponding {@link Category} object.
    */
   static Category toCategory(
-    final CategoryRecord categoryRecord
+    final CategoryRecord category,
+    final Classification classification
   ) {
-    if (null == categoryRecord) {
+    if (null == category) {
       return null;
     }
 
-    return new Category(
-      categoryRecord.getIdentifier(),
-      categoryRecord.getName(),
-      categoryRecord.getClassificationIdentifier()
+    return Category.builder()
+      .withIdentifier(category.getIdentifier())
+      .withName(category.getName())
+      .withClassification(classification)
+      .build();
+  }
+
+  /**
+   * Finds a {@link Category} instance by its identifier and returns it, or
+   * {@code null} if not found.
+   * <p>
+   * This method retrieves the raw {@link Category} record from the database
+   * using the provided identifier. It then retrieves the associated
+   * {@link Classification} object (if any) using the
+   * {@link ClassificationDao#findClassificationByIdentifierOrNull(DSLContext,
+   * String)} method. Finally, it combines the raw category data with the
+   * retrieved classification to construct and return a full {@link Category}
+   * object.
+   * </p>
+   *
+   * @param context    A {@link DSLContext} instance used to interact with the
+   *                   database.
+   * @param identifier The unique identifier of the {@link Category} to find.
+   * @return A {@link Category} instance with the matching identifier, or
+   * {@code null} if not found.
+   */
+  static Category findCategoryByIdentifierOrNull(
+    final DSLContext context,
+    final String identifier
+  ) {
+    // Fetch raw category record
+    final var rawCategory = context.selectFrom(CATEGORY)
+      .where(CATEGORY.IDENTIFIER.eq(identifier))
+      .fetchOneInto(CATEGORY);
+
+    // Return null if category not found
+    if (null == rawCategory) {
+      return null;
+    }
+
+    // Find associated classification (if any)
+    final var classification =
+      ClassificationDao.findClassificationByIdentifierOrNull(
+        context,
+        rawCategory.getIdentifier()
+      );
+
+    // Combine data and return full category
+    return CategoryDao.toCategory(
+      rawCategory,
+      classification
     );
+  }
+
+  /**
+   * Converts a {@link CategoryRecord} to a {@link Category} object using the
+   * provided {@link DSLContext}.
+   *
+   * @param context  The DSL context for jOOQ queries.
+   * @param category The {@link CategoryRecord} to convert.
+   * @return The corresponding {@link Category} object.
+   */
+  static Category toCategory(
+    final DSLContext context,
+    final CategoryRecord category
+  ) {
+    final var classification =
+      ClassificationDao.findClassificationByIdentifierOrNull(context, category.getIdentifier());
+
+    return CategoryDao.toCategory(
+      category,
+      classification
+    );
+  }
+
+  /**
+   * Converts a {@link CategoryRecord} to a {@link Category} object using the
+   * instance's DSL context.
+   *
+   * @param category The {@link CategoryRecord} to convert.
+   * @return The corresponding {@link Category} object.
+   */
+  protected Category toCategory(
+    final CategoryRecord category
+  ) {
+    return CategoryDao.toCategory(this.ctx, category);
   }
 
   @Override
   public long countCategories() {
     return this.ctx.fetchCount(CATEGORY);
+  }
+
+  @Override
+  public void deleteCategoryByIdentifier(
+    final String identifier
+  ) {
+    this.ctx.deleteFrom(CATEGORY)
+      .where(CATEGORY.IDENTIFIER.eq(identifier))
+      .execute();
   }
 
   @Override
@@ -84,7 +179,7 @@ public final class CategoryDao
         .limit(pageable.getSize())
         .offset(pageable.getOffset())
         .fetchInto(CATEGORY)
-        .map(CategoryDao::toCategory),
+        .map(this::toCategory),
       this::countCategories
     );
   }
@@ -98,11 +193,10 @@ public final class CategoryDao
   private Optional<Category> findCategoryBy(
     final Condition condition
   ) {
-    return this.ctx.select(CATEGORY.fields())
-      .from(CATEGORY)
+    return this.ctx.selectFrom(CATEGORY)
       .where(condition)
       .fetchOptionalInto(CATEGORY)
-      .map(CategoryDao::toCategory);
+      .map(this::toCategory);
   }
 
   @Override
@@ -123,84 +217,116 @@ public final class CategoryDao
     );
   }
 
+  @Transactional
   @Override
   public void insertCategories(
     final Collection<Category> categories
   ) {
-    // noinspection preview
+    if (categories.isEmpty()) {
+      return;
+    }
+
+    // Create a base insert step specifying the table and columns
+    final var insertStep = this.ctx.insertInto(
+      CATEGORY,
+      CATEGORY.IDENTIFIER,
+      CATEGORY.NAME,
+      CATEGORY.CLASSIFICATION_IDENTIFIER
+    ).values(
+      // Placeholder values will be replaced during batch binding
+      (String) null,
+      null,
+      null
+    );
+
+    // Process categories in chunks to improve performance
     categories.stream()
       .gather(Gatherers.windowFixed(8))
-      .forEach(listableCategories -> {
-        var insert = this.ctx.insertInto(
-          CATEGORY,
-          CATEGORY.IDENTIFIER,
-          CATEGORY.NAME,
-          CATEGORY.CLASSIFICATION_IDENTIFIER
-        );
-        for (final var category : listableCategories) {
-          insert = insert.values(
-            category.getIdentifier(),
-            category.getName(),
-            category.getClassificationIdentifier()
+      .forEach(chunk -> {
+        // Create a batch operation for efficient insertion
+        final var batch = this.ctx.batch(insertStep);
+
+        // Loop through each category in the chunk and bind actual values
+        // from the category object to the insert step
+        chunk.forEach(step -> {
+          // noinspection ResultOfMethodCallIgnored
+          batch.bind(
+            step.getIdentifier(),
+            step.getName(),
+            step.getClassificationIdentifier()
           );
-        }
-        insert.execute();
+        });
+
+        // Execute the batch insert operation
+        batch.execute();
       });
+  }
+
+
+  protected InsertSetMoreStep<CategoryRecord> insertCategoryStep(
+    final Category category
+  ) {
+    return this.ctx.insertInto(CATEGORY)
+      .set(CATEGORY.IDENTIFIER, category.getIdentifier())
+      .set(CATEGORY.NAME, category.getName())
+      .set(CATEGORY.CLASSIFICATION_IDENTIFIER, category.getClassificationIdentifier());
   }
 
   @Override
   public void insertCategory(
     final Category category
   ) {
-    this.ctx.insertInto(CATEGORY)
-      .set(CATEGORY.IDENTIFIER, category.getIdentifier())
-      .set(CATEGORY.NAME, category.getName())
-      .execute();
+    this.insertCategoryStep(category).execute();
   }
 
   @Override
   public Category insertCategoryAndReturn(
     final Category category
   ) {
-    return CategoryDao.toCategory(
-      this.ctx.insertInto(CATEGORY)
-        .set(CATEGORY.IDENTIFIER, category.getIdentifier())
-        .set(CATEGORY.NAME, category.getName())
-        .set(CATEGORY.CLASSIFICATION_IDENTIFIER, category.getClassificationIdentifier())
-        .returning(CATEGORY.fields())
-        .fetchOneInto(CATEGORY)
-    );
+    final var rawCategory = this.insertCategoryStep(category)
+      .returning(CATEGORY.fields())
+      .fetchOneInto(CATEGORY);
+
+    return null != rawCategory
+      ? this.toCategory(rawCategory)
+      : null;
+  }
+
+
+  protected UpdateConditionStep<CategoryRecord> updateCategoryStep(
+    final Category category
+  ) {
+    return this.ctx.update(CATEGORY)
+      .set(CATEGORY.NAME, category.getName())
+      .set(CATEGORY.CLASSIFICATION_IDENTIFIER, category.getClassificationIdentifier())
+      .where(CATEGORY.IDENTIFIER.eq(category.getIdentifier()));
+  }
+
+  @Transactional
+  @Override
+  public void updateCategories(
+    final Collection<Category> categories
+  ) {
+    categories.forEach(it -> this.updateCategoryStep(it).execute());
   }
 
   @Override
   public void updateCategory(
     final Category category
   ) {
-    this.ctx.update(CATEGORY)
-      .set(CATEGORY.NAME, category.getName())
-      .set(CATEGORY.CLASSIFICATION_IDENTIFIER, category.getClassificationIdentifier())
-      .execute();
+    this.updateCategoryStep(category).execute();
   }
 
   @Override
   public Category updateCategoryAndReturn(
     final Category category
   ) {
-    return CategoryDao.toCategory(
-      this.ctx.update(CATEGORY)
-        .set(CATEGORY.NAME, category.getName())
-        .set(CATEGORY.CLASSIFICATION_IDENTIFIER, category.getClassificationIdentifier())
-        .returning(CATEGORY.fields())
-        .fetchOneInto(CATEGORY)
-    );
-  }
+    final var rawCategory = this.updateCategoryStep(category)
+      .returning(CATEGORY.fields())
+      .fetchOneInto(CATEGORY);
 
-  @Override
-  public boolean deleteCategoryByIdentifier(
-    final String identifier
-  ) {
-    return 0 < this.ctx.deleteFrom(CATEGORY)
-      .where(CATEGORY.IDENTIFIER.eq(identifier))
-      .execute();
+    return null != rawCategory
+      ? this.toCategory(rawCategory)
+      : null;
   }
 }

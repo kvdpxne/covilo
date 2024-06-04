@@ -35,13 +35,13 @@ public class JjwtService {
 //  private Map<String, List<String>> keys;
 
   /**
-   * The time, in seconds, until the access token expires.
+   * The datetime, in seconds, until the access token expires.
    */
   @Value("${application.security.jjwt.expiration}")
   private long accessTokenExpiration;
 
   /**
-   * The time, in milliseconds, until the refresh token expires.
+   * The datetime, in milliseconds, until the refresh token expires.
    */
   @Value("${application.security.jjwt.refresh-token-expiration}")
   private long refreshTokenExpiration ;
@@ -80,10 +80,10 @@ public class JjwtService {
   }
 
   /**
-   * Constructs a JwtBuilder with the specified user and expiry time.
+   * Constructs a JwtBuilder with the specified user and expiry datetime.
    *
    * @param user       the user.
-   * @param expiryTime the expiry time.
+   * @param expiryTime the expiry datetime.
    * @return A JwtBuilder instance.
    */
   public JwtBuilder getJwtBuilder(
@@ -106,10 +106,10 @@ public class JjwtService {
   }
 
   /**
-   * Creates a JSON Web Signature (JWS) for the given user and expiry time.
+   * Creates a JSON Web Signature (JWS) for the given user and expiry datetime.
    *
    * @param user          The user for whom the token is created.
-   * @param expiryTime    The expiry time for the token.
+   * @param expiryTime    The expiry datetime for the token.
    * @param keyIdentifier The identifier for the key used to encrypt the token.
    * @param keyAlgorithm  The algorithm used for key generation.
    * @return The JWS token.
@@ -167,10 +167,10 @@ public class JjwtService {
   }
 
   /**
-   * Creates a JSON Web Encryption (JWE) for the given user and expiry time.
+   * Creates a JSON Web Encryption (JWE) for the given user and expiry datetime.
    *
    * @param user          The user for whom the token is created.
-   * @param expiryTime    The expiry time for the token.
+   * @param expiryTime    The expiry datetime for the token.
    * @param keyIdentifier The identifier for the key used to encrypt the token.
    * @param keyAlgorithm  The algorithm used for key generation.
    * @return The JWE token.

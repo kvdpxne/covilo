@@ -142,7 +142,7 @@ public final class UserService {
   /**
    *
    */
-  private User _getUserByIdentifier(
+  public User _getUserByIdentifier(
     final String identifier
   ) {
     return this.userRepository

@@ -2,7 +2,6 @@ package me.kvdpxne.covilo.domain.model;
 
 import java.util.HashMap;
 import java.util.Objects;
-import java.util.UUID;
 import me.kvdpxne.covilo.domain.aggregation.Buildable;
 import me.kvdpxne.covilo.domain.aggregation.Identifiable;
 import me.kvdpxne.covilo.domain.aggregation.Nameable;
@@ -17,7 +16,7 @@ public final class Category
 
   private final String identifier;
   private final String name;
-  private final String classificationIdentifier;
+  private final Classification classification;
 
   /**
    * Constructs a new {@link Category} instance with the specified identifier,
@@ -28,17 +27,17 @@ public final class Category
    *
    * @param identifier               The unique identifier of the category.
    * @param name                     The name of the category.
-   * @param classificationIdentifier The unique identifier of the
+   * @param classification The unique identifier of the
    *                                 classification.
    */
   public Category(
     final String identifier,
     final String name,
-    final String classificationIdentifier
+    final Classification classification
   ) {
     this.identifier = identifier;
     this.name = name;
-    this.classificationIdentifier = classificationIdentifier;
+    this.classification = classification;
   }
 
   /**
@@ -61,7 +60,7 @@ public final class Category
     return new CategoryBuilder(
       this.identifier,
       this.name,
-      this.classificationIdentifier
+      this.classification
     );
   }
 
@@ -90,8 +89,22 @@ public final class Category
    *
    * @return The classification identifier.
    */
+  public Classification getClassification() {
+    return this.classification;
+  }
+
+  /**
+   * alias for
+   */
   public String getClassificationIdentifier() {
-    return this.classificationIdentifier;
+    return this.getClassification().getIdentifier();
+  }
+
+  /**
+   *
+   */
+  public String getClassificationName() {
+    return this.getClassification().getName();
   }
 
   /**
@@ -117,8 +130,8 @@ public final class Category
     final var that = (Category) o;
     return this.identifier.equals(that.identifier) &&
       this.name.equals(that.name) &&
-      Objects.equals(this.classificationIdentifier,
-        that.classificationIdentifier
+      Objects.equals(this.classification,
+        that.classification
       );
   }
 
@@ -132,7 +145,7 @@ public final class Category
   public int hashCode() {
     var result = this.identifier.hashCode();
     result = 31 * result + this.name.hashCode();
-    result = 31 * result + Objects.hashCode(this.classificationIdentifier);
+    result = 31 * result + Objects.hashCode(this.classification);
     return result;
   }
 
@@ -150,7 +163,7 @@ public final class Category
       Category{
         identifier="\{this.identifier}",
         name="\{this.name}",
-        classificationIdentifier="\{this.classificationIdentifier}"
+        classificationIdentifier="\{this.classification}"
       }""";
   }
 
@@ -162,7 +175,7 @@ public final class Category
 
     private String identifier;
     private String name;
-    private String classificationIdentifier;
+    private Classification classification;
 
     /**
      * Constructs a new instance of {@link CategoryBuilder} with the specified
@@ -170,16 +183,16 @@ public final class Category
      *
      * @param identifier               The identifier.
      * @param name                     The name.
-     * @param classificationIdentifier The classification identifier.
+     * @param classification The classification identifier.
      */
     private CategoryBuilder(
       final String identifier,
       final String name,
-      final String classificationIdentifier
+      final Classification classification
     ) {
       this.identifier = identifier;
       this.name = name;
-      this.classificationIdentifier = classificationIdentifier;
+      this.classification = classification;
     }
 
     /**
@@ -228,13 +241,13 @@ public final class Category
     /**
      * Sets the classification identifier of the category.
      *
-     * @param classificationIdentifier The classification identifier.
+     * @param classification The classification identifier.
      * @return This {@link CategoryBuilder} instance.
      */
-    public CategoryBuilder withClassificationIdentifier(
-      final String classificationIdentifier
+    public CategoryBuilder withClassification(
+      final Classification classification
     ) {
-      this.classificationIdentifier = classificationIdentifier;
+      this.classification = classification;
       return this;
     }
 
@@ -248,7 +261,7 @@ public final class Category
       return new Category(
         this.identifier,
         this.name,
-        this.classificationIdentifier
+        this.classification
       );
     }
   }

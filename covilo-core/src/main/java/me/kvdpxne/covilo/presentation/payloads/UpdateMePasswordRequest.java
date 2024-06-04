@@ -8,7 +8,7 @@ package me.kvdpxne.covilo.presentation.payloads;
  * @param newPassword        A new password.
  * @param confirmedPassword Repeated and identical new password.
  */
-public record UpdateUserMePasswordRequest(
+public record UpdateMePasswordRequest(
   String currentPassword,
   String newPassword,
   String confirmedPassword

@@ -7,21 +7,21 @@ import java.time.LocalDateTime;
  * modification timestamps.
  *
  * <p>
- * An auditable entity tracks the date and time when it was created and
+ * An auditable entity tracks the date and datetime when it was created and
  * last modified.
  * </p>
  */
 public interface Auditable {
 
   /**
-   * Retrieves the date and time when the entity was created.
+   * Retrieves the date and datetime when the entity was created.
    *
    * @return The creation timestamp.
    */
   LocalDateTime getCreatedDate();
 
   /**
-   * Retrieves the date and time when the entity was last modified.
+   * Retrieves the date and datetime when the entity was last modified.
    *
    * @return The last modification timestamp.
    */

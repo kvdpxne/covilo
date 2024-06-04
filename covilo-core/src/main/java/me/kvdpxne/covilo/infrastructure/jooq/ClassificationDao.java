@@ -12,6 +12,8 @@ import me.kvdpxne.covilo.domain.persistence.ClassificationRepository;
 import me.kvdpxne.covilo.domain.service.ConfiguredPageFactory;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
+import org.jooq.InsertSetMoreStep;
+import org.jooq.UpdateConditionStep;
 import org.jooq.generated.tables.records.ClassificationRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,7 +27,7 @@ import static org.jooq.generated.Tables.CLASSIFICATION;
  */
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @Component
-public final class ClassificationDao
+public class ClassificationDao
   implements ClassificationRepository {
 
   /**
@@ -39,26 +41,62 @@ public final class ClassificationDao
   private final DSLContext ctx;
 
   /**
-   * Converts a {@link ClassificationRecord} to a {@link Classification} object.
+   * Converts a {@link ClassificationRecord} to a {@link Classification}
+   * object.
    *
-   * @param record The {@link ClassificationRecord} to convert.
+   * @param classification The {@link ClassificationRecord} to convert.
    * @return The corresponding {@link Classification} object.
    */
   static Classification toClassification(
-    final ClassificationRecord record
+    final ClassificationRecord classification
   ) {
-    if (null == record) {
+    if (null == classification) {
       return null;
     }
-    return new Classification(
-      record.getIdentifier(),
-      record.getName()
+
+    return Classification.builder()
+      .withIdentifier(classification.getIdentifier())
+      .withName(classification.getName())
+      .build();
+  }
+
+  /**
+   * Finds a {@link Classification} object by its identifier and returns it, or
+   * {@code null} if not found.
+   *
+   * @param context    A {@link DSLContext} object used to interact with the
+   *                   database.
+   * @param identifier The unique identifier of the {@link Classification}
+   *                   object to find.
+   * @return A {@link Classification} object with the matching identifier, or
+   * {@code null} if not found.
+   */
+  static Classification findClassificationByIdentifierOrNull(
+    final DSLContext context,
+    final String identifier
+  ) {
+    // Fetch raw classification record
+    final var rawClassification = context.selectFrom(CLASSIFICATION)
+      .where(CLASSIFICATION.IDENTIFIER.eq(identifier))
+      .fetchOneInto(CLASSIFICATION);
+
+    return ClassificationDao.toClassification(
+      rawClassification
     );
   }
 
   @Override
   public long countClassifications() {
     return this.ctx.fetchCount(CLASSIFICATION);
+  }
+
+  @Override
+  public void deleteClassificationByIdentifier(
+    final String identifier
+  ) {
+    this.ctx.deleteFrom(CLASSIFICATION)
+      .where(CLASSIFICATION.IDENTIFIER.eq(identifier))
+      .execute();
   }
 
   @Override
@@ -123,77 +161,121 @@ public final class ClassificationDao
   public void insertClassifications(
     final Collection<Classification> classifications
   ) {
-    // noinspection preview
+    if (classifications.isEmpty()) {
+      return;
+    }
+
+    // Create a base insert step specifying the table and columns
+    final var insertStep = this.ctx.insertInto(
+      CLASSIFICATION,
+      CLASSIFICATION.IDENTIFIER,
+      CLASSIFICATION.NAME
+    ).values(
+      // Placeholder values will be replaced during batch binding
+      (String) null,
+      null
+    );
+
+    // Process classifications in chunks to improve performance
     classifications.stream()
       .gather(Gatherers.windowFixed(8))
-      .forEach(dividedClassifications -> {
-        var insert = this.ctx.insertInto(
-          CLASSIFICATION,
-          CLASSIFICATION.IDENTIFIER,
-          CLASSIFICATION.NAME
-        );
-        for (final var category : dividedClassifications) {
-          insert = insert.values(
-            category.getIdentifier(),
-            category.getName()
+      .forEach(chunk -> {
+        // Create a batch operation for efficient insertion
+        final var batch = this.ctx.batch(insertStep);
+
+        // Loop through each classification in the chunk and bind actual
+        // values from the classification object to the insert step
+        chunk.forEach(step -> {
+          // noinspection ResultOfMethodCallIgnored
+          batch.bind(
+            step.getIdentifier(),
+            step.getName()
           );
-        }
-        insert.execute();
+        });
+
+        // Execute the batch insert operation
+        batch.execute();
       });
+  }
+
+  /**
+   * Creates a step to insert a new {@link Classification} record into the
+   * database.
+   *
+   * @param classification The {@link Classification} object containing the data
+   *                       to be inserted.
+   * @return An {@link InsertSetMoreStep} representing the insert operation for
+   * the classification record.
+   */
+  protected InsertSetMoreStep<ClassificationRecord> insertClassificationStep(
+    final Classification classification
+  ) {
+    return this.ctx.insertInto(CLASSIFICATION)
+      .set(CLASSIFICATION.IDENTIFIER, classification.getIdentifier())
+      .set(CLASSIFICATION.NAME, classification.getName());
   }
 
   @Override
   public void insertClassification(
     final Classification classification
   ) {
-    this.ctx.insertInto(CLASSIFICATION)
-      .set(CLASSIFICATION.IDENTIFIER, classification.getIdentifier())
-      .set(CLASSIFICATION.NAME, classification.getName())
-      .execute();
+    this.insertClassificationStep(classification).execute();
   }
 
   @Override
   public Classification insertClassificationAndReturn(
     final Classification classification
   ) {
-    return ClassificationDao.toClassification(
-      this.ctx.insertInto(CLASSIFICATION)
-        .set(CLASSIFICATION.IDENTIFIER, classification.getIdentifier())
-        .set(CLASSIFICATION.NAME, classification.getName())
-        .returning(CLASSIFICATION.fields())
-        .fetchOneInto(CLASSIFICATION)
-    );
+    final var rawClassification = this.insertClassificationStep(classification)
+      .returning(CLASSIFICATION.fields())
+      .fetchOneInto(CLASSIFICATION);
+
+    return null != rawClassification
+      ? ClassificationDao.toClassification(rawClassification)
+      : null;
+  }
+
+  /**
+   * Creates a step to update an existing {@link Classification} record in the
+   * database.
+   *
+   * @param classification The {@link Classification} object containing the data
+   *                       to be updated.
+   * @return An {@link UpdateConditionStep} representing the update operation
+   * for the classification record.
+   */
+  protected UpdateConditionStep<ClassificationRecord> updateClassificationStep(
+    final Classification classification
+  ) {
+    return this.ctx.update(CLASSIFICATION)
+      .set(CLASSIFICATION.NAME, classification.getName())
+      .where(CLASSIFICATION.IDENTIFIER.eq(classification.getIdentifier()));
+  }
+
+  @Override
+  public void updateClassifications(
+    final Collection<Classification> classifications
+  ) {
+    classifications.forEach(it -> this.updateClassificationStep(it).execute());
   }
 
   @Override
   public void updateClassification(
     final Classification classification
   ) {
-    this.ctx.update(CLASSIFICATION)
-      .set(CLASSIFICATION.NAME, classification.getName())
-      .where(CLASSIFICATION.IDENTIFIER.eq(classification.getIdentifier()))
-      .execute();
+    this.updateClassificationStep(classification).execute();
   }
 
   @Override
   public Classification updateClassificationAndReturn(
     final Classification classification
   ) {
-    return ClassificationDao.toClassification(
-      this.ctx.update(CLASSIFICATION)
-        .set(CLASSIFICATION.NAME, classification.getName())
-        .where(CLASSIFICATION.IDENTIFIER.eq(classification.getIdentifier()))
-        .returning(CLASSIFICATION.fields())
-        .fetchOneInto(CLASSIFICATION)
-    );
-  }
+    final var rawClassification = this.updateClassificationStep(classification)
+      .returning(CLASSIFICATION.fields())
+      .fetchOneInto(CLASSIFICATION);
 
-  @Override
-  public boolean deleteClassificationByIdentifier(
-    final String identifier
-  ) {
-    return 0 < this.ctx.deleteFrom(CLASSIFICATION)
-      .where(CLASSIFICATION.IDENTIFIER.eq(identifier))
-      .execute();
+    return null != rawClassification
+      ? ClassificationDao.toClassification(rawClassification)
+      : null;
   }
 }
