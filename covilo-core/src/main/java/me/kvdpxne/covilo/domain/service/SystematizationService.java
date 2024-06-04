@@ -678,10 +678,10 @@ public final class SystematizationService {
    * @throws NullPointerException If the provided classification identifier
    *                              is {@code null}.
    */
-  public boolean deleteClassificationByIdentifier(
+  public void deleteClassificationByIdentifier(
     final String identifier
   ) {
-    return this.classificationRepository.deleteClassificationByIdentifier(
+    this.classificationRepository.deleteClassificationByIdentifier(
       this.validClassificationIdentifier(identifier)
     );
   }

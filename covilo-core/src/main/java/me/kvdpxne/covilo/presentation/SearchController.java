@@ -64,13 +64,11 @@ public final class SearchController {
    * {@code false}.
    */
   @DeleteMapping("classification/{identifier}")
-  public boolean deleteClassificationByIdentifier(
+  public void deleteClassificationByIdentifier(
     @PathVariable
     final String identifier
   ) {
-    return this.systematizationService.deleteClassificationByIdentifier(
-      identifier
-    );
+    this.systematizationService.deleteClassificationByIdentifier(identifier);
   }
 
   /**
