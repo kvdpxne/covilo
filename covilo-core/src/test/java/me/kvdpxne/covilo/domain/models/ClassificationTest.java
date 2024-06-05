@@ -1,9 +1,9 @@
 package me.kvdpxne.covilo.domain.models;
 
 import me.kvdpxne.covilo.domain.model.Classification;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * This class contains JUnit tests for the {@link Classification} model class.
@@ -15,18 +15,31 @@ public final class ClassificationTest {
    * classification has a randomly generated identifier and the name
    * "test_classification".
    */
-  public static final Classification TEST_CLASSIFICATION;
-
-  static {
-    TEST_CLASSIFICATION = Classification.builder()
-      .withRandomIdentifier()
-      .withName("test_classification")
-      .build();
-  }
+  public static final Classification TEST_CLASSIFICATION =
+    ClassificationTest.makeTestClassification();
 
   //
   ClassificationTest() {
     // ...
+  }
+
+  /**
+   * Generates a test classification with a random identifier and name.
+   *
+   * @return A classification object with a random identifier and the name
+   * "test_classification".
+   */
+  public static Classification makeTestClassification() {
+    try {
+      Thread.sleep(2);
+    } catch (final InterruptedException e) {
+      throw new RuntimeException(e);
+    }
+
+    return Classification.builder()
+      .withRandomIdentifier()
+      .withName("test_classification")
+      .build();
   }
 
   /**
@@ -46,6 +59,6 @@ public final class ClassificationTest {
       .build();
 
     // Verify that classifications are equal
-    Assertions.assertEquals(classification, secondClassification);
+    assertEquals(classification, secondClassification);
   }
 }
