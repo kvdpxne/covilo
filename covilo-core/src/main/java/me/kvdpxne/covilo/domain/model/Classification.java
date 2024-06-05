@@ -5,6 +5,8 @@ import me.kvdpxne.covilo.domain.aggregation.Buildable;
 import me.kvdpxne.covilo.domain.aggregation.Identifiable;
 import me.kvdpxne.covilo.domain.aggregation.Nameable;
 import me.kvdpxne.covilo.infrastructure.uid.Uid;
+import me.kvdpxne.covilo.shared.ApacheEqualsBuilder;
+import me.kvdpxne.covilo.shared.ApacheHashCodeBuilder;
 
 /**
  * Represents a classification entity.
@@ -98,8 +100,10 @@ public final class Classification
       return false;
     }
     final var that = (Classification) o;
-    return this.identifier.equalsIgnoreCase(that.identifier) &&
-      this.name.equalsIgnoreCase(that.name);
+    return new ApacheEqualsBuilder()
+      .appendIgnoreCase(this.identifier, that.identifier)
+      .appendIgnoreCase(this.name, that.name)
+      .isEquals();
   }
 
   /**
@@ -110,9 +114,10 @@ public final class Classification
    */
   @Override
   public int hashCode() {
-    var result = this.identifier.hashCode();
-    result = 31 * result + this.name.hashCode();
-    return result;
+    return new ApacheHashCodeBuilder()
+      .appendIgnoreCase(this.identifier)
+      .appendIgnoreCase(this.name)
+      .toHashCode();
   }
 
   /**

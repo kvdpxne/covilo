@@ -2,11 +2,14 @@ package me.kvdpxne.covilo.domain.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import me.kvdpxne.covilo.domain.aggregation.Auditable;
 import me.kvdpxne.covilo.domain.aggregation.Buildable;
 import me.kvdpxne.covilo.domain.aggregation.Identifiable;
 import me.kvdpxne.covilo.domain.aggregation.Nameable;
 import me.kvdpxne.covilo.infrastructure.uid.Uid;
+import me.kvdpxne.covilo.shared.ApacheEqualsBuilder;
+import me.kvdpxne.covilo.shared.ApacheHashCodeBuilder;
 
 /**
  * Represents a user entity.
@@ -143,6 +146,45 @@ public final class User
   @Override
   public LocalDateTime getLastModifiedDate() {
     return this.lastModifiedDate;
+  }
+
+  @Override
+  public boolean equals(final Object o) {
+    if (this == o) {
+      return true;
+    }
+
+    if (o == null || this.getClass() != o.getClass()) {
+      return false;
+    }
+
+    final var that = (User) o;
+    return new ApacheEqualsBuilder()
+      .appendIgnoreCase(this.identifier, that.identifier)
+      .appendIgnoreCase(this.email, that.email)
+      .append(this.encryptedPassword, that.encryptedPassword)
+      .appendIgnoreCase(this.firstName, that.firstName)
+      .appendIgnoreCase(this.lastName, that.firstName)
+      .append(this.gender, that.gender)
+      .append(this.birthDate, that.birthDate)
+      .append(this.createdDate, that.createdDate)
+      .append(this.lastModifiedDate, that.lastModifiedDate)
+      .isEquals();
+  }
+
+  @Override
+  public int hashCode() {
+    return new ApacheHashCodeBuilder()
+      .appendIgnoreCase(this.identifier)
+      .appendIgnoreCase(this.email)
+      .append(this.encryptedPassword)
+      .appendIgnoreCase(this.firstName)
+      .appendIgnoreCase(this.lastName)
+      .append(this.gender)
+      .append(this.birthDate)
+      .append(this.createdDate)
+      .append(this.lastModifiedDate)
+      .toHashCode();
   }
 
   /**

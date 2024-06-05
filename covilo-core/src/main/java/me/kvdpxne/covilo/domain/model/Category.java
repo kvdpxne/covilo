@@ -1,11 +1,12 @@
 package me.kvdpxne.covilo.domain.model;
 
 import java.util.HashMap;
-import java.util.Objects;
 import me.kvdpxne.covilo.domain.aggregation.Buildable;
 import me.kvdpxne.covilo.domain.aggregation.Identifiable;
 import me.kvdpxne.covilo.domain.aggregation.Nameable;
 import me.kvdpxne.covilo.infrastructure.uid.Uid;
+import me.kvdpxne.covilo.shared.ApacheEqualsBuilder;
+import me.kvdpxne.covilo.shared.ApacheHashCodeBuilder;
 
 /**
  * Represents a category entity.
@@ -128,9 +129,11 @@ public final class Category
       return false;
     }
     final var that = (Category) o;
-    return this.identifier.equalsIgnoreCase(that.identifier) &&
-      this.name.equalsIgnoreCase(that.name) &&
-      Objects.equals(this.classification, that.classification);
+    return new ApacheEqualsBuilder()
+      .appendIgnoreCase(this.identifier, that.identifier)
+      .appendIgnoreCase(this.name, that.name)
+      .append(this.classification, that.classification)
+      .isEquals();
   }
 
   /**
@@ -141,10 +144,11 @@ public final class Category
    */
   @Override
   public int hashCode() {
-    var result = this.identifier.hashCode();
-    result = 31 * result + this.name.hashCode();
-    result = 31 * result + Objects.hashCode(this.classification);
-    return result;
+    return new ApacheHashCodeBuilder()
+      .appendIgnoreCase(this.identifier)
+      .appendIgnoreCase(this.name)
+      .append(this.classification)
+      .toHashCode();
   }
 
   /**

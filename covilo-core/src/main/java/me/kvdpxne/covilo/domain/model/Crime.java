@@ -8,6 +8,8 @@ import me.kvdpxne.covilo.domain.aggregation.Auditable;
 import me.kvdpxne.covilo.domain.aggregation.Buildable;
 import me.kvdpxne.covilo.domain.aggregation.Identifiable;
 import me.kvdpxne.covilo.infrastructure.uid.Uid;
+import me.kvdpxne.covilo.shared.ApacheEqualsBuilder;
+import me.kvdpxne.covilo.shared.ApacheHashCodeBuilder;
 
 @SuppressWarnings("LombokGetterMayBeUsed")
 public final class Crime
@@ -100,6 +102,43 @@ public final class Crime
   @Override
   public LocalDateTime getLastModifiedDate() {
     return this.lastModifiedDate;
+  }
+
+  @Override
+  public boolean equals(final Object o) {
+    if (this == o) {
+      return true;
+    }
+
+    if (null == o || this.getClass() != o.getClass()) {
+      return false;
+    }
+
+    final Crime that = (Crime) o;
+    return new ApacheEqualsBuilder()
+      .appendIgnoreCase(this.identifier, that.identifier)
+      .append(this.time, that.time)
+      .append(this.coordinates, that.coordinates)
+      .append(this.categories, that.categories)
+      .append(this.reporter, that.reporter)
+      .append(this.confirmed, that.confirmed)
+      .append(this.createdDate, that.createdDate)
+      .append(this.lastModifiedDate, that.lastModifiedDate)
+      .isEquals();
+  }
+
+    @Override
+  public int hashCode() {
+    return new ApacheHashCodeBuilder()
+      .appendIgnoreCase(this.identifier)
+      .append(this.time)
+      .append(this.coordinates)
+      .append(this.categories)
+      .append(this.reporter)
+      .append(this.confirmed)
+      .append(this.createdDate)
+      .append(this.lastModifiedDate)
+      .toHashCode();
   }
 
   public static final class CrimeBuilder
