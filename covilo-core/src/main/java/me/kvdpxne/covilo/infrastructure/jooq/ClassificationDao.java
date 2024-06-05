@@ -99,6 +99,13 @@ public class ClassificationDao
       .execute();
   }
 
+  /**
+   * Deletes all {@link Classification} records from the database.
+   */
+  void deleteAllClassifications() {
+    this.ctx.deleteFrom(CLASSIFICATION).execute();
+  }
+
   @Override
   public boolean existsClassificationByIdentifier(
     final String identifier

@@ -158,6 +158,13 @@ public class CategoryDao
       .execute();
   }
 
+  /**
+   * Deletes all {@link Category} records from the database.
+   */
+  void deleteAllCategories() {
+    this.ctx.deleteFrom(CATEGORY).execute();
+  }
+
   @Override
   public boolean existsCategoryByIdentifier(
     final String identifier
