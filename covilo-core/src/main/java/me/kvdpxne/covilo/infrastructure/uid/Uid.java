@@ -1,5 +1,6 @@
 package me.kvdpxne.covilo.infrastructure.uid;
 
+import com.github.f4b6a3.ulid.Ulid;
 import com.github.f4b6a3.ulid.UlidCreator;
 
 /**
@@ -20,14 +21,44 @@ public final class Uid {
   /**
    * Generates a new ULID and returns its string representation in lowercase.
    * <p>
-   * This method uses the {@code UlidCreator} library to generate a new ULID and
-   * converts it to a lowercase string. ULIDs are 128-bit identifiers that are
-   * lexicographically sortable and URL-safe.
+   * This method uses the {@link UlidCreator} library to generate a new ULID and
+   * converts it to a lowercase string.
    * </p>
    *
    * @return a new ULID in lowercase string format.
    */
   public static String next() {
-    return UlidCreator.getUlid().toString();
+    return UlidCreator.getUlid().toLowerCase();
+  }
+
+  /**
+   * Generates a new monotonic ULID and returns its string representation in
+   * lowercase.
+   * <p>
+   * This method uses the {@link UlidCreator} library to generate a new
+   * monotonic ULID and converts it to a lowercase string. The random component
+   * is incremented by 1 whenever the current millisecond equals the previous
+   * millisecond. Its main advantage is speed.
+   * </p>
+   *
+   * @return a new monotonic ULID in lowercase string format.
+   */
+  public static String nextMonotonic() {
+    return UlidCreator.getMonotonicUlid().toLowerCase();
+  }
+
+  /**
+   * Generates a new fast ULID and returns its string representation in
+   * lowercase.
+   * <p>
+   * This method uses the {@link Ulid#fast()} method to quickly generate a ULID
+   * and converts it to a lowercase string. This method is faster but may trade
+   * off some randomness or other attributes.
+   * </p>
+   *
+   * @return a new fast ULID in lowercase string format.
+   */
+  public static String fast() {
+    return Ulid.fast().toLowerCase();
   }
 }
