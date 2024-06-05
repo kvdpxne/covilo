@@ -128,11 +128,9 @@ public final class Category
       return false;
     }
     final var that = (Category) o;
-    return this.identifier.equals(that.identifier) &&
-      this.name.equals(that.name) &&
-      Objects.equals(this.classification,
-        that.classification
-      );
+    return this.identifier.equalsIgnoreCase(that.identifier) &&
+      this.name.equalsIgnoreCase(that.name) &&
+      Objects.equals(this.classification, that.classification);
   }
 
   /**

@@ -98,8 +98,8 @@ public final class Classification
       return false;
     }
     final var that = (Classification) o;
-    return this.identifier.equals(that.identifier) &&
-      this.name.equals(that.name);
+    return this.identifier.equalsIgnoreCase(that.identifier) &&
+      this.name.equalsIgnoreCase(that.name);
   }
 
   /**
