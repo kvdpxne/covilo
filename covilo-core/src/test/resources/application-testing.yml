@@ -12,6 +12,6 @@ spring:
     generate-unique-name: false
     name: postgres-local
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/covilo
+    url: jdbc:postgresql://localhost:5432/covilo_test
     username: postgres
     password: postgres
