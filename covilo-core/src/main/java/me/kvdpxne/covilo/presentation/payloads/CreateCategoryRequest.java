@@ -12,7 +12,7 @@ import me.kvdpxne.covilo.domain.model.Category;
  * </p>
  *
  * @param name                        the name of the category.
- * @param createClassificationRequest the request payload for creating a
+ * @param classification the request payload for creating a
  *                                    classification associated with this
  *                                    category.
  * @since 0.1
@@ -26,7 +26,7 @@ public record CreateCategoryRequest(
   String name,
 
   @Valid
-  CreateClassificationRequest createClassificationRequest
+  CreateClassificationRequest classification
 ) {
 
   public CreateCategoryRequest {
@@ -50,7 +50,7 @@ public record CreateCategoryRequest(
     final var builder = Category.builder()
       .withName(this.name);
 
-    final var classificationRequest = this.createClassificationRequest;
+    final var classificationRequest = this.classification;
     if (null != classificationRequest) {
       builder.withClassification(classificationRequest.asClassification());
     }

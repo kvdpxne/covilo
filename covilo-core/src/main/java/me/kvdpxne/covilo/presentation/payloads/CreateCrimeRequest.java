@@ -18,7 +18,7 @@ public record CreateCrimeRequest(
   String reporterIdentifier,
 
   @Valid
-  CreateCategoryRequest[] createCategoryRequests,
+  CreateCategoryRequest[] categories,
 
   double latitude,
   double longitude
@@ -37,8 +37,8 @@ public record CreateCrimeRequest(
           .build()
       )
       .withCategories(() -> {
-          if (null != this.createCategoryRequests) {
-            return Arrays.stream(this.createCategoryRequests)
+          if (null != this.categories) {
+            return Arrays.stream(this.categories)
               .map(CreateCategoryRequest::asCategory)
               .toList();
           }

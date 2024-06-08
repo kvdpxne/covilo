@@ -23,10 +23,14 @@ public record PageDto<T>(
   int size,
   long totalPages,
   long totalElements,
+  SortDto sort,
   boolean hasNext,
   boolean hasPrevious,
   boolean isFirst,
-  boolean isLast
+  boolean isLast,
+  boolean isLimited,
+  boolean isUnlimited,
+  boolean isEmpty
 ) {
 
   @SuppressWarnings("unchecked")
@@ -40,10 +44,14 @@ public record PageDto<T>(
       page.getSize(),
       page.getTotalPages(),
       page.getTotalElements(),
+      SortDto.from(page.getSortable()),
       page.hasNext(),
       page.hasPrevious(),
       page.isFirst(),
-      page.isLast()
+      page.isLast(),
+      page.isLimited(),
+      page.isUnlimited(),
+      page.isEmpty()
     );
   }
 }

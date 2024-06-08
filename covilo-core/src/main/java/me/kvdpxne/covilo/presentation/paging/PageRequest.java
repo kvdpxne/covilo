@@ -2,6 +2,8 @@ package me.kvdpxne.covilo.presentation.paging;
 
 import me.kvdpxne.covilo.domain.model.pagination.BasePageable;
 import me.kvdpxne.covilo.domain.model.pagination.Pageable;
+import me.kvdpxne.covilo.domain.model.pagination.Sort;
+import me.kvdpxne.covilo.domain.model.pagination.SortOrder;
 
 /**
  * Represents a request for a specific page of data.
@@ -12,13 +14,25 @@ import me.kvdpxne.covilo.domain.model.pagination.Pageable;
  */
 public record PageRequest(
   int index,
-  int size
+  int size,
+  SortRequest sort
 ) {
 
   public Pageable getPage() {
     return new BasePageable(
       this.index,
-      this.size
+      this.size,
+      null != this.sort ? this.sort.toSort() : null
+    );
+  }
+
+  public Pageable getPage(
+    final String property
+    ) {
+    return new BasePageable(
+      this.index,
+      this.size,
+      Sort.by(property)
     );
   }
 }

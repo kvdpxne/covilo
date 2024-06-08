@@ -1,7 +1,6 @@
 package me.kvdpxne.covilo.infrastructure.jooq;
 
 import java.util.Collection;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Gatherers;
 import lombok.RequiredArgsConstructor;
@@ -18,12 +17,15 @@ import org.jooq.generated.tables.records.ClassificationRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import static org.jooq.generated.Tables.CLASSIFICATION;
+import static org.jooq.impl.DSL.lower;
 
 /**
  * DAO implementation for handling classifications using jOOQ.
  * <br>
  * This class interacts with the database using jOOQ {@link DSLContext} to
  * perform CRUD operations on classifications.
+ *
+ * @since 0.1
  */
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @Component
@@ -95,7 +97,7 @@ public class ClassificationDao
     final String identifier
   ) {
     this.ctx.deleteFrom(CLASSIFICATION)
-      .where(CLASSIFICATION.IDENTIFIER.eq(identifier))
+      .where(lower(CLASSIFICATION.IDENTIFIER).eq(identifier.toLowerCase()))
       .execute();
   }
 
@@ -112,7 +114,7 @@ public class ClassificationDao
   ) {
     return this.ctx.fetchExists(
       CLASSIFICATION,
-      CLASSIFICATION.IDENTIFIER.eq(identifier)
+      lower(CLASSIFICATION.IDENTIFIER).eq(identifier.toLowerCase())
     );
   }
 
@@ -151,7 +153,7 @@ public class ClassificationDao
     final String identifier
   ) {
     return this.findClassificationBy(
-      CLASSIFICATION.IDENTIFIER.eq(identifier)
+      lower(CLASSIFICATION.IDENTIFIER).eq(identifier.toLowerCase())
     );
   }
 
@@ -160,7 +162,7 @@ public class ClassificationDao
     final String name
   ) {
     return this.findClassificationBy(
-      CLASSIFICATION.NAME.eq(name.toLowerCase(Locale.ENGLISH))
+      lower(CLASSIFICATION.NAME).eq(name.toLowerCase())
     );
   }
 
@@ -256,7 +258,7 @@ public class ClassificationDao
   ) {
     return this.ctx.update(CLASSIFICATION)
       .set(CLASSIFICATION.NAME, classification.getName())
-      .where(CLASSIFICATION.IDENTIFIER.eq(classification.getIdentifier()));
+      .where(lower(CLASSIFICATION.IDENTIFIER).eq(classification.getIdentifier()));
   }
 
   @Override

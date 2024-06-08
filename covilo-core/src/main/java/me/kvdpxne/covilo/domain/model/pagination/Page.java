@@ -45,6 +45,11 @@ public interface Page<T> {
   long getTotalElements();
 
   /**
+   *
+   */
+  Sortable getSortable();
+
+  /**
    * Checks if there is a next page available.
    * @return True if there is a next page, otherwise false.
    */
@@ -67,4 +72,10 @@ public interface Page<T> {
    * @return True if the current page is the last page, otherwise false.
    */
   boolean isLast();
+
+  boolean isLimited();
+
+  boolean isUnlimited();
+
+  boolean isEmpty();
 }

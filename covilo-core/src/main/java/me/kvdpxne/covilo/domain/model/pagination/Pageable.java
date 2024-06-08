@@ -22,4 +22,9 @@ public interface Pageable {
    * @return The offset of the requested page.
    */
   long getOffset();
+
+  /**
+   *
+   */
+  Sortable getSortable();
 }

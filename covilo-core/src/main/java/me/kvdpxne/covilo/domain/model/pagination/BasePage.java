@@ -81,6 +81,11 @@ public class BasePage<T>
   }
 
   @Override
+  public Sortable getSortable() {
+    return this.pageable.getSortable();
+  }
+
+  @Override
   public boolean hasNext() {
     return 1 + this.getIndex() < this.getTotalPages();
   }
@@ -98,5 +103,20 @@ public class BasePage<T>
   @Override
   public boolean isLast() {
     return !this.hasNext();
+  }
+
+  @Override
+  public boolean isLimited() {
+    return true;
+  }
+
+  @Override
+  public boolean isUnlimited() {
+    return false;
+  }
+
+  @Override
+  public boolean isEmpty() {
+    return false;
   }
 }

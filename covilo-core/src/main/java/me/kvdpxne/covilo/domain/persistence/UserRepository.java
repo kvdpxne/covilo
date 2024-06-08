@@ -20,6 +20,23 @@ public interface UserRepository {
   long countUsers();
 
   /**
+   * Deletes a user by their identifier.
+   *
+   * @param identifier The identifier of the user to delete.
+   * @return true if the user was deleted successfully, false otherwise.
+   */
+  void deleteUserByIdentifier(
+    final String identifier
+  );
+
+  /**
+   *
+   */
+  void deleteUsersByIdentifiers(
+    final Collection<String> identifiers
+  );
+
+  /**
    * Checks if a user with the specified identifier exists.
    *
    * @param identifier The identifier of the user.
@@ -70,21 +87,21 @@ public interface UserRepository {
   );
 
   /**
-   * Inserts a collection of users into the repository.
-   *
-   * @param users The collection of users to insert.
-   */
-  void insertUsers(
-    final Collection<User> users
-  );
-
-  /**
    * Inserts a new user into the repository.
    *
    * @param user The user to insert.
    */
   void insertUser(
     final User user
+  );
+
+  /**
+   * Inserts a collection of users into the repository.
+   *
+   * @param users The collection of users to insert.
+   */
+  void insertUsers(
+    final Collection<User> users
   );
 
   /**
@@ -106,12 +123,16 @@ public interface UserRepository {
   );
 
   /**
-   * Deletes a user by their identifier.
    *
-   * @param identifier The identifier of the user to delete.
-   * @return true if the user was deleted successfully, false otherwise.
    */
-  boolean deleteUserByIdentifier(
-    final String identifier
+  void updateUsers(
+    final Collection<User> users
+  );
+
+  /**
+   *
+   */
+  User updateUserAndReturn(
+    final User user
   );
 }

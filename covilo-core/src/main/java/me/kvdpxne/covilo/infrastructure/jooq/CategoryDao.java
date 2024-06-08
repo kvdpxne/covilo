@@ -25,6 +25,8 @@ import static org.jooq.generated.Tables.CATEGORY;
  * <br>
  * This class interacts with the database using jOOQ {@link DSLContext} to
  * perform CRUD operations on categories.
+ *
+ * @since 0.1
  */
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @Component

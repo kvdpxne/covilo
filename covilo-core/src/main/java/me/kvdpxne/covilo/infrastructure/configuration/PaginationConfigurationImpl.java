@@ -22,6 +22,9 @@ public class PaginationConfigurationImpl
   @Value("${application.pagination.size.maximum}")
   private int maximumPageSize = 100;
 
+  @Value("${application.pagination.unlimited}")
+  private boolean allowUnlimited;
+
   @Override
   public int getDefaultPageSize() {
     return this.defaultPageSize;
@@ -30,6 +33,11 @@ public class PaginationConfigurationImpl
   @Override
   public int getMaximumPageSize() {
     return this.maximumPageSize;
+  }
+
+  @Override
+  public boolean isUnlimitedAllowed() {
+    return this.allowUnlimited;
   }
 
   @Override

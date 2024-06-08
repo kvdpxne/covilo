@@ -7,11 +7,17 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import me.kvdpxne.covilo.common.constants.Endpoints;
 import me.kvdpxne.covilo.domain.model.Crime;
+import me.kvdpxne.covilo.domain.model.pagination.Pageable;
 import me.kvdpxne.covilo.domain.service.CrimeService;
 import me.kvdpxne.covilo.domain.service.GeolocationService;
 import me.kvdpxne.covilo.domain.service.SystematizationService;
 import me.kvdpxne.covilo.domain.service.UserService;
+import me.kvdpxne.covilo.infrastructure.swagger.HiddenParameter;
+import me.kvdpxne.covilo.infrastructure.swagger.PagingAsQueryParameter;
+import me.kvdpxne.covilo.infrastructure.swagger.PagingWithSortingAsQueryParameter;
 import me.kvdpxne.covilo.presentation.dto.CrimeDto;
+import me.kvdpxne.covilo.presentation.paging.PageDto;
+import me.kvdpxne.covilo.presentation.paging.PageRequest;
 import me.kvdpxne.covilo.presentation.payloads.CreateCrimeRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -45,11 +51,11 @@ public class CrimeController {
 //  )
 //  @PagingAsQueryParameter
 //  @GetMapping("all")
-//  public Page<CrimeDto> getCrimes(
+//  public PageDto<CrimeDto> getCrimes(
 //    @HiddenParameter
 //    final CrimeSearchQuery query,
 //    @HiddenParameter
-//    final PageRange page
+//    final PageRequest page
 //  ) {
 //    final var criteria = this.crimeMapper.toCrimeSearchCriteria(query);
 //
@@ -60,6 +66,18 @@ public class CrimeController {
 //    // Maps Crime objects to CrimeDto objects for presentation.
 //    return crimes.map(this.crimeMapper::toDto);
 //  }
+
+  @PagingWithSortingAsQueryParameter
+  @GetMapping("/latest")
+  public PageDto<CrimeDto> getLatestCrimes(
+    @HiddenParameter
+    final PageRequest pageRequest
+    ) {
+    return PageDto.of(
+      this.crimeService.getLatestCrimes(pageRequest.getPage("createdDate")),
+      CrimeDto::toCrimeDto
+    );
+  }
 
   @Operation(summary = "Retrieve Crime by identifier.")
   @ApiResponse(

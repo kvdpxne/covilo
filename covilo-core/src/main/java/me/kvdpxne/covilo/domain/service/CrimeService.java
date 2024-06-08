@@ -9,8 +9,11 @@ import me.kvdpxne.covilo.domain.exceptions.CrimeAlreadyExistsException;
 import me.kvdpxne.covilo.domain.exceptions.CrimeNotFoundException;
 import me.kvdpxne.covilo.domain.model.Category;
 import me.kvdpxne.covilo.domain.model.Crime;
+import me.kvdpxne.covilo.domain.model.pagination.BasePageable;
 import me.kvdpxne.covilo.domain.model.pagination.Page;
 import me.kvdpxne.covilo.domain.model.pagination.Pageable;
+import me.kvdpxne.covilo.domain.model.pagination.Sort;
+import me.kvdpxne.covilo.domain.model.pagination.SortOrder;
 import me.kvdpxne.covilo.domain.persistence.CrimeRepository;
 import me.kvdpxne.covilo.shared.Validation;
 
@@ -91,6 +94,12 @@ public final class CrimeService {
     final Pageable pageable
   ) {
     return this.crimeRepository.getCrimes(pageable);
+  }
+
+  public Page<Crime> getLatestCrimes(
+    final Pageable pageable
+  ) {
+    return this.crimeRepository.getLatestCrimes(pageable);
   }
 
   public Crime _getCrimeByIdentifier(

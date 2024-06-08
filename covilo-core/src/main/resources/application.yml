@@ -36,6 +36,7 @@ application:
     size:
       default: 20
       maximum: 100
+    unlimited: false
 
   storage:
     avatars: avatars

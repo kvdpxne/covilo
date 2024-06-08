@@ -3,6 +3,7 @@ package me.kvdpxne.covilo.infrastructure.jooq;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Collection;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Gatherers;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,9 @@ import me.kvdpxne.covilo.domain.model.pagination.Page;
 import me.kvdpxne.covilo.domain.model.pagination.Pageable;
 import me.kvdpxne.covilo.domain.persistence.CrimeRepository;
 import me.kvdpxne.covilo.domain.service.ConfiguredPageFactory;
+import me.kvdpxne.covilo.infrastructure.jooq.utils.JooqOrderBy;
 import org.jooq.DSLContext;
+import org.jooq.Field;
 import org.jooq.InsertSetMoreStep;
 import org.jooq.UpdateConditionStep;
 import org.jooq.generated.tables.records.CrimeRecord;
@@ -29,6 +32,14 @@ import static org.jooq.generated.Tables.USER;
 @Component
 public class CrimeDao
   implements CrimeRepository {
+
+  /**
+   *
+   */
+  private static final Map<String, Field<?>> SORTS = Map.of(
+    "createdDate", CRIME.CREATED_DATE,
+    "lastModifiedDate", CRIME.LAST_MODIFIED_DATE
+  );
 
   /**
    * The factory for creating configured pages.
@@ -78,12 +89,18 @@ public class CrimeDao
   private Collection<Category> findCrimeCategories(
     final String identifier
   ) {
-    return this.ctx.select(CATEGORY.fields())
-      .from(CATEGORY)
-      .leftJoin(CRIME_CATEGORIES)
-      .on(CRIME_CATEGORIES.CRIME_IDENTIFIER.eq(identifier))
-      .fetchInto(CATEGORY)
-      .map(category -> CategoryDao.toCategory(this.ctx, category));
+    return this.ctx.selectFrom(CRIME_CATEGORIES)
+      .where(CRIME_CATEGORIES.CRIME_IDENTIFIER.eq(identifier))
+      .fetchInto(CRIME_CATEGORIES)
+      .map(it -> CategoryDao
+        .findCategoryByIdentifierOrNull(this.ctx, it.getCategoryIdentifier())
+      );
+//    return this.ctx.select(CATEGORY.fields())
+//      .from(CATEGORY)
+//      .leftJoin(CRIME_CATEGORIES)
+//      .on(CRIME_CATEGORIES.CRIME_IDENTIFIER.eq(identifier))
+//      .fetchInto(CATEGORY)
+//      .map(category -> CategoryDao.toCategory(this.ctx, category));
   }
 
   /**
@@ -175,6 +192,30 @@ public class CrimeDao
         .offset(pageable.getOffset())
         .fetchInto(CRIME)
         .map(this::toCrime),
+      this::countCrimes
+    );
+  }
+
+  @Override
+  public Page<Crime> getLatestCrimes(
+    final Pageable pageable
+  ) {
+    return this.configuredPageFactory.createPage(
+      pageable,
+      () -> {
+        //
+        final var orderBy = JooqOrderBy.orderBy(
+          pageable.getSortable(),
+          SORTS
+        );
+
+        return this.ctx.selectFrom(CRIME)
+          .orderBy(orderBy)
+          .limit(pageable.getSize())
+          .offset(pageable.getOffset())
+          .fetchInto(CRIME)
+          .map(this::toCrime);
+      },
       this::countCrimes
     );
   }

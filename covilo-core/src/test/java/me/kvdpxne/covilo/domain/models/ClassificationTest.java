@@ -38,7 +38,7 @@ public final class ClassificationTest {
 
     return Classification.builder()
       .withRandomIdentifier()
-      .withName("test_classification")
+      .withName("TEST_CLASSIFICATION")
       .build();
   }
 

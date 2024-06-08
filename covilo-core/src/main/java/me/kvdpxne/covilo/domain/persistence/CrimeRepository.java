@@ -64,6 +64,13 @@ public interface CrimeRepository {
   );
 
   /**
+   *
+   */
+  Page<Crime> getLatestCrimes(
+    final Pageable pageable
+  );
+
+  /**
    * Finds a crime by its unique identifier.
    *
    * @param identifier The unique identifier of the crime.

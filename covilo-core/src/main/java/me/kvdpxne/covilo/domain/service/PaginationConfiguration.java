@@ -22,6 +22,11 @@ public interface PaginationConfiguration {
   int getMaximumPageSize();
 
   /**
+   *
+   */
+  boolean isUnlimitedAllowed();
+
+  /**
    * Retrieves the default pageable configuration.
    *
    * @return The default pageable configuration.

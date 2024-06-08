@@ -177,7 +177,7 @@ public final class Classification
     public ClassificationBuilder withIdentifier(
       final String identifier
     ) {
-      this.identifier = identifier;
+      this.identifier = identifier.toLowerCase();
       return this;
     }
 
@@ -200,7 +200,7 @@ public final class Classification
     public ClassificationBuilder withName(
       final String name
     ) {
-      this.name = name;
+      this.name = name.toLowerCase();
       return this;
     }
 
