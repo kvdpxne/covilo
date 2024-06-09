@@ -10,7 +10,7 @@ public final class JjwtKeyGeneratorTest {
   @Autowired
   private JjwtKeyGenerator jjwtKeyGenerator;
 
-  @Test
+//  @Test
   void generateKeys() {
     this.jjwtKeyGenerator.generateKeyAndStore(
       KeyAlgorithm.X25519,

@@ -3,17 +3,20 @@ package me.kvdpxne.covilo.infrastructure.jooq;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Gatherers;
 import lombok.RequiredArgsConstructor;
 import me.kvdpxne.covilo.domain.model.Category;
+import me.kvdpxne.covilo.domain.model.Coordinates;
 import me.kvdpxne.covilo.domain.model.Crime;
 import me.kvdpxne.covilo.domain.model.User;
 import me.kvdpxne.covilo.domain.model.pagination.Page;
 import me.kvdpxne.covilo.domain.model.pagination.Pageable;
 import me.kvdpxne.covilo.domain.persistence.CrimeRepository;
 import me.kvdpxne.covilo.domain.service.ConfiguredPageFactory;
+import me.kvdpxne.covilo.domain.service.GeolocationService;
 import me.kvdpxne.covilo.infrastructure.jooq.utils.JooqOrderBy;
 import org.jooq.DSLContext;
 import org.jooq.Field;
@@ -23,6 +26,7 @@ import org.jooq.generated.tables.records.CrimeRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import static me.kvdpxne.covilo.domain.service.GeolocationService.KM;
 import static org.jooq.generated.Tables.CATEGORY;
 import static org.jooq.generated.Tables.CRIME;
 import static org.jooq.generated.Tables.CRIME_CATEGORIES;
@@ -171,6 +175,19 @@ public class CrimeDao
     this.deleteCrimeCategoriesByIdentifier(identifier);
   }
 
+  /**
+   * Deletes all crimes from the data source.
+   * <p>
+   * This method removes all crime entries from the underlying data store
+   * represented by the `CRIME` constant. Use this method with extreme caution
+   * as it permanently deletes all crime data. Consider implementing backups or
+   * confirmation prompts before using this method in production environments.
+   * </p>
+   */
+  void deleteAllCrimes() {
+    this.ctx.deleteFrom(CRIME).execute();
+  }
+
   @Override
   public boolean existsCrimeByIdentifier(
     final String identifier
@@ -221,6 +238,24 @@ public class CrimeDao
   }
 
   @Override
+  public Collection<Crime> getCrimesInCoordinatesRange(
+    final Coordinates coordinates,
+    final int radius
+  ) {
+    final var lat = coordinates.getLatitude();
+    final var lon = coordinates.getLongitude();
+    final var a = lat + radius * KM;
+    final var b = lat - radius * KM;
+    final var c = lon + radius * KM;
+    final var d = lon - radius * KM;
+
+    return this.ctx.selectFrom(CRIME)
+      .where(CRIME.LATITUDE.between(a, b)).and(CRIME.LONGITUDE.between(c, d))
+      .fetchInto(CRIME)
+      .map(this::toCrime);
+  }
+
+  @Override
   public Optional<Crime> findCrimeByIdentifier(
     final String identifier
   ) {
@@ -241,7 +276,7 @@ public class CrimeDao
     final String identifier,
     final Collection<Category> categories
   ) {
-    if (categories.isEmpty()) {
+    if (null == categories || categories.isEmpty()) {
       return;
     }
 

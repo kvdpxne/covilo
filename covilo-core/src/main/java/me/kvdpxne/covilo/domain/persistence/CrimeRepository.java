@@ -2,6 +2,7 @@ package me.kvdpxne.covilo.domain.persistence;
 
 import java.util.Collection;
 import java.util.Optional;
+import me.kvdpxne.covilo.domain.model.Coordinates;
 import me.kvdpxne.covilo.domain.model.Crime;
 import me.kvdpxne.covilo.domain.model.pagination.Page;
 import me.kvdpxne.covilo.domain.model.pagination.Pageable;
@@ -40,14 +41,15 @@ public interface CrimeRepository {
    * @param identifier The unique identifier of the crime to delete.
    */
   void deleteCrimeByIdentifier(
-    final String identifier)
-  ;
+    final String identifier
+  );
 
   /**
    * Checks if a crime with the given identifier exists.
    *
    * @param identifier The unique identifier of the crime to check.
-   * @return {@code true} if a crime with the given identifier exists, {@code false} otherwise.
+   * @return {@code true} if a crime with the given identifier exists,
+   * {@code false} otherwise.
    */
   boolean existsCrimeByIdentifier(
     final String identifier
@@ -68,6 +70,14 @@ public interface CrimeRepository {
    */
   Page<Crime> getLatestCrimes(
     final Pageable pageable
+  );
+
+  /**
+   *
+   */
+  Collection<Crime> getCrimesInCoordinatesRange(
+    final Coordinates coordinates,
+    final int radius
   );
 
   /**

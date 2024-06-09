@@ -106,6 +106,21 @@ public final class User
     return this.email;
   }
 
+  public boolean isBaseEmail() {
+    return !this.email.contains("+");
+  }
+
+  public String getBaseEmail() {
+    if (this.isBaseEmail()) {
+      return this.email;
+    }
+
+    final var username = this.email.substring(0, this.email.indexOf("+"));
+    final var domain = this.email.substring(this.email.indexOf("@")+ 1);
+
+    return STR."\{username}@\{domain}";
+  }
+
   public String getPassword() {
     return this.encryptedPassword;
   }
@@ -251,7 +266,7 @@ public final class User
     public UserBuilder withIdentifier(
       final String identifier
     ) {
-      this.identifier = identifier;
+      this.identifier = identifier.toLowerCase();
       return this;
     }
 
@@ -263,7 +278,7 @@ public final class User
     public UserBuilder withEmail(
       final String email
     ) {
-      this.email = email;
+      this.email = email.toLowerCase();
       return this;
     }
 

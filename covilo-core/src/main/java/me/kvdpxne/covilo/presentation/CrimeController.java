@@ -45,34 +45,28 @@ public class CrimeController {
 
   private final UserService userService;
 
-//  @Operation(
-//    summary = "Retrieve Crimes",
-//    description = "Retrieve a page of crimes based on provided search criteria with paging."
-//  )
-//  @PagingAsQueryParameter
-//  @GetMapping("all")
-//  public PageDto<CrimeDto> getCrimes(
-//    @HiddenParameter
-//    final CrimeSearchQuery query,
-//    @HiddenParameter
-//    final PageRequest page
-//  ) {
-//    final var criteria = this.crimeMapper.toCrimeSearchCriteria(query);
-//
-//    // Retrieves crimes based on provided search criteria and paging
-//    // information.
-//    final var crimes = (Page<Crime>) this.crimeService.getCrimes(criteria, page);
-//
-//    // Maps Crime objects to CrimeDto objects for presentation.
-//    return crimes.map(this.crimeMapper::toDto);
-//  }
+  @Operation(
+    summary = "Retrieve Crimes",
+    description = "Retrieve a page of crimes based on provided search criteria with paging."
+  )
+  @PagingAsQueryParameter
+  @GetMapping("all")
+  public PageDto<CrimeDto> getCrimes(
+    @HiddenParameter
+    final PageRequest pageRequest
+  ) {
+    return PageDto.of(
+      this.crimeService.getCrimes(pageRequest.getPage()),
+      CrimeDto::toCrimeDto
+    );
+  }
 
   @PagingWithSortingAsQueryParameter
   @GetMapping("/latest")
   public PageDto<CrimeDto> getLatestCrimes(
     @HiddenParameter
     final PageRequest pageRequest
-    ) {
+  ) {
     return PageDto.of(
       this.crimeService.getLatestCrimes(pageRequest.getPage("createdDate")),
       CrimeDto::toCrimeDto

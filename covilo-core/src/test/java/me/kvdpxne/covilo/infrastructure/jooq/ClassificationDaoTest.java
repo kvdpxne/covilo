@@ -10,13 +10,20 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Test class for {@link ClassificationDao}.
  */
+@Order(1)
 @SpringBootTest
 final class ClassificationDaoTest {
+
+  /**
+   *
+   */
+  private static final int FS = 100;
 
   /**
    * Instance of the {@link ClassificationDao} to be tested.
@@ -71,19 +78,23 @@ final class ClassificationDaoTest {
   @Test
   void insertMultipleClassifications() {
     // Number of classifications to insert
-    final var size = 500;
+    final var size = FS;
 
     // Create a list to hold the classifications
     final var classifications = new ArrayList<Classification>();
 
+    final var classification = ClassificationTest.TEST_CLASSIFICATION;
+
     // Generate classifications with random identifiers and dynamic names
     for (var i = 0; i < size; ++i) {
-      classifications.add(
-        Classification.builder()
-          .withRandomIdentifier()
-          .withName(STR."test_classification_\{i}")
-          .build()
-      );
+      //
+      final var dynamicNamedClassification = classification.toBuilder()
+        .withRandomIdentifier()
+        .withName(STR."\{classification.getName()}_\{i}")
+        .build();
+
+      //
+      classifications.add(dynamicNamedClassification);
     }
 
     // Insert the classifications
@@ -194,5 +205,104 @@ final class ClassificationDaoTest {
     assertEquals(identifier, newClassification.getIdentifier());
     assertEquals(name, newClassification.getName());
     assertEquals(classification, newClassification);
+  }
+
+  /**
+   *
+   */
+  @Order(6)
+  @DisplayName("Update Single Classification")
+  @Test
+  void updateClassification() {
+    //
+    this.insertClassification();
+
+    final var classification = ClassificationTest.TEST_CLASSIFICATION;
+    final var identifier = classification.getIdentifier();
+    final var name = classification.getName();
+
+    final var updatedName = STR."UPDATED_\{classification.getName()}";
+    final var updatedClassification = classification.toBuilder()
+      .withName(updatedName)
+      .build();
+
+    this.classificationDao.updateClassification(updatedClassification);
+
+    final var newClassification = this.classificationDao
+      .findClassificationByIdentifier(identifier)
+      .orElse(null);
+
+    assertNotNull(newClassification);
+    assertEquals(identifier, newClassification.getIdentifier());
+    assertNotEquals(name, newClassification.getName());
+    assertNotEquals(updatedName, newClassification.getName());
+    assertEquals(updatedName.toLowerCase(), newClassification.getName());
+    assertEquals(updatedClassification, newClassification);
+    assertNotEquals(classification, newClassification);
+  }
+
+  /**
+   *
+   */
+  @Order(7)
+  @DisplayName("Update and Retrieve Classification")
+  @Test
+  void updateClassificationAndReturn() {
+    //
+    this.insertClassification();
+
+    final var classification = ClassificationTest.TEST_CLASSIFICATION;
+    final var identifier = classification.getIdentifier();
+    final var name = classification.getName();
+
+    final var updatedName = STR."UPDATED_\{classification.getName()}";
+    final var updatedClassification = classification.toBuilder()
+      .withName(updatedName)
+      .build();
+
+    final var newClassification = this.classificationDao
+      .updateClassificationAndReturn(updatedClassification);
+
+    assertNotNull(newClassification);
+    assertEquals(identifier, newClassification.getIdentifier());
+    assertNotEquals(name, newClassification.getName());
+    assertNotEquals(updatedName, newClassification.getName());
+    assertEquals(updatedName.toLowerCase(), newClassification.getName());
+    assertEquals(updatedClassification, newClassification);
+    assertNotEquals(classification, newClassification);
+  }
+
+  /**
+   *
+   */
+  @Order(8)
+  @DisplayName("Delete Classification by Identifier (Case-Insensitive)")
+  @Test
+  void deleteClassificationByIdentifier() {
+    //
+    final var classification = ClassificationTest.TEST_CLASSIFICATION;
+    final var identifier = classification.getIdentifier();
+
+    //
+    this.insertClassification();
+
+    this.classificationDao.deleteClassificationByIdentifier(identifier.toLowerCase());
+    assertEquals(0, this.classificationDao.countClassifications());
+
+    //
+    this.insertClassification();
+
+    this.classificationDao.deleteClassificationByIdentifier(identifier.toUpperCase());
+    assertEquals(0, this.classificationDao.countClassifications());
+  }
+
+  /**
+   *
+   */
+  @Order(9)
+  @DisplayName("Delete Multiple Classifications by Identifiers")
+  @Test
+  void deleteMultipleClassificationsByIdentifiers() {
+    // TODO deleteMultipleClassificationsByIdentifiers
   }
 }

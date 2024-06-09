@@ -1,5 +1,7 @@
 package me.kvdpxne.covilo.infrastructure.jooq;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
@@ -51,7 +53,6 @@ public class UserDao
    * The DSL context for jOOQ queries.
    */
   private final DSLContext ctx;
-  private BatchBindStep batch;
 
   /**
    * Converts a {@link UserRecord} object to a {@link User} object.
@@ -222,7 +223,7 @@ public class UserDao
       .set(USER.LAST_NAME, user.getLastName())
       .set(USER.IS_MALE, user.getGenderValue())
       .set(USER.BIRTH_DATE, user.getBirthDate())
-      .set(USER.CREATED_DATE, user.getCreatedDate())
+      .set(USER.CREATED_DATE, LocalDateTime.now(ZoneId.of("Z")))
       .setNull(USER.LAST_MODIFIED_DATE);
   }
 
@@ -313,7 +314,7 @@ public class UserDao
       .set(USER.LAST_NAME, user.getLastName())
       .set(USER.IS_MALE, user.getGenderValue())
       .set(USER.BIRTH_DATE, user.getBirthDate())
-      .set(USER.LAST_MODIFIED_DATE, user.getLastModifiedDate())
+      .set(USER.LAST_MODIFIED_DATE, LocalDateTime.now(ZoneId.of("Z")))
       .where(USER.IDENTIFIER.eq(user.getIdentifier()));
   }
 

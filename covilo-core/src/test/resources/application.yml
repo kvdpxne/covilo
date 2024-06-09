@@ -1,4 +1,5 @@
 spring:
+
   jpa:
     properties:
       hibernate:
@@ -6,6 +7,8 @@ spring:
   web:
     resources:
       static-locations: file:run
+  main:
+    banner-mode: OFF
 
 application:
   name: Covilo
@@ -36,4 +39,6 @@ application:
 
 logging:
   level:
-    me.kvdpxne.covilo: DEBUG
+    org.springframework.*: ERROR
+    root: ERROR
+    me.kvdpxne.covilo: ERROR

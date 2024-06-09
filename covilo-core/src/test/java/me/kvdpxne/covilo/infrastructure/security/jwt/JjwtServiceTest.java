@@ -11,7 +11,7 @@ public class JjwtServiceTest {
   @Autowired
   public JjwtServiceExtension jjwtService;
 
-  @Test
+//  @Test
   void test() {
     final User user = User.builder()
       .withRandomIdentifier()

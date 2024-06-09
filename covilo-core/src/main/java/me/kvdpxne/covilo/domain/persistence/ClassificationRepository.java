@@ -31,6 +31,13 @@ public interface ClassificationRepository {
   );
 
   /**
+   *
+   */
+  void deleteClassificationsByIdentifiers(
+    final Collection<String> identifiers
+  );
+
+  /**
    * Checks if a classification with the specified identifier exists.
    *
    * @param identifier The unique identifier of the classification to check.
@@ -91,7 +98,6 @@ public interface ClassificationRepository {
     final Classification classification
   );
 
-
   /**
    * Inserts a new classification into the repository and returns the
    * inserted classification.
@@ -104,19 +110,19 @@ public interface ClassificationRepository {
   );
 
   /**
-   *
-   */
-  void updateClassifications(
-    final Collection<Classification> classifications
-  );
-
-  /**
    * Updates an existing classification in the repository.
    *
    * @param classification The classification to update.
    */
   void updateClassification(
     final Classification classification
+  );
+
+  /**
+   *
+   */
+  void updateClassifications(
+    final Collection<Classification> classifications
   );
 
   /**

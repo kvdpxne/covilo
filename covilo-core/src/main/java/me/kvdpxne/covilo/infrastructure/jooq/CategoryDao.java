@@ -1,6 +1,7 @@
 package me.kvdpxne.covilo.infrastructure.jooq;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Gatherers;
 import lombok.RequiredArgsConstructor;
@@ -10,8 +11,10 @@ import me.kvdpxne.covilo.domain.model.pagination.Page;
 import me.kvdpxne.covilo.domain.model.pagination.Pageable;
 import me.kvdpxne.covilo.domain.persistence.CategoryRepository;
 import me.kvdpxne.covilo.domain.service.ConfiguredPageFactory;
+import me.kvdpxne.covilo.infrastructure.jooq.utils.JooqOrderBy;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
+import org.jooq.Field;
 import org.jooq.InsertSetMoreStep;
 import org.jooq.UpdateConditionStep;
 import org.jooq.generated.tables.records.CategoryRecord;
@@ -19,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import static org.jooq.generated.Tables.CATEGORY;
+import static org.jooq.impl.DSL.lower;
 
 /**
  * DAO implementation for handling categories using jOOQ.
@@ -32,6 +36,15 @@ import static org.jooq.generated.Tables.CATEGORY;
 @Component
 public class CategoryDao
   implements CategoryRepository {
+
+  /**
+   *
+   */
+  private static final Map<String, Field<?>> SORTS = Map.of(
+    "identifier", CATEGORY.IDENTIFIER,
+    "name", CATEGORY.NAME,
+    "classificationIdentifier", CATEGORY.CLASSIFICATION_IDENTIFIER
+  );
 
   /**
    * The factory for creating configured pages.
@@ -125,7 +138,8 @@ public class CategoryDao
     final CategoryRecord category
   ) {
     final var classification =
-      ClassificationDao.findClassificationByIdentifierOrNull(context, category.getIdentifier());
+      ClassificationDao.findClassificationByIdentifierOrNull(context,
+        category.getClassificationIdentifier());
 
     return CategoryDao.toCategory(
       category,
@@ -156,7 +170,7 @@ public class CategoryDao
     final String identifier
   ) {
     this.ctx.deleteFrom(CATEGORY)
-      .where(CATEGORY.IDENTIFIER.eq(identifier))
+      .where(lower(CATEGORY.IDENTIFIER).eq(identifier.toLowerCase()))
       .execute();
   }
 
@@ -173,7 +187,7 @@ public class CategoryDao
   ) {
     return this.ctx.fetchExists(
       CATEGORY,
-      CATEGORY.IDENTIFIER.eq(identifier)
+      lower(CATEGORY.IDENTIFIER).eq(identifier.toLowerCase())
     );
   }
 
@@ -183,14 +197,31 @@ public class CategoryDao
   ) {
     return this.configuredPageFactory.createPage(
       pageable,
-      () -> this.ctx.select(CATEGORY.fields())
-        .from(CATEGORY)
-        .limit(pageable.getSize())
-        .offset(pageable.getOffset())
-        .fetchInto(CATEGORY)
-        .map(this::toCategory),
+      () -> {
+        final var orderBy = JooqOrderBy.orderBy(
+          pageable.getSortable(),
+          SORTS
+        );
+
+        return this.ctx.selectFrom(CATEGORY)
+          .orderBy(orderBy)
+          .limit(pageable.getSize())
+          .offset(pageable.getOffset())
+          .fetchInto(CATEGORY)
+          .map(this::toCategory);
+      },
       this::countCategories
     );
+  }
+
+  @Override
+  public Collection<Category> findCategoriesByClassificationIdentifier(
+    final String identifier
+  ) {
+    return this.ctx.selectFrom(CATEGORY)
+      .where(lower(CATEGORY.CLASSIFICATION_IDENTIFIER).eq(identifier.toLowerCase()))
+      .fetchInto(CATEGORY)
+      .map(this::toCategory);
   }
 
   /**
@@ -213,7 +244,7 @@ public class CategoryDao
     final String identifier
   ) {
     return this.findCategoryBy(
-      CATEGORY.IDENTIFIER.eq(identifier)
+      lower(CATEGORY.IDENTIFIER).eq(identifier.toLowerCase())
     );
   }
 
@@ -222,7 +253,7 @@ public class CategoryDao
     final String name
   ) {
     return this.findCategoryBy(
-      CATEGORY.NAME.eq(name)
+      lower(CATEGORY.NAME).eq(name.toLowerCase())
     );
   }
 
@@ -231,7 +262,7 @@ public class CategoryDao
   public void insertCategories(
     final Collection<Category> categories
   ) {
-    if (categories.isEmpty()) {
+    if (null == categories || categories.isEmpty()) {
       return;
     }
 
@@ -271,7 +302,6 @@ public class CategoryDao
       });
   }
 
-
   protected InsertSetMoreStep<CategoryRecord> insertCategoryStep(
     final Category category
   ) {
@@ -301,22 +331,13 @@ public class CategoryDao
       : null;
   }
 
-
   protected UpdateConditionStep<CategoryRecord> updateCategoryStep(
     final Category category
   ) {
     return this.ctx.update(CATEGORY)
       .set(CATEGORY.NAME, category.getName())
       .set(CATEGORY.CLASSIFICATION_IDENTIFIER, category.getClassificationIdentifier())
-      .where(CATEGORY.IDENTIFIER.eq(category.getIdentifier()));
-  }
-
-  @Transactional
-  @Override
-  public void updateCategories(
-    final Collection<Category> categories
-  ) {
-    categories.forEach(it -> this.updateCategoryStep(it).execute());
+      .where(lower(CATEGORY.IDENTIFIER).eq(category.getIdentifier().toLowerCase()));
   }
 
   @Override
@@ -324,6 +345,18 @@ public class CategoryDao
     final Category category
   ) {
     this.updateCategoryStep(category).execute();
+  }
+
+  @Transactional
+  @Override
+  public void updateCategories(
+    final Collection<Category> categories
+  ) {
+    if (null == categories || categories.isEmpty()) {
+      return;
+    }
+
+    categories.forEach(this::updateCategory);
   }
 
   @Override

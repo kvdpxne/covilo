@@ -1,7 +1,10 @@
 package me.kvdpxne.covilo.domain.service;
 
 public class GeolocationService {
-  private static final double EARTH_RADIUS = 6371; // Promień Ziemi w kilometrach
+
+  public static final double EARTH_RADIUS = 6371; // Promień Ziemi w kilometrach
+
+  public static final double KM = 0.009d;
 
   // Metoda do obliczania odległości między dwoma punktami na sferze (Ziemi)
   public double calculateDistance(double lat1, double lon1, double lat2, double lon2) {

@@ -79,7 +79,7 @@ public class ClassificationDao
   ) {
     // Fetch raw classification record
     final var rawClassification = context.selectFrom(CLASSIFICATION)
-      .where(CLASSIFICATION.IDENTIFIER.eq(identifier))
+      .where(lower(CLASSIFICATION.IDENTIFIER).eq(identifier.toLowerCase()))
       .fetchOneInto(CLASSIFICATION);
 
     return ClassificationDao.toClassification(
@@ -98,6 +98,19 @@ public class ClassificationDao
   ) {
     this.ctx.deleteFrom(CLASSIFICATION)
       .where(lower(CLASSIFICATION.IDENTIFIER).eq(identifier.toLowerCase()))
+      .execute();
+  }
+
+  @Override
+  public void deleteClassificationsByIdentifiers(
+    final Collection<String> identifiers
+  ) {
+    if (null == identifiers || identifiers.isEmpty()) {
+      return;
+    }
+
+    this.ctx.deleteFrom(CLASSIFICATION)
+      .where(CLASSIFICATION.IDENTIFIER.in(identifiers))
       .execute();
   }
 
@@ -170,7 +183,7 @@ public class ClassificationDao
   public void insertClassifications(
     final Collection<Classification> classifications
   ) {
-    if (classifications.isEmpty()) {
+    if (null == classifications || classifications.isEmpty()) {
       return;
     }
 
@@ -258,14 +271,7 @@ public class ClassificationDao
   ) {
     return this.ctx.update(CLASSIFICATION)
       .set(CLASSIFICATION.NAME, classification.getName())
-      .where(lower(CLASSIFICATION.IDENTIFIER).eq(classification.getIdentifier()));
-  }
-
-  @Override
-  public void updateClassifications(
-    final Collection<Classification> classifications
-  ) {
-    classifications.forEach(it -> this.updateClassificationStep(it).execute());
+      .where(lower(CLASSIFICATION.IDENTIFIER).eq(classification.getIdentifier().toLowerCase()));
   }
 
   @Override
@@ -273,6 +279,17 @@ public class ClassificationDao
     final Classification classification
   ) {
     this.updateClassificationStep(classification).execute();
+  }
+
+  @Override
+  public void updateClassifications(
+    final Collection<Classification> classifications
+  ) {
+    if (null == classifications || classifications.isEmpty()) {
+      return;
+    }
+
+    classifications.forEach(this::updateClassification);
   }
 
   @Override

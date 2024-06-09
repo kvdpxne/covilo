@@ -2,7 +2,6 @@ package me.kvdpxne.covilo.domain.persistence;
 
 import java.util.Collection;
 import java.util.Optional;
-import java.util.UUID;
 import me.kvdpxne.covilo.domain.model.Category;
 import me.kvdpxne.covilo.domain.model.pagination.Page;
 import me.kvdpxne.covilo.domain.model.pagination.Pageable;
@@ -47,6 +46,13 @@ public interface CategoryRepository {
    */
   Page<Category> findCategories(
     final Pageable pageable
+  );
+
+  /**
+   *
+   */
+  Collection<Category> findCategoriesByClassificationIdentifier(
+    final String identifier
   );
 
   /**
@@ -99,13 +105,6 @@ public interface CategoryRepository {
   );
 
   /**
-   *
-   */
-  void updateCategories(
-    final Collection<Category> categories
-  );
-
-  /**
    * Updates a category.
    *
    * @param category The category to update.
@@ -113,6 +112,14 @@ public interface CategoryRepository {
   void updateCategory(
     final Category category
   );
+
+  /**
+   *
+   */
+  void updateCategories(
+    final Collection<Category> categories
+  );
+
 
   /**
    * Updates the provided category and returns the updated category object.

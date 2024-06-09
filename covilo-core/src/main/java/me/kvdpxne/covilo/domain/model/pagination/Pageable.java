@@ -6,6 +6,16 @@ package me.kvdpxne.covilo.domain.model.pagination;
 public interface Pageable {
 
   /**
+   *
+   */
+  static BasePageable of(
+    final int index,
+    final int size
+  ) {
+    return new BasePageable(index, size);
+  }
+
+  /**
    * Retrieves the index (0-based) of the requested page.
    * @return The index of the requested page.
    */

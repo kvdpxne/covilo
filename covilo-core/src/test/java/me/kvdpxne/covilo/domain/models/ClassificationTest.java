@@ -1,13 +1,16 @@
 package me.kvdpxne.covilo.domain.models;
 
 import me.kvdpxne.covilo.domain.model.Classification;
+import me.kvdpxne.covilo.infrastructure.uid.Uid;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * This class contains JUnit tests for the {@link Classification} model class.
  */
+@Order(100)
 public final class ClassificationTest {
 
   /**
@@ -18,28 +21,35 @@ public final class ClassificationTest {
   public static final Classification TEST_CLASSIFICATION =
     ClassificationTest.makeTestClassification();
 
-  //
-  ClassificationTest() {
-    // ...
-  }
-
   /**
    * Generates a test classification with a random identifier and name.
    *
    * @return A classification object with a random identifier and the name
-   * "test_classification".
+   * "TEST_CLASSIFICATION".
    */
   public static Classification makeTestClassification() {
     try {
-      Thread.sleep(2);
-    } catch (final InterruptedException e) {
-      throw new RuntimeException(e);
+      Thread.sleep(3L);
+    } catch (final InterruptedException exception) {
+      throw new RuntimeException(exception);
     }
 
     return Classification.builder()
       .withRandomIdentifier()
       .withName("TEST_CLASSIFICATION")
       .build();
+  }
+
+  public static Classification makeRandomClassification() {
+    return Classification.builder()
+      .withRandomIdentifier()
+      .withName(Uid.fast())
+      .build();
+  }
+
+  //
+  ClassificationTest() {
+    // ...
   }
 
   /**
@@ -53,10 +63,10 @@ public final class ClassificationTest {
     final var classification = TEST_CLASSIFICATION;
 
     // Create a second classification with lowercase identifier and name
-    final var secondClassification = classification.toBuilder()
-      .withIdentifier(classification.getIdentifier().toLowerCase())
-      .withName(classification.getName().toLowerCase())
-      .build();
+    final var secondClassification = new Classification(
+      classification.getIdentifier().toUpperCase(),
+      classification.getName().toUpperCase()
+    );
 
     // Verify that classifications are equal
     assertEquals(classification, secondClassification);
